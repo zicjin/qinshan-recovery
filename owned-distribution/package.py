@@ -5,14 +5,81 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import sys
 import zipfile
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+EXTERNAL_SCHEMA_CONTRACT = 'META-INF/lims-external-schema.json'
+EXTERNAL_SCHEMA_PROPERTIES = 'META-INF/lims-external-schema.properties'
+EXTERNAL_SCHEMA_MAPPERS = frozenset((
+    'com/sunwayworld/emc/module/bp/project/project/mapper/conf/pf-project-oracle-mapper.xml',
+    'com/sunwayworld/emc/module/mdm/contract/mapper/conf/emc-contract-oracle-mapper.xml',
+))
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def external_schema_contract(entries, required):
+    """Verify the contract against the final merged resource selection."""
+    if not required:
+        return None
+
+    def fail(message):
+        raise SystemExit('external schema build contract: ' + message)
+
+    def portable(value):
+        return (isinstance(value, str) and bool(value)
+                and not value.startswith(('/', '\\')) and '\\' not in value
+                and ':' not in value and not any(part in ('', '.', '..', 'private')
+                                               for part in value.split('/')))
+
+    def is_hash(value):
+        return isinstance(value, str) and re.fullmatch(r'[a-f0-9]{64}', value) is not None
+
+    if EXTERNAL_SCHEMA_CONTRACT not in entries or EXTERNAL_SCHEMA_PROPERTIES not in entries:
+        fail('embedded metadata is missing')
+    raw = entries[EXTERNAL_SCHEMA_CONTRACT][1]
+    try:
+        contract = json.loads(raw.decode('utf-8'))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        fail('embedded JSON is invalid')
+    expected_keys = {'schema', 'mode', 'profile', 'profile_sha256', 'manifest',
+                     'manifest_sha256', 'renderer', 'renderer_sha256', 'mappers'}
+    if not isinstance(contract, dict) or set(contract) != expected_keys:
+        fail('metadata fields differ from the supported schema')
+    if contract.get('schema') != 'external-schema-build-contract-v1':
+        fail('unsupported schema')
+    mode = contract.get('mode')
+    if mode not in ('original-db-link', 'direct-schema', 'local-view'):
+        fail('invalid mode')
+    for name in ('profile', 'manifest', 'renderer'):
+        if mode == 'original-db-link':
+            if contract[name] is not None or contract[name + '_sha256'] is not None:
+                fail('original SQL must not claim unused profile inputs')
+        elif not portable(contract[name]) or not is_hash(contract[name + '_sha256']):
+            fail('profile provenance is missing or non-portable')
+    records = contract.get('mappers')
+    if not isinstance(records, list) or len(records) != len(EXTERNAL_SCHEMA_MAPPERS):
+        fail('mapper coverage is incomplete')
+    seen = set()
+    for record in records:
+        if (not isinstance(record, dict) or set(record) != {'path', 'sha256'}
+                or not isinstance(record.get('path'), str)
+                or record['path'] not in EXTERNAL_SCHEMA_MAPPERS
+                or record['path'] in seen or not is_hash(record.get('sha256'))):
+            fail('mapper identity or hash is invalid')
+        seen.add(record['path'])
+        selected = entries.get(record['path'])
+        if selected is None or digest(selected[1]) != record['sha256']:
+            fail('packaged mapper hash mismatch: ' + record['path'])
+    sha = digest(raw)
+    properties = ('mode=' + mode + '\ncontract_sha256=' + sha + '\n').encode('ascii')
+    if entries[EXTERNAL_SCHEMA_PROPERTIES][1] != properties:
+        fail('embedded properties differ from JSON')
+    return {**contract, 'contract_sha256': sha}
 
 
 def normalized_jar(source):
@@ -129,6 +196,12 @@ def main():
     if factories:
         entries['META-INF/spring.factories'] = ('merged:' + ','.join(factory_sources),
                                                 render_factories(factories))
+    external_schema = external_schema_contract(
+        entries, os.environ.get('OWNED_DISTRIBUTION_MODE') == 'source-only-reconstituted')
+    if external_schema is not None:
+        provenance = output / 'provenance'
+        provenance.mkdir(parents=True, exist_ok=True)
+        (provenance / 'external-schema.properties').write_bytes(entries[EXTERNAL_SCHEMA_PROPERTIES][1])
     app.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(app, 'w', compression=zipfile.ZIP_DEFLATED) as archive:
         def write_entry(name, data):
@@ -272,6 +345,8 @@ def main():
         'supplier_runtime_included': False,
         'external_configuration_required': True,
     }
+    if external_schema is not None:
+        manifest['external_schema'] = external_schema
     provenance_path = os.environ.get('OWNED_THIRD_PARTY_DEPENDENCY_PROVENANCE')
     if provenance_path:
         provenance = json.loads(Path(provenance_path).read_text(encoding='utf-8'))

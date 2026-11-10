@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -27,6 +28,12 @@ SUPPLIER_PRIVATE_MARKERS = (
     "gikam-core-",
     "lims2-report-template-",
     "gikam-third-czjky-",
+)
+EXTERNAL_SCHEMA_CONTRACT = "META-INF/lims-external-schema.json"
+EXTERNAL_SCHEMA_PROPERTIES = "META-INF/lims-external-schema.properties"
+EXTERNAL_SCHEMA_MAPPERS = (
+    "com/sunwayworld/emc/module/bp/project/project/mapper/conf/pf-project-oracle-mapper.xml",
+    "com/sunwayworld/emc/module/mdm/contract/mapper/conf/emc-contract-oracle-mapper.xml",
 )
 
 
@@ -243,6 +250,65 @@ def render_external_logical_mapper_overlay(
             "profile": profile_ref,
         })
     return records
+
+
+def write_external_schema_build_contract(
+    resources: Path,
+    profile: Path | None = None,
+    manifest: Path | None = None,
+) -> dict[str, object]:
+    """Bind the selected SQL access mode to the exact packaged mapper bytes."""
+    mode = "original-db-link"
+    renderer = ROOT / "scripts/render-external-logical-mappers.py"
+    effective_manifest = manifest or ROOT / "api-fixtures/schema/external-schema-clone-manifest.json"
+
+    def reference(path: Path) -> str:
+        try:
+            relative = path.resolve().relative_to(ROOT)
+            return path.name if "private" in relative.parts else relative.as_posix()
+        except ValueError:
+            # External input contents and private absolute paths are not shipped.
+            return path.name
+
+    if profile is not None:
+        spec = importlib.util.spec_from_file_location("external_mapper_build_contract", renderer)
+        if spec is None or spec.loader is None:
+            raise SystemExit("external schema mapper renderer is unavailable")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        try:
+            mode, _ = module._load_profile(
+                profile, json.loads(effective_manifest.read_text(encoding="utf-8")))
+        except (OSError, ValueError, TypeError) as error:
+            raise SystemExit("external schema build profile is invalid") from error
+    elif manifest is not None:
+        raise SystemExit("external schema manifest requires an explicit profile")
+    mapper_records = []
+    for relative in EXTERNAL_SCHEMA_MAPPERS:
+        mapper = resources / relative
+        if not mapper.is_file():
+            raise SystemExit("external schema mapper is missing: " + relative)
+        mapper_records.append({"path": relative, "sha256": digest(mapper)})
+    contract = {
+        "schema": "external-schema-build-contract-v1",
+        "mode": mode,
+        "profile": reference(profile) if profile is not None else None,
+        "profile_sha256": digest(profile) if profile is not None else None,
+        "manifest": reference(effective_manifest) if profile is not None else None,
+        "manifest_sha256": digest(effective_manifest) if profile is not None else None,
+        "renderer": reference(renderer) if profile is not None else None,
+        "renderer_sha256": digest(renderer) if profile is not None else None,
+        "mappers": mapper_records,
+    }
+    raw = (json.dumps(contract, ensure_ascii=True, sort_keys=True, indent=2) + "\n").encode("utf-8")
+    target = resources / EXTERNAL_SCHEMA_CONTRACT
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(raw)
+    (resources / EXTERNAL_SCHEMA_PROPERTIES).write_text(
+        "mode=" + mode + "\ncontract_sha256=" + hashlib.sha256(raw).hexdigest() + "\n",
+        encoding="ascii",
+    )
+    return contract
 
 
 def build_application_jar(classes: Path, resources: Path, output: Path) -> None:
@@ -483,6 +549,19 @@ def main(argv: list[str] | None = None) -> int:
             record for record in resource_records if str(record["path"]) not in overlay_paths
         ]
         resource_records.extend(overlay_records)
+    external_schema = write_external_schema_build_contract(
+        resources,
+        args.external_schema_profile.resolve() if args.external_schema_profile else None,
+        args.external_schema_manifest.resolve() if args.external_schema_manifest else None,
+    )
+    contract_paths = {EXTERNAL_SCHEMA_CONTRACT, EXTERNAL_SCHEMA_PROPERTIES}
+    resource_records = [record for record in resource_records if str(record["path"]) not in contract_paths]
+    resource_records.extend({
+        "path": relative,
+        "sha256": digest(resources / relative),
+        "bytes": (resources / relative).stat().st_size,
+        "classification": "external-schema-build-contract",
+    } for relative in sorted(contract_paths))
     app_jar = output_root / "lims-owned-application.jar"
     build_application_jar(classes, resources, app_jar)
     third_party_provenance = (
@@ -564,6 +643,7 @@ def main(argv: list[str] | None = None) -> int:
         "application_jar": app_jar.relative_to(ROOT).as_posix(),
         "application_jar_sha256": digest(app_jar),
         "application_jar_bytes": app_jar.stat().st_size,
+        "external_schema": external_schema,
         "runtime_model": {
             "application": "one Spring application",
             "boundary_process": False,

@@ -5,7 +5,7 @@
     "status": "unavailable",
     "source_bound": false,
     "complete_current_production_ddl": false,
-    "reason": "No approved complete current-production Oracle DDL/package is tracked or supplied."
+    "reason": "Current-production metadata and partial DDL have been acquired privately; no complete sanitized ordered core DDL/config bootstrap package is tracked or supplied for new-device installation."
   },
   "historical_sql": {
     "path": "project/sql",

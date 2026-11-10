@@ -46,6 +46,49 @@ def verify_package_determinism(root, distribution, sources, environment):
     assert file_hashes(distribution) == before, 'repackaging changed the active distribution'
 
 
+def prepare_build_snapshot(source_root, root, inherited_environment):
+    """Snapshot repository inputs and keep profile paths inside that snapshot."""
+    source_root = Path(source_root).resolve()
+    root = Path(root).resolve()
+    for name in ('project', 'reconstituted', 'scripts', 'docs', 'build-support',
+                 'api-fixtures/schema',
+                 *[path.name for path in source_root.glob('owned-*') if path.is_dir()]):
+        shutil.copytree(source_root / name, root / name,
+                        ignore=shutil.ignore_patterns('target', '__pycache__', '.git'))
+    environment = dict(inherited_environment)
+    for key in ('EXTERNAL_SCHEMA_PROFILE', 'EXTERNAL_SCHEMA_MANIFEST'):
+        selected = environment.get(key)
+        if not selected:
+            continue
+        path = Path(selected).resolve()
+        assert path.is_file(), key + ' input is missing: ' + str(path)
+        if path.is_relative_to(source_root):
+            destination = root / path.relative_to(source_root)
+            # Explicit repository inputs may be outside the curated source
+            # roots (for example one private deployment profile). Copy only
+            # that selected file rather than reading the original checkout
+            # while a supposedly isolated clean build is running.
+            if not destination.is_file():
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(path, destination)
+            environment[key] = str(destination)
+        else:
+            # External operator inputs remain explicit absolute paths. Never
+            # discover an alternative from the parent planning repository.
+            environment[key] = str(path)
+    environment.update({
+        # Neither clean build may short-circuit via the checkout's cache.
+        'OWNED_DISTRIBUTION_REUSE': '0',
+        'JAVA_HOME': str(Path(environment.get('JAVA_HOME', source_root / 'build/jdk1.8.0_391')).resolve()),
+        'LIMS_PUBLIC_DEPENDENCY_DIR': str(Path(environment.get(
+            'LIMS_PUBLIC_DEPENDENCY_DIR', source_root / 'build/reconstituted-public-deps')).resolve()),
+        'LIMS_EXTERNAL_ARTIFACT_ROOT': str(Path(environment.get(
+            'LIMS_EXTERNAL_ARTIFACT_ROOT', source_root / '.external-materials')).resolve()),
+        'LIMS_PROJECT_ROOT': str(root / 'project'),
+    })
+    return environment
+
+
 def main():
     if os.environ.get('SOURCE_ONLY_CHECKPOINT') != '1':
         lifecycle = subprocess.run(
@@ -60,22 +103,7 @@ def main():
     # source snapshot, never the checkout's target or a mounted distribution.
     with tempfile.TemporaryDirectory(prefix='owned-distribution-build-') as temporary:
         root = Path(temporary) / 'source'
-        for name in ('project', 'reconstituted', 'scripts', 'docs', 'build-support',
-                     *[path.name for path in ROOT.glob('owned-*') if path.is_dir()]):
-            shutil.copytree(ROOT / name, root / name,
-                            ignore=shutil.ignore_patterns('target', '__pycache__', '.git'))
-        environment = dict(os.environ)
-        environment.update({
-            # This is the clean-build gate, even when callers reuse artifacts
-            # for runtime tests. Neither build may short-circuit via the cache.
-            'OWNED_DISTRIBUTION_REUSE': '0',
-            'JAVA_HOME': str(Path(os.environ.get('JAVA_HOME', ROOT / 'build/jdk1.8.0_391')).resolve()),
-            'LIMS_PUBLIC_DEPENDENCY_DIR': str(Path(os.environ.get(
-                'LIMS_PUBLIC_DEPENDENCY_DIR', ROOT / 'build/reconstituted-public-deps')).resolve()),
-            'LIMS_EXTERNAL_ARTIFACT_ROOT': str(Path(os.environ.get(
-                'LIMS_EXTERNAL_ARTIFACT_ROOT', ROOT / '.external-materials')).resolve()),
-            'LIMS_PROJECT_ROOT': str(root / 'project'),
-        })
+        environment = prepare_build_snapshot(ROOT, root, os.environ)
         verify_distribution(root, environment)
 
 
@@ -104,6 +132,13 @@ def verify_distribution(ROOT, build_environment):
         assert json.loads(gate_report.read_text())['findings'] == []
     manifest = json.loads((DIST / 'manifest.json').read_text())
     assert manifest['distribution_mode'] == 'source-only-reconstituted'
+    schema_contract = manifest['external_schema']
+    expected_schema_mode = 'original-db-link'
+    if build_environment.get('EXTERNAL_SCHEMA_PROFILE'):
+        expected_schema_mode = json.loads(Path(
+            build_environment['EXTERNAL_SCHEMA_PROFILE']).read_text())['mode']
+    assert schema_contract['mode'] == expected_schema_mode
+    assert 'provenance/external-schema.properties' in manifest['files']
     assert manifest['main_class'] == 'com.sunwayworld.emc.projectfunction.GikamWpjcApplication'
     assert manifest['duplicate_conflicts'] == [], 'runtime classpath may not hide differing classes'
     assert manifest['source_jar_hash_convention'].startswith('normalized module archives')
@@ -112,6 +147,12 @@ def verify_distribution(ROOT, build_environment):
     assert manifest['third_party_dependency_provenance'][0]['filename'] == 'qiyuesuo-sdk-vendored.jar'
     app = DIST / 'app/lims-owned-application.jar'
     with zipfile.ZipFile(app) as jar:
+        embedded = jar.read('META-INF/lims-external-schema.json')
+        assert hashlib.sha256(embedded).hexdigest() == schema_contract['contract_sha256']
+        assert jar.read('META-INF/lims-external-schema.properties') == (
+            DIST / 'provenance/external-schema.properties').read_bytes()
+        for mapper in schema_contract['mappers']:
+            assert hashlib.sha256(jar.read(mapper['path'])).hexdigest() == mapper['sha256']
         assert jar.namelist().count('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class') == 1
         assert 'com/sunwayworld/boot/ApplicationConfiguration.class' in jar.namelist()
         # Source-only distribution must carry owned seams in the application

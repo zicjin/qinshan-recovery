@@ -25,6 +25,10 @@ def fail(message: str) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--check-contract", action="store_true",
+        help="check the offline contract only; exit 0 does not mean deployment ready",
+    )
     parser.add_argument("--distribution", type=Path)
     parser.add_argument("--runtime-config", type=Path)
     args = parser.parse_args()
@@ -72,14 +76,15 @@ def main() -> int:
             if any("gikam-core-" in name or "gikam-third-" in name for name in jar.namelist()):
                 fail("supplier/private runtime JAR content is present")
     print(json.dumps({
-        "status": "pass",
+        "status": "blocked",
+        "contract_valid": True,
         "contract": str(MANIFEST.relative_to(ROOT)),
         "deployment_ready": False,
         "reason": "complete current-production core schema package is unavailable",
         "historical_sql_replay_allowed": False,
         "external_logical_clone_fixture": True,
     }, ensure_ascii=False))
-    return 0
+    return 0 if args.check_contract else 2
 
 
 if __name__ == "__main__":

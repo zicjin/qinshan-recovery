@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Exercise the package determinism gate with an immutable distribution."""
 import importlib.util
+import json
 import os
 from pathlib import Path
 import tempfile
@@ -17,6 +18,84 @@ spec.loader.exec_module(gate)
 
 
 class PackageIsolationTest(unittest.TestCase):
+    def write_snapshot_source(self, root):
+        for name in ('project', 'reconstituted', 'scripts', 'docs', 'build-support',
+                     'owned-distribution', 'api-fixtures/schema'):
+            directory = root / name
+            directory.mkdir(parents=True)
+            (directory / 'source.txt').write_text('source input\n')
+        schema = root / 'api-fixtures/schema'
+        (schema / 'profile.json').write_text('{"mode":"local-view"}\n')
+        (schema / 'external-schema-clone-manifest.json').write_text('{"domains": []}\n')
+        (root / 'project/target').mkdir()
+        (root / 'project/target/generated.txt').write_text('must not copy\n')
+        (root / 'api-fixtures/private-fixture.json').write_text('not a schema input\n')
+
+    def test_profiled_snapshot_uses_its_own_in_repository_schema_inputs(self):
+        with tempfile.TemporaryDirectory(prefix='profiled-package-isolation-') as temporary:
+            root = Path(temporary)
+            source = root / 'repository'
+            snapshot = root / 'snapshot'
+            self.write_snapshot_source(source)
+            profile = source / 'api-fixtures/schema/profile.json'
+            manifest = source / 'api-fixtures/schema/external-schema-clone-manifest.json'
+            environment = gate.prepare_build_snapshot(source, snapshot, {
+                'EXTERNAL_SCHEMA_PROFILE': str(profile),
+                'EXTERNAL_SCHEMA_MANIFEST': str(manifest),
+            })
+            for key, original in (('EXTERNAL_SCHEMA_PROFILE', profile),
+                                  ('EXTERNAL_SCHEMA_MANIFEST', manifest)):
+                copied = Path(environment[key])
+                self.assertEqual(copied, snapshot / original.relative_to(source))
+                self.assertEqual(copied.read_bytes(), original.read_bytes())
+            self.assertEqual(environment['LIMS_PROJECT_ROOT'], str(snapshot / 'project'))
+            self.assertEqual(environment['OWNED_DISTRIBUTION_REUSE'], '0')
+            self.assertTrue((snapshot / 'api-fixtures/schema/source.txt').is_file())
+            self.assertFalse((snapshot / 'api-fixtures/private-fixture.json').exists())
+            self.assertFalse((snapshot / 'project/target').exists())
+            profile.write_text('{"mode":"direct-schema"}\n')
+            self.assertEqual(json.loads(Path(environment['EXTERNAL_SCHEMA_PROFILE']).read_text())['mode'], 'local-view')
+
+    def test_profile_only_uses_snapshot_default_manifest_and_copies_selected_private_file(self):
+        with tempfile.TemporaryDirectory(prefix='profile-package-default-') as temporary:
+            root = Path(temporary)
+            source = root / 'repository'
+            snapshot = root / 'snapshot'
+            self.write_snapshot_source(source)
+            profile = source / 'private/profile.json'
+            profile.parent.mkdir()
+            profile.write_text('{"mode":"local-view"}\n')
+            (profile.parent / 'unrelated-secret.txt').write_text('not selected\n')
+            environment = gate.prepare_build_snapshot(source, snapshot, {
+                'EXTERNAL_SCHEMA_PROFILE': str(profile),
+            })
+            self.assertNotIn('EXTERNAL_SCHEMA_MANIFEST', environment)
+            self.assertEqual(environment['EXTERNAL_SCHEMA_PROFILE'], str(snapshot / 'private/profile.json'))
+            self.assertEqual(Path(environment['EXTERNAL_SCHEMA_PROFILE']).read_bytes(), profile.read_bytes())
+            self.assertFalse((snapshot / 'private/unrelated-secret.txt').exists())
+            self.assertTrue((snapshot / 'api-fixtures/schema/external-schema-clone-manifest.json').is_file())
+
+    def test_explicit_external_inputs_remain_external_and_missing_input_fails(self):
+        with tempfile.TemporaryDirectory(prefix='external-package-inputs-') as temporary:
+            root = Path(temporary)
+            source = root / 'repository'
+            self.write_snapshot_source(source)
+            profile = root / 'profile.json'
+            manifest = root / 'manifest.json'
+            profile.write_text('{"mode":"local-view"}\n')
+            manifest.write_text('{"domains": []}\n')
+            environment = gate.prepare_build_snapshot(source, root / 'snapshot', {
+                'EXTERNAL_SCHEMA_PROFILE': str(profile),
+                'EXTERNAL_SCHEMA_MANIFEST': str(manifest),
+            })
+            self.assertEqual(environment['EXTERNAL_SCHEMA_PROFILE'], str(profile.resolve()))
+            self.assertEqual(environment['EXTERNAL_SCHEMA_MANIFEST'], str(manifest.resolve()))
+            self.assertFalse((root / 'snapshot/profile.json').exists())
+            with self.assertRaisesRegex(AssertionError, 'EXTERNAL_SCHEMA_PROFILE.*missing'):
+                gate.prepare_build_snapshot(source, root / 'missing-snapshot', {
+                    'EXTERNAL_SCHEMA_PROFILE': str(root / 'missing.json'),
+                })
+
     def test_repackage_leaves_readonly_distribution_and_link_unchanged(self):
         with tempfile.TemporaryDirectory(prefix='package-isolation-test-') as temporary:
             root = Path(temporary)

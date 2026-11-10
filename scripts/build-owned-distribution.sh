@@ -2,6 +2,18 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# Validate profile inputs before compiling or activating any cached package.
+if [[ -n "${EXTERNAL_SCHEMA_MANIFEST:-}" && -z "${EXTERNAL_SCHEMA_PROFILE:-}" ]]; then
+  echo "EXTERNAL_SCHEMA_MANIFEST requires EXTERNAL_SCHEMA_PROFILE" >&2
+  exit 2
+fi
+if [[ -n "${EXTERNAL_SCHEMA_PROFILE:-}" ]]; then
+  EXTERNAL_SCHEMA_MANIFEST="${EXTERNAL_SCHEMA_MANIFEST:-$ROOT/api-fixtures/schema/external-schema-clone-manifest.json}"
+  [[ -f "$EXTERNAL_SCHEMA_PROFILE" && -f "$EXTERNAL_SCHEMA_MANIFEST" ]] || {
+    echo "external-schema profile/manifest input is missing" >&2
+    exit 2
+  }
+fi
 LIMS_PROJECT_ROOT="${LIMS_PROJECT_ROOT:-$ROOT/project}"
 JAVA_HOME="${JAVA_HOME:-$ROOT/build/jdk1.8.0_391}"
 export LIMS_PROJECT_ROOT JAVA_HOME
@@ -31,6 +43,7 @@ source_hash() {
         docs/reconstitution/framework-module-registry.json \
         docs/reconstitution/decompiler-transforms.json
       printf '%s\0' scripts/build-reconstituted-framework.sh \
+        scripts/build-owned-distribution.sh \
         scripts/build-source-only-application.py \
         scripts/stage-source-only-public-deps.py \
         scripts/prepare-reconstituted-maven-repo.py \
@@ -41,9 +54,8 @@ source_hash() {
       printf '%s\0' owned-distribution/example/owned-application.properties
       if [[ -n "${EXTERNAL_SCHEMA_PROFILE:-}" ]]; then
         printf '%s\0' "$EXTERNAL_SCHEMA_PROFILE"
-      fi
-      if [[ -n "${EXTERNAL_SCHEMA_MANIFEST:-}" ]]; then
         printf '%s\0' "$EXTERNAL_SCHEMA_MANIFEST"
+        printf '%s\0' scripts/render-external-logical-mappers.py
       fi
     } | sort -z | xargs -0 sha256sum
   )

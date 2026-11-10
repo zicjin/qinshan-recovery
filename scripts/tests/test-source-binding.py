@@ -116,6 +116,14 @@ class SourceBindingTest(unittest.TestCase):
         self.assertTrue(second["application_dirty"])
         self.assertTrue(second["implementation_dirty"])
 
+    def test_mapper_renderer_changes_application_binding(self):
+        first = self.capture()
+        (self.root / "scripts/render-external-logical-mappers.py").write_text("rendered-sql-v2\n")
+        second = self.capture()
+        self.assertNotEqual(first["application_binding"], second["application_binding"])
+        self.assertTrue(second["application_dirty"])
+        self.assertIn("scripts/render-external-logical-mappers.py", second["application_scope"])
+
     def test_harness_change_only_changes_harness_surface(self):
         first = self.capture()
         (self.root / "scripts" / "evidence_output.py").write_text("output-v2\n", encoding="utf-8")

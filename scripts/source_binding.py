@@ -187,6 +187,7 @@ _HARNESS_SUFFIXES = (
     "scripts/api_fixture.py",
     "scripts/schema_fixture.py",
     "scripts/verify-external-schema-manifest.py",
+    "scripts/render-external-logical-mappers.py",
     "scripts/local_schema_policy.py",
     "scripts/http_write_proof.py",
     "scripts/audit_fixture_cleanup.py",

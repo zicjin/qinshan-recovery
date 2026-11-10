@@ -1,0 +1,9 @@
+{
+  "mode": "direct-schema",
+  "qualifier_schemas": {
+    "LIMS_CZJKY_HT": "LIMS_EXT_HT",
+    "LIMS_CZJKY_HT2": "LIMS_EXT_HT",
+    "LIMS_CZJKY_SP": "LIMS_EXT_SP",
+    "LIMS_CZJKY_XFP": "LIMS_EXT_XFP"
+  }
+}

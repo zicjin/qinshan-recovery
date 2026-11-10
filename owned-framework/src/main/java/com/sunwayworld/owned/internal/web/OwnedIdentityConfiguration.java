@@ -31,10 +31,11 @@ public class OwnedIdentityConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(JdbcPersonnelIdentity.class)
-    public JdbcPersonnelIdentity ownedJdbcPersonnelIdentity(DataSource dataSource, Environment environment) {
+    public JdbcPersonnelIdentity ownedJdbcPersonnelIdentity(DataSource dataSource, Environment environment,
+            org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
         String encoder = environment.getProperty("sunway.user.password.encoder.type");
-        if (!"MD5".equals(encoder)) {
-            throw new IllegalStateException("sunway.user.password.encoder.type must explicitly select supported MD5 mode");
+        if (!"MD5".equals(encoder) && !"SM3".equals(encoder)) {
+            throw new IllegalStateException("sunway.user.password.encoder.type must explicitly select supported MD5 or SM3 mode");
         }
         String menuConfig = environment.getProperty("owned.identity.attachment-menu-ids", "").trim();
         String[] menuIds = menuConfig.length() == 0 ? new String[0] : menuConfig.split(",");
@@ -57,7 +58,7 @@ public class OwnedIdentityConfiguration {
         String auditConfig = environment.getProperty("owned.identity.audit-menu-ids", "9404").trim();
         String[] auditIds = auditConfig.length() == 0 ? new String[0] : auditConfig.split(",");
         for (int i = 0; i < auditIds.length; i++) auditIds[i] = auditIds[i].trim();
-        return new JdbcPersonnelIdentity(dataSource, encoder, menuIds, roleMenuIds, resultIds,
+        return new JdbcPersonnelIdentity(dataSource, encoder, passwordEncoder, menuIds, roleMenuIds, resultIds,
                 orderRetainIds, resultWriteIds, orderRetainWriteIds, auditIds);
     }
 

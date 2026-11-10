@@ -29,6 +29,7 @@ public final class JdbcPersonnelIdentity {
     private static final String DENIED = "GIKAM.PERMISSION.UNAUTHORIZED";
     private final DataSource dataSource;
     private final Object issuer = new Object();
+    private org.springframework.security.crypto.password.PasswordEncoder originalEncoder;
     private final String[] attachmentMenuIds;
     private final String[] roleMenuAdministrationMenuIds;
     private final String[] resultMenuIds;
@@ -101,12 +102,33 @@ public final class JdbcPersonnelIdentity {
         this.auditMenuIds = auditMenuIds == null ? new String[0] : auditMenuIds.clone();
     }
 
+    /** Original Spring encoder is required for a non-MD5 deployment. */
+    public JdbcPersonnelIdentity(DataSource dataSource, String passwordEncoderType,
+            org.springframework.security.crypto.password.PasswordEncoder originalEncoder,
+            String[] attachmentMenuIds, String[] roleMenuAdministrationMenuIds, String[] resultMenuIds,
+            String[] orderRetainMenuIds, String[] resultWriteMenuIds, String[] orderRetainWriteMenuIds,
+            String[] auditMenuIds) {
+        this(dataSource, "MD5", attachmentMenuIds, roleMenuAdministrationMenuIds, resultMenuIds,
+                orderRetainMenuIds, resultWriteMenuIds, orderRetainWriteMenuIds, auditMenuIds);
+        if (!"MD5".equals(passwordEncoderType) && !"SM3".equals(passwordEncoderType))
+            throw new IllegalArgumentException("Unsupported password encoder");
+        this.originalEncoder = Objects.requireNonNull(originalEncoder, "originalEncoder");
+    }
+
+    private boolean matchesConfigured(char[] password, String stored) {
+        if (originalEncoder == null) return matches(password, stored);
+        try { return stored != null && originalEncoder.matches(new String(password), stored); }
+        finally {
+            com.sunwayworld.framework.cache.memory.MemoryCacheManager.remove(Long.toString(Thread.currentThread().getId()));
+        }
+    }
+
     public Principal authenticate(String userId, char[] password) throws SQLException {
         if (userId == null || userId.length() == 0 || password == null) throw new BadCredentialsException(INCORRECT);
         try (Connection connection = dataSource.getConnection()) {
             checkLoginConfiguration(connection);
             UserRecord record = readUser(connection, userId);
-            if (record == null || !matches(password, record.password)) throw new BadCredentialsException(INCORRECT);
+            if (record == null || !matchesConfigured(password, record.password)) throw new BadCredentialsException(INCORRECT);
             checkActive(record);
             return new Principal(issuer, record.id, record.orgId, record.orgName);
         }
@@ -119,12 +141,17 @@ public final class JdbcPersonnelIdentity {
      */
     public Principal authenticatedPrincipal(String userId) throws SQLException {
         if (userId == null || userId.trim().length() == 0) throw new AccessDeniedException(DENIED);
+        org.springframework.security.core.Authentication authentication =
+                org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        boolean original = authentication != null && authentication.isAuthenticated()
+                && authentication.getPrincipal() instanceof com.sunwayworld.framework.security.bean.LoginUser
+                && userId.equals(authentication.getName());
         try (Connection connection = dataSource.getConnection()) {
-            checkLoginConfiguration(connection);
+            if (!original) checkLoginConfiguration(connection);
             UserRecord record = readUser(connection, userId);
             if (record == null) throw new AccessDeniedException(DENIED);
             checkActive(record);
-            return new Principal(issuer, record.id, record.orgId, record.orgName);
+            return new Principal(issuer, record.id, record.orgId, record.orgName, original);
         }
     }
 
@@ -132,11 +159,11 @@ public final class JdbcPersonnelIdentity {
     public Principal refreshPrincipal(Principal principal) throws SQLException {
         requireIssued(principal);
         try (Connection connection = dataSource.getConnection()) {
-            checkLoginConfiguration(connection);
+            if (!principal.originalAuthentication) checkLoginConfiguration(connection);
             UserRecord record = readUser(connection, principal.id);
             if (record == null) throw new AccessDeniedException(DENIED);
             checkActive(record);
-            return new Principal(issuer, record.id, record.orgId, record.orgName);
+            return new Principal(issuer, record.id, record.orgId, record.orgName, principal.originalAuthentication);
         }
     }
 
@@ -151,7 +178,7 @@ public final class JdbcPersonnelIdentity {
     public void authorizePersonnel(Principal principal) throws SQLException {
         requireIssued(principal);
         try (Connection connection = dataSource.getConnection()) {
-            checkLoginConfiguration(connection);
+            if (!principal.originalAuthentication) checkLoginConfiguration(connection);
             UserRecord record = readUser(connection, principal.id);
             if (record == null) throw new AccessDeniedException(DENIED);
             checkActive(record);
@@ -221,7 +248,7 @@ public final class JdbcPersonnelIdentity {
     public Set<String> permittedOrganizationIds(Principal principal) throws SQLException {
         requireIssued(principal);
         try (Connection connection = dataSource.getConnection()) {
-            checkLoginConfiguration(connection);
+            if (!principal.originalAuthentication) checkLoginConfiguration(connection);
             UserRecord record = readUser(connection, principal.id);
             if (record == null) throw new AccessDeniedException(DENIED);
             checkActive(record);
@@ -244,7 +271,7 @@ public final class JdbcPersonnelIdentity {
         requireIssued(principal);
         if (menuIds == null || menuIds.length == 0) throw new AccessDeniedException(DENIED);
         try (Connection connection = dataSource.getConnection()) {
-            checkLoginConfiguration(connection);
+            if (!principal.originalAuthentication) checkLoginConfiguration(connection);
             UserRecord record = readUser(connection, principal.id);
             if (record == null) throw new AccessDeniedException(DENIED);
             checkActive(record);
@@ -357,7 +384,11 @@ public final class JdbcPersonnelIdentity {
     }
     public static final class Principal implements java.security.Principal {
         private final Object issuer; private final String id,orgId,orgName;
-        private Principal(Object issuer,String id,String orgId,String orgName) { this.issuer=issuer;this.id=id;this.orgId=orgId;this.orgName=orgName; }
+        private final boolean originalAuthentication;
+        private Principal(Object issuer,String id,String orgId,String orgName) { this(issuer,id,orgId,orgName,false); }
+        private Principal(Object issuer,String id,String orgId,String orgName,boolean originalAuthentication) {
+            this.issuer=issuer;this.id=id;this.orgId=orgId;this.orgName=orgName;this.originalAuthentication=originalAuthentication;
+        }
         public String getName() { return id; }
         public String getId() { return id; }
         public String getOrgId() { return orgId; }

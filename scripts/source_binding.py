@@ -195,6 +195,7 @@ _HARNESS_SUFFIXES = (
     "scripts/render-external-logical-mappers.py",
     "scripts/generate-external-logical-clone-ddl.py",
     "scripts/verify-external-logical-clone-fixture.py",
+    "scripts/verify-external-logical-clone-runtime.py",
     "scripts/local_schema_policy.py",
     "scripts/http_write_proof.py",
     "scripts/audit_fixture_cleanup.py",

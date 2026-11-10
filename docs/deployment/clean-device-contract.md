@@ -100,8 +100,11 @@ schema and matches the `local-view` Mapper profile. Separate `direct-schema`
 owners or original DB-link transport require their own reviewed provisioning
 contract; this plan creates neither.
 
-Complete external non-table DDL, dependencies, grants, charset/collation closure,
-runtime logical access and business/HTTP acceptance remain incomplete. Plan
+The selected ten tables now have source-bound NLS, collation, table/column
+attribute and constraint semantics checked by the external verifier. It does not
+change session NLS to make the target pass. Complete production-reachable root
+discovery, external non-table DDL, dependencies, target grants, runtime logical
+access and business/HTTP acceptance remain incomplete. Plan
 validation and structural verification do not establish positive external data
 or real application equivalence. See the external package's
 [scope and phases](../../deployment/oracle/external-schema/README.md).

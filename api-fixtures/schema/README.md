@@ -197,3 +197,28 @@ the existing nine added tables; all other shared metadata must match. Its 492
 predicates verify both CoreFile definitions. Existing equal/v1/v2 policies retain
 their original contracts and reject this new schema difference. A successful
 fixture, observer or differential remains separate from strict HTTP evidence.
+
+`external-folder-unique-alignment-20261111.sql` is the narrow local correction
+for the earlier external logical-clone fixture's missing
+`IDX_T_LIMS_FOLDERS_FOLDERNO` / `UKT_LIMS_FOLDERS_FOLDERNO` pair. Its adjacent
+manifest pins the exact production-derived index and constraint statements in
+`deployment/oracle/external-schema/30-indexes.sql` and `35-constraints.sql`.
+Run `python3 scripts/tests/test-external-folder-unique-alignment.py` first.
+
+Execute only through the approved existing local Oracle SQLPlus channel,
+connected as `LIMS_RUNTIME_LOCAL` in `FREEPDB1` with unchanged current schema and
+application/schema writers idle. Before either DDL, the fixture checks the exact
+source `FOLDERNO` column, any existing index and any named or equivalent single
+column unique constraint. An absent index is created as the original normal,
+nonunique, ascending one-column index; an absent constraint is added using that
+index with the original **ENABLE NOVALIDATE** state. Existing equivalent
+objects are skipped, while conflicts reject without replacement. Source
+duplicate groups are counted and must remain unchanged; no row is inserted,
+deleted, merged or rewritten, and NOVALIDATE is not promoted to VALIDATE.
+
+Oracle DDL commits implicitly. If the index succeeds and a later step fails,
+SQLPlus ROLLBACK cannot remove it; retain the error and inspect the exact state.
+A repeat is safe only for the declared equivalent or absent paths. This is not a
+new-device installer, an automatic repair of arbitrary schema drift, a baseline
+change or API/strict evidence. It restarts no application, Oracle or Redis and
+changes no cache or privilege.

@@ -1,0 +1,73 @@
+{
+  "schema": "external-folder-unique-alignment-v1",
+  "source_class": "current-production-at-capture",
+  "target_owner": "LIMS_RUNTIME_LOCAL",
+  "target_container": "FREEPDB1",
+  "business_rows_written": false,
+  "production_writes": false,
+  "sources": [
+    {
+      "path": "deployment/oracle/external-schema/30-indexes.sql",
+      "sha256": "81d5ed6266a83feb65a4e98dcab95ae3c9c705f4bb2e87205d3983a8a0bb0b56",
+      "statement": "CREATE INDEX \"IDX_T_LIMS_FOLDERS_FOLDERNO\" ON \"T_LIMS_FOLDERS\" (\"FOLDERNO\");",
+      "statement_sha256": "36e03e44e5362033ddb739946991aee98d4545e70f68ef718a2ae680e927f873"
+    },
+    {
+      "path": "deployment/oracle/external-schema/35-constraints.sql",
+      "sha256": "d678dd28a305729e63fc22318d654fa6b829b06a5cf3062ffa4cd54c9995094d",
+      "statement": "ALTER TABLE \"T_LIMS_FOLDERS\" ADD CONSTRAINT \"UKT_LIMS_FOLDERS_FOLDERNO\" UNIQUE (\"FOLDERNO\") USING INDEX \"IDX_T_LIMS_FOLDERS_FOLDERNO\" ENABLE NOVALIDATE;",
+      "statement_sha256": "b97c4c550b6070658da60f1f6b2a22c9564028f05f405f0c0b9b95f1d25aa582"
+    }
+  ],
+  "source_column": {
+    "name": "FOLDERNO",
+    "position": 9,
+    "type": "VARCHAR2",
+    "length": "30",
+    "precision": null,
+    "scale": null,
+    "nullable": "N",
+    "char_used": "B",
+    "char_length": "30",
+    "default": null
+  },
+  "source_index": {
+    "name": "IDX_T_LIMS_FOLDERS_FOLDERNO",
+    "uniqueness": "NONUNIQUE",
+    "columns": [
+      [
+        "1",
+        "FOLDERNO",
+        "ASC"
+      ]
+    ]
+  },
+  "source_constraint": {
+    "name": "UKT_LIMS_FOLDERS_FOLDERNO",
+    "kind": "U",
+    "status": "ENABLED",
+    "validated": "NOT VALIDATED",
+    "deferrable": "NOT DEFERRABLE",
+    "deferred": "IMMEDIATE",
+    "condition": null,
+    "index_name": "IDX_T_LIMS_FOLDERS_FOLDERNO",
+    "columns": [
+      [
+        "1",
+        "FOLDERNO"
+      ]
+    ]
+  },
+  "sql": {
+    "path": "api-fixtures/schema/external-folder-unique-alignment-20261111.sql",
+    "sha256": "dc1d1e8f9071a465cccde9111546a8bc556e322ce37c542fa719f0c90960de23"
+  },
+  "limits": [
+    "Exact local runtime fixture only; not a new-device installer or production migration.",
+    "All known column/index/constraint conflicts reject before DDL; application/schema writers must be idle.",
+    "Source NONUNIQUE backing index and ENABLE NOVALIDATE preserve existing rows and duplicate groups; no data repair or VALIDATE.",
+    "Equivalent existing definition is skipped; conflicting definition is not replaced.",
+    "Oracle DDL implicitly commits; a later error does not roll back a created index or constraint.",
+    "No Oracle/Redis restart, baseline change, cache reset, privilege grant or API acceptance is implied."
+  ]
+}

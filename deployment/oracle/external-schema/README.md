@@ -47,9 +47,28 @@ its receipts remain transitional provenance and are not silently modified or
 applied to the running schema. Its older aggregate runtime verifier is not an
 exact verifier for this package.
 
-Complete non-table objects, cross-domain dependencies, grants, character-set/
-collation closure, integration into the core installer, runtime access mapping,
-business fixtures and real HTTP acceptance remain outstanding. This package's
+`structure.json.semantic_contract` also binds successful source reads for the
+selected tables' database/session NLS, ordinary/writable table attributes,
+default collation, visible-column identity/virtual/default-on-null state and
+constraint flags. `90-verify.sql` checks these conditions without changing NLS
+or database state. Ten source hidden physical columns, including six unused
+columns in the SP clearance table, are recorded by count and are not recreated
+as application columns. No production principal or grantor values are copied.
+The selected tables resolve directly in their source owner, with no source
+selected-table grants or synonyms; this does not supply target cross-schema
+grants for a `direct-schema` deployment.
+
+Current inspected application roots are two original Mapper files and these ten
+tables. Incoming functions and views that use the tables do not become forward
+installation dependencies of a direct application SELECT. Dynamic configuration
+root discovery and complete production-reachable domains remain separate.
+The same table surface also supports contract queries/selectors and the project
+termination invoice/payment binding check, in addition to the three CRM lists.
+A structure check does not prove those business behaviors.
+
+Complete production-reachable object/root discovery, non-table dependencies,
+target grants, runtime access mapping, business fixtures and real HTTP acceptance
+remain outstanding. This package's
 integrity or disposable-schema test does not establish complete external-domain
 or new-device restoration. Overall deployment readiness remains false; follow
 the [clean-device contract](../../../docs/deployment/clean-device-contract.md).

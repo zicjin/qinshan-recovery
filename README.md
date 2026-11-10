@@ -259,8 +259,10 @@ python3 scripts/verify-core-schema-package.py \
 
 It preserves the selected tables' 33 defaults and original constraint/index
 linkage. Its exact phases now participate in the combined installation plan.
-Complete external non-table DDL, dependencies, grants, charset/collation closure
-and runtime access acceptance remain unresolved. Neither this structure check
+The selected ten-table package also binds source database/session NLS,
+collation, table/column attributes and constraint flags, with read-only target
+verification. Complete production-reachable external roots, non-table DDL,
+dependencies, target grants and runtime access acceptance remain unresolved. Neither this structure check
 nor the combined plan check establishes positive external business rows or real
 HTTP equivalence. This package does not update an existing runtime schema.
 

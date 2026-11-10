@@ -11,7 +11,7 @@
     {
       "id": "external",
       "path": "external-schema/manifest.json",
-      "sha256": "8f39160978b7e923f998706075e114debbcdb6ac6c040d103e9285be35972e8e"
+      "sha256": "722c98160ba0683254dcbda8be05a697cb9a7498645f15a7667be55953744e22"
     },
     {
       "id": "core",
@@ -68,10 +68,10 @@
       "package": "external"
     },
     {
-      "bytes": 479878,
+      "bytes": 849082,
       "path": "external-schema/90-verify.sql",
       "role": "verifier",
-      "sha256": "e2c48ba1d2861b838a9b201921ad71e4de386979ecc632a3cf825ae52d55930e",
+      "sha256": "3893ba5dc1b3c9bcd8e14d5e5800f3f4584faad9d1b936d3521a0800c3378d23",
       "package": "external"
     },
     {

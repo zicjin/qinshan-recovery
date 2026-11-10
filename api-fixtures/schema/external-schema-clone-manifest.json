@@ -1,0 +1,111 @@
+{
+  "schema": "external-schema-clone-manifest-v1",
+  "status": "environment-not-ready-external-schema",
+  "strict_evidence": false,
+  "production_access": "read-only remote dictionary metadata",
+  "business_rows_read": false,
+  "writes": false,
+  "source_commit": "b9be218878a8ff56fd672e26b934bd1f43dc14b3",
+  "private_receipts": [
+    {
+      "path": "private/external-schema-clone-inventory-20261110.json",
+      "sha256": "a04b2ab536f03330cfd10bc6835b9c368f2b9710952205701e9c128beead7f99"
+    },
+    {
+      "path": "private/production-baseline-20261110/external-schema-remote-metadata-private.json",
+      "sha256": "c268df8626f7848e7674430d02d66d0a822afd9897b6e4b3a2472280fb836a89"
+    }
+  ],
+  "domains": [
+    {
+      "logical_domain": "HT",
+      "link_topology": [
+        {"owner": "LIMS2_CZJKY_EMC_DEV", "name": "LIMS_CZJKY_HT", "visibility": "private"},
+        {"owner": "LIMS2_CZJKY_EMC_DEV", "name": "LIMS_CZJKY_HT2", "visibility": "private"}
+      ],
+      "remote_owner": "LIMS_CZJKY_HT",
+      "objects": [
+        "T_CRM_CONTRACT",
+        "T_CRM_INVOICE_PROJ",
+        "T_CRM_INVOICE",
+        "T_CRM_PAY_PROJECT",
+        "T_CRM_PAYMENT"
+      ],
+      "metadata_counts": {
+        "objects": 5,
+        "columns": 270,
+        "constraints": 12,
+        "constraint_columns": 12,
+        "indexes": 10,
+        "index_columns": 10,
+        "triggers": 0,
+        "dependencies": 0,
+        "grants": "blocked-remote-dictionary-ora-00904"
+      },
+      "routes": [
+        "/secure/emc/module/bp/project/projects/all-proj/queries",
+        "/secure/emc/module/bp/project/projects/crm/invoice-proj/queries",
+        "/secure/emc/module/bp/project/projects/crm/payment-proj/queries"
+      ]
+    },
+    {
+      "logical_domain": "SP",
+      "link_topology": [
+        {"owner": "PUBLIC", "name": "LIMS_CZJKY_SP", "visibility": "public"}
+      ],
+      "remote_owner": "LIMS_CZJKY_SP",
+      "objects": ["T_LIMS_CLEARANCEFORM", "T_LIMS_FOLDERS"],
+      "metadata_counts": {
+        "objects": 2,
+        "columns": 662,
+        "constraints": 7,
+        "constraint_columns": 7,
+        "indexes": 21,
+        "index_columns": 23,
+        "triggers": 0,
+        "dependencies": 0,
+        "grants": "blocked-remote-dictionary-ora-00904"
+      },
+      "routes": ["/secure/emc/module/bp/project/projects/all-proj/queries"]
+    },
+    {
+      "logical_domain": "XFP",
+      "link_topology": [
+        {"owner": "PUBLIC", "name": "LIMS_CZJKY_XFP", "visibility": "public"}
+      ],
+      "remote_owner": "LIMS_CZJKY_XF",
+      "objects": ["T_XFP_ORDER_TASK", "T_XFP_PROJECT", "T_XFP_REPORT"],
+      "metadata_counts": {
+        "objects": 3,
+        "columns": 371,
+        "constraints": 7,
+        "constraint_columns": 7,
+        "indexes": 14,
+        "index_columns": 14,
+        "triggers": 0,
+        "dependencies": 0,
+        "grants": "blocked-remote-dictionary-ora-00904"
+      },
+      "routes": [
+        "/secure/emc/module/bp/project/projects/all-proj/queries",
+        "/secure/emc/module/bp/project/projects/crm/invoice-proj/queries",
+        "/secure/emc/module/bp/project/projects/crm/payment-proj/queries"
+      ]
+    }
+  ],
+  "required_before_provisioning": [
+    "approved isolated target contract and environment-private link secrets",
+    "complete remote grants and charset/collation contract",
+    "versioned DDL/object dependency package for HT, SP and XFP",
+    "minimum referential data closure and cleanup scope",
+    "link resolution and original SQL smoke receipt"
+  ],
+  "forbidden_inputs": [
+    "production link connection strings",
+    "production usernames/passwords/wallets",
+    "production business rows",
+    "guessed database links",
+    "empty-result or fixed-success fallbacks"
+  ],
+  "replay_gate": "blocked-until-supplier-and-local-links-resolve"
+}

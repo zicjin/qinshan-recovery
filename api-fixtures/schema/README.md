@@ -101,6 +101,16 @@ binding inputs. Observed schema hashes remain runtime-contract inputs. This work
 does not change application source, provide API equivalence, promote strict
 evidence or close `API-ALIGNMENT-GATE`.
 
+`external-schema-clone-manifest.json` is a separate production dependency
+inventory for Oracle domains reached through `@LIMS_CZJKY_HT`,
+`@LIMS_CZJKY_SP` and `@LIMS_CZJKY_XFP`. It records only link topology,
+source-bound remote object names, dictionary metadata counts and blocked gates.
+It is not a DDL or link-bootstrap fixture: production connection definitions,
+credentials, endpoints and business rows remain private, and the existing
+`schema_fixture.py` local-owner allowlist is unchanged. Provisioning requires an
+approved isolated target package before any link or external-schema DDL is
+applied.
+
 `production-ddl-alignment-20261109.sql` and
 `production-ddl-field-alignment-20261109.sql` are reviewed, one-time incremental
 alignment scripts for `LIMS_RUNTIME_LOCAL` in `FREEPDB1`. Their adjacent manifests

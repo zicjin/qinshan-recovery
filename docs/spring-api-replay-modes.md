@@ -10,8 +10,12 @@ when application source or configuration changes, batch the changes into one
 checkpoint and perform the necessary app-only refresh before replay. Finish active
 verification and fixture cleanup first. Application refresh is allowed and does
 not require an additional approval; avoiding unnecessary restarts is an efficiency
-rule, not an uninterrupted-application requirement. Keep supplier `18081` read-only;
-sss2 deployment belongs to final delivery acceptance.
+rule, not an uninterrupted-application requirement. Production `sss` remains
+strictly read-only. The named `sss2` supplier test application on `18081` is a
+controlled reference: fixture HTTP writes are allowed only under
+[supplier-test-baseline.md](../../.scratch/sunway-supplier-exit-api-first/supplier-test-baseline.md).
+Its Oracle, Redis and other instances remain protected; sss2 deployment belongs to
+final delivery acceptance.
 
 Each case must:
 

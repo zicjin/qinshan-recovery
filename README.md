@@ -52,6 +52,44 @@ python3 scripts/verify-source-only-checkpoint.py \
 SOURCE_ONLY_CHECKPOINT=1 python3 owned-distribution/tests/test-package.py
 ```
 
+## Clean-device deployment boundary
+
+The repository does not currently contain a complete current-production Oracle
+DDL/bootstrap package. A clean clone therefore cannot, by itself, recreate the
+full LIMS schema on a new server. The historical files under `project/sql/`
+are release and upgrade provenance, not an ordered initialization script; do
+not execute that directory as a bootstrap.
+
+Before deployment, an operator must provide one Oracle PDB, one Redis instance,
+an application schema/user with grants, a private runtime properties file, the
+approved core schema package for the target version, Java 8, public dependency
+JARs and the Maven plugin seed. Credentials, license material, private keys,
+DB-link strings and business data stay outside Git and the distribution.
+
+The current external logical-clone fixture is structure-only. It requires an
+existing application schema, creates the ten approved HT/SP/XFP tables and
+indexes, creates no DB link and inserts no business rows. Use the following
+fail-closed contract check before applying fixtures:
+
+```bash
+python3 scripts/verify-clean-device-contract.py
+python3 scripts/verify-external-logical-clone-fixture.py
+```
+
+Once the operator-managed core schema exists, apply
+`api-fixtures/schema/external-logical-clone.sql` through the approved SQLPlus
+channel, retain its log, and verify it with
+`scripts/verify-external-logical-clone-runtime.py`. The matching restore script
+drops only those ten fixture tables and does not restore a baseline or delete
+business data. The complete sequence and its limits are documented in
+`docs/deployment/clean-device-contract.md`.
+
+`verify-clean-device-contract.py` intentionally reports `deployment_ready:
+false` while the approved core schema package is unavailable. This is a
+deployment blocker, not an optional warning. A successful source-only build or
+external-clone structure check must not be reported as complete clean-device
+restoration.
+
 The distribution contains one Spring application and requires external
 configuration at startup. It contains no supplier run JAR, private
 `gikam-core-*` JAR, Sunway native loader, license input, compatibility process,

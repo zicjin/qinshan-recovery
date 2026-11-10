@@ -19,6 +19,15 @@
     "requires_private_source_at_install": false,
     "complete_application_bootstrap": false
   },
+  "combined_oracle_installation": {
+    "path": "deployment/oracle/installation-manifest.json",
+    "initializer": "deployment/oracle/install.sql",
+    "status": "partial",
+    "integrity_verifier": "scripts/verify-combined-oracle-installation.py --check-plan",
+    "requires_private_source_at_install": false,
+    "complete_external_domains": false,
+    "deployment_ready": false
+  },
   "first_administrator": {
     "launcher": "owned-distribution/initialize-admin.sh",
     "instructions": "docs/deployment/first-administrator.md",

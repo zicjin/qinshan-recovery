@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 from pathlib import Path
 import re
@@ -18,6 +19,11 @@ REQUIRED_FIXTURES = (
     "deployment/oracle/core-schema/manifest.json",
     "deployment/oracle/external-schema/manifest.json",
     "scripts/verify-core-schema-package.py",
+    "deployment/oracle/installation-manifest.json",
+    "deployment/oracle/install.sql",
+    "deployment/oracle/00-preflight.sql",
+    "deployment/oracle/99-verify.sql",
+    "scripts/verify-combined-oracle-installation.py",
     "owned-distribution/initialize-admin.sh",
     "docs/deployment/first-administrator.md",
 )
@@ -55,6 +61,15 @@ def main() -> int:
             or core.get("requires_private_source_at_install") is not False
             or core.get("complete_application_bootstrap") is not False):
         fail("core package must remain partial and independently verifiable")
+    combined = manifest.get("combined_oracle_installation", {})
+    if (combined.get("path") != "deployment/oracle/installation-manifest.json"
+            or combined.get("initializer") != "deployment/oracle/install.sql"
+            or combined.get("status") != "partial"
+            or combined.get("integrity_verifier") != "scripts/verify-combined-oracle-installation.py --check-plan"
+            or combined.get("requires_private_source_at_install") is not False
+            or combined.get("complete_external_domains") is not False
+            or combined.get("deployment_ready") is not False):
+        fail("combined Oracle installation must remain a portable partial plan")
     administrator = manifest.get("first_administrator", {})
     if (administrator.get("status") != "implemented"
             or administrator.get("launcher") != "owned-distribution/initialize-admin.sh"
@@ -77,6 +92,23 @@ def main() -> int:
             or package_manifest.get("deployment_ready") is not False
             or not package_manifest.get("blockers")):
         fail("deployment contract contradicts the partial production-derived core package")
+    # Reuse the finite plan verifier so this contract cannot validate missing
+    # child SQL, stale hashes, reordered phases or relaxed partial guards.
+    try:
+        spec = importlib.util.spec_from_file_location(
+            "combined_oracle_installation", ROOT / "scripts/verify-combined-oracle-installation.py",
+        )
+        if not spec or not spec.loader:
+            fail("combined Oracle installation verifier is unavailable")
+        verifier = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(verifier)
+        combined_result = verifier.verify(ROOT / combined["path"])
+    except (OSError, UnicodeError, ValueError, TypeError, KeyError, AttributeError, SyntaxError):
+        fail("combined Oracle installation integrity check failed")
+    if (combined_result.get("plan_valid") is not True
+            or combined_result.get("deployment_ready") is not False
+            or combined_result.get("complete_external_domains") is not False):
+        fail("combined Oracle installation contradicts the blocked deployment contract")
     text = json.dumps(manifest, ensure_ascii=False)
     if SECRET_MATERIAL.search(text):
         fail("manifest contains secret or connection material")
@@ -114,6 +146,7 @@ def main() -> int:
         "first_administrator_status": administrator["status"],
         "historical_sql_replay_allowed": False,
         "external_logical_clone_fixture": True,
+        "combined_oracle_installation_valid": combined_result["plan_valid"],
     }, ensure_ascii=False))
     return 0 if args.check_contract else 2
 

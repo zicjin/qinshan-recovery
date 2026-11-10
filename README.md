@@ -2,9 +2,10 @@
 
 This standalone repository contains the source-only application for the
 Sunway supplier exit. Application build/package, a partial production-derived
-Oracle DDL/technical bootstrap package and a first-administrator installer are
-available. Complete restoration on a new server remains blocked by the unfinished
-schema, configuration and installation acceptance. See
+Oracle DDL/technical bootstrap package, a combined core/external installation
+plan and a first-administrator installer are available. Complete restoration on
+a new server remains blocked by unfinished schema, configuration, grants and
+installation acceptance. See
 [the deployment boundary](#clean-device-deployment-boundary)
 before provisioning a new environment. It contains the original `project/`
 source, reconstructed
@@ -29,6 +30,10 @@ build or deployment inputs and are not required by a clean standalone checkout.
 - `build-support/`: integrity manifests for controlled external build inputs.
 - `deployment/oracle/core-schema/`: partial production-derived DDL and technical
   bootstrap, with a guard against incomplete installation.
+- `deployment/oracle/external-schema/`: selected HT/SP/XFP table DDL, defaults,
+  indexes, constraints and exact subset verification.
+- `deployment/oracle/installation-manifest.json` and `install.sql`: the combined
+  partial installation plan and guarded entry for one empty application schema.
 - `docs/reconstitution/`: source recovery provenance and compile snapshots.
 
 ## Controlled build inputs
@@ -107,6 +112,38 @@ not execute that directory as a bootstrap.
 | `api-fixtures/schema/external-logical-clone.sql` | Ten HT/SP/XFP table structures in an existing local runtime schema | No |
 | `deployment/oracle/core-schema/` | Production-derived partial structural package: 737 tables, ordered indexes/types/routines and an object verifier | Partial; normal installer rejects while blockers remain |
 | `deployment/oracle/external-schema/` | Portable partial HT/SP/XFP ten-table package with captured defaults, original index links and exact subset verification | Partial; requires empty diagnostic user and rejects full installation |
+| `deployment/oracle/installation-manifest.json` and `install.sql` | Combined external/core phase order, namespace checks and exact 747-table union verifier | Partial; normal entry rejects before any child SQL or DDL |
+
+The source-bound DDL for these selected 737 core and ten external tables is
+available, together with an integrated installation plan. This is a defined
+structural subset; it does not establish complete current-production DDL,
+configuration or independent new-server readiness.
+
+The shortest offline plan check is:
+
+```bash
+python3 scripts/verify-combined-oracle-installation.py --check-plan
+```
+
+It checks the pinned child packages, exact phase order, shared preflight,
+cross-package object namespaces and final union verifier without Oracle or
+private collection files. Exit 0 means `plan_valid=true`; the result still has
+`status=blocked`, `deployment_ready=false` and `complete_external_domains=false`.
+Without `--check-plan`, the verifier exits 2 to stop deployment. The normal SQL
+entry, `deployment/oracle/install.sql`, raises `ORA-20100` before child SQL or
+DDL while these blockers remain. There is no override mode.
+
+The integrated order is one empty-user/charset preflight, external tables /
+indexes / constraints / `90-verify.sql`, then the original core DDL order,
+technical bootstrap and its verification, core `90-verify.sql`, and finally
+`99-verify.sql` for the exact 747-table logical object union. External
+`90-verify.sql` requires exactly ten tables, so it must run before core objects
+exist. Chaining the two child `install.sql` files also fails their repeated
+empty-user preflight. See [the combined plan](deployment/oracle/README.md) for
+the precise phases; this order is not permission to bypass the partial guard.
+The combined plan places the selected external objects in the application
+schema, matching the `local-view` build profile. It does not provision separate
+`direct-schema` owners or original database links.
 
 Remaining project work is to complete the ordered, sanitized current-production
 core DDL package, its object/grant verifier, and versioned configuration bootstrap
@@ -158,8 +195,8 @@ empty identity set using the original Java password encoder; it is not a public
 bootstrap endpoint or a complete application configuration installer.
 
 The current distribution contains application/startup files, the administrator
-command and build provenance. It does not package `deployment/oracle/core-schema/`
-or `docs/deployment/`. A new-server handoff therefore needs the matching standalone
+command and build provenance. It does not package `deployment/oracle/` or
+`docs/deployment/`. A new-server handoff therefore needs the matching standalone
 checkout as well, or a future versioned, hash-pinned installation bundle carrying
 those materials. Copying only `owned-distribution/target/distribution` cannot
 initialize a new database. Completing the missing installation materials is
@@ -180,8 +217,11 @@ python3 scripts/verify-core-schema-package.py \
 ```
 
 It preserves the selected tables' 33 defaults and original constraint/index
-linkage. It remains partial and is not yet integrated with the core empty-schema
-installer. This package does not update an existing runtime schema.
+linkage. Its exact phases now participate in the combined installation plan.
+Complete external non-table DDL, dependencies, grants, charset/collation closure
+and runtime access acceptance remain unresolved. Neither this structure check
+nor the combined plan check establishes positive external business rows or real
+HTTP equivalence. This package does not update an existing runtime schema.
 
 The older external logical-clone fixture is structure-only. It requires an
 existing application schema, creates the ten approved HT/SP/XFP tables and
@@ -207,8 +247,8 @@ receipt. It is currently a provenance audit command for the recovery workspace,
 not a standalone clean-clone deployment verifier. That dependency must be
 removed from the eventual deployable schema package's verification path.
 
-For new installations, complete and use the portable
-`deployment/oracle/external-schema/` package with the core installer. The older
+For new installations, complete and use the combined
+`deployment/oracle/installation-manifest.json` / `install.sql` contract. The older
 `api-fixtures/schema/external-logical-clone.sql` is retained for existing test
 fixtures; do not apply both packages to the same schema. Its matching restore
 script drops those ten tables **including any rows they contain**. It is a

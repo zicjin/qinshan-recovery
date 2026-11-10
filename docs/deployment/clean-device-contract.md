@@ -5,7 +5,7 @@ distribution on a new server. It is deliberately explicit about the current
 gap: this repository does **not** contain a complete current-production Oracle
 schema bootstrap. A clean clone therefore cannot be advertised as a complete
 from-scratch LIMS restoration until an approved, source-bound core schema
-package is delivered.
+and configuration package is completed and accepted.
 
 `deployment/oracle/core-schema/` now contains the first source-bound structural
 package: 737 tables, ordered indexes/constraints, types, selected routines and
@@ -16,6 +16,13 @@ first-administrator installer. Its schema manifest remains partial and the SQL
 initializer rejects before applying any DDL. Run
 `python3 scripts/verify-core-schema-package.py --check-package` to validate shipped
 files without private inputs; this does not establish complete deployment readiness.
+
+The selected core and external DDL now have one integrated plan:
+`deployment/oracle/installation-manifest.json` pins both child packages and
+`deployment/oracle/install.sql` is its normal SQL entry. The plan covers 737
+core plus ten external tables, with a final exact 747-table union verifier.
+These selected DDL materials are available; complete current-production schema,
+configuration and new-server restoration remain unproven.
 
 The bootstrap content verifier is an installation-phase check: run it immediately
 following the seed and before initializing identities or starting the application.
@@ -50,9 +57,48 @@ python3 scripts/verify-core-schema-package.py \
   --manifest deployment/oracle/external-schema/manifest.json --check-package
 ```
 
-This package targets an empty diagnostic schema and retains an unconditional
-partial-install guard. Integration with core installation, complete external
-domain DDL/grants and application acceptance remain incomplete. See its
+Its phases are integrated with core in the combined plan. The shortest offline
+check, requiring no Oracle or private acquisition inputs, is:
+
+```bash
+python3 scripts/verify-combined-oracle-installation.py --check-plan
+```
+
+Exit 0 establishes `plan_valid: true` for pinned package/file hashes, fixed phase
+order, the shared preflight, cross-package namespaces and exact union verifier.
+The result remains `status: blocked`, `deployment_ready: false` and
+`complete_external_domains: false`. Without `--check-plan`, the command exits 2
+to stop deployment. It executes no SQL and offers no guard-bypass mode.
+
+The combined SQL initializer and both child installers retain their unconditional
+partial guard. The normal combined entry raises `ORA-20100` before any child SQL
+or DDL. Its declared phase order is:
+
+| Order | Phase | Required boundary |
+| --- | --- | --- |
+| 1 | Combined `00-preflight.sql` | Dedicated empty session user, unchanged `CURRENT_SCHEMA`, `AL32UTF8` and `AL16UTF16` |
+| 2 | External `20-tables.sql`, `30-indexes.sql`, `35-constraints.sql`, `90-verify.sql` | External verifier requires exactly its ten tables and no core objects yet |
+| 3 | Core `10-types.sql`, `20-tables.sql`, `30-indexes.sql`, `35-constraints.sql`, `60-sequences.sql`, `40-routines.sql`, `50-comments.sql` | Preserve original dependency order, including sequences before routines |
+| 4 | Core `70-bootstrap.sql`, `80-bootstrap-verify.sql`, `90-verify.sql` | Verify the finite technical bootstrap before identities or runtime changes |
+| 5 | Combined `99-verify.sql` | Exact 747-table/logical object union, named indexes and constraints, valid objects/indexes and no DB links |
+
+Run external verification before core; reversing them violates the exact
+ten-table precondition. Do not chain the two independent `install.sql` files:
+their second empty-user preflight would reject existing objects. The combined
+plan uses one shared preflight and preserves the child phase order. The final
+union verifier checks object identities as well as counts; a 747-table count
+alone is insufficient. Oracle-generated physical names are handled by the
+child logical structure checks, as described in the
+[combined plan](../../deployment/oracle/README.md).
+This combined target puts the selected external tables in the same application
+schema and matches the `local-view` Mapper profile. Separate `direct-schema`
+owners or original DB-link transport require their own reviewed provisioning
+contract; this plan creates neither.
+
+Complete external non-table DDL, dependencies, grants, charset/collation closure,
+runtime logical access and business/HTTP acceptance remain incomplete. Plan
+validation and structural verification do not establish positive external data
+or real application equivalence. See the external package's
 [scope and phases](../../deployment/oracle/external-schema/README.md).
 
 The older external logical-clone fixture is structure-only. It creates the
@@ -122,10 +168,23 @@ Do not copy production credentials, DB-link strings, license bodies, private
 keys, or business rows. `owned-distribution/example/owned-application.properties`
 is a shape example, not a deployable credential file.
 
-## Reproducible sequence once the core package exists
+The optional `verify-clean-device-contract.py --runtime-config` check currently
+checks only the presence of the three datasource keys. It does not validate
+credentials, Redis isolation, the encoder, the port or the artifact access mode;
+those settings still require installation acceptance. The SQL preflight checks
+database character sets, not the SQLPlus client encoding or application session
+NLS settings. Execute UTF-8 installation SQL with a matching client encoding
+(`NLS_LANG=.AL32UTF8` for SQLPlus) and verify the application's comparison/sort
+settings against the captured `NLS_COMP=BINARY` and `NLS_SORT=BINARY` contract.
+Logical table restoration excludes source hidden system/unused columns; it is
+not a claim of identical physical storage.
 
-This is the required sequence for the future complete deployment package.
-The full schema/grants and configuration phases remain incomplete. Do not
+## Reproducible sequence after installation blockers close
+
+The integrated partial phase order above is available now. The following is the
+required sequence for a completed deployment package; it is not an available
+successful new-server installation procedure. Full schema/grants, configuration
+and installation acceptance remain incomplete. Do not
 replace them by replaying the historical SQL directory or applying every fixture.
 
 Run the deployment readiness gate first:
@@ -162,24 +221,26 @@ only validates this explicit blocked state offline; it is not a deployment gate.
 2. Provision the operator-managed Oracle/PDB and Redis services on a new server.
    Reuse existing services during development and validation; do not restart
    Oracle or reimport data per check. Production remains strictly read-only.
-3. Create the dedicated application schema/user and grants using the completed
-   project-supplied installation package. Apply its ordered DDL and exact object
-   verifier, retaining its hash receipt. Apply and verify versioned configuration
-   bootstrap separately from ordinary business data. The current partial package
-   is guarded; do not bypass it or run all files under `project/sql/`.
-4. Apply and verify the completed portable external logical-domain package
-   matching the chosen access mode. `deployment/oracle/external-schema/` is the
-   new-installation package under development; its own `90-verify.sql` checks
-   exact selected structures and live empty-table counts as the installation
-   user. Core integration, non-table dependencies and grants remain incomplete,
-   so its normal installer still rejects. Do not apply both that package and
-   the older `api-fixtures/schema/external-logical-clone.sql` to the same schema.
-   The older fixture is retained for existing test environments. Its verifier is
-   specific to Docker SQLPlus, `FREEPDB1` and `LIMS_RUNTIME_LOCAL`; it checks
-   aggregate metadata counts and schema-owned DB-link absence. Its row figure
-   comes from `NUM_ROWS` statistics, not a live `COUNT(*)`. It is not a portable
-   exact schema/grants verifier or proof of empty tables. Completing this
-   installation/verification path remains project work.
+3. Create the dedicated empty application schema/user and grants from the
+   completed project installation contract. Validate the matching combined
+   plan with `python3 scripts/verify-combined-oracle-installation.py --check-plan`
+   and retain its manifest/hash receipt. The canonical SQL entry is
+   `deployment/oracle/install.sql`, through an approved SQLPlus connection to
+   that user. Its current partial guard stops before DDL; do not bypass it.
+   Once the package is completed, preserve the declared external-first,
+   core-second, final-union verification order above. Do not run all files under
+   `project/sql/`, chain child installers or apply the older external fixture
+   alongside the portable external package.
+4. Verify the versioned configuration bootstrap before initializing identities
+   or starting the application. The combined plan already places
+   `80-bootstrap-verify.sql` immediately after `70-bootstrap.sql`; do not reseed
+   configuration after runtime changes to make hashes match. Preserve the phase
+   receipts and SQLPlus logs. Oracle DDL commits implicitly, so a later failure
+   does not roll back earlier phases. This empty-schema plan supplies neither
+   an existing-schema upgrade nor data-preserving recovery. Complete external
+   domain/access and full configuration acceptance remain project work. The
+   older fixture's aggregate statistics are not proof of empty tables or a
+   replacement for the combined installation verifiers.
 5. Prepare the private runtime file for the exact schema, Redis database and
    artifact mode. Use the already obtained distribution's one-time installer:
 
@@ -238,4 +299,9 @@ default exits 2 to stop deployment; only explicit `--check-contract` exits 0 for
 offline validation of the blocked contract. The current state is therefore:
 source-only build/package is available; targeted schema fixtures and the
 external logical clone are available; complete clean-device Oracle restoration
-remains blocked.
+remains blocked. The combined selected 747-table installation plan is available
+for offline integrity checking, with a guarded normal entry. Outstanding source
+identifier/routine dispositions, full configuration bootstrap, target grants,
+complete external logical domains and real full-system installation acceptance
+must be resolved before declaring a new server ready. A diagnostic structural
+replay, synthetic SQL check or empty HTTP 200 cannot close those gates.

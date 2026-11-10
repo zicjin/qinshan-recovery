@@ -387,7 +387,6 @@ def main(argv: list[str] | None = None) -> int:
         return result.returncode
 
     resource_records = copy_resource_tree(resource_source_root, resources)
-    resource_records.extend(copy_license_clean_frontend_overlay(resources))
     java_tree_resources = copy_java_tree_resources(source_root, resources)
     resource_records.extend(java_tree_resources)
     owned_resource_records: list[dict[str, object]] = []
@@ -406,6 +405,9 @@ def main(argv: list[str] | None = None) -> int:
         if owned_root.is_dir():
             owned_resource_records.extend(copy_resource_tree(owned_root, resources))
     resource_records.extend(owned_resource_records)
+    # Apply the source-owned original frontend last so a reconstituted
+    # framework resource cannot overwrite the approved license-clean overlay.
+    resource_records.extend(copy_license_clean_frontend_overlay(resources))
     merge_spring_factories(
         [resource_source_root]
         + [ROOT / "owned-framework" / "src/main/resources"],

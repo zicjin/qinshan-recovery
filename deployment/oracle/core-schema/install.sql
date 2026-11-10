@@ -15,4 +15,6 @@ END;
 @@60-sequences.sql
 @@40-routines.sql
 @@50-comments.sql
+@@70-bootstrap.sql
+@@80-bootstrap-verify.sql
 @@90-verify.sql

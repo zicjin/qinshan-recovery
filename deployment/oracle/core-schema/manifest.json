@@ -585,10 +585,10 @@
   ],
   "files": [
     {
-      "bytes": 424,
+      "bytes": 469,
       "path": "install.sql",
       "role": "initializer",
-      "sha256": "a1dc76812a6120ebf1b3df65649d53a6cd5df54999502e17a1e375ecc99f49a8"
+      "sha256": "ab04192cfad18baad316066c63d5e221f825c7ad30ea24dc737456ed8ac32225"
     },
     {
       "bytes": 900,
@@ -655,6 +655,24 @@
       "path": "blocked-objects.tsv",
       "role": "blockers",
       "sha256": "34c43de299eb20a45435b6d343badb43ebc16cefece4df9d9415f865a8093638"
+    },
+    {
+      "bytes": 555667,
+      "path": "70-bootstrap.sql",
+      "role": "bootstrap",
+      "sha256": "d8dd94c45d5e7597b9d1338ef08125ef59c2403df3d50bcc475abfae1319b252"
+    },
+    {
+      "bytes": 1272039,
+      "path": "80-bootstrap-verify.sql",
+      "role": "bootstrap-verifier",
+      "sha256": "01e8c185b55ca29f1737ad85d5df3e8566aa6e5d1c85c66a94400ae00417dab7"
+    },
+    {
+      "bytes": 975052,
+      "path": "bootstrap-provenance.json",
+      "role": "source-metadata",
+      "sha256": "f4dbb0b66eb712e11461c5373bbc2e07901f7740f62f86ee10dfdb2fe712bbd5"
     }
   ],
   "limitations": [
@@ -13499,5 +13517,21 @@
   "target": {
     "owner": "current-session-user",
     "requires_empty_schema": true
+  },
+  "technical_bootstrap": {
+    "complete": false,
+    "excluded_rows": 45,
+    "path": "bootstrap-provenance.json",
+    "row_counts": {
+      "T_CORE_ADMIN_SELECT_CONFIG": 36,
+      "T_CORE_I18N": 1340,
+      "T_CORE_I18N_CONFIG": 2,
+      "T_CORE_I18N_MESSAGE": 1355,
+      "T_CORE_LOGIN_CONFIG": 1,
+      "T_CORE_MENU": 392,
+      "T_CORE_SYSTEM_CONFIG": 1,
+      "T_CORE_TABLE": 467,
+      "T_CORE_TABLE_HIERARCHY": 170
+    }
   }
 }

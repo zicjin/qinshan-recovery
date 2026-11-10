@@ -8,6 +8,7 @@ This verifier does not connect to Oracle or execute SQL.
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import csv
 import hashlib
 import io
@@ -20,7 +21,10 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "deployment/oracle/core-schema/manifest.json"
 HASH = re.compile(r"[0-9a-f]{64}\Z")
 ROLES = {"types", "tables", "indexes", "constraints", "stored-code", "sequences", "comments",
-         "preflight", "verifier", "initializer", "registry", "blockers"}
+         "bootstrap", "bootstrap-verifier", "source-metadata", "preflight", "verifier", "initializer", "registry", "blockers"}
+BOOTSTRAP_TABLES = {"T_CORE_I18N_CONFIG", "T_CORE_I18N", "T_CORE_I18N_MESSAGE", "T_CORE_TABLE",
+                    "T_CORE_TABLE_HIERARCHY", "T_CORE_MENU", "T_CORE_SYSTEM_CONFIG",
+                    "T_CORE_LOGIN_CONFIG", "T_CORE_PASSWORD_POLICY", "T_CORE_ADMIN_SELECT_CONFIG"}
 OBJECT_ROLES = {
     "TABLE": "tables", "INDEX": "indexes", "TYPE": "types", "TYPE BODY": "types",
     "FUNCTION": "stored-code", "PROCEDURE": "stored-code", "PACKAGE": "stored-code",
@@ -195,6 +199,66 @@ def object_blocks(text: str) -> dict[tuple[str, str], str]:
     return blocks
 
 
+def check_bootstrap(text: str) -> None:
+    """Only the reviewed technical configuration tables may receive seed rows."""
+    sql = masked_sql(text)
+    require(re.search(r"^\s*WHENEVER\s+SQLERROR\s+EXIT\s+FAILURE\s+ROLLBACK\s*$", sql, re.I | re.M) is not None,
+            "bootstrap must stop and roll back on SQL errors")
+    require(re.search(r"^\s*SET\s+DEFINE\s+OFF\s*$", sql, re.I | re.M) is not None,
+            "bootstrap must disable SQLPlus substitution")
+    sql = re.sub(r"^\s*(?:WHENEVER\s+(?:SQLERROR|OSERROR)\s+EXIT\s+FAILURE\s+ROLLBACK|"
+                 r"SET\s+(?:DEFINE\s+OFF|SQLBLANKLINES\s+ON))\s*$", "", sql, flags=re.I | re.M)
+    sql = sql.strip()
+    if re.match(r"DECLARE\b", sql, re.I):
+        guard = re.match(r"DECLARE\s+n\s+NUMBER\s*;\s*BEGIN\s*SELECT\s+"
+                         r"(?P<counts>[\s\S]+?)\s+INTO\s+n\s+FROM\s+DUAL\s*;\s*"
+                         r"IF\s+n\s*<>\s*0\s+THEN\s+RAISE_APPLICATION_ERROR\s*"
+                         r"\(\s*-20120\s*,\s*\)\s*;\s*END\s+IF\s*;\s*END\s*;\s*/", sql, re.I)
+        require(guard is not None, "bootstrap has an unapproved empty-target guard")
+        term = r"\(\s*SELECT\s+COUNT\s*\(\s*\*\s*\)\s+FROM\s+(" + IDENTIFIER + r")\s*\)"
+        counts = guard.group("counts").strip()
+        require(re.fullmatch(term + r"(?:\s*\+\s*" + term + r")*", counts, re.I) is not None,
+                "bootstrap guard may only sum whole-table counts")
+        tables = [identifier(value) for value in re.findall(term, counts, re.I)]
+        require(len(tables) == len(set(tables)) and set(tables).issubset(BOOTSTRAP_TABLES),
+                "bootstrap guard counts unapproved or repeated tables")
+        remainder = sql[guard.end():]
+        targets = [identifier(value) for value in re.findall(r"\bINSERT\s+INTO\s+(" + IDENTIFIER + r")", remainder, re.I)]
+        require(set(targets).issubset(set(tables)), "bootstrap empty-target guard omits a written table")
+        sql = remainder
+    else:
+        raise InvalidPackage("bootstrap must reject nonempty target configuration before INSERT")
+    statements = [statement.strip() for statement in sql.split(";") if statement.strip()]
+    require(bool(statements) and statements[-1].upper() == "COMMIT"
+            and all(statement.upper() != "COMMIT" for statement in statements[:-1]),
+            "bootstrap must commit exactly once after all INSERT statements")
+    for statement in statements[:-1]:
+        statement = statement.strip()
+        insert = re.fullmatch(r"INSERT\s+INTO\s+(" + IDENTIFIER + r")\s*"
+                              r"\(\s*(?:" + IDENTIFIER + r"\s*,\s*)*" + IDENTIFIER
+                              + r"\s*\)\s+VALUES\s*\(([\s\S]*)\)", statement, re.I)
+        require(insert is not None, "bootstrap must contain only explicit INSERT VALUES and COMMIT")
+        require(identifier(insert.group(1)) in BOOTSTRAP_TABLES,
+                "bootstrap inserts into a table outside the technical configuration allowlist")
+        expression = insert.group(2)
+        words = re.findall(r"[A-Za-z_$#][A-Za-z0-9_$#]*", expression)
+        require(all(word.upper() in {"NULL", "TO_CLOB", "CHR", "TO_DATE", "TO_TIMESTAMP"}
+                    for word in words), "bootstrap VALUES contains an unapproved SQL expression")
+        require(re.fullmatch(r"[\w\s(),+.|-]*", expression) is not None,
+                "bootstrap VALUES contains an unsupported expression")
+
+
+def check_bootstrap_verifier(text: str) -> None:
+    sql = masked_sql(text)
+    require(re.search(r"\b(?:INSERT|UPDATE|DELETE|MERGE|CREATE|ALTER|DROP|TRUNCATE|GRANT|"
+                      r"REVOKE|COMMIT|ROLLBACK|EXECUTE|CALL)\b", re.sub(
+                          r"^\s*WHENEVER\s+(?:SQLERROR|OSERROR)\s+EXIT\s+FAILURE\s+ROLLBACK\s*$",
+                          "", sql, flags=re.I | re.M), re.I) is None,
+            "bootstrap verifier must not execute DDL, DML or transaction changes")
+    require(re.search(r"^\s*@@?", sql, re.M) is None,
+            "bootstrap verifier must not include child SQL")
+
+
 def check_initializer(text: str, status: str, sql_files: set[str], preflight: str) -> None:
     masked = masked_sql(text)
     includes = list(re.finditer(r"^\s*@@?([^\s]+)\s*$", masked, re.M))
@@ -295,6 +359,57 @@ def verify(manifest_path: Path) -> dict:
     for role in ("initializer", "preflight", "registry", "verifier"):
         require(sum(entry["role"] == role for entry in files.values()) == 1,
                 "package must contain exactly one " + role)
+    require(sum(entry["role"] == "bootstrap" for entry in files.values()) <= 1,
+            "package may contain at most one bootstrap phase")
+    require(sum(entry["role"] == "bootstrap-verifier" for entry in files.values()) <= 1,
+            "package may contain at most one bootstrap verification phase")
+    for name, entry in files.items():
+        if entry["role"] == "bootstrap":
+            require(name.endswith(".sql"), "bootstrap must be SQL")
+            check_bootstrap(texts[name])
+        elif entry["role"] == "bootstrap-verifier":
+            require(name.endswith(".sql"), "bootstrap verifier must be SQL")
+            check_bootstrap_verifier(texts[name])
+    if "technical_bootstrap" in manifest:
+        reference = manifest["technical_bootstrap"]
+        require(isinstance(reference, dict), "technical bootstrap reference must be an object")
+        provenance_path = relative_path(reference.get("path"))
+        require(provenance_path in files and files[provenance_path]["role"] == "source-metadata",
+                "technical bootstrap provenance must be a listed source-metadata file")
+        provenance = json.loads(texts[provenance_path])
+        require(provenance.get("schema") == "core-technical-bootstrap-v1"
+                and provenance.get("source_class") == manifest["source_class"]
+                and provenance.get("business_rows") is False
+                and provenance.get("identities_or_permissions_copied") is False,
+                "technical bootstrap provenance has an invalid source or scope")
+        bootstrap_files = [name for name, entry in files.items() if entry["role"] == "bootstrap"]
+        require(len(bootstrap_files) == 1, "technical bootstrap provenance requires one bootstrap phase")
+        sql = texts[bootstrap_files[0]]
+        actual_rows = Counter()
+        for match in re.finditer(r"\bINSERT\s+INTO\s+(" + IDENTIFIER + r")[^;]*;", masked_sql(sql), re.I):
+            statement = sql[match.start():match.end()].strip() + "\n"
+            actual_rows[(identifier(match.group(1)), digest(statement.encode("utf-8")))] += 1
+        rows = provenance.get("rows")
+        require(isinstance(rows, list), "technical bootstrap row provenance is missing")
+        declared_rows, row_counts, seen = Counter(), Counter(), set()
+        for row in rows:
+            require(isinstance(row, dict) and row.get("table") in BOOTSTRAP_TABLES
+                    and isinstance(row.get("id"), str) and bool(row["id"]),
+                    "invalid technical bootstrap row provenance")
+            identity = (row["table"], row["id"])
+            require(identity not in seen, "duplicate technical bootstrap row identity")
+            seen.add(identity)
+            check_hash(row.get("source_row_sha256"), "bootstrap source row hash")
+            check_hash(row.get("statement_sha256"), "bootstrap SQL statement hash")
+            declared_rows[(row["table"], row["statement_sha256"])] += 1
+            row_counts[row["table"]] += 1
+        require(actual_rows == declared_rows, "bootstrap statement hashes do not match row provenance")
+        require(dict(row_counts) == provenance.get("row_counts") == reference.get("row_counts"),
+                "technical bootstrap row counts differ")
+        for artifact in provenance.get("source_artifacts", []):
+            require(isinstance(artifact, dict) and isinstance(artifact.get("path"), str),
+                    "invalid bootstrap source artifact provenance")
+            check_hash(artifact.get("sha256"), "bootstrap source artifact hash")
 
     objects = manifest.get("objects")
     require(isinstance(objects, list), "object list is missing")

@@ -114,6 +114,32 @@ END;
         self.assertFalse((checkout / 'private').exists())
         self.assertFalse((checkout / '.scratch').exists())
 
+    def test_bootstrap_provenance_rehashed_count_or_statement_tamper_is_rejected(self):
+        package = self.root / 'copied-package'
+        shutil.copytree(ROOT / 'deployment/oracle/core-schema', package)
+        manifest = json.loads((package / 'manifest.json').read_text())
+        reference = manifest.get('technical_bootstrap')
+        self.assertIsNotNone(reference)
+        provenance_path = package / reference['path']
+        original = json.loads(provenance_path.read_text())
+        for kind in ('count', 'statement'):
+            provenance = json.loads(json.dumps(original))
+            if kind == 'count':
+                table = next(iter(provenance['row_counts']))
+                provenance['row_counts'][table] += 1
+            else:
+                provenance['rows'][0]['statement_sha256'] = 'f' * 64
+            provenance_path.write_text(json.dumps(provenance, ensure_ascii=False) + '\n')
+            raw = provenance_path.read_bytes()
+            for entry in manifest['files']:
+                if entry['path'] == reference['path']:
+                    entry['sha256'], entry['bytes'] = sha(raw), len(raw)
+            (package / 'manifest.json').write_text(json.dumps(manifest))
+            result = subprocess.run([sys.executable, str(SCRIPT), '--manifest', str(package / 'manifest.json'),
+                                     '--check-package'], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            self.assertFalse(json.loads(result.stdout)['package_valid'])
+
     def test_sqlplus_error_and_display_directives_before_guard_are_safe(self):
         initializer = (self.root / 'install.sql').read_text()
         self.write('install.sql', 'WHENEVER OSERROR EXIT FAILURE ROLLBACK\n'
@@ -209,6 +235,46 @@ END;
                 self.pin()
                 self.assert_rejected()
 
+    def test_bootstrap_allows_only_reviewed_static_configuration_in_one_transaction(self):
+        bootstrap = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+SET SQLBLANKLINES ON
+DECLARE n NUMBER;
+BEGIN
+ SELECT (SELECT COUNT(*) FROM T_CORE_I18N_CONFIG) + (SELECT COUNT(*) FROM T_CORE_MENU) INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+INSERT INTO T_CORE_I18N_CONFIG (ID, LOCALENAME) VALUES ('zh-cn', '中文');
+INSERT INTO T_CORE_MENU (ID, MENUNAME, HREF) VALUES ('sample', 'UPDATE DELETE; literal
+with ''quoted'' text', NULL);
+COMMIT;
+'''
+        def pin_bootstrap(text):
+            self.write('70-bootstrap.sql', text)
+            self.pin()
+            raw = (self.root / '70-bootstrap.sql').read_bytes()
+            self.manifest['files'].append({'path': '70-bootstrap.sql', 'role': 'bootstrap',
+                                          'sha256': sha(raw), 'bytes': len(raw)})
+            self.write('manifest.json', json.dumps(self.manifest))
+
+        initializer = (self.root / 'install.sql').read_text()
+        self.write('install.sql', initializer.replace('@@90-verify.sql', '@@70-bootstrap.sql\n@@90-verify.sql'))
+        pin_bootstrap(bootstrap)
+        result = self.run_verifier()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        for bad in (bootstrap.replace('T_CORE_MENU (ID', 'T_CORE_USER (ID'),
+                    bootstrap.replace('VALUES (\'sample\'', 'SELECT (\'sample\''),
+                    bootstrap.replace('COMMIT;', 'DELETE FROM T_CORE_MENU;\nCOMMIT;'),
+                    bootstrap.replace('IF n<>0', 'IF n=0'),
+                    bootstrap.replace('(SELECT COUNT(*) FROM T_CORE_MENU)', '(SELECT COUNT(*) FROM T_CORE_TABLE)'),
+                    bootstrap.replace('INSERT INTO T_CORE_MENU', 'COMMIT;\nINSERT INTO T_CORE_MENU'),
+                    bootstrap.replace('COMMIT;', 'MERGE INTO T_CORE_MENU;\nCOMMIT;'),
+                    bootstrap.replace('COMMIT;', 'CREATE TABLE OUTSIDE(ID NUMBER);\nCOMMIT;')):
+            with self.subTest(bad=bad):
+                pin_bootstrap(bad)
+                self.assert_rejected()
+
     def test_secret_endpoint_user_and_unlisted_file_are_rejected(self):
         good = (self.root / '50-comments.sql').read_text()
         for bad in ('-- jdbc:oracle:thin:@//example.invalid:1521/service\n',
@@ -221,6 +287,39 @@ END;
         self.write('unlisted.sql', 'CREATE TABLE HIDDEN(ID NUMBER);\n')
         self.pin()
         self.assert_rejected()
+
+    def test_bootstrap_verifier_accepts_read_cursors_and_rejects_mutations(self):
+        good = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT COUNT(*) INTO n FROM T_CORE_MENU;
+ FOR r IN (SELECT ID FROM T_CORE_MENU) LOOP
+  IF r.ID IS NULL THEN RAISE_APPLICATION_ERROR(-20122, 'INSERT DELETE are message text'); END IF;
+ END LOOP;
+END;
+/
+'''
+        initializer = (self.root / 'install.sql').read_text()
+        self.write('install.sql', initializer.replace('@@90-verify.sql', '@@80-bootstrap-verify.sql\n@@90-verify.sql'))
+
+        def pin_verifier(text):
+            self.write('80-bootstrap-verify.sql', text)
+            self.pin()
+            raw = (self.root / '80-bootstrap-verify.sql').read_bytes()
+            self.manifest['files'].append({'path': '80-bootstrap-verify.sql', 'role': 'bootstrap-verifier',
+                                          'sha256': sha(raw), 'bytes': len(raw)})
+            self.write('manifest.json', json.dumps(self.manifest))
+
+        pin_verifier(good)
+        result = self.run_verifier()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        for bad in ('INSERT INTO T_CORE_MENU(ID) VALUES(1);', 'UPDATE T_CORE_MENU SET ID=1;',
+                    'DELETE FROM T_CORE_MENU;', 'CREATE TABLE BAD(ID NUMBER);', 'COMMIT;', 'ROLLBACK;',
+                    "EXECUTE IMMEDIATE 'DROP TABLE BAD';", '@@70-bootstrap.sql'):
+            with self.subTest(bad=bad):
+                pin_verifier(good + bad + '\n')
+                self.assert_rejected()
 
     def test_replacement_unicode_and_ipv4_are_rejected_without_rejecting_numbers(self):
         good = (self.root / '50-comments.sql').read_text()

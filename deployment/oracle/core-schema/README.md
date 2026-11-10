@@ -28,12 +28,32 @@ in a dedicated disposable validation schema.
 | `60-sequences.sql` | One sequence with explicit empty-install MIN_VALUE seed |
 | `40-routines.sql` | Seven valid functions and three procedures |
 | `50-comments.sql` | Reviewed table and column comments |
+| `70-bootstrap.sql` | Finite production-derived locale, translations, internal static menus, entity metadata and safe UI configuration |
+| `80-bootstrap-verify.sql` | Exact selected configuration counts and field content, using only target-schema reads |
 | `90-verify.sql` | Per-table logical columns, PK/UQ column relations and named index checks |
 
 The actual order is in `install.sql`: sequences precede procedures that reference
 `NEXTVAL`. This is an empty-user package, not an upgrade, a replacement for a
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
+
+The technical bootstrap contains 3,764 rows across nine explicitly selected
+configuration tables: 2 locales, 1,340 internationalization keys, 1,355 messages,
+392 static internal menus, 467 entity metadata rows, 170 hierarchy relations,
+one system UI config, one login UI config and 36 source-referenced select
+configs. `bootstrap-provenance.json` pins every emitted statement and selected
+source row. Identity/audit-origin columns are not copied. No users, organizations,
+roles, passwords or permission grants are copied from production.
+
+The bootstrap checks all selected target tables are empty before any INSERT,
+then commits the technical configuration together. It is an initial-install
+phase, not an idempotent upgrade: rerunning it rejects with `ORA-20120` before
+inserting rows. A deployment must resolve remaining bootstrap exclusions first.
+Two conflicting translation keys have no arbitrary winner; equal duplicate
+messages retain their original rows. Eleven dynamic-resource menus, three
+external-target menus and entity relationships outside the structural closure
+remain excluded. Select configs can still require dictionaries/workflows and
+other dependencies that this finite subset does not supply.
 
 `manifest.json`, `object-registry.tsv` and `blocked-objects.tsv` retain the source
 and rendered hashes, transformations and exclusions. Source artifact paths are
@@ -45,7 +65,7 @@ copied as application DDL.
 Remaining blockers include two tables with invalid original identifier bytes,
 two originally INVALID functions, one endpoint-bearing function requiring an
 isolated configuration decision, complete target grants and external logical
-domains, and application configuration bootstrap (menus, permissions,
+domains, and application configuration bootstrap (remaining menus, permissions,
 dictionaries, workflows, dynamic LCDP and initial administrator). The original
 invalid identifiers are not guessed or silently renamed. Excluded routines are
 not replaced with successful stubs. See `manifest.json` for exact dispositions.

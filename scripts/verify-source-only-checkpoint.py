@@ -64,7 +64,7 @@ def artifact_identity(root: Path, run_jar: Path | None, errors: list[str]) -> st
     return expected
 
 
-def verify_snapshots(root: Path, artifact_sha: str, errors: list[str]) -> None:
+def verify_snapshots(root: Path, artifact_sha: str, errors: list[str], project_snapshot_path: Path | None = None) -> None:
     registry = load(root / "docs/reconstitution/framework-module-registry.json")
     require(registry.get("schema") == "reconstituted-framework-module-registry-v1", "framework registry schema", errors)
     require(registry.get("status") == "compiled-source-only", "framework registry is not compiled-source-only", errors)
@@ -99,7 +99,7 @@ def verify_snapshots(root: Path, artifact_sha: str, errors: list[str]) -> None:
     if transform.is_file():
         require(sha256(transform) == registry.get("transformation_manifest_sha256"), "transformation manifest hash mismatch", errors)
 
-    project_snapshot = load(root / "docs/reconstitution/project-source-closure-current.json")
+    project_snapshot = load(project_snapshot_path or (root / "docs/reconstitution/project-source-closure-current.json"))
     require(project_snapshot.get("schema") == "supplier-project-source-closure-snapshot-v1", "project snapshot schema", errors)
     require(project_snapshot.get("status") == "diagnostic-project-source-compile-pass", "project snapshot status", errors)
     require(project_snapshot.get("canonical") is False and project_snapshot.get("strict_evidence") is False, "project snapshot is presented as evidence", errors)
@@ -163,12 +163,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--run-jar", type=Path, help="optional externally injected stock run JAR")
     parser.add_argument("--application-report", type=Path, help="optional source-only application compile report")
     parser.add_argument("--distribution", type=Path, help="optional built distribution directory")
+    parser.add_argument("--project-snapshot", type=Path, help="optional project closure snapshot override for regression tests")
     args = parser.parse_args(argv)
     root = ROOT.resolve()
     errors: list[str] = []
     try:
         artifact_sha = artifact_identity(root, args.run_jar.resolve() if args.run_jar else None, errors)
-        verify_snapshots(root, artifact_sha, errors)
+        verify_snapshots(root, artifact_sha, errors, args.project_snapshot.resolve() if args.project_snapshot else None)
         module_gate = subprocess.run(
             [sys.executable, str(root / "scripts/verify-reconstituted-framework-modules.py"),
              "--root", str(root / "reconstituted/framework"), "--compiled"],

@@ -83,8 +83,8 @@ def main() -> int:
         probe = temporary / "probe.json"
         probe.write_text(json.dumps(snapshot), encoding="utf-8")
         errors = []
-        verifier.verify_snapshots_with_snapshot_override = None
-        assert not probe.is_file() or "missing-source-snapshot-generator.py" not in str(ROOT / "scripts/verify-source-only-checkpoint.py")
+        verifier.verify_snapshots(ROOT, "4a720797810fd2f8cca6e22604657028cb87830ca0e24bb55a5f42f040f6ee9f", errors, probe)
+        assert any("project snapshot generator is missing" in error for error in errors)
 
     print("source-only checkpoint verifier: PASS")
     return 0

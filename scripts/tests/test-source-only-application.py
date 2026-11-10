@@ -101,6 +101,16 @@ def main() -> int:
         else:
             raise AssertionError("missing ELN preload was enabled in frontend overlay")
 
+        mapper_resources = root / "mapper-resources"
+        overlay_records = builder.render_external_logical_mapper_overlay(
+            mapper_resources,
+            ROOT / "api-fixtures/schema/external-schema-runtime-profile.example.json",
+        )
+        assert len(overlay_records) == 2
+        rendered = next(mapper_resources.rglob("pf-project-oracle-mapper.xml")).read_text()
+        assert "@LIMS_CZJKY_" not in rendered
+        assert "LIMS_EXT_HT.T_CRM_CONTRACT" in rendered
+
     print("source-only application builder: PASS")
     return 0
 

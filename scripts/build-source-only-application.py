@@ -10,6 +10,7 @@ from pathlib import Path, PurePosixPath
 import re
 import shutil
 import subprocess
+import sys
 import zipfile
 
 
@@ -199,6 +200,47 @@ def copy_license_clean_frontend_overlay(
     return records
 
 
+def render_external_logical_mapper_overlay(
+    resources: Path,
+    profile: Path,
+    manifest: Path | None = None,
+) -> list[dict[str, object]]:
+    """Apply an explicit external-schema mapper overlay to final resources.
+
+    The renderer is intentionally a separate, allowlisted tool.  The default
+    build never calls it; a deployment profile must opt in explicitly.  The
+    returned records replace any original mapper records so the resource
+    provenance describes the bytes actually packaged.
+    """
+    renderer = ROOT / "scripts" / "render-external-logical-mappers.py"
+    if not renderer.is_file():
+        raise SystemExit(f"missing logical mapper renderer: {renderer}")
+    command = [sys.executable, str(renderer), "--output-root", str(resources), "--profile", str(profile)]
+    if manifest is not None:
+        command.extend(("--manifest", str(manifest)))
+    result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
+    if result.returncode:
+        raise SystemExit(result.stderr.strip() or result.stdout.strip() or "logical mapper overlay failed")
+    try:
+        payload = json.loads(result.stdout)
+        written = payload["written"]
+    except (json.JSONDecodeError, KeyError, TypeError) as exc:
+        raise SystemExit(f"logical mapper renderer returned invalid output: {exc}")
+    records: list[dict[str, object]] = []
+    for relative in written:
+        path = resources / str(relative)
+        if not path.is_file():
+            raise SystemExit(f"logical mapper overlay output missing: {path}")
+        records.append({
+            "path": str(relative),
+            "sha256": digest(path),
+            "bytes": path.stat().st_size,
+            "classification": "explicit-external-logical-clone-mapper-overlay",
+            "profile": str(profile),
+        })
+    return records
+
+
 def build_application_jar(classes: Path, resources: Path, output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     entries: dict[str, bytes] = {}
@@ -254,6 +296,19 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         default=Path(os.environ.get("JAVA_HOME", ROOT / "build/jdk1.8.0_391"))
         / "bin/javac",
+    )
+    parser.add_argument(
+        "--external-schema-profile",
+        type=Path,
+        help=(
+            "explicit logical-clone mapper profile; omitted by default so "
+            "original production-backed mapper resources remain unchanged"
+        ),
+    )
+    parser.add_argument(
+        "--external-schema-manifest",
+        type=Path,
+        help="manifest used by --external-schema-profile (optional)",
     )
     args = parser.parse_args(argv)
 
@@ -413,6 +468,17 @@ def main(argv: list[str] | None = None) -> int:
         + [ROOT / "owned-framework" / "src/main/resources"],
         resources,
     )
+    if args.external_schema_profile:
+        overlay_records = render_external_logical_mapper_overlay(
+            resources,
+            args.external_schema_profile.resolve(),
+            args.external_schema_manifest.resolve() if args.external_schema_manifest else None,
+        )
+        overlay_paths = {str(record["path"]) for record in overlay_records}
+        resource_records = [
+            record for record in resource_records if str(record["path"]) not in overlay_paths
+        ]
+        resource_records.extend(overlay_records)
     app_jar = output_root / "lims-owned-application.jar"
     build_application_jar(classes, resources, app_jar)
     third_party_provenance = (

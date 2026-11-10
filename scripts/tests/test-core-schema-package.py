@@ -345,6 +345,35 @@ COMMIT;
         self.write('manifest.json',json.dumps(self.manifest))
         self.assert_rejected()
 
+    def test_lcdp_bootstrap_projection_excludes_identity_and_allows_only_public_dtd(self):
+        bootstrap = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT (SELECT COUNT(*) FROM T_LCDP_RESOURCE) INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1,'Mapper','mapper',0,1,TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'),1,'emc.equiptInOut.mapper.ExampleOracleMapper','0',NULL,NULL,NULL);
+COMMIT;
+'''
+        self.write('install.sql',(self.root/'install.sql').read_text().replace('@@90-verify.sql','@@70-bootstrap.sql\n@@90-verify.sql'))
+        def pin_bootstrap(text):
+            self.write('70-bootstrap.sql',text)
+            self.pin()
+            raw=(self.root/'70-bootstrap.sql').read_bytes()
+            self.manifest['files'].append({'path':'70-bootstrap.sql','role':'bootstrap','sha256':sha(raw),'bytes':len(raw)})
+            self.write('manifest.json',json.dumps(self.manifest))
+        pin_bootstrap(bootstrap)
+        result=self.run_verifier()
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        for bad in (bootstrap.replace('CONTENT,EFFECTVERSION','CREATEDBYID,EFFECTVERSION'),
+                    bootstrap.replace('http://mybatis.org/dtd/mybatis-3-mapper.dtd','http://example.invalid/private.dtd'),
+                    bootstrap.replace('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">',
+                                      'http://mybatis.org/dtd/mybatis-3-mapper.dtd')):
+            pin_bootstrap(bad)
+            self.assert_rejected()
+
     def test_bootstrap_verifier_accepts_read_cursors_and_rejects_mutations(self):
         good = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
 SET DEFINE OFF

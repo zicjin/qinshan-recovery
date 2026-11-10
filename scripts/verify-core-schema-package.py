@@ -31,6 +31,18 @@ DICTIONARY_COLUMNS = {
     "T_CORE_CODE_CATEGORY": {"ID", "CODECATEGORYNAME", "CODECLASSID", "ORDERNO"},
     "T_CORE_CODE": {"ID", "CODE", "CODENAME", "CODECATEGORYID", "ORDERNO", "LASTSUSPENDEDFLAG", "I18NCODE"},
 }
+LCDP_COLUMNS = {
+    "T_LCDP_RESOURCE": {"ID","RESOURCENAME","RESOURCECATEGORY","PARENTID","ORDERNO","CONTENT","EFFECTVERSION","PATH","DELETEFLAG","DATATYPE","CLASSCONTENT","CLASSNAME"},
+    "T_LCDP_RESOURCE_HISTORY": {"ID","RESOURCEID","RESOURCENAME","RESOURCECATEGORY","CONTENT","VERSION","SUBMITFLAG","EFFECTFLAG","PATH","MODIFYVERSION","DELETEFLAG","CLASSCONTENT"},
+    "T_LCDP_MODULE_PAGE_COMP": {"ID","MODULEPAGEHISTORYID","MODULEPAGEID","MODULEPAGEVERSION","COMPID","TYPE","PARENTID","PREVIOUSID","VISIBLE","EDITABLE","CONFIG","CONFIGEXTEND"},
+    "T_LCDP_MODULE_PAGE_I18N": {"ID","MODULEPAGEID","MODULEPAGEHISTORYID","CODE","I18NCONFIGID","MESSAGE"},
+    "T_LCDP_PAGE_I18N_CODE": {"ID","CODE","MODULEPAGEID","MODULEPAGEHISTORYID"},
+}
+BOOTSTRAP_TABLES.update(LCDP_COLUMNS)
+MYBATIS_DTD = re.compile(
+    r'<!DOCTYPE\s+mapper\s+PUBLIC\s+"-//mybatis\.org//DTD Mapper 3\.0//EN"\s+'
+    r'"http://mybatis\.org/dtd/mybatis-3-mapper\.dtd"\s*>', re.I,
+)
 OBJECT_ROLES = {
     "TABLE": "tables", "INDEX": "indexes", "TYPE": "types", "TYPE BODY": "types",
     "FUNCTION": "stored-code", "PROCEDURE": "stored-code", "PACKAGE": "stored-code",
@@ -73,7 +85,10 @@ def digest(raw: bytes) -> str:
 
 
 def unsafe_material(text: str) -> bool:
-    return "\ufffd" in text or SENSITIVE.search(text) is not None or IPV4.search(text) is not None
+    # The exact public MyBatis DTD is source syntax, not an environment endpoint.
+    # A bare URL, changed host/path, or unrelated endpoint still fails closed.
+    reviewed = MYBATIS_DTD.sub("", text)
+    return "\ufffd" in reviewed or SENSITIVE.search(reviewed) is not None or IPV4.search(reviewed) is not None
 
 
 def check_hash(value: object, label: str) -> None:
@@ -247,10 +262,11 @@ def check_bootstrap(text: str) -> None:
         table = identifier(insert.group(1))
         require(table in BOOTSTRAP_TABLES,
                 "bootstrap inserts into a table outside the technical configuration allowlist")
-        if table in DICTIONARY_COLUMNS:
+        projections = {**DICTIONARY_COLUMNS, **LCDP_COLUMNS}
+        if table in projections:
             columns = [identifier(name.strip()) for name in insert.group("columns").split(",")]
-            require(len(columns) == len(set(columns)) and set(columns) == DICTIONARY_COLUMNS[table],
-                    "dictionary bootstrap columns differ from the reviewed technical projection")
+            require(len(columns) == len(set(columns)) and set(columns) == projections[table],
+                    "bootstrap columns differ from the reviewed technical projection")
         expression = insert.group("values")
         words = re.findall(r"[A-Za-z_$#][A-Za-z0-9_$#]*", expression)
         require(all(word.upper() in {"NULL", "TO_CLOB", "CHR", "TO_DATE", "TO_TIMESTAMP"}

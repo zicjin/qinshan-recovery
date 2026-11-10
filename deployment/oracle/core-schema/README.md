@@ -37,11 +37,13 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 3,941 rows across twelve explicitly selected
+The technical bootstrap contains 4,118 rows across seventeen explicitly selected
 configuration tables: 2 locales, 1,350 internationalization keys, 1,375 messages,
-392 static internal menus, 467 entity metadata rows, 170 hierarchy relations,
-one system UI config, one login UI config and 36 source-referenced select
-configs, plus 2 dictionary classes, 27 categories and 118 options.
+392 static and 4 published equipment menus, 467 entity metadata rows, 170 hierarchy
+relations, one system UI config, one login UI config and 37 source-referenced
+select configs, plus 2 dictionary classes, 28 categories and 120 options.
+The equipment LCDP module contributes 10 resource/ancestor nodes, 8 published
+histories, 78 components, 61 page translations and 12 dependent translation keys.
 `bootstrap-provenance.json` pins every emitted statement and selected
 source row. Identity/audit-origin columns are not copied. No users, organizations,
 roles, passwords or permission grants are copied from production.
@@ -54,12 +56,26 @@ parent class and translation dependency. The source categories `dsCategory`,
 no synthetic defaults are inserted. Generic selectors and other categories are
 outside this finite dictionary closure.
 
+The published `emc.equiptInOut` Java, Oracle Mapper and page source is preserved
+with its original versions and component graph. Only its reviewed published
+closure is seeded. Draft history, locks, checkout identities and production
+`appuuid` are excluded. Long source CLOBs use bounded `TO_CLOB` expressions with
+explicit CR/LF characters; the verifier compares full lengths and every chunk.
+The exact public MyBatis DTD is allowed as source syntax, not a deployment
+endpoint. Other URLs and secret material remain rejected.
+
+Source limitations remain: one page references an undefined keyboard callback;
+ten dependent translation keys were absent from the acquired global/page keys.
+The source scan method uses request operation-user fields, and its password
+check depends on the original deterministic encoder. These are not changed by
+the installer or represented as fully accepted business/security behavior.
+
 The bootstrap checks all selected target tables are empty before any INSERT,
 then commits the technical configuration together. It is an initial-install
 phase, not an idempotent upgrade: rerunning it rejects with `ORA-20120` before
 inserting rows. A deployment must resolve remaining bootstrap exclusions first.
 Two conflicting translation keys have no arbitrary winner; equal duplicate
-messages retain their original rows. Eleven dynamic-resource menus, three
+messages retain their original rows. Seven other dynamic-resource menus, three
 external-target menus and entity relationships outside the structural closure
 remain excluded. Other select configs can still require dictionaries/workflows and
 other dependencies that this finite subset does not supply.

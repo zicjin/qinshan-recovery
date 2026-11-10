@@ -1,0 +1,838 @@
+{
+  "blockers": [
+    {
+      "id": "external-domain-closure",
+      "reason": "Selected ten tables only; complete non-table DDL, dependency, grants and charset/collation closure remain unverified."
+    },
+    {
+      "id": "core-install-integration",
+      "reason": "Empty diagnostic schema target; integration with core installation and runtime logical access path/grants still requires acceptance."
+    },
+    {
+      "id": "business-and-http-acceptance",
+      "reason": "No business rows or real HTTP equivalence are established by a structure installation package."
+    }
+  ],
+  "captured_at": "2026-11-10T08:41:45.713406+00:00",
+  "counts": {
+    "captured_defaults": 33,
+    "columns": 1303,
+    "explicit_indexes": 45,
+    "source_constraints": 26,
+    "tables": 10
+  },
+  "deployment_ready": false,
+  "excluded_objects": [],
+  "files": [
+    {
+      "bytes": 339,
+      "path": "install.sql",
+      "role": "initializer",
+      "sha256": "d0349518837ebaf44a79cdba7cf06f3ea9c5c88af459de57bf756590ec53e1a6"
+    },
+    {
+      "bytes": 900,
+      "path": "00-preflight.sql",
+      "role": "preflight",
+      "sha256": "4be68aff017c73098859f7b97eb1c777822e97035a8d27d44f33ae6057b5dd99"
+    },
+    {
+      "bytes": 50273,
+      "path": "20-tables.sql",
+      "role": "tables",
+      "sha256": "77a98d714c3a61edb754462d79877a95b42de8c85163ae475161c09896f35689"
+    },
+    {
+      "bytes": 8125,
+      "path": "30-indexes.sql",
+      "role": "indexes",
+      "sha256": "81d5ed6266a83feb65a4e98dcab95ae3c9c705f4bb2e87205d3983a8a0bb0b56"
+    },
+    {
+      "bytes": 1886,
+      "path": "35-constraints.sql",
+      "role": "constraints",
+      "sha256": "d678dd28a305729e63fc22318d654fa6b829b06a5cf3062ffa4cd54c9995094d"
+    },
+    {
+      "bytes": 479878,
+      "path": "90-verify.sql",
+      "role": "verifier",
+      "sha256": "e2c48ba1d2861b838a9b201921ad71e4de386979ecc632a3cf825ae52d55930e"
+    },
+    {
+      "bytes": 4217,
+      "path": "object-registry.tsv",
+      "role": "registry",
+      "sha256": "00ddb759543b1f4d36eb038554e53c11120f852de3ea13907d0478730c43c1f7"
+    },
+    {
+      "bytes": 420260,
+      "path": "structure.json",
+      "role": "source-metadata",
+      "sha256": "ca5787bf5fb681b7912561482620795acddef29fa2442a0040a7905ebf7a30f7"
+    }
+  ],
+  "objects": [
+    {
+      "name": "IDX_CLEARANCEFORM_CORPID_TIME",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "78b0f08f576ae9ee35a1677e134d0644f58e0ba88e615316ed9c4af5644ba250",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_CLEARANCEFORM_FROMFOLDERNO",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "ee4790aa9b895ef4f2fd0ed9302fbfef7470541236bea532ca56e6eda02d2990",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_CLEARANCEFORM_STATUS",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "39849a8dd9283e10cbd75da679bb8a6814f042e987ae933ea3fbcf8e37b873b5",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_FOLDERS_CLEARANCEID",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "f63655d1cc781973e83d81f6b2a13e94b84a902989e9dff75a740d5a102bb9f7",
+      "source_sha256": "54daa53ab5b4b12b22b2792fd6b50363113c5ca1e19c080261da47e9550922ca",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_FOLDERS_ID",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "5d6883f9ac0cf5dbe1d15591ab29a98e07f2fdce1343bce7540ead1c6b4e8ac9",
+      "source_sha256": "54daa53ab5b4b12b22b2792fd6b50363113c5ca1e19c080261da47e9550922ca",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_LIMS_CFORM_CRTDATE",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "0c425a4ec850228d217e0dfe58a52969e859e2546059621cd0fe0f9a09200658",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_LIMS_CLEARANCEFORM_230907",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "d6b4cb8bd80fc4b1f9b940c221844bed930476f68d040cffb31d3d1a1a609399",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_LIMS_CLEARANCEFORM_COMPLETIONDATE",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "0ac51f201fdfc0c556ac1f36abdf9458f12390442ff8d840db39a26553cecbcc",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_LIMS_CLEARANCEFORM_CRMORDERID",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "8787828a13c61722acc3ed2b6f7b9492c2394dbbf1d1a28167b470b62e7a029b",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_LIMS_CLEARANCEFORM_REQTYPNAM",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "94b324797056d15ae2681ab0198e87fbcc403103d74a58308a5bda5f6ff96b6d",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_LIMS_CLEARANCEFORM_TYPE",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "2fc894c04144ce21658461446ba9fc84449ada800a888683edb5d40c4eb2b1db",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_LIMS_FOLDERS_ISPLACEONFILE",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "3368b030756d21f85be802ae618fb13a5de5dd4cc3ed79a5236b47d2455fe2ad",
+      "source_sha256": "54daa53ab5b4b12b22b2792fd6b50363113c5ca1e19c080261da47e9550922ca",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_LIMS_FOLDERS_PRTTIME",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "2d20a611c836b0535a6ce2f00955efae7716d6aa34fb8173e550e198c427f760",
+      "source_sha256": "54daa53ab5b4b12b22b2792fd6b50363113c5ca1e19c080261da47e9550922ca",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_T_LIMS_CLEARANCEFORM_ID",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "60308e65e5871990a88df06581b344e85b55d30056bae4b83702701f7982f21b",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_T_LIMS_CLEARANCEFORM_NODECODE",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "2873c17b0d02d0e37ab7a8773c3ee0e8d347bdeed324f0fe1f805c1ffc400270",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_T_LIMS_CLEARANCEFORM_NODEINSTID",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "bc725739a43491c16be741917376320be2c4fd21d96ee6e7bad2da52fbd38942",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_T_LIMS_CLEARANCEFORM_PROCINSTID",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "3be09bcc52c989d200188a7f35cfcba2cda97ad47d6454921bd1ce4c352ba7d3",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_T_LIMS_FOLDERS_FOLDERNO",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "78e33f7eabe061d9a162f617a62bab3f78b5e213e34ad6425a8d6a829d435f2b",
+      "source_sha256": "54daa53ab5b4b12b22b2792fd6b50363113c5ca1e19c080261da47e9550922ca",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_T_LIMS_FOLDERS_NODECODE",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "2007fdcad48ac1b8ea82543fedeeabaad3d14d37d8f8f245a453d6f5d009f2f5",
+      "source_sha256": "54daa53ab5b4b12b22b2792fd6b50363113c5ca1e19c080261da47e9550922ca",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_T_LIMS_FOLDERS_NODEINSTID",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "4ab73da0a87c098e10b4207fca96fa5dea6646f7d26f2e6ce0618d800b273512",
+      "source_sha256": "54daa53ab5b4b12b22b2792fd6b50363113c5ca1e19c080261da47e9550922ca",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "IDX_T_LIMS_FOLDERS_PROCINSTID",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "e5939d36f487975743af6a0f99f3dbb15333e02a8d8ae89871bf55f63a773672",
+      "source_sha256": "54daa53ab5b4b12b22b2792fd6b50363113c5ca1e19c080261da47e9550922ca",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "PK_CRM_INVOICE",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "a95df2fd1c10867ec70e75e0ff48a09ff7679b61303714f0f05bf302eb506dd2",
+      "source_sha256": "5810c10d95f7ecdf60f9278ac764b152d8bf80cd59faf3b4a5e0fc565a9e2fa7",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "PK_CRM_INVOICE_PROJ",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "c57158de050d952fb6e55f0cedae9f4d62e9488abfcc348ec9e0dfd24c0a84ab",
+      "source_sha256": "036a4fd99db37c79f5f2e761fcdee3e4d8c70176997a9f00c4419badf120ea4f",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "PK_CRM_PAYMENT",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "fb09caf34194ff8d06c1692607ef6dc4d742be8c19049370d16fff2f4d283909",
+      "source_sha256": "b998eeafbd1077a06f54d939d599efc80161132dc6eb9c216b058e3462d12928",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "PK_CRM_PAY_PROJECT",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "5245144d0fe410646bdbb5c68d7dcc666dc99a7808d9f569eabee96c9ea4139d",
+      "source_sha256": "185c0c68d737b3a4d05e88b47082eae3c5cb1189a64bd2a6872fcbff78ae0418",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "PK_XFP_ORDER_TASK",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "11ed79b372023e407bfd3c86ff11f17dbfaabca819cf9ef8f501dd071a5daf49",
+      "source_sha256": "a09dd6fbcddb3e7ecb469b8334f14625af39980954190a1a9071ec682d34538c",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "PK_XFP_PROJECT",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "3363d7fdae8b3d47ff439f7dfb78db458a8535d57ccb25cfb01740f5c46e666e",
+      "source_sha256": "25746e68bf46e129cf90e8483d90f8f7e87960b7faf62312196c86e89ee85416",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "PK_XFP_REPORT",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "ecb4fc7ca28512a42e2672bfbfcfc8cf6ab5465b0a643243b272cf07cd3b281c",
+      "source_sha256": "8e4e55684c2f4f7bc941cb47a1eda06e7b2411691f53d9330b527396c8ab7d1e",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_CONTRACT_CONTRACTNO_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "fe9a05e6e70ff7c7284493209ed4a86a4217f7f48df9b1556dae0063264f4aa7",
+      "source_sha256": "747414e54877b14d4fd7e489ad156cb78db351a74167c7eb143a1ccdb241996e",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_CONTRACT_PK",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "217c1fcdefe825df4cc6339c3e0b0b827593d839ff30a683be97c80e8fd00e4d",
+      "source_sha256": "747414e54877b14d4fd7e489ad156cb78db351a74167c7eb143a1ccdb241996e",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_CONTRACT_SIGNUSERID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "a953b070e0d2c8d34facdfd3593fc2e5cbb42e982d45a4b4d68a8fad945d50f3",
+      "source_sha256": "747414e54877b14d4fd7e489ad156cb78db351a74167c7eb143a1ccdb241996e",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_INVOICE_PROJ_INVOICEID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "5647f707e09ef1db9b0af4f6957ba4ce6923cdbbde0598a0b54a1823e880a1be",
+      "source_sha256": "036a4fd99db37c79f5f2e761fcdee3e4d8c70176997a9f00c4419badf120ea4f",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_INVOICE_PROJ_PROJID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "4faf583a0980511eec21a7896cd8256e1ac59119691f4496f8caa34da205245d",
+      "source_sha256": "036a4fd99db37c79f5f2e761fcdee3e4d8c70176997a9f00c4419badf120ea4f",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_PAYMENT_ORGNAME_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "75471697312d18c9eb4ecf1edb57bf4e5a938128cf1027b52ac6e84131803ea9",
+      "source_sha256": "b998eeafbd1077a06f54d939d599efc80161132dc6eb9c216b058e3462d12928",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_ORDER_TASK_PROJID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "7c6e4f418f59c49e47b2fffc05d3ba5ccf211c269f809cd8006afb02618fc202",
+      "source_sha256": "a09dd6fbcddb3e7ecb469b8334f14625af39980954190a1a9071ec682d34538c",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_ORDER_TASK_RUNID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "f61eda22ab082553925397f9c4f8693088246017eef437f8fb641e375b1f8002",
+      "source_sha256": "a09dd6fbcddb3e7ecb469b8334f14625af39980954190a1a9071ec682d34538c",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_PROJECT_BIZHOSTUSERID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "aca2fb21169e03caf4f3717a806d8b96180c8746fe3367790129fed7372f0246",
+      "source_sha256": "25746e68bf46e129cf90e8483d90f8f7e87960b7faf62312196c86e89ee85416",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_PROJECT_CONTRACTNO_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "343a555409efaa86f651b8f56c20129eb171d354fdff9ff7a4f4a4548c34bbf8",
+      "source_sha256": "25746e68bf46e129cf90e8483d90f8f7e87960b7faf62312196c86e89ee85416",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_PROJECT_CREATEDBYORGID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "f6a6a1278666b377f6eb1f214a6cce4e942f67091f0ac18577e142f19d1bdb02",
+      "source_sha256": "25746e68bf46e129cf90e8483d90f8f7e87960b7faf62312196c86e89ee85416",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_PROJECT_DEPARTMENTID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "137fd50837384b3e59cc3fdfa1a2ce1a283d411f5b722181883e3ceecb4afd87",
+      "source_sha256": "25746e68bf46e129cf90e8483d90f8f7e87960b7faf62312196c86e89ee85416",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_PROJECT_PRODUCTID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "4ad95d26c912d1420a27a02e2770e3e212ab21ea48a1bea9e8776c19ab7c66b0",
+      "source_sha256": "25746e68bf46e129cf90e8483d90f8f7e87960b7faf62312196c86e89ee85416",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_PROJECT_PROJNO_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "3dff710a72acb11fa3644abb687d5ec30fbb0498b21812b669392bb1a713611b",
+      "source_sha256": "25746e68bf46e129cf90e8483d90f8f7e87960b7faf62312196c86e89ee85416",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_REPORT_OTHERREPORTTEMPLATEID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "189edf84a8db98707cbeba9c1c28eaeba62ce9ecdf18bb0d43ebac3768bd2881",
+      "source_sha256": "8e4e55684c2f4f7bc941cb47a1eda06e7b2411691f53d9330b527396c8ab7d1e",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_REPORT_PROCESSSTATUS_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "f12db340e60506f11e8c3114e838702831a0de0c704e9b7eaa70abedc10514c7",
+      "source_sha256": "8e4e55684c2f4f7bc941cb47a1eda06e7b2411691f53d9330b527396c8ab7d1e",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_REPORT_PROJID_IDX",
+      "object_type": "INDEX",
+      "path": "30-indexes.sql",
+      "rendered_sha256": "e80c4ae7ad301c7a313777b7d82819907ad347d3f301896ac3437484d291a8d1",
+      "source_sha256": "8e4e55684c2f4f7bc941cb47a1eda06e7b2411691f53d9330b527396c8ab7d1e",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_CONTRACT",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "26b26b26f5b02fb63c845b6935f1c112e8c3fb1e2831311182708e151156ea1c",
+      "source_sha256": "747414e54877b14d4fd7e489ad156cb78db351a74167c7eb143a1ccdb241996e",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_INVOICE",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "726cf88a0001cecdf3fed66a3cd0e8219dd82f527adf351322226a591fa54b54",
+      "source_sha256": "5810c10d95f7ecdf60f9278ac764b152d8bf80cd59faf3b4a5e0fc565a9e2fa7",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_INVOICE_PROJ",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "53e48c036b09e4bd076240e9ac295e6a3375fde70a09228d2b9d14f3a6aa044c",
+      "source_sha256": "036a4fd99db37c79f5f2e761fcdee3e4d8c70176997a9f00c4419badf120ea4f",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_PAYMENT",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "d33ead8381868b4cf3aacd4b8ada71c384d0ed522f0ca74c0a37911c5a9c0373",
+      "source_sha256": "b998eeafbd1077a06f54d939d599efc80161132dc6eb9c216b058e3462d12928",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_CRM_PAY_PROJECT",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "f2e723d02ceeb4d6feff34d27fc788633c969b79b6a4e59c3ca98875debfb78b",
+      "source_sha256": "185c0c68d737b3a4d05e88b47082eae3c5cb1189a64bd2a6872fcbff78ae0418",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_LIMS_CLEARANCEFORM",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "263bf5dd5ea32a8f0b81034645d01502c29dc59161cc974cc324327b78aa28e3",
+      "source_sha256": "6ae291ee16495bd25d34cd835090c6550ca1a74c6c89484ddd2061618e16a494",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_LIMS_FOLDERS",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "1ea614a75465b7923d92c9d9f425bf0e7ae4b5d5aae983f4c833c30f7d0a492d",
+      "source_sha256": "54daa53ab5b4b12b22b2792fd6b50363113c5ca1e19c080261da47e9550922ca",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_ORDER_TASK",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "0395c1ca7c33b0b2660d43bdf2b2b58a56e49f28f9ed90226656c8cff12f4c58",
+      "source_sha256": "a09dd6fbcddb3e7ecb469b8334f14625af39980954190a1a9071ec682d34538c",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_PROJECT",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "6be1de24f08df0f7fb63f139661ad2dbd5d8f8a6840da6802c2057c3e287c2c3",
+      "source_sha256": "25746e68bf46e129cf90e8483d90f8f7e87960b7faf62312196c86e89ee85416",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    },
+    {
+      "name": "T_XFP_REPORT",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "ff37bb280af7777d0aaea7f33fd20cc198aee66cfebc4ece60e8b99b3398d935",
+      "source_sha256": "8e4e55684c2f4f7bc941cb47a1eda06e7b2411691f53d9330b527396c8ab7d1e",
+      "transformations": [
+        "Render approved dictionary metadata for the current installation user.",
+        "Preserve captured defaults, named NOT NULL constraints and constraint validation state.",
+        "Preserve all captured logical indexes and actual P/U USING INDEX linkages.",
+        "Explicit source NOT NULL names become user-named constraints; generated-name metadata is not preserved."
+      ]
+    }
+  ],
+  "registry": {
+    "path": "object-registry.tsv",
+    "sha256": "00ddb759543b1f4d36eb038554e53c11120f852de3ea13907d0478730c43c1f7"
+  },
+  "schema": "core-schema-package-v1",
+  "source_artifacts": [
+    {
+      "path": "private/production-baseline-20261110/external-schema-remote-full-metadata-private.json",
+      "sha256": "652ff5f9e04ca15eb0896aceeac5493be97d8c92083dd5736c5282cf684a2d97"
+    },
+    {
+      "path": "private/external-ddl-defaults-20261111/20261110T163349Z-HT-defaults-private.json",
+      "sha256": "6a8637ce49809e2b3e35c8c17f7c4cf3195d3ad330589fe750669b903e1ddd70"
+    },
+    {
+      "path": "private/external-ddl-defaults-20261111/20261110T163349Z-SP-defaults-private.json",
+      "sha256": "a8ceadacc02cc7b6e2d4ab8c6a3e8518e5a3dac6cfa3e9aabda832722f4200e4"
+    },
+    {
+      "path": "private/external-ddl-defaults-20261111/20261110T163349Z-XFP-defaults-private.json",
+      "sha256": "f329d85c4ac0a8574ae3285ebc7a4fdcbd09657f7135956068cbe8214df56b92"
+    },
+    {
+      "path": "private/external-ddl-defaults-20261111/20261110T164019Z-HT-constraint-index-linkage-private.json",
+      "sha256": "6b8a34526008660c2dc7c4ecd5dc815d572066ebc1b5ff25ba029e3a8e0326fd"
+    },
+    {
+      "path": "private/external-ddl-defaults-20261111/20261110T164019Z-SP-constraint-index-linkage-private.json",
+      "sha256": "f7a36a33217eb09ba13f696cde59236439980117f5d8346f640e7f220f22faa1"
+    },
+    {
+      "path": "private/external-ddl-defaults-20261111/20261110T164019Z-XFP-constraint-index-linkage-private.json",
+      "sha256": "6ce04f8b22de47efe8cadd2f6e11fbd78602e888fcbaf1d4f0aadcd23ff885c4"
+    },
+    {
+      "path": "private/external-ddl-defaults-20261111/combined-metadata-private.json",
+      "sha256": "fc62f26e238ebad8e3bbcf7621fcd70a055d481beb8d4294298236ee165ec674"
+    }
+  ],
+  "source_class": "current-production-at-capture",
+  "status": "partial",
+  "target": {
+    "owner": "current-session-user",
+    "requires_empty_schema": true
+  }
+}

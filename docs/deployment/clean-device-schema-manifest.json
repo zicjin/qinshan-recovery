@@ -27,6 +27,10 @@
     "completes_application_bootstrap": false
   },
   "external_logical_clone": {
+    "portable_partial_package": "deployment/oracle/external-schema/manifest.json",
+    "portable_package_integrity_verifier": "scripts/verify-core-schema-package.py --manifest deployment/oracle/external-schema/manifest.json --check-package",
+    "portable_package_requires_private_source_at_install": false,
+    "complete_external_domain_installation": false,
     "fixture": "api-fixtures/schema/external-logical-clone.sql",
     "restore": "api-fixtures/schema/external-logical-clone-restore.sql",
     "mode": "local-view",

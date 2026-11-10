@@ -53,6 +53,7 @@ class CleanDeviceContractTest(unittest.TestCase):
                 "scripts/verify-external-logical-clone-fixture.py",
                 "scripts/verify-external-logical-clone-runtime.py",
                 "deployment/oracle/core-schema/manifest.json",
+                "deployment/oracle/external-schema/manifest.json",
                 "scripts/verify-core-schema-package.py",
                 "owned-distribution/initialize-admin.sh",
                 "docs/deployment/first-administrator.md",

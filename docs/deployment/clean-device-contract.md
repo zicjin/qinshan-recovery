@@ -31,7 +31,23 @@ create an Oracle user, PDB, grants, Redis instance, or business rows.
 Some files are explicitly metadata DML fixtures; their scope is described in
 `api-fixtures/schema/README.md`. Applying all fixtures is not a bootstrap path.
 
-The current external logical-clone fixture is structure-only. It creates the
+`deployment/oracle/external-schema/` now ships a separately verifiable partial
+ten-table package, including captured defaults and actual constraint/index
+links. Its source references are hash-only provenance and do not require private
+files at installation. Its read-only SQL verifier checks the selected structure
+and live empty-table counts as the connected user, without a fixed schema/PDB:
+
+```bash
+python3 scripts/verify-core-schema-package.py \
+  --manifest deployment/oracle/external-schema/manifest.json --check-package
+```
+
+This package targets an empty diagnostic schema and retains an unconditional
+partial-install guard. Integration with core installation, complete external
+domain DDL/grants and application acceptance remain incomplete. See its
+[scope and phases](../../deployment/oracle/external-schema/README.md).
+
+The older external logical-clone fixture is structure-only. It creates the
 ten approved HT/SP/XFP tables and indexes in the application schema, creates no
 DB link, and inserts no rows. It is valid for a `local-view` access path after
 the application schema exists:

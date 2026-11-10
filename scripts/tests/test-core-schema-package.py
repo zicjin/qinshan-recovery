@@ -114,6 +114,30 @@ END;
         self.assertFalse((checkout / 'private').exists())
         self.assertFalse((checkout / '.scratch').exists())
 
+    def test_external_package_in_standalone_checkout_without_private_inputs(self):
+        checkout = self.root / 'external-isolated-checkout'
+        script = checkout / 'scripts' / SCRIPT.name
+        script.parent.mkdir(parents=True)
+        shutil.copy2(SCRIPT, script)
+        package = checkout / 'deployment/oracle/external-schema'
+        shutil.copytree(ROOT / 'deployment/oracle/external-schema', package)
+        command = [sys.executable, str(script), '--manifest', str(package / 'manifest.json')]
+        result = subprocess.run(command + ['--check-package'], cwd=checkout, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        receipt = json.loads(result.stdout)
+        self.assertEqual(receipt['objects'], 55)
+        self.assertTrue(receipt['package_valid'])
+        self.assertFalse(receipt['deployment_ready'])
+        result = subprocess.run(command, cwd=checkout, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertFalse((checkout / 'private').exists())
+        self.assertFalse((checkout / '.scratch').exists())
+        # Missing packaged SQL must not be replaced by an acquisition receipt.
+        (package / '35-constraints.sql').unlink()
+        result = subprocess.run(command + ['--check-package'], cwd=checkout, capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(json.loads(result.stdout)['package_valid'])
+
     def test_bootstrap_provenance_rehashed_count_or_statement_tamper_is_rejected(self):
         package = self.root / 'copied-package'
         shutil.copytree(ROOT / 'deployment/oracle/core-schema', package)

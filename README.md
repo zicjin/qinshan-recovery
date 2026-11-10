@@ -104,6 +104,7 @@ not execute that directory as a bootstrap.
 | Other `api-fixtures/schema/*.sql` | Targeted test restoration and metadata fixtures with explicit preconditions | No |
 | `api-fixtures/schema/external-logical-clone.sql` | Ten HT/SP/XFP table structures in an existing local runtime schema | No |
 | `deployment/oracle/core-schema/` | Production-derived partial structural package: 737 tables, ordered indexes/types/routines and an object verifier | Partial; normal installer rejects while blockers remain |
+| `deployment/oracle/external-schema/` | Portable partial HT/SP/XFP ten-table package with captured defaults, original index links and exact subset verification | Partial; requires empty diagnostic user and rejects full installation |
 
 Remaining project work is to complete the ordered, sanitized current-production
 core DDL package, its object/grant verifier, and versioned configuration bootstrap
@@ -150,7 +151,19 @@ project's completed schema package for the target version, JDK 8, public depende
 JARs and the Maven plugin seed. Credentials, license material, private keys,
 DB-link strings and business data stay outside Git and the distribution.
 
-The current external logical-clone fixture is structure-only. It requires an
+The portable [external table package](deployment/oracle/external-schema/README.md)
+can now be checked without private receipts or parent files:
+
+```bash
+python3 scripts/verify-core-schema-package.py \
+  --manifest deployment/oracle/external-schema/manifest.json --check-package
+```
+
+It preserves the selected tables' 33 defaults and original constraint/index
+linkage. It remains partial and is not yet integrated with the core empty-schema
+installer. This package does not update an existing runtime schema.
+
+The older external logical-clone fixture is structure-only. It requires an
 existing application schema, creates the ten approved HT/SP/XFP tables and
 indexes, creates no DB link and inserts no business rows. This readiness check
 currently prints `status=blocked`, `deployment_ready=false` and exits **2**, so

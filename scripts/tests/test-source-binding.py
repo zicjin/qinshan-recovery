@@ -142,6 +142,18 @@ class SourceBindingTest(unittest.TestCase):
         second = self.capture()
         self.assertEqual(first['application_binding'], second['application_binding'])
 
+    def test_external_deployment_sql_is_bound_but_instructions_are_replay_neutral(self):
+        first = self.capture()
+        directory = self.root / 'deployment/oracle/external-schema'
+        directory.mkdir(parents=True)
+        (directory / '20-tables.sql').write_text('CREATE TABLE EXAMPLE (ID NUMBER);\n')
+        second = self.capture()
+        self.assertNotEqual(first['application_binding'], second['application_binding'])
+        self.assertTrue(second['application_dirty'])
+        (directory / 'README.md').write_text('Partial package instructions.\n')
+        third = self.capture()
+        self.assertEqual(second['application_binding'], third['application_binding'])
+
     def test_harness_change_only_changes_harness_surface(self):
         first = self.capture()
         (self.root / "scripts" / "evidence_output.py").write_text("output-v2\n", encoding="utf-8")

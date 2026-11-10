@@ -40,6 +40,10 @@ class ExternalSchemaBuildCacheTest(unittest.TestCase):
             "docs/reconstitution/decompiler-transforms.json",
         ):
             self.write(path, "{}\n")
+        shutil.copytree(ROOT / 'deployment/oracle', self.root / 'deployment/oracle')
+        for name in ('verify-core-schema-package.py', 'verify-combined-oracle-installation.py'):
+            shutil.copy2(ROOT / 'scripts' / name, self.root / 'scripts' / name)
+        self.write('owned-distribution/installation-README.md', 'Partial installation materials.\n')
         self.write("docs/reconstitution/framework-module-registry.json", '{"modules": []}\n')
         self.write("scripts/render-external-logical-mappers.py", "# renderer version one\n")
         self.write("scripts/verify-external-artifacts.sh", "#!/bin/sh\nexit 0\n", executable=True)
@@ -161,6 +165,24 @@ shutil.copyfile(sys.argv[2], output / 'app/lims-owned-application.jar')
         self.assertNotEqual(first_artifact, second_artifact)
         self.assertIn("build passed:", output)
         self.assertEqual(self.invocation_count(), 2)
+
+    def test_installation_inputs_change_cache_key_and_unchanged_inputs_reuse(self):
+        previous_key, previous_artifact, _ = self.build()
+        for relative in ('deployment/oracle/99-verify.sql',
+                         'deployment/oracle/core-schema/manifest.json',
+                         'scripts/verify-combined-oracle-installation.py',
+                         'owned-distribution/installation-README.md'):
+            with self.subTest(relative=relative):
+                path = self.root / relative
+                path.write_bytes(path.read_bytes() + b'\n')
+                key, artifact, output = self.build()
+                self.assertNotEqual(previous_key, key)
+                self.assertEqual(previous_artifact, artifact)
+                self.assertIn('build passed:', output)
+                reused_key, _, reused_output = self.build()
+                self.assertEqual(key, reused_key)
+                self.assertIn('build reused:', reused_output)
+                previous_key = key
 
     def test_manifest_without_profile_fails_before_downstream_build(self):
         environment = dict(self.environment, EXTERNAL_SCHEMA_MANIFEST=str(self.manifest))

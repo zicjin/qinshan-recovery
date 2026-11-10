@@ -20,7 +20,7 @@ spec.loader.exec_module(gate)
 class PackageIsolationTest(unittest.TestCase):
     def write_snapshot_source(self, root):
         for name in ('project', 'reconstituted', 'scripts', 'docs', 'build-support',
-                     'owned-distribution', 'api-fixtures/schema'):
+                     'owned-distribution', 'api-fixtures/schema', 'deployment/oracle'):
             directory = root / name
             directory.mkdir(parents=True)
             (directory / 'source.txt').write_text('source input\n')
@@ -51,6 +51,7 @@ class PackageIsolationTest(unittest.TestCase):
             self.assertEqual(environment['LIMS_PROJECT_ROOT'], str(snapshot / 'project'))
             self.assertEqual(environment['OWNED_DISTRIBUTION_REUSE'], '0')
             self.assertTrue((snapshot / 'api-fixtures/schema/source.txt').is_file())
+            self.assertTrue((snapshot / 'deployment/oracle/source.txt').is_file())
             self.assertFalse((snapshot / 'api-fixtures/private-fixture.json').exists())
             self.assertFalse((snapshot / 'project/target').exists())
             profile.write_text('{"mode":"direct-schema"}\n')

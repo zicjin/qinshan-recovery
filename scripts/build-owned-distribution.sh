@@ -53,6 +53,9 @@ source_hash() {
       printf '%s\0' owned-distribution/package.py owned-distribution/start.sh \
         owned-distribution/initialize-admin.sh
       printf '%s\0' owned-distribution/example/owned-application.properties
+      find deployment/oracle -type f \( -name '*.sql' -o -name '*.json' -o -name '*.tsv' \) -print0
+      printf '%s\0' scripts/verify-core-schema-package.py \
+        scripts/verify-combined-oracle-installation.py owned-distribution/installation-README.md
       if [[ -n "${EXTERNAL_SCHEMA_PROFILE:-}" ]]; then
         printf '%s\0' "$EXTERNAL_SCHEMA_PROFILE"
         printf '%s\0' "$EXTERNAL_SCHEMA_MANIFEST"

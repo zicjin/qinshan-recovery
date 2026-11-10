@@ -172,13 +172,27 @@ class SourceBindingTest(unittest.TestCase):
         second = self.capture()
         self.assertEqual(first['application_binding'], second['application_binding'])
 
-    def test_combined_installation_verifier_changes_harness_only(self):
+    def test_shipped_combined_verifier_changes_harness_and_distribution(self):
         first = self.capture()
         (self.root / 'scripts/verify-combined-oracle-installation.py').write_text('verification-v1\n')
         second = self.capture()
-        self.assertEqual(first['application_binding'], second['application_binding'])
+        self.assertNotEqual(first['application_binding'], second['application_binding'])
         self.assertNotEqual(first['harness_binding'], second['harness_binding'])
         self.assertTrue(second['harness_dirty'])
+
+    def test_shipped_installation_inputs_change_distribution_binding(self):
+        for relative in ('deployment/oracle/installation-manifest.json',
+                         'deployment/oracle/core-schema/manifest.json',
+                         'scripts/verify-core-schema-package.py',
+                         'scripts/verify-combined-oracle-installation.py',
+                         'owned-distribution/installation-README.md'):
+            with self.subTest(relative=relative):
+                first = self.capture()
+                target = self.root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text('installation input\n')
+                second = self.capture()
+                self.assertNotEqual(first['distribution_input_digest'], second['distribution_input_digest'])
 
     def test_harness_change_only_changes_harness_surface(self):
         first = self.capture()

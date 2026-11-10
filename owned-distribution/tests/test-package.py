@@ -27,7 +27,7 @@ def verify_package_determinism(root, distribution, sources, environment):
         output = Path(temporary) / 'distribution'
         output.mkdir()
         for path in distribution.iterdir():
-            if path.name in ('app', 'modules', 'lib', 'manifest.json'):
+            if path.name in ('app', 'modules', 'lib', 'manifest.json', 'installation'):
                 continue
             destination = output / path.name
             if path.is_dir():
@@ -51,7 +51,7 @@ def prepare_build_snapshot(source_root, root, inherited_environment):
     source_root = Path(source_root).resolve()
     root = Path(root).resolve()
     for name in ('project', 'reconstituted', 'scripts', 'docs', 'build-support',
-                 'api-fixtures/schema',
+                 'api-fixtures/schema', 'deployment/oracle',
                  *[path.name for path in source_root.glob('owned-*') if path.is_dir()]):
         shutil.copytree(source_root / name, root / name,
                         ignore=shutil.ignore_patterns('target', '__pycache__', '.git'))
@@ -133,6 +133,16 @@ def verify_distribution(ROOT, build_environment):
     manifest = json.loads((DIST / 'manifest.json').read_text())
     assert manifest['distribution_mode'] == 'source-only-reconstituted'
     assert (DIST / 'initialize-admin.sh').is_file(), 'one-time first-admin command must ship'
+    assert manifest['installation']['deployment_ready'] is False
+    installation = DIST / 'installation'
+    for arguments, expected_exit in ((['--check-plan'], 0), ([], 2)):
+        checked = subprocess.run([
+            sys.executable, str(installation / 'scripts/verify-combined-oracle-installation.py'), *arguments,
+        ], cwd=installation, text=True, capture_output=True)
+        assert checked.returncode == expected_exit, checked.stdout + checked.stderr
+        assert json.loads(checked.stdout)['deployment_ready'] is False
+    for name in ('core-schema', 'external-schema'):
+        assert 'installation/deployment/oracle/' + name + '/manifest.json' in manifest['files']
     schema_contract = manifest['external_schema']
     expected_schema_mode = 'original-db-link'
     if build_environment.get('EXTERNAL_SCHEMA_PROFILE'):

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Merge owned module jars without classpath masking or conflicting duplicates."""
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -80,6 +81,43 @@ def external_schema_contract(entries, required):
     if entries[EXTERNAL_SCHEMA_PROPERTIES][1] != properties:
         fail('embedded properties differ from JSON')
     return {**contract, 'contract_sha256': sha}
+
+
+def package_installation(output):
+    """Copy only the finite, verified public Oracle installation dependency set."""
+    spec = importlib.util.spec_from_file_location(
+        'combined_oracle_installation', REPO_ROOT / 'scripts/verify-combined-oracle-installation.py')
+    assert spec and spec.loader
+    verifier = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(verifier)
+    plan_path = REPO_ROOT / 'deployment/oracle/installation-manifest.json'
+    try:
+        verifier.verify(plan_path)
+        plan = json.loads(plan_path.read_text(encoding='utf-8'))
+        inputs = {'deployment/oracle/installation-manifest.json',
+                  'scripts/verify-core-schema-package.py',
+                  'scripts/verify-combined-oracle-installation.py'}
+        inputs.update('deployment/oracle/' + entry['path'] for entry in plan['files'])
+        for package in plan['packages']:
+            manifest = REPO_ROOT / 'deployment/oracle' / package['path']
+            inputs.add(manifest.relative_to(REPO_ROOT).as_posix())
+            metadata = json.loads(manifest.read_text(encoding='utf-8'))
+            inputs.update((manifest.parent / entry['path']).relative_to(REPO_ROOT).as_posix()
+                          for entry in metadata['files'])
+        installation = output / 'installation'
+        shutil.rmtree(installation, ignore_errors=True)
+        for relative in sorted(inputs):
+            source = verifier.core.package_file(REPO_ROOT, relative)
+            target = installation / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
+        shutil.copyfile(REPO_ROOT / 'owned-distribution/installation-README.md', installation / 'README.md')
+    except (OSError, ValueError, TypeError, KeyError) as exc:
+        raise SystemExit('installation bundle integrity failed: ' + type(exc).__name__) from exc
+    return {'path': 'installation', 'status': 'partial', 'deployment_ready': False,
+            'complete_external_domains': False,
+            'manifest': 'installation/deployment/oracle/installation-manifest.json',
+            'integrity_verifier': 'installation/scripts/verify-combined-oracle-installation.py --check-plan'}
 
 
 def normalized_jar(source):
@@ -306,9 +344,11 @@ def main():
                                                         'sha256': digest(data)})
                 else:
                     class_entries[name] = (str(jar_path), data)
+    installation = (package_installation(output)
+                    if os.environ.get('OWNED_DISTRIBUTION_MODE') == 'source-only-reconstituted' else None)
     files = {}
     for path in sorted(output.rglob('*')):
-        if path.is_file() and path.name != 'manifest.json':
+        if path.is_file() and path != output / 'manifest.json':
             files[str(path.relative_to(output))] = digest(path.read_bytes())
     manifest = {
         'schema': 1,
@@ -345,6 +385,8 @@ def main():
         'supplier_runtime_included': False,
         'external_configuration_required': True,
     }
+    if installation is not None:
+        manifest['installation'] = installation
     if external_schema is not None:
         manifest['external_schema'] = external_schema
     provenance_path = os.environ.get('OWNED_THIRD_PARTY_DEPENDENCY_PROVENANCE')

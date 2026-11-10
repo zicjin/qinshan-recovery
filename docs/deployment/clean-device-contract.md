@@ -7,6 +7,13 @@ schema bootstrap. A clean clone therefore cannot be advertised as a complete
 from-scratch LIMS restoration until an approved, source-bound core schema
 package is delivered.
 
+`deployment/oracle/core-schema/` now contains the first source-bound structural
+package: 737 tables, ordered indexes/constraints, types, selected routines and
+per-table verification. Its manifest remains partial and the initializer rejects
+before applying any DDL. `python3 scripts/verify-core-schema-package.py
+--check-package` validates it using only shipped files; it does not initialize
+the missing application configuration or establish complete deployment readiness.
+
 `project/sql/` contains historical release and upgrade SQL. Its files are not a
 current production DDL snapshot and must not be executed as a directory-wide
 initialization script. The files under `api-fixtures/schema/` are targeted,

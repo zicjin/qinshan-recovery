@@ -101,6 +101,7 @@ not execute that directory as a bootstrap.
 | `api-fixtures/schema/production-ddl-*-20261109.sql` | Reviewed incremental alignment of an existing test schema | No |
 | Other `api-fixtures/schema/*.sql` | Targeted test restoration and metadata fixtures with explicit preconditions | No |
 | `api-fixtures/schema/external-logical-clone.sql` | Ten HT/SP/XFP table structures in an existing local runtime schema | No |
+| `deployment/oracle/core-schema/` | Production-derived partial structural package: 737 tables, ordered indexes/types/routines and an object verifier | Partial; normal installer rejects while blockers remain |
 
 The remaining deployment input is an ordered, sanitized current-production core
 DDL package, its object/grant verifier, and versioned configuration bootstrap
@@ -112,6 +113,17 @@ Delivering that package is remaining project work. It must be included in the
 standalone repository or a versioned, hash-pinned deployment bundle; a parent
 checkout, private collection directory or a developer's existing Oracle volume
 must not become a requirement for new-server installation.
+
+The first structural package is now in
+[deployment/oracle/core-schema](deployment/oracle/core-schema/README.md).
+It can be integrity-checked without private material or the parent checkout:
+
+```bash
+python3 scripts/verify-core-schema-package.py --check-package
+```
+
+This does not grant deployment readiness. The normal package gate and SQL
+installer still reject the incomplete package before applying DDL.
 
 Before deployment, an operator must provide one Oracle PDB, one Redis instance,
 an application schema/user with grants, a private runtime properties file, the

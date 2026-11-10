@@ -124,6 +124,24 @@ class SourceBindingTest(unittest.TestCase):
         self.assertTrue(second["application_dirty"])
         self.assertIn("scripts/render-external-logical-mappers.py", second["application_scope"])
 
+    def test_deployment_ddl_changes_application_surface(self):
+        first = self.capture()
+        ddl = self.root / 'deployment/oracle/core-schema/20-tables.sql'
+        ddl.parent.mkdir(parents=True)
+        ddl.write_text('CREATE TABLE "EXAMPLE" ("ID" NUMBER);\n')
+        second = self.capture()
+        self.assertNotEqual(first['application_binding'], second['application_binding'])
+        self.assertIn('deployment/oracle/core-schema/20-tables.sql', second['application_scope'])
+        self.assertTrue(second['application_dirty'])
+
+    def test_deployment_readme_does_not_change_application_binding(self):
+        first = self.capture()
+        readme = self.root / 'deployment/oracle/core-schema/README.md'
+        readme.parent.mkdir(parents=True)
+        readme.write_text('Deployment instructions only.\n')
+        second = self.capture()
+        self.assertEqual(first['application_binding'], second['application_binding'])
+
     def test_harness_change_only_changes_harness_surface(self):
         first = self.capture()
         (self.root / "scripts" / "evidence_output.py").write_text("output-v2\n", encoding="utf-8")

@@ -1,0 +1,283 @@
+WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+SET SQLBLANKLINES ON
+-- BEGIN OBJECT FUNCTION ENCODESTR
+CREATE OR REPLACE EDITIONABLE FUNCTION "ENCODESTR" (str1 in varchar2,strCode in varchar2) return varchar2
+is
+ss varchar2(1000);
+  begin
+  ss :=  utl_url.escape(str1, true, strCode);
+  return ss;
+end;
+/
+-- END OBJECT FUNCTION ENCODESTR
+
+-- BEGIN OBJECT FUNCTION F_LIMS_IDC_GC_ITEM
+CREATE OR REPLACE EDITIONABLE FUNCTION "F_LIMS_IDC_GC_ITEM" (PI_FOLDERID IN VARCHAR2)
+  RETURN CLOB IS
+  /*
+  21486推送国抽接口-获取查询项目数据的SQL
+  */
+  V_RET_SQL CLOB;
+BEGIN
+  V_RET_SQL := 'SELECT ''1'' AS 模板类型,
+       OT.SORTER AS 序号,
+       NVL(RES.TESTLIMIT, ''/'') AS 检出限,
+       ''/'' AS 定量限,
+       NVL(RES.NUMRES, ''/'') AS 检验结果,
+       CASE
+         WHEN RES.CONCLUSION = ''不符合规定'' THEN
+          ''不符合''
+         WHEN RES.CONCLUSION = ''问题项'' THEN
+          ''问题项''
+         WHEN RES.CONCLUSION = ''符合'' THEN
+          ''符合''
+         ELSE
+          ''无需检验''
+       END AS 结论,
+       NVL(RES.UNITS, ''/'') AS 单位,
+       NVL(RES.CRITERION, ''/'') AS 限值规定
+  FROM T_LIMS_ORDTASK OT
+  LEFT JOIN T_LIMS_RESULTS RES
+    ON RES.ORDTASKID = OT.ID
+ WHERE (RES.DISPLAYFLAG IS NULL OR RES.DISPLAYFLAG = ''1'')
+   AND OT.FOLDERSID = ''' || PI_FOLDERID || '''
+ ORDER BY OT.SORTER, RES.SORTER';
+  RETURN V_RET_SQL;
+END F_LIMS_IDC_GC_ITEM;
+/
+-- END OBJECT FUNCTION F_LIMS_IDC_GC_ITEM
+
+-- BEGIN OBJECT FUNCTION LONG_TO_CHAR
+CREATE OR REPLACE EDITIONABLE FUNCTION "LONG_TO_CHAR" (uTABLE IN VARCHAR2,uID IN NUMBER)
+RETURN VARCHAR2
+AS
+  uVal VARCHAR2(4000);
+BEGIN
+  SELECT DATA_DEFAULT INTO uVal FROM USER_TAB_COLS WHERE TABLE_NAME = UPPER(uTABLE) AND COLUMN_ID = uID;
+  RETURN uVal;
+END LONG_TO_CHAR;
+/
+-- END OBJECT FUNCTION LONG_TO_CHAR
+
+-- BEGIN OBJECT FUNCTION STRINGTOSCIENCE
+CREATE OR REPLACE EDITIONABLE FUNCTION "STRINGTOSCIENCE" (Valu IN VARCHAR2)
+RETURN VARCHAR2
+IS
+    isScience INTEGER;
+    LEFTValu   VARCHAR2(150);
+    RIGHTValu  VARCHAR2(150);
+    RIGHTText  VARCHAR2(150);
+    result     VARCHAR2(150);
+BEGIN
+    isScience := INSTR(upper(Valu), 'E') - 1; -- 将'E'之后的索引减1以匹配原始字符串的位置
+    result := Valu; -- 默认使用原始值
+    
+    IF isScience > 0 THEN
+        LEFTValu := SUBSTR(Valu, 1, isScience);
+        RIGHTValu := SUBSTR(Valu, isScience + 2); -- 从'E'之后开始截取
+        
+        -- 根据RIGHTValu的值，设置RIGHTText的值
+        SELECT
+            CASE
+                WHEN RIGHTValu = '-6' THEN '×10⁻⁶'
+                WHEN RIGHTValu = '-5' THEN '×10⁻⁵'
+                WHEN RIGHTValu = '-4' THEN '×10⁻⁴'
+                WHEN RIGHTValu = '-3' THEN '×10⁻³'
+                WHEN RIGHTValu = '-2' THEN '×10⁻²'
+                WHEN RIGHTValu = '-1' THEN '×10⁻¹'
+                WHEN RIGHTValu = '+1' THEN '×10¹'
+                WHEN RIGHTValu = '+2' THEN '×10²'
+                WHEN RIGHTValu = '+3' THEN '×10³'
+                WHEN RIGHTValu = '+4' THEN '×10⁴'
+                WHEN RIGHTValu = '+5' THEN '×10⁵'
+                WHEN RIGHTValu = '+6' THEN '×10⁶'
+                WHEN RIGHTValu = '+7' THEN '×10⁷'
+                WHEN RIGHTValu = '+8' THEN '×10⁸'
+                WHEN RIGHTValu = '+9' THEN '×10⁹'
+                ELSE ''
+            END
+        INTO RIGHTText
+        FROM DUAL;
+        
+        result := LEFTValu || RIGHTText;
+    END IF;
+    
+    RETURN result;
+END STRINGTOSCIENCE;
+/
+-- END OBJECT FUNCTION STRINGTOSCIENCE
+
+-- BEGIN OBJECT FUNCTION URLENCODE
+CREATE OR REPLACE EDITIONABLE FUNCTION "URLENCODE" (str IN VARCHAR2)
+RETURN VARCHAR2 AS
+  sub VARCHAR2(1);
+  val NUMBER;
+  ind NUMBER DEFAULT 1;
+  OCT RAW(1);
+  ret VARCHAR2(4096);
+BEGIN
+  IF str IS NULL THEN
+    RETURN NULL;
+  ELSE
+    ret := '';
+    WHILE ind <= LENGTH(str) LOOP
+      sub := SUBSTR(str, ind, 1);
+      val := ASCII(sub);
+      
+      IF NOT (val BETWEEN 48 AND 57 OR
+              val BETWEEN 65 AND 90 OR
+              val BETWEEN 97 AND 122 OR
+              val IN (45, 46, 95, 126)) THEN
+        -- 将字符转换为RAW类型，然后使用UTL_RAW.LENGTH获取长度
+        OCT := UTL_RAW.CAST_TO_RAW(sub);
+        FOR i IN 1..UTL_RAW.LENGTH(OCT) LOOP
+          -- 将RAW类型的每个字节转换为十六进制字符串，并添加到结果中
+          ret := ret || TO_CHAR(TO_NUMBER(RAWTOHEX(SUBSTR(OCT, i, 1)), 'FM999999'), 'FM9999') || '%';
+        END LOOP;
+      ELSE
+        ret := ret || sub;
+      END IF;
+      ind := ind + 1;
+    END LOOP;
+  END IF;
+  RETURN ret;
+END URLENCODE;
+/
+-- END OBJECT FUNCTION URLENCODE
+
+-- BEGIN OBJECT FUNCTION VIEW_SELECT
+CREATE OR REPLACE EDITIONABLE FUNCTION "VIEW_SELECT" (uVIEW IN VARCHAR2)
+RETURN VARCHAR2
+AS
+  uVal VARCHAR2(4000);
+BEGIN
+  SELECT TEXT INTO uVal FROM USER_VIEWS WHERE VIEW_NAME = UPPER(uVIEW);
+  RETURN uVal;
+END VIEW_SELECT;
+/
+-- END OBJECT FUNCTION VIEW_SELECT
+
+-- BEGIN OBJECT FUNCTION WORKDAYS_BETWEEN
+CREATE OR REPLACE EDITIONABLE FUNCTION "WORKDAYS_BETWEEN" (
+    start_date IN DATE,
+    end_date IN DATE
+) RETURN NUMBER IS
+    num_workdays NUMBER := 0;
+    current_date DATE := start_date;
+BEGIN
+    -- 循环直到达到结束日期
+    WHILE current_date <= end_date LOOP
+        -- 检查是否为工作日（周一至周五）
+        IF TO_CHAR(current_date, 'D') BETWEEN 2 AND 6 THEN
+                num_workdays := num_workdays + 1;
+            END IF;
+        -- 移到下一个日期
+        current_date := current_date + 1;
+    END LOOP;
+
+    RETURN num_workdays;
+END;
+/
+-- END OBJECT FUNCTION WORKDAYS_BETWEEN
+
+-- BEGIN OBJECT PROCEDURE DELETEI18N
+CREATE OR REPLACE EDITIONABLE PROCEDURE "DELETEI18N" (CODEPARAM   VARCHAR) AS
+  V_ID    NUMBER;
+  V_COUNT NUMBER;
+BEGIN
+
+  SELECT COUNT(*) INTO V_COUNT FROM T_CORE_I18N WHERE CODE = CODEPARAM;
+
+  IF V_COUNT > 0 THEN
+    SELECT ID
+      INTO V_ID
+      FROM T_CORE_I18N
+     WHERE CODE = CODEPARAM
+       AND ROWNUM = 1;
+    DELETE FROM T_CORE_I18N_MESSAGE WHERE I18NID = V_ID;
+    DELETE FROM T_CORE_I18N WHERE CODE = CODEPARAM;
+
+    COMMIT;
+  END IF;
+END;
+/
+-- END OBJECT PROCEDURE DELETEI18N
+
+-- BEGIN OBJECT PROCEDURE INSERTI18N
+CREATE OR REPLACE EDITIONABLE PROCEDURE "INSERTI18N" (PI_CODEPARAM      VARCHAR,
+                                       PI_DESCRIPTION    VARCHAR,
+                                       PI_DEFAULTMESSAGE VARCHAR,
+                                       PI_LANG           VARCHAR,
+                                       PI_MESSAGE        VARCHAR) AS
+  V_ID     NUMBER;
+  V_COUNT  NUMBER;
+  V_MCOUNT NUMBER;
+BEGIN
+
+  V_COUNT  := 0;
+  V_MCOUNT := 0;
+
+  SELECT COUNT(*) INTO V_COUNT FROM T_CORE_I18N WHERE CODE = PI_CODEPARAM;
+
+  IF V_COUNT > 0 THEN
+    SELECT ID
+      INTO V_ID
+      FROM T_CORE_I18N
+     WHERE CODE = PI_CODEPARAM
+       AND ROWNUM = 1;
+  
+    UPDATE T_CORE_I18N T
+       SET T.DESCRIPTION    = PI_DESCRIPTION,
+           T.DEFAULTMESSAGE = PI_DEFAULTMESSAGE
+     WHERE T.ID = V_ID;
+  
+    SELECT COUNT(*)
+      INTO V_MCOUNT
+      FROM T_CORE_I18N_MESSAGE
+     WHERE I18NID = V_ID
+       AND I18NCONFIGID = PI_LANG;
+  
+    IF V_MCOUNT > 0 THEN
+      UPDATE T_CORE_I18N_MESSAGE
+         SET MESSAGE = PI_MESSAGE
+       WHERE I18NID = V_ID
+         AND I18NCONFIGID = PI_LANG;
+    END IF;
+  
+  ELSE
+    SELECT SEQ_CORE.NEXTVAL INTO V_ID FROM DUAL;
+    INSERT INTO T_CORE_I18N
+      (ID, CODE, DESCRIPTION, DEFAULTMESSAGE)
+    VALUES
+      (V_ID, PI_CODEPARAM, PI_DESCRIPTION, PI_DEFAULTMESSAGE);
+  END IF;
+
+  IF V_MCOUNT = 0 THEN
+    INSERT INTO T_CORE_I18N_MESSAGE
+      (ID, I18NID, I18NCONFIGID, MESSAGE)
+    VALUES
+      (SEQ_CORE.NEXTVAL, V_ID, PI_LANG, PI_MESSAGE);
+  END IF;
+  COMMIT;
+END;
+/
+-- END OBJECT PROCEDURE INSERTI18N
+
+-- BEGIN OBJECT PROCEDURE UPDATEI18N
+CREATE OR REPLACE EDITIONABLE PROCEDURE "UPDATEI18N" (CODEPARAM   VARCHAR,
+                                       LANG        VARCHAR,
+                                       MESSAGEINFO VARCHAR) AS
+BEGIN
+  UPDATE T_CORE_I18N_MESSAGE IM
+     SET IM.MESSAGE = MESSAGEINFO
+   WHERE EXISTS (SELECT 1
+            FROM T_CORE_I18N I
+           WHERE I.ID = IM.I18NID
+             AND I.CODE = CODEPARAM
+             AND IM.I18NCONFIGID = LANG);
+
+  COMMIT;
+END;
+/
+-- END OBJECT PROCEDURE UPDATEI18N

@@ -15,6 +15,8 @@ REQUIRED_FIXTURES = (
     "api-fixtures/schema/external-logical-clone-restore.sql",
     "scripts/verify-external-logical-clone-fixture.py",
     "scripts/verify-external-logical-clone-runtime.py",
+    "deployment/oracle/core-schema/manifest.json",
+    "scripts/verify-core-schema-package.py",
 )
 SECRET_MATERIAL = re.compile(r"(?i)(jdbc:|oracle:thin|@//|BEGIN\s+(?:RSA|OPENSSH)|-----BEGIN)")
 

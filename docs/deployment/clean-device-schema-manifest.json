@@ -12,6 +12,13 @@
     "replay_allowed": false,
     "reason": "Historical release/upgrade SQL is not an ordered current-production bootstrap."
   },
+  "core_schema_package": {
+    "path": "deployment/oracle/core-schema/manifest.json",
+    "status": "partial",
+    "integrity_verifier": "scripts/verify-core-schema-package.py --check-package",
+    "requires_private_source_at_install": false,
+    "complete_application_bootstrap": false
+  },
   "external_logical_clone": {
     "fixture": "api-fixtures/schema/external-logical-clone.sql",
     "restore": "api-fixtures/schema/external-logical-clone-restore.sql",

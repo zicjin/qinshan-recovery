@@ -154,6 +154,32 @@ class SourceBindingTest(unittest.TestCase):
         third = self.capture()
         self.assertEqual(second['application_binding'], third['application_binding'])
 
+    def test_combined_installation_inputs_change_application_but_readme_is_neutral(self):
+        for relative in ('deployment/oracle/installation-manifest.json',
+                         'deployment/oracle/install.sql', 'deployment/oracle/00-preflight.sql',
+                         'deployment/oracle/99-verify.sql'):
+            with self.subTest(relative=relative):
+                first = self.capture()
+                target = self.root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text('combined-deployment-input\n')
+                second = self.capture()
+                self.assertNotEqual(first['application_binding'], second['application_binding'])
+                self.assertEqual(first['harness_binding'], second['harness_binding'])
+                self.assertTrue(second['application_dirty'])
+        first = self.capture()
+        (self.root / 'deployment/oracle/README.md').write_text('Instructions only.\n')
+        second = self.capture()
+        self.assertEqual(first['application_binding'], second['application_binding'])
+
+    def test_combined_installation_verifier_changes_harness_only(self):
+        first = self.capture()
+        (self.root / 'scripts/verify-combined-oracle-installation.py').write_text('verification-v1\n')
+        second = self.capture()
+        self.assertEqual(first['application_binding'], second['application_binding'])
+        self.assertNotEqual(first['harness_binding'], second['harness_binding'])
+        self.assertTrue(second['harness_dirty'])
+
     def test_harness_change_only_changes_harness_surface(self):
         first = self.capture()
         (self.root / "scripts" / "evidence_output.py").write_text("output-v2\n", encoding="utf-8")

@@ -1,0 +1,168 @@
+{
+  "schema": "combined-oracle-installation-v1",
+  "status": "partial",
+  "deployment_ready": false,
+  "complete_external_domains": false,
+  "target": {
+    "owner": "current-session-user",
+    "requires_empty_schema": true
+  },
+  "packages": [
+    {
+      "id": "external",
+      "path": "external-schema/manifest.json",
+      "sha256": "8f39160978b7e923f998706075e114debbcdb6ac6c040d103e9285be35972e8e"
+    },
+    {
+      "id": "core",
+      "path": "core-schema/manifest.json",
+      "sha256": "0aa217b9eceee20fa1eb47e7fc5e51fe192c9d16956afd964f99c9c1ed71755a"
+    }
+  ],
+  "files": [
+    {
+      "path": "install.sql",
+      "role": "initializer",
+      "sha256": "e5f4e9c3a372bab49a7321f7bf23c187ca469388443a41aa88f3a51593afb4b1",
+      "bytes": 756
+    },
+    {
+      "path": "00-preflight.sql",
+      "role": "preflight",
+      "sha256": "4be68aff017c73098859f7b97eb1c777822e97035a8d27d44f33ae6057b5dd99",
+      "bytes": 900
+    },
+    {
+      "path": "99-verify.sql",
+      "role": "verifier",
+      "sha256": "01cb40f3a1914d6448197adbb75d0cfc10c173f5dd46b8aec07560790afb4778",
+      "bytes": 69419
+    }
+  ],
+  "phases": [
+    {
+      "path": "00-preflight.sql",
+      "role": "preflight",
+      "sha256": "4be68aff017c73098859f7b97eb1c777822e97035a8d27d44f33ae6057b5dd99",
+      "bytes": 900
+    },
+    {
+      "bytes": 50273,
+      "path": "external-schema/20-tables.sql",
+      "role": "tables",
+      "sha256": "77a98d714c3a61edb754462d79877a95b42de8c85163ae475161c09896f35689",
+      "package": "external"
+    },
+    {
+      "bytes": 8125,
+      "path": "external-schema/30-indexes.sql",
+      "role": "indexes",
+      "sha256": "81d5ed6266a83feb65a4e98dcab95ae3c9c705f4bb2e87205d3983a8a0bb0b56",
+      "package": "external"
+    },
+    {
+      "bytes": 1886,
+      "path": "external-schema/35-constraints.sql",
+      "role": "constraints",
+      "sha256": "d678dd28a305729e63fc22318d654fa6b829b06a5cf3062ffa4cd54c9995094d",
+      "package": "external"
+    },
+    {
+      "bytes": 479878,
+      "path": "external-schema/90-verify.sql",
+      "role": "verifier",
+      "sha256": "e2c48ba1d2861b838a9b201921ad71e4de386979ecc632a3cf825ae52d55930e",
+      "package": "external"
+    },
+    {
+      "bytes": 1984,
+      "path": "core-schema/10-types.sql",
+      "role": "types",
+      "sha256": "ebb61ba39c975d2ea18ab7077fae426230a47dbbf0e7c17d417362f80fb32ad7",
+      "package": "core"
+    },
+    {
+      "bytes": 510908,
+      "path": "core-schema/20-tables.sql",
+      "role": "tables",
+      "sha256": "f8d8d309fe29dfc82ef0907599a502f5aa759a1aa677fbb8976f35ba3a238b25",
+      "package": "core"
+    },
+    {
+      "bytes": 62723,
+      "path": "core-schema/30-indexes.sql",
+      "role": "indexes",
+      "sha256": "2ba9105586ad5202a37ee186bc9219a3be1a9d67bed172842e2d2ead0cd7cc36",
+      "package": "core"
+    },
+    {
+      "bytes": 345,
+      "path": "core-schema/35-constraints.sql",
+      "role": "constraints",
+      "sha256": "6a54eb75f1966073852eae407b2f9bd0e982b3cc9a65d887631208f398265177",
+      "package": "core"
+    },
+    {
+      "bytes": 300,
+      "path": "core-schema/60-sequences.sql",
+      "role": "sequences",
+      "sha256": "58e89dff655d02aad818301043fc7b41d9bba8ec84b43799c5d0d90651a66812",
+      "package": "core"
+    },
+    {
+      "bytes": 8230,
+      "path": "core-schema/40-routines.sql",
+      "role": "stored-code",
+      "sha256": "b162048071c45b10818e928a7b0660d8df40b2cea5bdd13de1a9fc1ea8df0a4c",
+      "package": "core"
+    },
+    {
+      "bytes": 743652,
+      "path": "core-schema/50-comments.sql",
+      "role": "comments",
+      "sha256": "f60c4691b4467a39124bda333e5c9a210dd77b8e02c81f03c54a1f0084d55cb9",
+      "package": "core"
+    },
+    {
+      "bytes": 1482853,
+      "path": "core-schema/70-bootstrap.sql",
+      "role": "bootstrap",
+      "sha256": "31e7458df84ec597c09f37c5664223c27caa9b8a256caabccdca5dfaacd35637",
+      "package": "core"
+    },
+    {
+      "bytes": 2408990,
+      "path": "core-schema/80-bootstrap-verify.sql",
+      "role": "bootstrap-verifier",
+      "sha256": "1a833bbe89d780f72a3e13370b8306d889fae0625d1040fd5f2c6e5615d0e748",
+      "package": "core"
+    },
+    {
+      "bytes": 4505980,
+      "path": "core-schema/90-verify.sql",
+      "role": "verifier",
+      "sha256": "9bba82a064a6656b0d5ebeebc69365076d9f1da4780b3cea8f569da506959d49",
+      "package": "core"
+    },
+    {
+      "path": "99-verify.sql",
+      "role": "verifier",
+      "sha256": "01cb40f3a1914d6448197adbb75d0cfc10c173f5dd46b8aec07560790afb4778",
+      "bytes": 69419
+    }
+  ],
+  "blockers": [
+    {
+      "id": "configuration-bootstrap",
+      "reason": "Complete menus, permissions, dictionaries, workflows and LCDP bootstrap remain incomplete."
+    },
+    {
+      "id": "installation-grants-and-external-domain-closure",
+      "reason": "Target grants and prerequisites, complete reachable external logical domains and runtime access acceptance remain incomplete."
+    },
+    {
+      "id": "full-system-installation-acceptance",
+      "reason": "Combined structural phases are diagnostic only; complete new-device restoration and real application acceptance remain incomplete."
+    }
+  ]
+}

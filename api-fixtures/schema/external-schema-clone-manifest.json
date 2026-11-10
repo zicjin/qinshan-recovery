@@ -14,7 +14,10 @@
   "clone_contract": {
     "logical_semantics_required": true,
     "db_link_transport_required": false,
-    "allowed_access_modes": ["direct-schema", "local-view"],
+    "allowed_access_modes": [
+      "direct-schema",
+      "local-view"
+    ],
     "qualifier_rewrite": "explicit-allowlist-only",
     "same_object_names_required": true,
     "business_rows_policy": "minimum-source-backed-closure"
@@ -36,21 +39,43 @@
     {
       "path": "private/production-baseline-20261110/external-channel-capability-assessment-20261110.json",
       "sha256": "781d9a5365591a81bf21c4c088776d6a10a928be0e66585de22292cda5ce8f2e"
+    },
+    {
+      "path": "private/local-runtime/external-logical-clone-runtime-20261110.json",
+      "sha256": "bb7006e30716203eb76a8ede2e0e4ef4ec0cdd4c5dbdd638cd04f04a086aff24"
+    },
+    {
+      "path": "private/supplier-logical-clone-replay-20261110.json",
+      "sha256": "e4af21df44dde09304316031a30c5e39207cd3dedffef609f20539f8ad9b2f18"
     }
   ],
   "domains": [
     {
       "logical_domain": "HT",
       "link_topology": [
-        {"owner": "LIMS2_CZJKY_EMC_DEV", "name": "LIMS_CZJKY_HT", "visibility": "private"},
-        {"owner": "LIMS2_CZJKY_EMC_DEV", "name": "LIMS_CZJKY_HT2", "visibility": "private"}
+        {
+          "owner": "LIMS2_CZJKY_EMC_DEV",
+          "name": "LIMS_CZJKY_HT",
+          "visibility": "private"
+        },
+        {
+          "owner": "LIMS2_CZJKY_EMC_DEV",
+          "name": "LIMS_CZJKY_HT2",
+          "visibility": "private"
+        }
       ],
       "remote_owner": "LIMS_CZJKY_HT",
       "clone_access": {
-        "allowed_modes": ["direct-schema", "local-view"],
-        "selected_mode": null,
-        "runtime_schema": null,
-        "production_qualifiers": ["LIMS_CZJKY_HT", "LIMS_CZJKY_HT2"]
+        "allowed_modes": [
+          "direct-schema",
+          "local-view"
+        ],
+        "selected_mode": "local-view",
+        "runtime_schema": "LIMS_RUNTIME_LOCAL",
+        "production_qualifiers": [
+          "LIMS_CZJKY_HT",
+          "LIMS_CZJKY_HT2"
+        ]
       },
       "objects": [
         "T_CRM_CONTRACT",
@@ -84,16 +109,28 @@
     {
       "logical_domain": "SP",
       "link_topology": [
-        {"owner": "PUBLIC", "name": "LIMS_CZJKY_SP", "visibility": "public"}
+        {
+          "owner": "PUBLIC",
+          "name": "LIMS_CZJKY_SP",
+          "visibility": "public"
+        }
       ],
       "remote_owner": "LIMS_CZJKY_SP",
       "clone_access": {
-        "allowed_modes": ["direct-schema", "local-view"],
-        "selected_mode": null,
-        "runtime_schema": null,
-        "production_qualifiers": ["LIMS_CZJKY_SP"]
+        "allowed_modes": [
+          "direct-schema",
+          "local-view"
+        ],
+        "selected_mode": "local-view",
+        "runtime_schema": "LIMS_RUNTIME_LOCAL",
+        "production_qualifiers": [
+          "LIMS_CZJKY_SP"
+        ]
       },
-      "objects": ["T_LIMS_CLEARANCEFORM", "T_LIMS_FOLDERS"],
+      "objects": [
+        "T_LIMS_CLEARANCEFORM",
+        "T_LIMS_FOLDERS"
+      ],
       "metadata_counts": {
         "objects": 2,
         "columns": 662,
@@ -110,21 +147,36 @@
         "dependencies": 0,
         "grants": "blocked-remote-dictionary-ora-00904"
       },
-      "routes": ["/secure/emc/module/bp/project/projects/all-proj/queries"]
+      "routes": [
+        "/secure/emc/module/bp/project/projects/all-proj/queries"
+      ]
     },
     {
       "logical_domain": "XFP",
       "link_topology": [
-        {"owner": "PUBLIC", "name": "LIMS_CZJKY_XFP", "visibility": "public"}
+        {
+          "owner": "PUBLIC",
+          "name": "LIMS_CZJKY_XFP",
+          "visibility": "public"
+        }
       ],
       "remote_owner": "LIMS_CZJKY_XF",
       "clone_access": {
-        "allowed_modes": ["direct-schema", "local-view"],
-        "selected_mode": null,
-        "runtime_schema": null,
-        "production_qualifiers": ["LIMS_CZJKY_XFP"]
+        "allowed_modes": [
+          "direct-schema",
+          "local-view"
+        ],
+        "selected_mode": "local-view",
+        "runtime_schema": "LIMS_RUNTIME_LOCAL",
+        "production_qualifiers": [
+          "LIMS_CZJKY_XFP"
+        ]
       },
-      "objects": ["T_XFP_ORDER_TASK", "T_XFP_PROJECT", "T_XFP_REPORT"],
+      "objects": [
+        "T_XFP_ORDER_TASK",
+        "T_XFP_PROJECT",
+        "T_XFP_REPORT"
+      ],
       "metadata_counts": {
         "objects": 3,
         "columns": 371,
@@ -162,5 +214,21 @@
     "guessed database links",
     "empty-result or fixed-success fallbacks"
   ],
-  "replay_gate": "blocked-until-supplier-and-local-logical-clones-resolve"
+  "replay_gate": "blocked-until-approved-business-closure-and-current-differential",
+  "resolution": {
+    "status": "resolved-structure-only",
+    "access_mode": "local-view",
+    "local_runtime": {
+      "schema": "LIMS_RUNTIME_LOCAL",
+      "receipt": "private/local-runtime/external-logical-clone-runtime-20261110.json",
+      "business_rows": 0,
+      "db_links": 0
+    },
+    "supplier_test": {
+      "schema": "LIMS2_CZJKY_EMC_DEV",
+      "receipt": "private/supplier-logical-clone-replay-20261110.json",
+      "business_rows": 0,
+      "db_links": 0
+    }
+  }
 }

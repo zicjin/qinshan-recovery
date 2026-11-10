@@ -122,6 +122,22 @@ def main() -> int:
             fail("private receipt missing: " + str(path))
         if hashlib.sha256(path.read_bytes()).hexdigest() != receipt.get("sha256"):
             fail("private receipt hash mismatch: " + str(path))
+    resolution = manifest.get("resolution")
+    if not isinstance(resolution, Mapping) or resolution.get("status") != "resolved-structure-only":
+        fail("resolution must explicitly remain structure-only")
+    if resolution.get("access_mode") != "local-view":
+        fail("resolved access mode must be local-view")
+    for name, schema in (("local_runtime", "LIMS_RUNTIME_LOCAL"), ("supplier_test", "LIMS2_CZJKY_EMC_DEV")):
+        item = resolution.get(name)
+        if not isinstance(item, Mapping) or item.get("schema") != schema:
+            fail(name + " resolution schema mismatch")
+        if item.get("business_rows") != 0 or item.get("db_links") != 0:
+            fail(name + " resolution must have zero business rows and DB links")
+        receipt_path = ROOT / str(item.get("receipt", ""))
+        if not receipt_path.is_file():
+            fail(name + " resolution receipt missing")
+        if not any(r.get("path") == item.get("receipt") and r.get("sha256") == hashlib.sha256(receipt_path.read_bytes()).hexdigest() for r in manifest.get("private_receipts", [])):
+            fail(name + " resolution receipt is not registered")
     if not INVENTORY.is_file() or not REMOTE_METADATA.is_file():
         fail("required private inventory/metadata receipt missing")
     print(json.dumps({"status": "pass", "manifest": str(args.manifest.relative_to(ROOT)), "status_class": manifest["status"], "domains": sorted(domains)}, ensure_ascii=False))

@@ -30,8 +30,16 @@ class ExternalSchemaManifestTest(unittest.TestCase):
         self.assertFalse(contract["db_link_transport_required"])
         self.assertEqual(set(contract["allowed_access_modes"]), {"direct-schema", "local-view"})
         for domain in manifest["domains"]:
-            self.assertEqual(domain["clone_access"]["selected_mode"], None)
+            self.assertEqual(domain["clone_access"]["selected_mode"], "local-view")
             self.assertEqual(set(domain["clone_access"]["allowed_modes"]), {"direct-schema", "local-view"})
+
+    def test_structure_resolution_remains_separate_from_business_gate(self):
+        manifest = json.loads((ROOT / "api-fixtures/schema/external-schema-clone-manifest.json").read_text())
+        self.assertEqual(manifest["status"], "environment-not-ready-external-schema")
+        self.assertEqual(manifest["resolution"]["status"], "resolved-structure-only")
+        self.assertEqual(manifest["replay_gate"], "blocked-until-approved-business-closure-and-current-differential")
+        self.assertEqual(manifest["resolution"]["local_runtime"]["business_rows"], 0)
+        self.assertEqual(manifest["resolution"]["supplier_test"]["business_rows"], 0)
 
     def test_unknown_clone_mode_is_rejected(self):
         manifest = json.loads((ROOT / "api-fixtures/schema/external-schema-clone-manifest.json").read_text())

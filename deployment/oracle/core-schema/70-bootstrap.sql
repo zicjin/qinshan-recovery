@@ -18921,6 +18921,96 @@ NULL,
 NULL,
 NULL,
 NULL);
+INSERT INTO T_CORE_MENU (ID,MENUNAME,PARENTID,ORDERNO,MENUINITNAME,ICON,TODOICON,I18NCODE,RESOURCEID,RESOURCENAME,BPID,RESOURCEPATH,MENUPARAM,HREF,CLIENTSCRIPT) VALUES ('20250300004',
+'样品信息修改',
+'25',
+11,
+'样品信息修改',
+'060.svg',
+NULL,
+NULL,
+1597703224613312,
+'OrderInfoModifyEditPage',
+NULL,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_CORE_MENU (ID,MENUNAME,PARENTID,ORDERNO,MENUINITNAME,ICON,TODOICON,I18NCODE,RESOURCEID,RESOURCENAME,BPID,RESOURCEPATH,MENUPARAM,HREF,CLIENTSCRIPT) VALUES ('20250300005',
+'点位信息修改',
+'25',
+10,
+'点位信息修改',
+'043.svg',
+NULL,
+NULL,
+1605674000347936,
+'FloderInfoModifyEditPage',
+NULL,
+'emc.FloderInfoModify.page.FloderInfoModifyEditPage',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_CORE_MENU (ID,MENUNAME,PARENTID,ORDERNO,MENUINITNAME,ICON,TODOICON,I18NCODE,RESOURCEID,RESOURCENAME,BPID,RESOURCEPATH,MENUPARAM,HREF,CLIENTSCRIPT) VALUES ('20250400001',
+'任务状态修改',
+'25',
+9,
+'任务状态修改',
+'019.svg',
+NULL,
+NULL,
+1630039276722656,
+'ProjectInfoModifyEditPage',
+NULL,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_CORE_MENU (ID,MENUNAME,PARENTID,ORDERNO,MENUINITNAME,ICON,TODOICON,I18NCODE,RESOURCEID,RESOURCENAME,BPID,RESOURCEPATH,MENUPARAM,HREF,CLIENTSCRIPT) VALUES ('20250400002',
+'报告查询(业务)',
+'1525',
+152511,
+'报告查询(业务员)',
+'073.svg',
+NULL,
+NULL,
+1631067840535008,
+'ReportSearchByYWEditPage',
+NULL,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_CORE_MENU (ID,MENUNAME,PARENTID,ORDERNO,MENUINITNAME,ICON,TODOICON,I18NCODE,RESOURCEID,RESOURCENAME,BPID,RESOURCEPATH,MENUPARAM,HREF,CLIENTSCRIPT) VALUES ('20250500001',
+'采样单信息修改',
+'25',
+7,
+'采样单信息修改',
+'035.svg',
+NULL,
+NULL,
+1654892685304660,
+'SampleInfoModifyEditPage',
+NULL,
+'emc.SampleInfoModify.page.SampleInfoModifyEditPage',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_CORE_MENU (ID,MENUNAME,PARENTID,ORDERNO,MENUINITNAME,ICON,TODOICON,I18NCODE,RESOURCEID,RESOURCENAME,BPID,RESOURCEPATH,MENUPARAM,HREF,CLIENTSCRIPT) VALUES ('20250700001',
+'快递回签单登记',
+'20250200001',
+3,
+'快递回签单登记',
+'058.svg',
+'018.png',
+NULL,
+1587156564485600,
+'reportSendExpressDeliveryEditPage',
+NULL,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage',
+NULL,
+NULL,
+NULL);
 INSERT INTO T_CORE_MENU (ID,MENUNAME,PARENTID,ORDERNO,MENUINITNAME,ICON,TODOICON,I18NCODE,RESOURCEID,RESOURCENAME,BPID,RESOURCEPATH,MENUPARAM,HREF,CLIENTSCRIPT) VALUES ('20250900001',
 '仪器出库未入库',
 '20250300001',
@@ -20176,6 +20266,1743 @@ TO_CLOB('出库'),
 NULL,
 '0',
 NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1605674001560352,
+'LcdpEmcFolderMysqlMapper',
+'mapper',
+1605673968390944,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_FOLDER T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'emc.FloderInfoModify.mapper.LcdpEmcFolderMysqlMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1605674001789728,
+'LcdpEmcFolderOracleMapper',
+'mapper',
+1605673968390944,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_FOLDER T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'emc.FloderInfoModify.mapper.LcdpEmcFolderOracleMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1605674002264864,
+'LcdpEmcFolderPostgresqlMapper',
+'mapper',
+1605673968390944,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_FOLDER T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'emc.FloderInfoModify.mapper.LcdpEmcFolderPostgresqlMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1605674002436896,
+'LcdpEmcFolderSqlserverMapper',
+'mapper',
+1605673968390944,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_FOLDER T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'emc.FloderInfoModify.mapper.LcdpEmcFolderSqlserverMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1605674000347936,
+'FloderInfoModifyEditPage',
+'view',
+1605673968390944,
+1,
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.FloderInfoModify.server.LcdpEmcFolderService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.FloderInfoModify.page.FloderInfoModifyDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''folderno''){')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10)),
+2,
+'emc.FloderInfoModify.page.FloderInfoModifyEditPage',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1605674001404724,
+'LcdpEmcFolderService',
+'java',
+1605673968390944,
+1,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcFolderService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_FOLDER";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.FloderInfoModify.mapper.LcdpEmcFolderMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'emc.FloderInfoModify.server.LcdpEmcFolderService',
+'0',
+NULL,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class FloderInfoModifyLcdpEmcFolderServicev1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_FOLDER";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.FloderInfoModify.mapper.LcdpEmcFolderMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+'FloderInfoModifyLcdpEmcFolderServicev1');
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1597703226128832,
+'LcdpEmcOrderOracleMapper',
+'mapper',
+1597703216355776,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.OrderInfoModify.mapper.LcdpEmcOrderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.* FROM')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          (SELECT teo.*,tep.PROJNO,tep.PROJNAME FROM T_EMC_ORDER teo ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =teo.PROJID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          )  T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+2,
+'emc.OrderInfoModify.mapper.LcdpEmcOrderOracleMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1597703224613312,
+'OrderInfoModifyEditPage',
+'view',
+1597703216355776,
+1,
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.OrderInfoModify.server.LcdpEmcOrderService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.OrderInfoModify.page.OrderInfoModifyDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''orderno''){')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10)),
+6,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1597703225768386,
+'LcdpEmcOrderService',
+'java',
+1597703216355776,
+1,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcOrderService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_ORDER";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.OrderInfoModify.mapper.LcdpEmcOrderMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'emc.OrderInfoModify.server.LcdpEmcOrderService',
+'0',
+NULL,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class OrderInfoModifyLcdpEmcOrderServicev1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_ORDER";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.OrderInfoModify.mapper.LcdpEmcOrderMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+'OrderInfoModifyLcdpEmcOrderServicev1');
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1630039278516704,
+'LcdpEmcProjectOracleMapper',
+'mapper',
+1630039212923360,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          (SELECT tep.ID,tep.PROJNO,tep.PROJNAME,tep.PROJNODE,tep.status,tep.TOREPORTEDITDATE ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            FROM T_EMC_PROJECT tep')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHERE tep.STATUS = ''auditFinished'' AND tep.STATUS <![CDATA[<>]]> ''cancel''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND NOT EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK teot WHERE tep.ID =teot.PROJID AND teot.STATUS <![CDATA[<>]]> ''done'' AND teot.ANALYSISTYPE <![CDATA[<>]]> ''calculate'')')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND NOT EXISTS (SELECT 1 FROM T_EMC_SAMPLE tes WHERE tes.PROJID =tep.ID AND tes.STATUS <![CDATA[<>]]> ''done'')')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND EXISTS (SELECT 1 FROM T_EMC_SAMPLE tes WHERE tes.PROJID = tep.ID)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ) T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+4,
+'emc.ProjectInfoModify.mapper.LcdpEmcProjectOracleMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1630039276722656,
+'ProjectInfoModifyEditPage',
+'view',
+1630039212923360,
+1,
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.ProjectInfoModify.server.LcdpEmcProjectService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.ProjectInfoModify.page.ProjectInfoModifyDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_1_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''projectinfomodify-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.confirm(''确认更新'', ''更新至报告编制'', function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.put(IFM_CONTEXT + ''/secure/emc/module/bp/project/projects/action/to-report'', Gikam.getJsonWrapper({}, [''emcProjectServiceImpl'', selections])).done(function (id) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.getComp(''projectinfomodify-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+5,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1630039278172660,
+'LcdpEmcProjectService',
+'java',
+1630039212923360,
+1,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcProjectService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_PROJECT";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'emc.ProjectInfoModify.server.LcdpEmcProjectService',
+'0',
+NULL,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class ProjectInfoModifyLcdpEmcProjectServicev1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_PROJECT";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+'ProjectInfoModifyLcdpEmcProjectServicev1');
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1631067842468320,
+'LcdpEmcReportOracleMapper',
+'mapper',
+1631067705645536,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.ReportSearchByYW.mapper.LcdpEmcReportMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          SELECT ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ter.ID,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tebc.BIZCATEGORYNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            CASE ter.STATUS ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHEN ''reportArchiving'' THEN ''报告归档''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHEN ''reportPrint'' THEN ''报告打印''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHEN ''reportSeal'' THEN ''报告发送''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            END AS STATUS,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ter.REPORTNO,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.ENTRUSTORGNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.TESTORGNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.BUSINESSUSERNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.BUSINESSUSERID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            FROM T_EMC_REPORT ter ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN t_emc_project tep ON tep.id=ter.PROJID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_BIZ_CATEGORY tebc ON tebc.id=tep.BIZCATEGORYID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHERE ter.STATUS IN (''reportArchiving'',''reportPrint'',''reportSeal'')')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          ) T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+2,
+'emc.ReportSearchByYW.mapper.LcdpEmcReportOracleMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1631067840535008,
+'ReportSearchByYWEditPage',
+'view',
+1631067705645536,
+1,
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.ReportSearchByYW.server.LcdpEmcReportService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    pageParam.BUSINESSUSERID_SEQ = workspace.user.id;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function reportsearchbyyw_edit_grid_onrowactive(index, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.getComp(''Uploader_1'').setOptions({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        bizId: row.id,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ext_SEQ: ''sealPdf''')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_1_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var _this = this;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsearchbyyw-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.postText(IFM_CONTEXT + ''/secure/emc/module/bp/report/reports/action/report-pack'', Gikam.getJsonWrapper({}, ['''', selections])')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    ).done(function (fileUrl) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (fileUrl != '''' && fileUrl != undefined) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.download(IFM_CONTEXT + fileUrl);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        } else {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.alert(''没有可下载的附件'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+6,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1631067842025978,
+'LcdpEmcReportService',
+'java',
+1631067705645536,
+1,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcReportService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.ReportSearchByYW.mapper.LcdpEmcReportMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'emc.ReportSearchByYW.server.LcdpEmcReportService',
+'0',
+NULL,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class ReportSearchByYWLcdpEmcReportServicev1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.ReportSearchByYW.mapper.LcdpEmcReportMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+'ReportSearchByYWLcdpEmcReportServicev1');
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1654892686623552,
+'LcdpEmcSampleOracleMapper',
+'mapper',
+1654892682027840,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.SampleInfoModify.mapper.LcdpEmcSampleMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_SAMPLE T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'emc.SampleInfoModify.mapper.LcdpEmcSampleOracleMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1654892685304660,
+'SampleInfoModifyEditPage',
+'view',
+1654892682027840,
+1,
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.SampleInfoModify.server.LcdpEmcSampleService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.SampleInfoModify.page.SampleInfoModifyDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''sampleno''){')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10)),
+2,
+'emc.SampleInfoModify.page.SampleInfoModifyEditPage',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1654892686369620,
+'LcdpEmcSampleService',
+'java',
+1654892682027840,
+1,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcSampleService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_SAMPLE";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.SampleInfoModify.mapper.LcdpEmcSampleMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'emc.SampleInfoModify.server.LcdpEmcSampleService',
+'0',
+NULL,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class SampleInfoModifyLcdpEmcSampleServicev1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_SAMPLE";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.SampleInfoModify.mapper.LcdpEmcSampleMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+'SampleInfoModifyLcdpEmcSampleServicev1');
 INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1734450104704032,
 'LcdpEmcEquiptIOracleMapper',
 'mapper',
@@ -21709,8 +23536,578 @@ TO_CLOB('import com.sunwayworld.framework.context.ApplicationContextHelper;')
  || TO_CLOB('}')
  || TO_CLOB(CHR(10)),
 'EquiptInOutLcdpEmcEquiptInoutServicev8');
-INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1596797905263584,
-'equiptInOut',
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1587156565566944,
+'LcdpEmcReportSendInfoOracleMapper',
+'mapper',
+1587156555744736,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          (')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            select ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.ID,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.EXPRESSNO,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.EXPRESSTYPE,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.ISSURER,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.ISSURERDATE,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.PIC,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tep.ENTRUSTORGNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tep.PROJNO,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tep.CONTRACTNO')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            from T_EMC_REPORT_SEND_INFO tersi ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =tersi.PROJID ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHERE tersi.EXPRESSNO IS NOT NULL')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND tersi.EXPRESSNO NOT LIKE ''%自提%''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND tersi.EXPRESSNO NOT LIKE ''%/%''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          )T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('              T.ISSURERDATE')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+4,
+'emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoOracleMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1587156564485600,
+'reportSendExpressDeliveryEditPage',
+'view',
+1587156555744736,
+1,
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.reportSendExpressDelivery.page.reportSendExpressDeliveryDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''projid'') {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, { id: row.id, sourcePage: ''edit'' });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_1_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var _this = this;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.create(''simpleUploader'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        id: ''reportsendexpressdelivery-edit-uploader'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        dbTable: ''T_EMC_REPORT_SEND_INFO'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        bizId: Date.now(),')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        multiple: false,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        accept: ''image'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onAfterClose: function (fileList) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            if (!Gikam.isEmpty(fileList)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                Gikam.getJson(IFM_CONTEXT + ''/core/module/item/files/'' + fileList[0].id).done(function (coreFile) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    var saveData = selections.map(function (row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        return {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            id: row.id,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            pic: coreFile.downloadUrl')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        };')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    var updUrl = baseUrl + ''.updateData'';')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    Gikam.put(updUrl, Gikam.getJsonWrapper({}, [null, saveData])).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Gikam.getComp(''reportsendexpressdelivery-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_2_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var _this = this;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var modal = Gikam.create(''modal'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        title: ''签字'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        width: ''100%'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        height: ''100%'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onAfterClose: function (data) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            if (!Gikam.isEmpty(data)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                var saveData = selections.map(function (row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    return {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        id: row.id,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        pic: data.downloadUrl')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    };')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                var updUrl = baseUrl + ''.updateData'';')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                Gikam.put(updUrl, Gikam.getJsonWrapper({}, [null, saveData])).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    Gikam.getComp(''reportsendexpressdelivery-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.finalDelay("drawBoard", function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.create(''layout'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            renderTo: modal.window.$dom,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            center: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                items: [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    type: ''iframe'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    id: ''create-draw-board-ifram'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    src: ''/secure/emc/module/bp/project/projects/page/draw-board''')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }]')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_3_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.viewReport(''HQD'', Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections());')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+10,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1587156565214717,
+'LcdpEmcReportSendInfoService',
+'java',
+1587156555744736,
+1,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcReportSendInfoService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT_SEND_INFO";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService',
+'0',
+NULL,
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class ReportSendExpressDeliveryLcdpEmcReportSendInfoServicev1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT_SEND_INFO";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+'ReportSendExpressDeliveryLcdpEmcReportSendInfoServicev1');
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1605673968390944,
+'FloderInfoModify',
 'module',
 1583426288284192,
 1,
@@ -21732,6 +24129,648 @@ NULL,
 '0',
 NULL,
 NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1597703216355776,
+'OrderInfoModify',
+'module',
+1583426288284192,
+1,
+NULL,
+NULL,
+NULL,
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1630039212923360,
+'ProjectInfoModify',
+'module',
+1583426288284192,
+1,
+NULL,
+NULL,
+NULL,
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1631067705645536,
+'ReportSearchByYW',
+'module',
+1583426288284192,
+1,
+NULL,
+NULL,
+NULL,
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1654892682027840,
+'SampleInfoModify',
+'module',
+1583426288284192,
+1,
+NULL,
+NULL,
+NULL,
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1596797905263584,
+'equiptInOut',
+'module',
+1583426288284192,
+1,
+NULL,
+NULL,
+NULL,
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1587156555744736,
+'reportSendExpressDelivery',
+'module',
+1583426288284192,
+1,
+NULL,
+NULL,
+NULL,
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1794420245005760,
+1587156564485600,
+'reportSendExpressDeliveryEditPage',
+'view',
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.reportSendExpressDelivery.page.reportSendExpressDeliveryDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''projid'') {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, { id: row.id, sourcePage: ''edit'' });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_1_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var _this = this;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.create(''simpleUploader'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        id: ''reportsendexpressdelivery-edit-uploader'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        dbTable: ''T_EMC_REPORT_SEND_INFO'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        bizId: Date.now(),')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        multiple: false,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        accept: ''image'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onAfterClose: function (fileList) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            if (!Gikam.isEmpty(fileList)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                Gikam.getJson(IFM_CONTEXT + ''/core/module/item/files/'' + fileList[0].id).done(function (coreFile) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    var saveData = selections.map(function (row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        return {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            id: row.id,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            pic: coreFile.downloadUrl')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        };')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    var updUrl = baseUrl + ''.updateData'';')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    Gikam.put(updUrl, Gikam.getJsonWrapper({}, [null, saveData])).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Gikam.getComp(''reportsendexpressdelivery-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_2_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var _this = this;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var modal = Gikam.create(''modal'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        title: ''签字'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        width: ''100%'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        height: ''100%'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onAfterClose: function (data) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            if (!Gikam.isEmpty(data)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                var saveData = selections.map(function (row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    return {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        id: row.id,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        pic: data.downloadUrl')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    };')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                var updUrl = baseUrl + ''.updateData'';')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                Gikam.put(updUrl, Gikam.getJsonWrapper({}, [null, saveData])).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    Gikam.getComp(''reportsendexpressdelivery-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.finalDelay("drawBoard", function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.create(''layout'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            renderTo: modal.window.$dom,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            center: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                items: [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    type: ''iframe'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    id: ''create-draw-board-ifram'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    src: ''/secure/emc/module/bp/project/projects/page/draw-board''')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }]')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_3_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.viewReport(''HQD'', Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections());')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+10,
+'yes',
+'yes',
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage',
+2,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1587156565222880,
+1587156565214717,
+'LcdpEmcReportSendInfoService',
+'java',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcReportSendInfoService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT_SEND_INFO";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'yes',
+'yes',
+'emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService',
+1,
+'0',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class reportSendExpressDeliveryLcdpEmcReportSendInfoServicev1m1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT_SEND_INFO";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'));
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1794420016489920,
+1587156565566944,
+'LcdpEmcReportSendInfoOracleMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          (')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            select ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.ID,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.EXPRESSNO,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.EXPRESSTYPE,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.ISSURER,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.ISSURERDATE,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tersi.PIC,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tep.ENTRUSTORGNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tep.PROJNO,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                tep.CONTRACTNO')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            from T_EMC_REPORT_SEND_INFO tersi ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =tersi.PROJID ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHERE tersi.EXPRESSNO IS NOT NULL')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND tersi.EXPRESSNO NOT LIKE ''%自提%''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND tersi.EXPRESSNO NOT LIKE ''%/%''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          )T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('              T.ISSURERDATE')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+4,
+'yes',
+'yes',
+'emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoOracleMapper',
+2,
+'0',
 NULL);
 INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1607008533293824,
 1596797917215712,
@@ -22841,6 +25880,1743 @@ TO_CLOB('var baseUrl = "emc.equiptInOut.server.LcdpEmcEquiptInoutService";')
 2,
 '0',
 NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1630288250714592,
+1597703224613312,
+'OrderInfoModifyEditPage',
+'view',
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.OrderInfoModify.server.LcdpEmcOrderService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.OrderInfoModify.page.OrderInfoModifyDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''orderno''){')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10)),
+6,
+'yes',
+'yes',
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage',
+3,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1597703225776576,
+1597703225768386,
+'LcdpEmcOrderService',
+'java',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcOrderService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_ORDER";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.OrderInfoModify.mapper.LcdpEmcOrderMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'yes',
+'yes',
+'emc.OrderInfoModify.server.LcdpEmcOrderService',
+1,
+'0',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class OrderInfoModifyLcdpEmcOrderServicev1m1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_ORDER";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.OrderInfoModify.mapper.LcdpEmcOrderMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'));
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1622456642169440,
+1597703226128832,
+'LcdpEmcOrderOracleMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.OrderInfoModify.mapper.LcdpEmcOrderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.* FROM')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          (SELECT teo.*,tep.PROJNO,tep.PROJNAME FROM T_EMC_ORDER teo ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =teo.PROJID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          )  T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+2,
+'yes',
+'yes',
+'emc.OrderInfoModify.mapper.LcdpEmcOrderOracleMapper',
+2,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1616648289373824,
+1605674000347936,
+'FloderInfoModifyEditPage',
+'view',
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.FloderInfoModify.server.LcdpEmcFolderService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.FloderInfoModify.page.FloderInfoModifyDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''folderno''){')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10)),
+2,
+'yes',
+'yes',
+'emc.FloderInfoModify.page.FloderInfoModifyEditPage',
+3,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1605674001404725,
+1605674001404724,
+'LcdpEmcFolderService',
+'java',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcFolderService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_FOLDER";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.FloderInfoModify.mapper.LcdpEmcFolderMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'yes',
+'yes',
+'emc.FloderInfoModify.server.LcdpEmcFolderService',
+1,
+'0',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class FloderInfoModifyLcdpEmcFolderServicev1m1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_FOLDER";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.FloderInfoModify.mapper.LcdpEmcFolderMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'));
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1605674001568544,
+1605674001560352,
+'LcdpEmcFolderMysqlMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_FOLDER T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'yes',
+'yes',
+'emc.FloderInfoModify.mapper.LcdpEmcFolderMysqlMapper',
+1,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1605674001789729,
+1605674001789728,
+'LcdpEmcFolderOracleMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_FOLDER T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'yes',
+'yes',
+'emc.FloderInfoModify.mapper.LcdpEmcFolderOracleMapper',
+1,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1605674002273056,
+1605674002264864,
+'LcdpEmcFolderPostgresqlMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_FOLDER T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'yes',
+'yes',
+'emc.FloderInfoModify.mapper.LcdpEmcFolderPostgresqlMapper',
+1,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1605674002445088,
+1605674002436896,
+'LcdpEmcFolderSqlserverMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_FOLDER T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'yes',
+'yes',
+'emc.FloderInfoModify.mapper.LcdpEmcFolderSqlserverMapper',
+1,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1631134722128352,
+1630039276722656,
+'ProjectInfoModifyEditPage',
+'view',
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.ProjectInfoModify.server.LcdpEmcProjectService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.ProjectInfoModify.page.ProjectInfoModifyDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_1_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''projectinfomodify-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.confirm(''确认更新'', ''更新至报告编制'', function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.put(IFM_CONTEXT + ''/secure/emc/module/bp/project/projects/action/to-report'', Gikam.getJsonWrapper({}, [''emcProjectServiceImpl'', selections])).done(function (id) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.getComp(''projectinfomodify-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+5,
+'yes',
+'yes',
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage',
+2,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1630039278180832,
+1630039278172660,
+'LcdpEmcProjectService',
+'java',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcProjectService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_PROJECT";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'yes',
+'yes',
+'emc.ProjectInfoModify.server.LcdpEmcProjectService',
+1,
+'0',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class ProjectInfoModifyLcdpEmcProjectServicev1m1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_PROJECT";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'));
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1640700360159968,
+1630039278516704,
+'LcdpEmcProjectOracleMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          (SELECT tep.ID,tep.PROJNO,tep.PROJNAME,tep.PROJNODE,tep.status,tep.TOREPORTEDITDATE ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            FROM T_EMC_PROJECT tep')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHERE tep.STATUS = ''auditFinished'' AND tep.STATUS <![CDATA[<>]]> ''cancel''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND NOT EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK teot WHERE tep.ID =teot.PROJID AND teot.STATUS <![CDATA[<>]]> ''done'' AND teot.ANALYSISTYPE <![CDATA[<>]]> ''calculate'')')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND NOT EXISTS (SELECT 1 FROM T_EMC_SAMPLE tes WHERE tes.PROJID =tep.ID AND tes.STATUS <![CDATA[<>]]> ''done'')')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            AND EXISTS (SELECT 1 FROM T_EMC_SAMPLE tes WHERE tes.PROJID = tep.ID)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ) T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+4,
+'yes',
+'yes',
+'emc.ProjectInfoModify.mapper.LcdpEmcProjectOracleMapper',
+2,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1699784763219680,
+1631067840535008,
+'ReportSearchByYWEditPage',
+'view',
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.ReportSearchByYW.server.LcdpEmcReportService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    pageParam.BUSINESSUSERID_SEQ = workspace.user.id;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function reportsearchbyyw_edit_grid_onrowactive(index, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.getComp(''Uploader_1'').setOptions({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        bizId: row.id,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ext_SEQ: ''sealPdf''')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_1_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var _this = this;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsearchbyyw-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.postText(IFM_CONTEXT + ''/secure/emc/module/bp/report/reports/action/report-pack'', Gikam.getJsonWrapper({}, ['''', selections])')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    ).done(function (fileUrl) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (fileUrl != '''' && fileUrl != undefined) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.download(IFM_CONTEXT + fileUrl);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        } else {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.alert(''没有可下载的附件'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+6,
+'yes',
+'yes',
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage',
+2,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1631067842042336,
+1631067842025978,
+'LcdpEmcReportService',
+'java',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcReportService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.ReportSearchByYW.mapper.LcdpEmcReportMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'yes',
+'yes',
+'emc.ReportSearchByYW.server.LcdpEmcReportService',
+1,
+'0',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class ReportSearchByYWLcdpEmcReportServicev1m1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.ReportSearchByYW.mapper.LcdpEmcReportMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'));
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1632479276270112,
+1631067842468320,
+'LcdpEmcReportOracleMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.ReportSearchByYW.mapper.LcdpEmcReportMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          SELECT ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ter.ID,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tebc.BIZCATEGORYNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            CASE ter.STATUS ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHEN ''reportArchiving'' THEN ''报告归档''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHEN ''reportPrint'' THEN ''报告打印''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHEN ''reportSeal'' THEN ''报告发送''')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            END AS STATUS,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ter.REPORTNO,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.ENTRUSTORGNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.TESTORGNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.BUSINESSUSERNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.BUSINESSUSERID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            FROM T_EMC_REPORT ter ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN t_emc_project tep ON tep.id=ter.PROJID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_BIZ_CATEGORY tebc ON tebc.id=tep.BIZCATEGORYID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHERE ter.STATUS IN (''reportArchiving'',''reportPrint'',''reportSeal'')')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          ) T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+2,
+'yes',
+'yes',
+'emc.ReportSearchByYW.mapper.LcdpEmcReportOracleMapper',
+2,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1654966506939200,
+1654892685304660,
+'SampleInfoModifyEditPage',
+'view',
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.SampleInfoModify.server.LcdpEmcSampleService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.SampleInfoModify.page.SampleInfoModifyDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''sampleno''){')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10)),
+2,
+'yes',
+'yes',
+'emc.SampleInfoModify.page.SampleInfoModifyEditPage',
+2,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1654892686377792,
+1654892686369620,
+'LcdpEmcSampleService',
+'java',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcSampleService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_SAMPLE";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.SampleInfoModify.mapper.LcdpEmcSampleMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+1,
+'yes',
+'yes',
+'emc.SampleInfoModify.server.LcdpEmcSampleService',
+1,
+'0',
+TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class SampleInfoModifyLcdpEmcSampleServicev1m1 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_SAMPLE";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.SampleInfoModify.mapper.LcdpEmcSampleMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /**')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     * 新增数据')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('     */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'));
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1654892686631744,
+1654892686623552,
+'LcdpEmcSampleOracleMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.SampleInfoModify.mapper.LcdpEmcSampleMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.*')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('          FROM T_EMC_SAMPLE T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+1,
+'yes',
+'yes',
+'emc.SampleInfoModify.mapper.LcdpEmcSampleOracleMapper',
+1,
+'0',
+NULL);
 INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1754830408176672,
 1734443928132640,
 'equiptInOutStatus',
@@ -23265,6 +28041,259 @@ TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
 'emc.equiptInOut.mapper.LcdpEmcEquiptIOracleMapper',
 2,
 '0',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('03d3fb8056c4455ea31cc109399b49da',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"03d3fb8056c4455ea31cc109399b49da"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('0e032a480e3d486689e316f58f218758',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"custom","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.projno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"0e032a480e3d486689e316f58f218758","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projno","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('15d5dc2adff84425a5055dedf4ba0395',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'Button',
+'d2308cb8c10f4fc3939389036be3457e',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"result-record-2","id":"Button_2","text":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_2.text","type":"i18n"},"uuid":"15d5dc2adff84425a5055dedf4ba0395","onClick__$S$__":"button_2_onclick","visibleRoles":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('3a2d384e4c83460db0cf7a8b18078f3a',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"source":"dataSource","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.pic.title","type":"i18n"},"gridColumnType":"image","type":"image","uuid":"3a2d384e4c83460db0cf7a8b18078f3a","visibleRoles":[],"children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_pic","renderType":"","value":"","editRoles":[],"onClick__$S$__":"","height":50,"editor":false,"contentAlign":"center","sort":true,"filter":true,"formatter__$S$__":"","field":"pic","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('3e9cb257b4f6483c92e23c28053065ec',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'Button',
+'d2308cb8c10f4fc3939389036be3457e',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"send-cloud","id":"Button_1","text":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_1.text","type":"i18n"},"uuid":"3e9cb257b4f6483c92e23c28053065ec","onClick__$S$__":"button_1_onclick","visibleRoles":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('4359437e9449430f8aa2ab7c78743ef2',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'Button',
+'d2308cb8c10f4fc3939389036be3457e',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"preview","id":"Button_3","text":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_3.text","type":"i18n"},"uuid":"4359437e9449430f8aa2ab7c78743ef2","onClick__$S$__":"button_3_onclick","visibleRoles":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('4bf9c990bf754486b67c88dd315266b4',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'LayoutNorth',
+'cec1f0851ec44d3bb0b71b4c4e19c9d6',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"4bf9c990bf754486b67c88dd315266b4","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('66a576f4e78947dc8e0fdf53cb8b8dd5',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"custom","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.contractno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"66a576f4e78947dc8e0fdf53cb8b8dd5","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_contractno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"contractno","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('6ec897738b6649219bc2233406058492',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'LayoutSouth',
+'cec1f0851ec44d3bb0b71b4c4e19c9d6',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"6ec897738b6649219bc2233406058492","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('7542dcb866ee4528ac25ebe46a0c40ee',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expressno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"7542dcb866ee4528ac25ebe46a0c40ee","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_expressno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"expressno","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('93d29592746a4aa9a4d7323005a78a63',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurer.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"93d29592746a4aa9a4d7323005a78a63","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_issurer","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"issurer","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('94a1c5ea281742b2b34191ead98a7e39',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expresstype.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"94a1c5ea281742b2b34191ead98a7e39","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_expresstype","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"expresstype","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('9cdc4af4439f426e884d7b082be9421f',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"custom","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.entrustorgname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"9cdc4af4439f426e884d7b082be9421f","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_entrustorgname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"entrustorgname","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('a934c49411cb4c959ac894eaf3d141c2',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'LayoutWest',
+'cec1f0851ec44d3bb0b71b4c4e19c9d6',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"a934c49411cb4c959ac894eaf3d141c2"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('bfeafee3587a4cc49b70371bf7f7209d',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'LayoutCenter',
+'cec1f0851ec44d3bb0b71b4c4e19c9d6',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["d370cfe8af584569b2dd10c4696b1126"],"id":"LayoutCenter_1","uuid":"bfeafee3587a4cc49b70371bf7f7209d"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('c36cc9805580481b94c0dfb5f140f5dc',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'LayoutEast',
+'cec1f0851ec44d3bb0b71b4c4e19c9d6',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"c36cc9805580481b94c0dfb5f140f5dc"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('cec1f0851ec44d3bb0b71b4c4e19c9d6',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'Layout',
+NULL,
+NULL,
+NULL,
+NULL,
+'{"layout":"all","childrenWidgetId":["4bf9c990bf754486b67c88dd315266b4","6ec897738b6649219bc2233406058492","c36cc9805580481b94c0dfb5f140f5dc","a934c49411cb4c959ac894eaf3d141c2","bfeafee3587a4cc49b70371bf7f7209d"],"id":"Layout_1","uuid":"cec1f0851ec44d3bb0b71b4c4e19c9d6","height":"100%"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('d2308cb8c10f4fc3939389036be3457e',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridToolbar',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["3e9cb257b4f6483c92e23c28053065ec","15d5dc2adff84425a5055dedf4ba0395","4359437e9449430f8aa2ab7c78743ef2"],"generalPanelTrigger":[],"toolbarAlign":"left","toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"d2308cb8c10f4fc3939389036be3457e"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('d370cfe8af584569b2dd10c4696b1126',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'Grid',
+'bfeafee3587a4cc49b70371bf7f7209d',
+NULL,
+NULL,
+NULL,
+'{"onCheckboxClick__$S$__":"","columnAutoFill":false,"pageSize":50,"autoSave":true,"onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"checkOnActiveGroupRow":true,"exportWithStyle":true,"onValidating__$S$__":"","id":"reportsendexpressdelivery-edit-grid","height":"100%","order":{},"onCellClick__$S$__":"loadDetailPage","deleteFormatter__$S$__":"","textLineFeed":false,"showPagination":true,"allowMultiColSort":false,"columnResize":true,"onBeforeDelete__$S$__":"","checkOneOnActive":true,"activateFormatter__$S$__":"","childrenWidgetId":["da0fe38357984af6a5d4ea299da77a72","03d3fb8056c4455ea31cc109399b49da","0e032a480e3d486689e316f58f218758","9cdc4af4439f426e884d7b082be9421f","66a576f4e78947dc8e0fdf53cb8b8dd5","f2cd30d5446f4d3f805c97c1a020328f","93d29592746a4aa9a4d7323005a78a63","94a1c5ea281742b2b34191ead98a7e39","7542dcb866ee4528ac25ebe46a0c40ee","3a2d384e4c83460db0cf7a8b18078f3a"],"headRequestData":{},"columns":[],"commonSearch":false,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onColumnsWidthChange__$S$__":"","keyDownSelectContent":true,"toolbarAlign":"left","formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","showCheckedNum":false,"contextmenu_childrenWidgetId":[],"toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"requestData":{},"activateFirstRow":false,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","onBeforeLoad__$S$__":"","toolbarHidden":false,"url":"emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService.selectPaginationData","instantSavePath":"emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService.updateData","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"showCheckedBadgeGt":1,"onBeforeHeadRequest__$S$__":"","onRendered__$S$__":"","advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"'
+ || 'show":false,"titleStyle":"","title":""},"confirmField":"projid","filterOpen":true,"suspendFormatter__$S$__":"","uuid":"d2308cb8c10f4fc3939389036be3457e","contextMenuConfig":false,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","activeOnCheck":false,"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":[],"sortEnable":true},"initRequest":true,"onAfterChoose__$S$__":"","onBeforeSuspend__$S$__":"","sort":true,"exportExcelHeader":"","onColumnActive__$S$__":"","onBeforeActivate__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"formatterParamOnExportExcel__$S$__":"","toggleCheckOnActive":true,"appendButtonsToGeneral_childrenWidgetId":[],"serverSearch":true,"onUpdated__$S$__":"","exportHiddenColumns":true,"onDrag__$S$__":"","loadingMode":"normal","onRowDblclick__$S$__":"","cellValueFillByDrag":false,"showSortArrow":true,"enterKeyDownActive":true,"onAllSelect__$S$__":"","onBeforeUpdate__$S$',
+'__":"","generalButtonGroup":[],"onBeforeEditorRender__$S$__":"","enableKeySwitchEditor":true,"checkedIds":[],"toolbar_childrenWidgetId":["d2308cb8c10f4fc3939389036be3457e"],"pageList":[50,100,150,200,"grid.all.data"],"checkOnActive":true}');
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('da0fe38357984af6a5d4ea299da77a72',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"da0fe38357984af6a5d4ea299da77a72"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('f2cd30d5446f4d3f805c97c1a020328f',
+1794420245005760,
+1587156564485600,
+10,
+NULL,
+'GridColumn',
+'d370cfe8af584569b2dd10c4696b1126',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"source":"dataSource","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurerdate.title","type":"i18n"},"gridColumnType":"date","type":"date","uuid":"f2cd30d5446f4d3f805c97c1a020328f","visibleRoles":[],"getDateRanger__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_issurerdate","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"issurerdate","width":150,"fixed":false,"getPrefixIcons__$S$__":""}',
 NULL);
 INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('2f972d1103fc4e2db50660c3757aa68a',
 1607008533293824,
@@ -23856,6 +28885,1571 @@ NULL,
 NULL,
 '{"getStyle__$S$__":"","childrenWidgetId":[],"enableSecond":true,"lcdpVisible":true,"validators":[],"source":"dataSource","title":{"i18nCode":"emc.equiptInOut.page.equiptInOutRecord.Grid_1.operatetime.title","type":"i18n"},"gridColumnType":"dateTime","type":"dateTime","uuid":"fef75eca8ad245ff96dc0fdd929bdbd8","visibleRoles":[],"getDateRanger__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_operatetime","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"operatetime","width":150,"fixed":false,"getPrefixIcons__$S$__":""}',
 NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('108b0230ec614cbcb2bea515434865ea',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"108b0230ec614cbcb2bea515434865ea","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projno","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1ecd94c33aac49b59542f8f6a66159df',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"accepteusername","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_accepteusername","title":{"i18nCode":"T_EMC_ORDER.ACCEPTEUSERNAME","type":"i18n","zh-CN":"接收人"},"gridColumnType":"text","uuid":"1ecd94c33aac49b59542f8f6a66159df"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('269d57c9717f49538ffb412deb58ae49',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"ordernum","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_ordernum","title":{"i18nCode":"T_EMC_ORDER.ORDERNUM","type":"i18n","zh-CN":"排序码"},"gridColumnType":"text","uuid":"269d57c9717f49538ffb412deb58ae49"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('2843c346eabb40789612338b2d49121f',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_ORDER.SENDDATE","type":"i18n","zh-CN":"送样日期"},"gridColumnType":"date","type":"date","uuid":"2843c346eabb40789612338b2d49121f","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","field":"senddate","children":[{}],"width":150,"fixed":false,"id":"GridColumn_senddate"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('2d7084b974c74de4ab62de1c56516bb9',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"enableSecond":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_ORDER.ACCEPTEDDATE","type":"i18n","zh-CN":"接收日期"},"gridColumnType":"dateTime","type":"dateTime","uuid":"2d7084b974c74de4ab62de1c56516bb9","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","formatter__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","field":"accepteddate","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"width":150,"fixed":false,"id":"GridColumn_accepteddate","onDataChange__$S$__":"","getPrefixIcons__$S$__":""}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('31427b7ed84f47e9ba1d5f8c125b8ff0',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"validators":[],"onInput__$S$__":"","sort":true,"autoCompleteUrl":"","title":{"i18nCode":"T_EMC_ORDER.ORDERNO","type":"i18n","zh-CN":"样品编号"},"gridColumnType":"text","type":"text","uuid":"31427b7ed84f47e9ba1d5f8c125b8ff0","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","onKeyDown__$S$__":"","textStyleFormatter__$S$__":"","field":"orderno","children":[{}],"width":150,"fixed":false,"id":"GridColumn_orderno","placeholder":{"en-US":"","zh-CN":""},"value":"","onDataChange__$S$__":""}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('36f3d9f3b1b44aca9244d1b72563b3a0',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"structure","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_structure","title":{"i18nCode":"T_EMC_ORDER.STRUCTURE","type":"i18n","zh-CN":"结构"},"gridColumnType":"text","uuid":"36f3d9f3b1b44aca9244d1b72563b3a0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('3e1a96df3345489bb8e4ebd73d447ac4',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"3e1a96df3345489bb8e4ebd73d447ac4","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projname","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('43c57fcfd1054494b585034799ca904d',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"ordercategory","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_ordercategory","title":{"i18nCode":"T_EMC_ORDER.ORDERCATEGORY","type":"i18n","zh-CN":"样品类型"},"gridColumnType":"text","uuid":"43c57fcfd1054494b585034799ca904d"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('459228db6c56446bba0a667efbb7affe',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplingdepth","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplingdepth","title":{"i18nCode":"T_EMC_ORDER.SAMPLINGDEPTH","type":"i18n","zh-CN":"采样深度"},"gridColumnType":"text","uuid":"459228db6c56446bba0a667efbb7affe"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('4b01c7a3a6eb4e748be0fff02d82b5af',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"accepteduserid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_accepteduserid","title":{"i18nCode":"T_EMC_ORDER.ACCEPTEDUSERID","type":"i18n","zh-CN":"接收人编码"},"gridColumnType":"text","uuid":"4b01c7a3a6eb4e748be0fff02d82b5af"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('53f7cae5046148ae8c9b3203af8c5d3a',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"qcname","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_qcname","title":{"i18nCode":"T_EMC_ORDER.QCNAME","type":"i18n","zh-CN":"QC类型中文"},"gridColumnType":"text","uuid":"53f7cae5046148ae8c9b3203af8c5d3a"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('540cb3b381f543f88c1765b8da449b9f',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplecompletetime","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplecompletetime","title":{"i18nCode":"T_EMC_ORDER.SAMPLECOMPLETETIME","type":"i18n","zh-CN":"采样完成时间"},"gridColumnType":"text","uuid":"540cb3b381f543f88c1765b8da449b9f"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('5ab019b222d24f3582a512fd97e9dff9',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'LayoutWest',
+'82eb4560aafe45a0bea03b5fa9aaf7d5',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"5ab019b222d24f3582a512fd97e9dff9"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('63cfcd1874644531b676ed28c70676ad',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_ORDER.SAMPLEBEGINDATE","type":"i18n","zh-CN":"采样开始日期"},"gridColumnType":"date","type":"date","uuid":"63cfcd1874644531b676ed28c70676ad","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","field":"samplebegindate","children":[{}],"width":150,"fixed":false,"id":"GridColumn_samplebegindate"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('75a3ca1dc1434599b2fc22f08d43b21f',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"qccategorycode","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_qccategorycode","title":{"i18nCode":"T_EMC_ORDER.QCCATEGORYCODE","type":"i18n","zh-CN":"QC类型编码"},"gridColumnType":"text","uuid":"75a3ca1dc1434599b2fc22f08d43b21f"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('7e3c7d95cb914ef0888f3d65450b75ec',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":true,"childrenWidgetId":[],"visible":true,"field":"termination","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_termination","title":{"i18nCode":"T_EMC_ORDER.TERMINATION","type":"i18n","zh-CN":"是否终止"},"gridColumnType":"text","uuid":"7e3c7d95cb914ef0888f3d65450b75ec"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('82eb4560aafe45a0bea03b5fa9aaf7d5',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'Layout',
+NULL,
+NULL,
+NULL,
+NULL,
+'{"layout":"all","childrenWidgetId":["99dd6c4163324f1387cd6e2e806b6171","93b879eaba884a26b20f3145f09d7fb8","e40b4295908d4d7280d66733a94739b2","5ab019b222d24f3582a512fd97e9dff9","bcbdf5275742463e90c78656c035a6ce"],"id":"Layout_1","uuid":"82eb4560aafe45a0bea03b5fa9aaf7d5","height":"100%"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8bbb3277d837410ba717444064d898f3',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.clientordername.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"8bbb3277d837410ba717444064d898f3","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_clientordername","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"clientordername","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8df4d54376d14ef0afd8ef43c16a1ddd',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"monitortmplid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_monitortmplid","title":{"i18nCode":"T_EMC_ORDER.MONITORTMPLID","type":"i18n","zh-CN":"监测模板ID"},"gridColumnType":"text","uuid":"8df4d54376d14ef0afd8ef43c16a1ddd"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8f38a478364c4d0087960556a9d7d925',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"odor","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_odor","title":{"i18nCode":"T_EMC_ORDER.ODOR","type":"i18n","zh-CN":"气味"},"gridColumnType":"text","uuid":"8f38a478364c4d0087960556a9d7d925"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('90207590e68d4f62a5c5a6efa25bbabe',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":true,"childrenWidgetId":[],"visible":true,"field":"samplenum","children":[{}],"width":100,"fixed":false,"sort":true,"id":"GridColumn_samplenum","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.samplenum.title","type":"i18n"},"gridColumnType":"text","uuid":"90207590e68d4f62a5c5a6efa25bbabe"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('91ca9866f9cf4961a2d4bbccd88b639c',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'Grid',
+'bcbdf5275742463e90c78656c035a6ce',
+NULL,
+NULL,
+NULL,
+'{"onCheckboxClick__$S$__":"","onRendered__$S$__":"","columnAutoFill":false,"advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"orderno","pageSize":50,"filterOpen":true,"autoSave":true,"suspendFormatter__$S$__":"","uuid":"af7cc05d27ac451f8c6e8e5eeb1d6f71","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"contextMenuConfig":false,"checkOnActiveGroupRow":true,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"orderinfomodify-edit-grid","activeOnCheck":false,"height":"100%","order":{},"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":["projno"],"sortEnable":true},"onCellClick__$S$__":"loadDetailPage","initRequest":true,"onAfterChoose__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"exportExcelHeader":"","allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["aa79e8be03e34401b02711b4a7e9029c","95bdb3c7e42c4ae9bbddc46c47cc1133","108b0230ec614cbcb2bea515434865ea","3e1a96df3345489bb8e4ebd73d447ac4","31427b7ed84f47e9ba1d5f8c125b8ff0","8bbb3277d837410ba717444064d898f3","2843c346eabb40789612338b2d49121f","c786a11a672e40f6b4431305d98fe4d9","a137fdbcc16c413c8ffc7732223e865a","d0bc83b141ed440a85490609144d2d5f","90207590e68d4f62a5c5a6efa25bbabe","af3f3561059c49e789a4ba528506fc29","63cfcd1874644531b676ed28c70676ad","d13147b31b7d4c8290bcbf9fccb37f9f","91deda402c214c40a7f5cb49596ff371","540cb3b381f543f88c1765b8da449b9f","e0891d7bf5e643899f212cf5432797ee","75a3ca1dc1434599b2fc22f08d43b21f","53f7cae5046148ae8c9b3203af8c5d3a","8df4d54376d14ef0afd8ef43c16a1ddd","43c57fcfd1054494b585034799ca904d","269d57c9717f49538f'
+ || 'fb412deb58ae49","7e3c7d95cb914ef0888f3d65450b75ec","4b01c7a3a6eb4e748be0fff02d82b5af","1ecd94c33aac49b59542f8f6a66159df","2d7084b974c74de4ab62de1c56516bb9","d9c2fe7d541f4b3c809acd0752c15a54","ee6d9ee1bb274596b5e2f6cd8823dea3","459228db6c56446bba0a667efbb7affe","99f9eaec78524632a47eb70716732b09","9cc5b7fd6c38422fb71afaaa8a334013","8f38a478364c4d0087960556a9d7d925","e7a4047364af4f6f9b20c06c90b7903c","36f3d9f3b1b44aca9244d1b72563b3a0","c75c05f8ad3b4cb9910af0197a9b50de"],"headRequestData":{},"formatterParamOnExportExcel__$S$__":"","columns":[],"commonSearch":false,"appendButtonsToGeneral_childrenWidgetId":[],"serverSearch":true,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","onDrag__$S$__":"","keyDownSelectContent":true,"formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","loadingMode":"normal","showCheckedNum":false,"contextmenu_childrenWidgetId":',
+'[],"onRowDblclick__$S$__":"","toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"cellValueFillByDrag":false,"requestData":{},"activateFirstRow":true,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"enterKeyDownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.OrderInfoModify.server.LcdpEmcOrderService.selectPaginationData","instantSavePath":"emc.OrderInfoModify.server.LcdpEmcOrderService.updateData","onBeforeEditorRender__$S$__":"","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_childrenWidgetId":["af7cc05d27ac451f8c6e8e5eeb1d6f71"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""}');
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('91deda402c214c40a7f5cb49596ff371',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_ORDER.SAMPLECOMPLETEDATE","type":"i18n","zh-CN":"采样完成日期"},"gridColumnType":"date","type":"date","uuid":"91deda402c214c40a7f5cb49596ff371","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","field":"samplecompletedate","children":[{}],"width":150,"fixed":false,"id":"GridColumn_samplecompletedate"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('93b879eaba884a26b20f3145f09d7fb8',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'LayoutSouth',
+'82eb4560aafe45a0bea03b5fa9aaf7d5',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"93b879eaba884a26b20f3145f09d7fb8","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('95bdb3c7e42c4ae9bbddc46c47cc1133',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"95bdb3c7e42c4ae9bbddc46c47cc1133"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('99dd6c4163324f1387cd6e2e806b6171',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'LayoutNorth',
+'82eb4560aafe45a0bea03b5fa9aaf7d5',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"99dd6c4163324f1387cd6e2e806b6171","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('99f9eaec78524632a47eb70716732b09',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"color","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_color","title":{"i18nCode":"T_EMC_ORDER.COLOR","type":"i18n","zh-CN":"颜色"},"gridColumnType":"text","uuid":"99f9eaec78524632a47eb70716732b09"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('9cc5b7fd6c38422fb71afaaa8a334013',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"texture","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_texture","title":{"i18nCode":"T_EMC_ORDER.TEXTURE","type":"i18n","zh-CN":"质地"},"gridColumnType":"text","uuid":"9cc5b7fd6c38422fb71afaaa8a334013"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('a137fdbcc16c413c8ffc7732223e865a',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":true,"childrenWidgetId":[],"visible":true,"field":"cycle","children":[{}],"width":100,"fixed":false,"sort":true,"id":"GridColumn_cycle","title":{"i18nCode":"T_EMC_ORDER.CYCLE","type":"i18n","zh-CN":"周期"},"gridColumnType":"text","uuid":"a137fdbcc16c413c8ffc7732223e865a"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('aa79e8be03e34401b02711b4a7e9029c',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"aa79e8be03e34401b02711b4a7e9029c"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('af3f3561059c49e789a4ba528506fc29',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleid","title":{"i18nCode":"T_EMC_ORDER.SAMPLEID","type":"i18n","zh-CN":"采样单编码"},"gridColumnType":"text","uuid":"af3f3561059c49e789a4ba528506fc29"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('af7cc05d27ac451f8c6e8e5eeb1d6f71',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridToolbar',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"generalPanelTrigger":[],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"af7cc05d27ac451f8c6e8e5eeb1d6f71"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('bcbdf5275742463e90c78656c035a6ce',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'LayoutCenter',
+'82eb4560aafe45a0bea03b5fa9aaf7d5',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["91ca9866f9cf4961a2d4bbccd88b639c"],"id":"LayoutCenter_1","uuid":"bcbdf5275742463e90c78656c035a6ce"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('c75c05f8ad3b4cb9910af0197a9b50de',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.orderdesc.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"c75c05f8ad3b4cb9910af0197a9b50de","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_orderdesc","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"orderdesc","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('c786a11a672e40f6b4431305d98fe4d9',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sendtime","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sendtime","title":{"i18nCode":"T_EMC_ORDER.SENDTIME","type":"i18n","zh-CN":"送样时间"},"gridColumnType":"text","uuid":"c786a11a672e40f6b4431305d98fe4d9"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('d0bc83b141ed440a85490609144d2d5f',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":true,"childrenWidgetId":[],"visible":true,"field":"frequency","children":[{}],"width":100,"fixed":false,"sort":true,"id":"GridColumn_frequency","title":{"i18nCode":"T_EMC_ORDER.FREQUENCY","type":"i18n","zh-CN":"频次"},"gridColumnType":"text","uuid":"d0bc83b141ed440a85490609144d2d5f"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('d13147b31b7d4c8290bcbf9fccb37f9f',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplebegintime","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplebegintime","title":{"i18nCode":"T_EMC_ORDER.SAMPLEBEGINTIME","type":"i18n","zh-CN":"采样开始时间"},"gridColumnType":"text","uuid":"d13147b31b7d4c8290bcbf9fccb37f9f"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('d9c2fe7d541f4b3c809acd0752c15a54',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleaddress","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleaddress","title":{"i18nCode":"T_EMC_ORDER.SAMPLEADDRESS","type":"i18n","zh-CN":"采样地点"},"gridColumnType":"text","uuid":"d9c2fe7d541f4b3c809acd0752c15a54"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('e0891d7bf5e643899f212cf5432797ee',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"qccategoryid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_qccategoryid","title":{"i18nCode":"T_EMC_ORDER.QCCATEGORYID","type":"i18n","zh-CN":""},"gridColumnType":"text","uuid":"e0891d7bf5e643899f212cf5432797ee"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('e40b4295908d4d7280d66733a94739b2',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'LayoutEast',
+'82eb4560aafe45a0bea03b5fa9aaf7d5',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"e40b4295908d4d7280d66733a94739b2"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('e7a4047364af4f6f9b20c06c90b7903c',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"density","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_density","title":{"i18nCode":"T_EMC_ORDER.DENSITY","type":"i18n","zh-CN":"密度"},"gridColumnType":"text","uuid":"e7a4047364af4f6f9b20c06c90b7903c"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('ee6d9ee1bb274596b5e2f6cd8823dea3',
+1630288250714592,
+1597703224613312,
+6,
+NULL,
+'GridColumn',
+'91ca9866f9cf4961a2d4bbccd88b639c',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplecontainer","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplecontainer","title":{"i18nCode":"T_EMC_ORDER.SAMPLECONTAINER","type":"i18n","zh-CN":"样品容器"},"gridColumnType":"text","uuid":"ee6d9ee1bb274596b5e2f6cd8823dea3"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1bf90623aafc488abfae1ce327b0eeeb',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"riverdepth","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_riverdepth","title":{"i18nCode":"T_EMC_FOLDER.RIVERDEPTH","type":"i18n","zh-CN":"河深(m)"},"gridColumnType":"text","uuid":"1bf90623aafc488abfae1ce327b0eeeb"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1cb38f6c1beb4db2b82554703f19e150',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"monitorpointcategory","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_monitorpointcategory","title":{"i18nCode":"T_EMC_FOLDER.MONITORPOINTCATEGORY","type":"i18n","zh-CN":"监测点类型"},"gridColumnType":"text","uuid":"1cb38f6c1beb4db2b82554703f19e150"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('21781c2052a84ba2921afc9740966055',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":true,"childrenWidgetId":[],"visible":true,"field":"monitorpointno","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_monitorpointno","title":{"i18nCode":"T_EMC_FOLDER.MONITORPOINTNO","type":"i18n","zh-CN":"监测点编码"},"gridColumnType":"text","uuid":"21781c2052a84ba2921afc9740966055"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('26e92898467d41b2a97963e7f8539885',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"26e92898467d41b2a97963e7f8539885"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('363f39986b4d4cc49891a967fbde45e4',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'LayoutCenter',
+'b0ec156560dd46b6a60037c72614ae6f',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["961384ebb25a4cca98512ae7eb21fe00"],"id":"LayoutCenter_1","uuid":"363f39986b4d4cc49891a967fbde45e4"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('3b111e3102b54b10ada2699e40b5557c',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"remark","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_remark","title":{"i18nCode":"T_EMC_FOLDER.REMARK","type":"i18n","zh-CN":"备注"},"gridColumnType":"text","uuid":"3b111e3102b54b10ada2699e40b5557c"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('3b5e63e03c2645a1802a39cd2329f582',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"latitude","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_latitude","title":{"i18nCode":"T_EMC_FOLDER.LATITUDE","type":"i18n","zh-CN":"纬度"},"gridColumnType":"text","uuid":"3b5e63e03c2645a1802a39cd2329f582"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('4121f4ccfd004be0a5f163e61e246194',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"section","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_section","title":{"i18nCode":"T_EMC_FOLDER.SECTION","type":"i18n","zh-CN":"断面"},"gridColumnType":"text","uuid":"4121f4ccfd004be0a5f163e61e246194"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('445fc5c67d64458f92b89888773e9957',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":false,"addon":"","validators":[],"range":"","source":"table","title":{"i18nCode":"T_EMC_FOLDER.PROJID","en-US":"","zh-CN":"项目编码"},"gridColumnType":"number","type":"number","uuid":"445fc5c67d64458f92b89888773e9957","visibleRoles":[],"isInteger":false,"readonly":false,"children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projid","value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeUpdate__$S$__":"","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","thousandSeparator":false,"hasArrow":true,"field":"projid","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('44f1c573014a4dd7958397fa0fff3cb3',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'LayoutNorth',
+'b0ec156560dd46b6a60037c72614ae6f',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"44f1c573014a4dd7958397fa0fff3cb3","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('471754e6503a4045936dde80ae8abbe3',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sceneuserid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sceneuserid","title":{"i18nCode":"T_EMC_FOLDER.SCENEUSERID","type":"i18n","zh-CN":"现场负责人编码"},"gridColumnType":"text","uuid":"471754e6503a4045936dde80ae8abbe3"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('4ae9ed8dca8a41df8833a3e485ed32d4',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"currentspeed","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_currentspeed","title":{"i18nCode":"T_EMC_FOLDER.CURRENTSPEED","type":"i18n","zh-CN":"流速(m/s)"},"gridColumnType":"text","uuid":"4ae9ed8dca8a41df8833a3e485ed32d4"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('55b2fb7bd6fe4dc8947f1a56b254d504',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplingdepth","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplingdepth","title":{"i18nCode":"T_EMC_FOLDER.SAMPLINGDEPTH","type":"i18n","zh-CN":"采样深度"},"gridColumnType":"text","uuid":"55b2fb7bd6fe4dc8947f1a56b254d504"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('65675ef8166c47b092ecd64236862a43',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"longitude","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_longitude","title":{"i18nCode":"T_EMC_FOLDER.LONGITUDE","type":"i18n","zh-CN":"经度"},"gridColumnType":"text","uuid":"65675ef8166c47b092ecd64236862a43"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('6d46bf63cf4d4bc781102a808c1a4d2e',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"sort":true,"title":{"i18nCode":"T_EMC_FOLDER.FOLDERNO","type":"i18n","zh-CN":"点位编号"},"gridColumnType":"link","type":"link","uuid":"6d46bf63cf4d4bc781102a808c1a4d2e","field":"folderno","children":[{}],"width":150,"fixed":false,"id":"GridColumn_folderno"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('7427785e76bd4a2a9d9de563cdbd8238',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_FOLDER.PLANSAMPLEDATE","type":"i18n","zh-CN":"计划采样日期"},"gridColumnType":"date","type":"date","uuid":"7427785e76bd4a2a9d9de563cdbd8238","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","field":"plansampledate","children":[{}],"width":150,"fixed":false,"id":"GridColumn_plansampledate"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('75cdb023abd24a32a43fad74e8bcec08',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"river","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_river","title":{"i18nCode":"T_EMC_FOLDER.RIVER","type":"i18n","zh-CN":"河流"},"gridColumnType":"text","uuid":"75cdb023abd24a32a43fad74e8bcec08"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('77c84bf071f2472cae4e1d53f31805a6',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"plansampleusername","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_plansampleusername","title":{"i18nCode":"T_EMC_FOLDER.PLANSAMPLEUSERNAME","type":"i18n","zh-CN":"计划采样人"},"gridColumnType":"text","uuid":"77c84bf071f2472cae4e1d53f31805a6"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('81078140f5a64ae3a33f40b1d00f7934',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleusername","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleusername","title":{"i18nCode":"T_EMC_FOLDER.SAMPLEUSERNAME","type":"i18n","zh-CN":"采样人名称"},"gridColumnType":"text","uuid":"81078140f5a64ae3a33f40b1d00f7934"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8187f7d24fa04a09b031db0ae3f6fc08',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'LayoutWest',
+'b0ec156560dd46b6a60037c72614ae6f',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"8187f7d24fa04a09b031db0ae3f6fc08"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8b09a9fa8dff41ddbf739cf9dca07b0b',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleuserid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleuserid","title":{"i18nCode":"T_EMC_FOLDER.SAMPLEUSERID","type":"i18n","zh-CN":"采样人编码"},"gridColumnType":"text","uuid":"8b09a9fa8dff41ddbf739cf9dca07b0b"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8ebd2c4e8e7d4c559440d10953d45ba9',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"plansampleuserid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_plansampleuserid","title":{"i18nCode":"T_EMC_FOLDER.PLANSAMPLEUSERID","type":"i18n","zh-CN":"计划采样人编码"},"gridColumnType":"text","uuid":"8ebd2c4e8e7d4c559440d10953d45ba9"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('94dcf07b5b6a4506a9f54082e74e27cd',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"94dcf07b5b6a4506a9f54082e74e27cd"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('961384ebb25a4cca98512ae7eb21fe00',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'Grid',
+'363f39986b4d4cc49891a967fbde45e4',
+NULL,
+NULL,
+NULL,
+'{"onCheckboxClick__$S$__":"","onRendered__$S$__":"","columnAutoFill":false,"advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"folderno","pageSize":50,"filterOpen":true,"autoSave":true,"suspendFormatter__$S$__":"","uuid":"c924880e6c364a8fa3b8a058a68b2a89","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"contextMenuConfig":false,"checkOnActiveGroupRow":true,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"floderinfomodify-edit-grid","activeOnCheck":false,"height":"100%","order":{},"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":["projid"],"sortEnable":true},"onCellClick__$S$__":"loadDetailPage","initRequest":true,"onAfterChoose__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"exportExcelHeader":"","allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["26e92898467d41b2a97963e7f8539885","94dcf07b5b6a4506a9f54082e74e27cd","445fc5c67d64458f92b89888773e9957","6d46bf63cf4d4bc781102a808c1a4d2e","f5d29f4101f2435098241a51c6aced48","21781c2052a84ba2921afc9740966055","9a2c7531e6314041bf80be2e356a6c58","7427785e76bd4a2a9d9de563cdbd8238","471754e6503a4045936dde80ae8abbe3","9934b07fa57a432089acb92fcea96f15","1cb38f6c1beb4db2b82554703f19e150","65675ef8166c47b092ecd64236862a43","3b5e63e03c2645a1802a39cd2329f582","d3ebafb96ed34585a5e844955f5d1c6d","75cdb023abd24a32a43fad74e8bcec08","cb023f0a4b9c425db16f2a045b953a9d","8ebd2c4e8e7d4c559440d10953d45ba9","77c84bf071f2472cae4e1d53f31805a6","b7221c29984e4ed592d1439e1cca40c2","55b2fb7bd6fe4dc8947f1a56b254d504","1bf90623aafc488abfae1ce327b0eeeb","4ae9ed8dca8a41df'
+ || '8833a3e485ed32d4","f77d70e2ddf84bfc89ceec195df9e785","c1c27c364feb4e6f9c2bc80d0ec2477c","8b09a9fa8dff41ddbf739cf9dca07b0b","81078140f5a64ae3a33f40b1d00f7934","3b111e3102b54b10ada2699e40b5557c","4121f4ccfd004be0a5f163e61e246194"],"headRequestData":{},"formatterParamOnExportExcel__$S$__":"","columns":[],"commonSearch":false,"serverSearch":true,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","onDrag__$S$__":"","keyDownSelectContent":true,"formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","loadingMode":"normal","showCheckedNum":false,"onRowDblclick__$S$__":"","toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"cellValueFillByDrag":false,"requestData":{},"activateFirstRow":true,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"enterKeyD',
+'ownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.FloderInfoModify.server.LcdpEmcFolderService.selectPaginationData","instantSavePath":"emc.FloderInfoModify.server.LcdpEmcFolderService.updateData","onBeforeEditorRender__$S$__":"","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_childrenWidgetId":["c924880e6c364a8fa3b8a058a68b2a89"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""}');
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('9934b07fa57a432089acb92fcea96f15',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sceneusername","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sceneusername","title":{"i18nCode":"T_EMC_FOLDER.SCENEUSERNAME","type":"i18n","zh-CN":"现场负责人名称"},"gridColumnType":"text","uuid":"9934b07fa57a432089acb92fcea96f15"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('9a2c7531e6314041bf80be2e356a6c58',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":true,"childrenWidgetId":[],"visible":true,"field":"monitorpointname","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_monitorpointname","title":{"i18nCode":"T_EMC_FOLDER.MONITORPOINTNAME","type":"i18n","zh-CN":"监测点名称"},"gridColumnType":"text","uuid":"9a2c7531e6314041bf80be2e356a6c58"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('b0ec156560dd46b6a60037c72614ae6f',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'Layout',
+NULL,
+NULL,
+NULL,
+NULL,
+'{"layout":"all","childrenWidgetId":["44f1c573014a4dd7958397fa0fff3cb3","eff27739c1594f5cbf6177b8be636b7b","df258faa989b4c9588598aa997526541","8187f7d24fa04a09b031db0ae3f6fc08","363f39986b4d4cc49891a967fbde45e4"],"id":"Layout_1","uuid":"b0ec156560dd46b6a60037c72614ae6f","height":"100%"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('b7221c29984e4ed592d1439e1cca40c2',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"isrange","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_isrange","title":{"i18nCode":"T_EMC_FOLDER.ISRANGE","type":"i18n","zh-CN":"是否采样范围内"},"gridColumnType":"text","uuid":"b7221c29984e4ed592d1439e1cca40c2"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('c1c27c364feb4e6f9c2bc80d0ec2477c',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleorgname","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleorgname","title":{"i18nCode":"T_EMC_FOLDER.SAMPLEORGNAME","type":"i18n","zh-CN":"采样科室名称"},"gridColumnType":"text","uuid":"c1c27c364feb4e6f9c2bc80d0ec2477c"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('c924880e6c364a8fa3b8a058a68b2a89',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridToolbar',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"generalPanelTrigger":[],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"c924880e6c364a8fa3b8a058a68b2a89"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('cb023f0a4b9c425db16f2a045b953a9d',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"tributary","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_tributary","title":{"i18nCode":"T_EMC_FOLDER.TRIBUTARY","type":"i18n","zh-CN":"支流断面"},"gridColumnType":"text","uuid":"cb023f0a4b9c425db16f2a045b953a9d"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('d3ebafb96ed34585a5e844955f5d1c6d',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"termination","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_termination","title":{"i18nCode":"T_EMC_FOLDER.TERMINATION","type":"i18n","zh-CN":"是否终止"},"gridColumnType":"text","uuid":"d3ebafb96ed34585a5e844955f5d1c6d"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('df258faa989b4c9588598aa997526541',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'LayoutEast',
+'b0ec156560dd46b6a60037c72614ae6f',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"df258faa989b4c9588598aa997526541"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('eff27739c1594f5cbf6177b8be636b7b',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'LayoutSouth',
+'b0ec156560dd46b6a60037c72614ae6f',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"eff27739c1594f5cbf6177b8be636b7b","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('f5d29f4101f2435098241a51c6aced48',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"ordercategory","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_ordercategory","title":{"i18nCode":"T_EMC_FOLDER.ORDERCATEGORY","type":"i18n","zh-CN":"样品类型"},"gridColumnType":"text","uuid":"f5d29f4101f2435098241a51c6aced48"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('f77d70e2ddf84bfc89ceec195df9e785',
+1616648289373824,
+1605674000347936,
+2,
+NULL,
+'GridColumn',
+'961384ebb25a4cca98512ae7eb21fe00',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"flow","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_flow","title":{"i18nCode":"T_EMC_FOLDER.FLOW","type":"i18n","zh-CN":"流量(m3/h)"},"gridColumnType":"text","uuid":"f77d70e2ddf84bfc89ceec195df9e785"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('02dc422ea45c4044b215b51f68a43644',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'GridColumn',
+'f547917743af462d83f9fcf67e7e6b97',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projnode.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"02dc422ea45c4044b215b51f68a43644","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projnode","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projnode","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('042bf38d0be34c77aa2b813325f77089',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'GridColumn',
+'f547917743af462d83f9fcf67e7e6b97',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"042bf38d0be34c77aa2b813325f77089"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('0fd0a596330e41c79aaf49eda7f98250',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'GridColumn',
+'f547917743af462d83f9fcf67e7e6b97',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"0fd0a596330e41c79aaf49eda7f98250"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1d1490eead0f4184a6190897132085e1',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'LayoutNorth',
+'ddb7285ef49449d6bce85b74189e5cf8',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"1d1490eead0f4184a6190897132085e1","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('247c51b60f4a47c490c95648f736afa1',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'LayoutCenter',
+'ddb7285ef49449d6bce85b74189e5cf8',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["f547917743af462d83f9fcf67e7e6b97"],"id":"LayoutCenter_1","uuid":"247c51b60f4a47c490c95648f736afa1"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('2cb67878fe7b477fb915bcca22ba98f2',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'LayoutSouth',
+'ddb7285ef49449d6bce85b74189e5cf8',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"2cb67878fe7b477fb915bcca22ba98f2","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('31086e9ceb6e4ca887a7da5c80f25e14',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'GridColumn',
+'f547917743af462d83f9fcf67e7e6b97',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"31086e9ceb6e4ca887a7da5c80f25e14","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projname","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('32c686f5a7974ac4b156ce7c5018c272',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'GridColumn',
+'f547917743af462d83f9fcf67e7e6b97',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.status.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"32c686f5a7974ac4b156ce7c5018c272","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_status","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"status","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('7446f54f0bae4d949a9b03f18e21bb97',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'LayoutWest',
+'ddb7285ef49449d6bce85b74189e5cf8',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"7446f54f0bae4d949a9b03f18e21bb97"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('7b75b2c566bb4d26a1b3a2fa8b9dff4d',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'GridColumn',
+'f547917743af462d83f9fcf67e7e6b97',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"7b75b2c566bb4d26a1b3a2fa8b9dff4d","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projno","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8ee2a4890eae403c9d29332e20c7669b',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'GridToolbar',
+'f547917743af462d83f9fcf67e7e6b97',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["bb3d4a57ea0f48ea845bed0f63bcb2d1"],"generalPanelTrigger":[],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"8ee2a4890eae403c9d29332e20c7669b"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('9005536ab65d4ec890bbd4665ff825ef',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'GridColumn',
+'f547917743af462d83f9fcf67e7e6b97',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"enableSecond":true,"lcdpVisible":true,"validators":[],"source":"dataSource","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.toreporteditdate.title","type":"i18n"},"gridColumnType":"dateTime","type":"dateTime","uuid":"9005536ab65d4ec890bbd4665ff825ef","visibleRoles":[],"getDateRanger__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_toreporteditdate","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"toreporteditdate","width":150,"fixed":false,"getPrefixIcons__$S$__":""}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('bb3d4a57ea0f48ea845bed0f63bcb2d1',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'Button',
+'8ee2a4890eae403c9d29332e20c7669b',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"archived-2","id":"Button_1","text":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.Button_1.text","type":"i18n"},"uuid":"bb3d4a57ea0f48ea845bed0f63bcb2d1","onClick__$S$__":"button_1_onclick","visibleRoles":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('ddb7285ef49449d6bce85b74189e5cf8',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'Layout',
+NULL,
+NULL,
+NULL,
+NULL,
+'{"layout":"all","childrenWidgetId":["1d1490eead0f4184a6190897132085e1","2cb67878fe7b477fb915bcca22ba98f2","f346d6020394409f80d95f8a3b5e1b76","7446f54f0bae4d949a9b03f18e21bb97","247c51b60f4a47c490c95648f736afa1"],"id":"Layout_1","uuid":"ddb7285ef49449d6bce85b74189e5cf8","height":"100%"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('f346d6020394409f80d95f8a3b5e1b76',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'LayoutEast',
+'ddb7285ef49449d6bce85b74189e5cf8',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"f346d6020394409f80d95f8a3b5e1b76"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('f547917743af462d83f9fcf67e7e6b97',
+1631134722128352,
+1630039276722656,
+5,
+NULL,
+'Grid',
+'247c51b60f4a47c490c95648f736afa1',
+NULL,
+NULL,
+NULL,
+'{"onCheckboxClick__$S$__":"","onRendered__$S$__":"","columnAutoFill":false,"advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"projno","pageSize":50,"autoSave":true,"suspendFormatter__$S$__":"","uuid":"8ee2a4890eae403c9d29332e20c7669b","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"contextMenuConfig":false,"checkOnActiveGroupRow":true,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"projectinfomodify-edit-grid","activeOnCheck":false,"height":"100%","order":{},"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":[],"sortEnable":true},"onCellClick__$S$__":"","initRequest":true,"onAfterChoose__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"exportExcelHeader":"","allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["0fd0a596330e41c79aaf49eda7f98250","042bf38d0be34c77aa2b813325f77089","7b75b2c566bb4d26a1b3a2fa8b9dff4d","31086e9ceb6e4ca887a7da5c80f25e14","32c686f5a7974ac4b156ce7c5018c272","02dc422ea45c4044b215b51f68a43644","9005536ab65d4ec890bbd4665ff825ef"],"headRequestData":{},"formatterParamOnExportExcel__$S$__":"","columns":[],"commonSearch":false,"serverSearch":true,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","onDrag__$S$__":"","keyDownSelectContent":true,"formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","loadingMode":"normal","showCheckedNum":false,"onRowDblclick__$S$__":"","toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":tru'
+ || 'e,"cellValueFillByDrag":false,"requestData":{},"activateFirstRow":true,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"enterKeyDownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.ProjectInfoModify.server.LcdpEmcProjectService.selectPaginationData","instantSavePath":"emc.ProjectInfoModify.server.LcdpEmcProjectService.updateData","onBeforeEditorRender__$S$__":"","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_childrenWidgetId":["8ee2a4890eae403c9d29332e20c7669b"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('0a4633c0e8bc440eb6c46e04cee23950',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridColumn',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.signusername.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"0a4633c0e8bc440eb6c46e04cee23950","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_signusername","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"signusername","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1d572b98abec496eb6e38a844dd85fd6',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridColumn',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.bizcategoryname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"1d572b98abec496eb6e38a844dd85fd6","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_bizcategoryname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"bizcategoryname","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('317c770fc4a647a4a347e4022c2f359e',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridToolbar',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["cacc09fe70dc4c8e8afd1cbd28aedf71"],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","uuid":"317c770fc4a647a4a347e4022c2f359e"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('3651e586684c43d389fb0f608cb6d1b3',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'TabPanel',
+'627cb9850a0c4f0fad5a990361ac0126',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["8bbc7744faff4656a89b507350282cd2"],"hidden":false,"tip":{"en-US":"","zh-CN":""},"id":"TabPanel_4","title":{"en-US":"New tab2","zh-CN":"附件"},"uuid":"3651e586684c43d389fb0f608cb6d1b3","editRoles":[],"visibleRoles":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('541e1fdb3c1b4c67a4ba439cb521f114',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'LayoutWest',
+'8d0f45c3a32b4958b0c295830d5e2d02',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","title":{"en-US":"","zh-CN":""},"uuid":"541e1fdb3c1b4c67a4ba439cb521f114"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('627cb9850a0c4f0fad5a990361ac0126',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'Tab',
+'9ce007fdd8b54398a16e5d926dcdc358',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":["3651e586684c43d389fb0f608cb6d1b3"],"onActived__$S$__":"","id":"Tab_1","type":"Tab","refreshOnPanelActivated":true,"uuid":"627cb9850a0c4f0fad5a990361ac0126","height":"100%"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('763c539fd26a4974a9b83f03d7423a0d',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'LayoutNorth',
+'8d0f45c3a32b4958b0c295830d5e2d02',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["e263a2a2049a4301b35751509c3f28a3"],"id":"LayoutNorth_1","title":{"en-US":"","zh-CN":""},"uuid":"763c539fd26a4974a9b83f03d7423a0d","height":"70%"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('77ac0d6c61f742d98f1dc9634e4a0304',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridColumn',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.testorgname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"77ac0d6c61f742d98f1dc9634e4a0304","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_testorgname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"testorgname","width":200,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('799d083e1b6a4b6a9b90b639fb34a351',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'LayoutSouth',
+'8d0f45c3a32b4958b0c295830d5e2d02',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutSouth_1","title":{"en-US":"","zh-CN":""},"uuid":"799d083e1b6a4b6a9b90b639fb34a351","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8bbc7744faff4656a89b507350282cd2',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'Uploader',
+'3651e586684c43d389fb0f608cb6d1b3',
+NULL,
+NULL,
+NULL,
+'{"preview":true,"server":"lcdp.file.server.FileScript.upload","onRendered__$S$__":"","childrenWidgetId":[],"gridPage":true,"dbTable":"T_EMC_REPORT","getOrder__$S$__":"","type":"uploader","batchPreview":false,"onBeforeUpload__$S$__":"","uuid":"8bbc7744faff4656a89b507350282cd2","formatterGridToolbar__$S$__":"","onGridLoadSuccess__$S$__":"","download":true,"onAfterClose__$S$__":"","readonly":true,"bizCategory":"","scope":"","onBeforeRefresh__$S$__":"","onBeforeFilesUpload__$S$__":"","searchUrl":"lcdp.file.server.FileScript.selectPagination","deleteUrl":"lcdp.file.server.FileScript.delete","id":"Uploader_1","onGridRowActive__$S$__":"","height":"100%","batchDownload":false,"gridFilter":true,"immediateUpload":false,"onAfterDelete__$S$__":"","multiple":true,"fileViewType":"view","formatterGridColumns__$S$__":"","popupIsModal":true,"onUploadSuccess__$S$__":"","onBeforeDelete__$S$__":"","beforeDownloadRender__$S$__":"","autoClose":false,"beforePreviewRender__$S$__":""}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8d024a9f798a4dc5ae4afe2c539402cf',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridColumn',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.status.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"8d024a9f798a4dc5ae4afe2c539402cf","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_status","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"status","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8d0f45c3a32b4958b0c295830d5e2d02',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'Layout',
+NULL,
+NULL,
+NULL,
+NULL,
+'{"layout":"tb","childrenWidgetId":["763c539fd26a4974a9b83f03d7423a0d","799d083e1b6a4b6a9b90b639fb34a351","f7bc85894fe444d382e5265cc3552f67","541e1fdb3c1b4c67a4ba439cb521f114","9ce007fdd8b54398a16e5d926dcdc358"],"id":"Layout_1","uuid":"8d0f45c3a32b4958b0c295830d5e2d02","height":"100%"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('9ce007fdd8b54398a16e5d926dcdc358',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'LayoutCenter',
+'8d0f45c3a32b4958b0c295830d5e2d02',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["627cb9850a0c4f0fad5a990361ac0126"],"id":"LayoutCenter_1","title":{"en-US":"","zh-CN":""},"uuid":"9ce007fdd8b54398a16e5d926dcdc358"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('b88cd9fb83fb49d6ac192e40ccad27ab',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridColumn',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"b88cd9fb83fb49d6ac192e40ccad27ab"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('bea5250f86314436a2363eb5c8230103',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridColumn',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.reportno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"bea5250f86314436a2363eb5c8230103","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_reportno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"reportno","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('c35734c7bae94f909be4b675e04f4989',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridColumn',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.entrustorgname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"c35734c7bae94f909be4b675e04f4989","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_entrustorgname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"entrustorgname","width":200,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('cacc09fe70dc4c8e8afd1cbd28aedf71',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'Button',
+'317c770fc4a647a4a347e4022c2f359e',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"batch-download","id":"Button_1","text":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.Button_1.text","type":"i18n"},"onClick__$S$__":"button_1_onclick","visibleRoles":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('da4dc3da95c9418394cb8ce59df97de4',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridColumn',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.businessusername.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"da4dc3da95c9418394cb8ce59df97de4","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_businessusername","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"businessusername","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('e263a2a2049a4301b35751509c3f28a3',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'Grid',
+'763c539fd26a4974a9b83f03d7423a0d',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","onCheckboxClick__$S$__":"","rowStyleFormatter__$S$__":"","advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"title":""},"confirmField":"projid","getOrder__$S$__":"","pageSize":50,"filterOpen":true,"onFocus__$S$__":"","autoSave":true,"suspendFormatter__$S$__":"","uuid":"317c770fc4a647a4a347e4022c2f359e","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","contextMenuConfig":false,"filterImmediate":false,"checkOnActiveGroupRow":true,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"reportsearchbyyw-edit-grid","appendButtonsToGeneral":[],"activeOnCheck":false,"height":"100%","group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":["entrustorgname"]},"onCellClick__$S$__":"","getHeadRequestData__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["fa449093ed574db9bb72f7f0a9de0545","b88cd9fb83fb49d6ac192e40ccad27ab","1d572b98abec496eb6e38a844dd85fd6","8d024a9f798a4dc5ae4afe2c539402cf","bea5250f86314436a2363eb5c8230103","c35734c7bae94f909be4b675e04f4989","77ac0d6c61f742d98f1dc9634e4a0304","da4dc3da95c9418394cb8ce59df97de4"],"getColumnGroup__$S$__":"","columns":[],"commonSearch":false,"appendButtonsToGeneral_childrenWidgetId":[],"serverSearch":true,"dependentWidgetId":"","columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","keyDownSelectContent":true,"loadingMode":"normal","formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","showCheckedNum":true,"contextmenu_childrenWidgetId":[],"onRowDblclick__$S$__":"","onSelect__$S$'
+ || '__":"","toolbarWrap":false,"generalButtonGroupShow":true,"cellValueFillByDrag":false,"activateFirstRow":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"contextmenu":[],"enterKeyDownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.ReportSearchByYW.server.LcdpEmcReportService.selectPaginationData","instantSavePath":"emc.ReportSearchByYW.server.LcdpEmcReportService.updateData","onRowActive__$S$__":"reportsearchbyyw_edit_grid_onrowactive","enableGetDataByUrl":true,"toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_childrenWidgetId":["317c770fc4a647a4a347e4022c2f359e"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('f7bc85894fe444d382e5265cc3552f67',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'LayoutEast',
+'8d0f45c3a32b4958b0c295830d5e2d02',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","title":{"en-US":"","zh-CN":""},"uuid":"f7bc85894fe444d382e5265cc3552f67"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('fa449093ed574db9bb72f7f0a9de0545',
+1699784763219680,
+1631067840535008,
+6,
+NULL,
+'GridColumn',
+'e263a2a2049a4301b35751509c3f28a3',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"fa449093ed574db9bb72f7f0a9de0545"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('20f3ea3ac9f948c18115c6352019745d',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'Caption',
+'e9f7a79d2e1a4c048d4a779eb3f2f3b1',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"color":"#007AFF","getHidden__$S$__":"","id":"Caption_1","text":{"i18nCode":"emc.SampleInfoModify.page.SampleInfoModifyEditPage.Caption_1.text","type":"i18n"},"uuid":"20f3ea3ac9f948c18115c6352019745d"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('2a6c88cab27f4a0e8b8568173857f356',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'LayoutWest',
+'33e6a05b8c764fcdaf36b05d08b8701e',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"2a6c88cab27f4a0e8b8568173857f356"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('3325d65a6b8f4327b640b0f6e2efa049',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'LayoutNorth',
+'33e6a05b8c764fcdaf36b05d08b8701e',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"3325d65a6b8f4327b640b0f6e2efa049","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('33e6a05b8c764fcdaf36b05d08b8701e',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'Layout',
+NULL,
+NULL,
+NULL,
+NULL,
+'{"layout":"all","childrenWidgetId":["3325d65a6b8f4327b640b0f6e2efa049","fe1c1986381d4f00981ad38445a0666b","3e796779ed284533907253bdc533ffa2","2a6c88cab27f4a0e8b8568173857f356","449683f131b54314a1076ecb1a054a9b"],"id":"Layout_1","uuid":"33e6a05b8c764fcdaf36b05d08b8701e","height":"100%"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('3e796779ed284533907253bdc533ffa2',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'LayoutEast',
+'33e6a05b8c764fcdaf36b05d08b8701e',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"3e796779ed284533907253bdc533ffa2"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('449683f131b54314a1076ecb1a054a9b',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'LayoutCenter',
+'33e6a05b8c764fcdaf36b05d08b8701e',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["5cace00b431f4d7ebfe1b4adb807c058"],"id":"LayoutCenter_1","uuid":"449683f131b54314a1076ecb1a054a9b"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('4e04b3d4a01448dcbd4b6c04ebd21bb9',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'GridColumn',
+'5cace00b431f4d7ebfe1b4adb807c058',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"4e04b3d4a01448dcbd4b6c04ebd21bb9"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('5cace00b431f4d7ebfe1b4adb807c058',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'Grid',
+'449683f131b54314a1076ecb1a054a9b',
+NULL,
+NULL,
+NULL,
+'{"onCheckboxClick__$S$__":"","onRendered__$S$__":"","columnAutoFill":false,"advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"sampleno","pageSize":50,"filterOpen":true,"autoSave":true,"suspendFormatter__$S$__":"","uuid":"e9f7a79d2e1a4c048d4a779eb3f2f3b1","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"contextMenuConfig":false,"checkOnActiveGroupRow":true,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"sampleinfomodify-edit-grid","activeOnCheck":false,"height":"100%","order":{},"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":[],"sortEnable":true},"onCellClick__$S$__":"loadDetailPage","initRequest":true,"onAfterChoose__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"exportExcelHeader":"","allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["4e04b3d4a01448dcbd4b6c04ebd21bb9","e9137ddeb02c4e2d8c80b2338aa00266","85792843027648b88d2e2e5c5197dda9","e59bd0f8c54b4883812bce8f21f8a852","8093682674634f7faebfec7734b207b6"],"headRequestData":{},"formatterParamOnExportExcel__$S$__":"","columns":[],"commonSearch":false,"serverSearch":true,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","onDrag__$S$__":"","keyDownSelectContent":true,"formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","loadingMode":"normal","showCheckedNum":false,"onRowDblclick__$S$__":"","toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"cellValueFillByDrag":false,"reques'
+ || 'tData":{},"activateFirstRow":true,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"enterKeyDownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.SampleInfoModify.server.LcdpEmcSampleService.selectPaginationData","instantSavePath":"emc.SampleInfoModify.server.LcdpEmcSampleService.updateData","onBeforeEditorRender__$S$__":"","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_childrenWidgetId":["e9f7a79d2e1a4c048d4a779eb3f2f3b1"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('8093682674634f7faebfec7734b207b6',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'GridColumn',
+'5cace00b431f4d7ebfe1b4adb807c058',
+NULL,
+NULL,
+NULL,
+'{"editor":true,"childrenWidgetId":[],"visible":true,"field":"handstatus","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_handstatus","title":{"i18nCode":"T_EMC_SAMPLE.HANDSTATUS","type":"i18n","zh-CN":"交接状态"},"gridColumnType":"text","uuid":"8093682674634f7faebfec7734b207b6"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('85792843027648b88d2e2e5c5197dda9',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'GridColumn',
+'5cace00b431f4d7ebfe1b4adb807c058',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"sort":true,"title":{"i18nCode":"T_EMC_SAMPLE.SAMPLENO","type":"i18n","zh-CN":"采样单号"},"gridColumnType":"link","type":"link","uuid":"85792843027648b88d2e2e5c5197dda9","field":"sampleno","children":[{}],"width":250,"fixed":false,"id":"GridColumn_sampleno"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('e59bd0f8c54b4883812bce8f21f8a852',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'GridColumn',
+'5cace00b431f4d7ebfe1b4adb807c058',
+NULL,
+NULL,
+NULL,
+'{"editor":false,"childrenWidgetId":[],"visible":true,"field":"ordercategory","children":[{}],"width":250,"fixed":false,"sort":true,"id":"GridColumn_ordercategory","title":{"i18nCode":"T_EMC_SAMPLE.ORDERCATEGORY","type":"i18n","zh-CN":"样品类型"},"gridColumnType":"text","uuid":"e59bd0f8c54b4883812bce8f21f8a852"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('e9137ddeb02c4e2d8c80b2338aa00266',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'GridColumn',
+'5cace00b431f4d7ebfe1b4adb807c058',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"e9137ddeb02c4e2d8c80b2338aa00266"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('e9f7a79d2e1a4c048d4a779eb3f2f3b1',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'GridToolbar',
+'5cace00b431f4d7ebfe1b4adb807c058',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["20f3ea3ac9f948c18115c6352019745d"],"generalPanelTrigger":[],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"e9f7a79d2e1a4c048d4a779eb3f2f3b1"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('fe1c1986381d4f00981ad38445a0666b',
+1654966506939200,
+1654892685304660,
+2,
+NULL,
+'LayoutSouth',
+'33e6a05b8c764fcdaf36b05d08b8701e',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"fe1c1986381d4f00981ad38445a0666b","height":"0"}',
+NULL);
 INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('052d6ffad4fc4c4b8b7865f0a2e8c10e',
 1754830408176672,
 1734443928132640,
@@ -24206,6 +30800,138 @@ NULL,
 NULL,
 '{"editor":false,"childrenWidgetId":[],"visible":true,"field":"equiptid","children":[{}],"width":120,"fixed":false,"sort":true,"id":"GridColumn_equiptid","title":{"i18nCode":"emc.equiptInOut.page.equiptInOutStatus.equiptinout-edit-grid.equiptid.title","type":"i18n"},"gridColumnType":"text","uuid":"f0d43e44d10b415da5ec5f2883b28765"}',
 NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782802,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_1.text',
+'en-US',
+'Button');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782800,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_2.text',
+'en-US',
+'Button');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782788,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_3.text',
+'en-US',
+'Button');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782798,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.contractno.title',
+'en-US',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782784,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.entrustorgname.title',
+'en-US',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782794,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expressno.title',
+'en-US',
+'expressno');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782786,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expresstype.title',
+'en-US',
+'expresstype');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782804,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurer.title',
+'en-US',
+'issurer');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782792,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurerdate.title',
+'en-US',
+'issurerdate');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782790,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.pic.title',
+'en-US',
+'pic');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782796,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.projno.title',
+'en-US',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782803,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_1.text',
+'zh-CN',
+'上传签收图片');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782801,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_2.text',
+'zh-CN',
+'领取签名');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782789,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_3.text',
+'zh-CN',
+'回签单');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782799,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.contractno.title',
+'zh-CN',
+'合同号');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782785,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.entrustorgname.title',
+'zh-CN',
+'委托单位');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782795,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expressno.title',
+'zh-CN',
+'快递单号');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782787,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expresstype.title',
+'zh-CN',
+'发送方式');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782805,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurer.title',
+'zh-CN',
+'发送人');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782793,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurerdate.title',
+'zh-CN',
+'发送日期');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782791,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.pic.title',
+'zh-CN',
+'签名/快递回签截图');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1794420304782797,
+1587156564485600,
+1794420245005760,
+'emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.projno.title',
+'zh-CN',
+'任务单号');
 INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1607008543091457,
 1596797917215712,
 1607008533293824,
@@ -24434,6 +31160,246 @@ INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I1
 'emc.equiptInOut.page.equiptInOutRecord.Grid_1.username.title',
 'zh-CN',
 '操作人');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084706,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.clientordername.title',
+'en-US',
+'clientordername');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084712,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.orderdesc.title',
+'en-US',
+'orderdesc');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084704,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projname.title',
+'en-US',
+'projname');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084710,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projno.title',
+'en-US',
+'projno');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084708,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.samplenum.title',
+'en-US',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084707,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.clientordername.title',
+'zh-CN',
+'样品名称');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084713,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.orderdesc.title',
+'zh-CN',
+'样品描述');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084705,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projname.title',
+'zh-CN',
+'任务名称');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084711,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projno.title',
+'zh-CN',
+'任务编号');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1630288604084709,
+1597703224613312,
+1630288250714592,
+'emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.samplenum.title',
+'zh-CN',
+'频次');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146916,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.Button_1.text',
+'en-US',
+'Button');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146918,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projname.title',
+'en-US',
+'projname');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146914,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projno.title',
+'en-US',
+'projno');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146920,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projnode.title',
+'en-US',
+'projnode');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146922,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.status.title',
+'en-US',
+'status');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146912,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.toreporteditdate.title',
+'en-US',
+'toreporteditdate');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146917,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.Button_1.text',
+'zh-CN',
+'更新至报告编制');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146919,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projname.title',
+'zh-CN',
+'任务名称');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146915,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projno.title',
+'zh-CN',
+'任务编号');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146921,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projnode.title',
+'zh-CN',
+'任务阶段');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146923,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.status.title',
+'zh-CN',
+'状态');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1631134832146913,
+1630039276722656,
+1631134722128352,
+'emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.toreporteditdate.title',
+'zh-CN',
+'至报告编制日期');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413934,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.Button_1.text',
+'en-US',
+'Button');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413924,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.bizcategoryname.title',
+'en-US',
+'bizcategoryname');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413926,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.businessusername.title',
+'en-US',
+'businessusername');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413932,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.entrustorgname.title',
+'en-US',
+'entrustorgname');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413930,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.reportno.title',
+'en-US',
+'reportno');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413922,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.signusername.title',
+'en-US',
+'signusername');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413920,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.status.title',
+'en-US',
+'status');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413928,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.testorgname.title',
+'en-US',
+'testorgname');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413935,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.Button_1.text',
+'zh-CN',
+'批量下载');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413925,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.bizcategoryname.title',
+'zh-CN',
+'业务类型');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413927,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.businessusername.title',
+'zh-CN',
+'业务员');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413933,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.entrustorgname.title',
+'zh-CN',
+'委托单位');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413931,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.reportno.title',
+'zh-CN',
+'报告编号');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413923,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.signusername.title',
+'zh-CN',
+'业务员');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413921,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.status.title',
+'zh-CN',
+'报告阶段');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1699787896413929,
+1631067840535008,
+1699784763219680,
+'emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.testorgname.title',
+'zh-CN',
+'受检单位');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1654966576317248,
+1654892685304660,
+1654966506939200,
+'emc.SampleInfoModify.page.SampleInfoModifyEditPage.Caption_1.text',
+'en-US',
+'captionn');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1654966576317249,
+1654892685304660,
+1654966506939200,
+'emc.SampleInfoModify.page.SampleInfoModifyEditPage.Caption_1.text',
+'zh-CN',
+'未提交样品接收状态：draft');
 INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1754833173918753,
 1734443928132640,
 1754830408176672,
@@ -24572,6 +31538,122 @@ INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I1
 'emc.equiptInOut.page.equiptInOutStatus.equiptinout-query-grid.username.title',
 'zh-CN',
 '操作人');
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247561664,
+'GIKAM.BUTTON.DELETE',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247553472,
+'GIKAM.BUTTON.INSERT',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247619009,
+'T_EMC_REPORT_SEND_INFO.ADDRESS',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247610817,
+'T_EMC_REPORT_SEND_INFO.BACKSENDNO',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247635393,
+'T_EMC_REPORT_SEND_INFO.CNENREPORTCNT',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247659968,
+'T_EMC_REPORT_SEND_INFO.CNREPORTCNT',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247586241,
+'T_EMC_REPORT_SEND_INFO.CREATEDBYID',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247586240,
+'T_EMC_REPORT_SEND_INFO.CREATEDBYNAME',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247578048,
+'T_EMC_REPORT_SEND_INFO.CREATEDBYORGID',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247569856,
+'T_EMC_REPORT_SEND_INFO.CREATEDBYORGNAME',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247578049,
+'T_EMC_REPORT_SEND_INFO.CREATEDTIME',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247643585,
+'T_EMC_REPORT_SEND_INFO.ENREPORTCNT',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247668161,
+'T_EMC_REPORT_SEND_INFO.EXPRESSNO',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247676352,
+'T_EMC_REPORT_SEND_INFO.EXPRESSTYPE',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247594432,
+'T_EMC_REPORT_SEND_INFO.ISRECEIVED',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247602625,
+'T_EMC_REPORT_SEND_INFO.ISSURER',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247602624,
+'T_EMC_REPORT_SEND_INFO.ISSURERDATE',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247643584,
+'T_EMC_REPORT_SEND_INFO.NEEDCNENREPORT',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247659969,
+'T_EMC_REPORT_SEND_INFO.NEEDCNREPORT',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247651776,
+'T_EMC_REPORT_SEND_INFO.NEEDENREPORT',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247610816,
+'T_EMC_REPORT_SEND_INFO.ORGID',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247627200,
+'T_EMC_REPORT_SEND_INFO.PHONE',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247619008,
+'T_EMC_REPORT_SEND_INFO.PIC',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247700928,
+'T_EMC_REPORT_SEND_INFO.PROJID',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247668160,
+'T_EMC_REPORT_SEND_INFO.REMARK',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247684544,
+'T_EMC_REPORT_SEND_INFO.SENDEMAIL',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247692736,
+'T_EMC_REPORT_SEND_INFO.SENDTOQUOTER',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247684545,
+'T_EMC_REPORT_SEND_INFO.SENDTOSALER',
+1587156564485600,
+1794420245005760);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1794420247635392,
+'T_EMC_REPORT_SEND_INFO.USERNAME',
+1587156564485600,
+1794420245005760);
 INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1607008544336641,
 'GIKAM.BUTTON.DELETE',
 1596797917215712,
@@ -24620,4 +31702,808 @@ INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VAL
 'T_EMC_EQUIPT_INOUT.OPERATEUSERNAME',
 1596797917215712,
 1607008533293824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338419328,
+'GIKAM.BUTTON.DELETE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338402944,
+'GIKAM.BUTTON.INSERT',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338566784,
+'T_EMC_FOLDER.CARNUM',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338476672,
+'T_EMC_FOLDER.CONTRACTPOTNAME',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338542208,
+'T_EMC_FOLDER.CURRENTSPEED',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338460289,
+'T_EMC_FOLDER.EMISSIONSTATUS',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338427521,
+'T_EMC_FOLDER.EXISTLNGLAT',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338435712,
+'T_EMC_FOLDER.EXISTTIME',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338534017,
+'T_EMC_FOLDER.FLOW',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338615937,
+'T_EMC_FOLDER.FLOWDIRECTION',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338787968,
+'T_EMC_FOLDER.FOLDERNO',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338452096,
+'T_EMC_FOLDER.INTOLNGLAT',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338460288,
+'T_EMC_FOLDER.INTOTIME',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338615936,
+'T_EMC_FOLDER.ISRANGE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338697856,
+'T_EMC_FOLDER.LATITUDE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338706048,
+'T_EMC_FOLDER.LONGITUDE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338665088,
+'T_EMC_FOLDER.MOBILEID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338714240,
+'T_EMC_FOLDER.MONITORPOINTCATEGORY',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338722432,
+'T_EMC_FOLDER.MONITORPOINTCATEGORYID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338763392,
+'T_EMC_FOLDER.MONITORPOINTID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338509440,
+'T_EMC_FOLDER.MONITORPOINTNAME',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338755200,
+'T_EMC_FOLDER.MONITORPOINTNO',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338656896,
+'T_EMC_FOLDER.MONITORTMPLID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338763393,
+'T_EMC_FOLDER.ORDERCATEGORY',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338525824,
+'T_EMC_FOLDER.PARAMPROJID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338747008,
+'T_EMC_FOLDER.PLANSAMPLEDATE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338632320,
+'T_EMC_FOLDER.PLANSAMPLEUSERID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338624128,
+'T_EMC_FOLDER.PLANSAMPLEUSERNAME',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338689665,
+'T_EMC_FOLDER.PROCESSSTATUS',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338779776,
+'T_EMC_FOLDER.PROJID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338591360,
+'T_EMC_FOLDER.REALITYDISTANCE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338599552,
+'T_EMC_FOLDER.REALITYLATITUDE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338607744,
+'T_EMC_FOLDER.REALITYLONGITUDE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338484864,
+'T_EMC_FOLDER.REMARK',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338648704,
+'T_EMC_FOLDER.RIVER',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338550400,
+'T_EMC_FOLDER.RIVERDEPTH',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338558592,
+'T_EMC_FOLDER.RIVERWIDTH',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338534016,
+'T_EMC_FOLDER.RUNID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338771584,
+'T_EMC_FOLDER.SAMPLEORGID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338517632,
+'T_EMC_FOLDER.SAMPLEORGNAME',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338501248,
+'T_EMC_FOLDER.SAMPLEUSERID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338493056,
+'T_EMC_FOLDER.SAMPLEUSERNAME',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338574976,
+'T_EMC_FOLDER.SAMPLINGDEPTH',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338583168,
+'T_EMC_FOLDER.SAMPLINGRANGE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338738816,
+'T_EMC_FOLDER.SCENEUSERID',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338730624,
+'T_EMC_FOLDER.SCENEUSERNAME',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338427520,
+'T_EMC_FOLDER.SECTION',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338681472,
+'T_EMC_FOLDER.SOURCE',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338689664,
+'T_EMC_FOLDER.STATUS',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338673280,
+'T_EMC_FOLDER.TERMINATION',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338640512,
+'T_EMC_FOLDER.TRIBUTARY',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1616648338566785,
+'T_EMC_FOLDER.USEDEPTNAME',
+1605674000347936,
+1616648289373824);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730090977,
+'GIKAM.BUTTON.DELETE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730099168,
+'GIKAM.BUTTON.INSERT',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729869793,
+'T_EMC_PROJECT.ACCEPTDATE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730041824,
+'T_EMC_PROJECT.BEFORESTATUS',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729959904,
+'T_EMC_PROJECT.BIZCATEGORYCODE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729853408,
+'T_EMC_PROJECT.BIZCATEGORYID',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730090976,
+'T_EMC_PROJECT.CANCELREASON',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729927137,
+'T_EMC_PROJECT.CANCLEREASON',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729877984,
+'T_EMC_PROJECT.COMPLEDATE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730000865,
+'T_EMC_PROJECT.CONTRACTID',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730033633,
+'T_EMC_PROJECT.DETECT',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729984481,
+'T_EMC_PROJECT.ENDTIME',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729877985,
+'T_EMC_PROJECT.ENTRUSTDATE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729894369,
+'T_EMC_PROJECT.ENTRUSTMETHOD',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729935328,
+'T_EMC_PROJECT.ENTRUSTORGCONTACT',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729845216,
+'T_EMC_PROJECT.ENTRUSTORGID',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729935329,
+'T_EMC_PROJECT.ENTRUSTORGPHONE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729976289,
+'T_EMC_PROJECT.MOBILEID',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729951712,
+'T_EMC_PROJECT.MONITORORGNAME',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729902561,
+'T_EMC_PROJECT.NDCAL',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729976288,
+'T_EMC_PROJECT.NEXTTASKDATE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730066401,
+'T_EMC_PROJECT.OPERATIONORG',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729918944,
+'T_EMC_PROJECT.PROCESSSTATUS',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729837025,
+'T_EMC_PROJECT.PROJADDRESS',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729820640,
+'T_EMC_PROJECT.PROJNO',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729992672,
+'T_EMC_PROJECT.PROJNODE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730082785,
+'T_EMC_PROJECT.QCCHECK',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730017248,
+'T_EMC_PROJECT.QUALITYCONTROL',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729861601,
+'T_EMC_PROJECT.REGISTDATE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730074592,
+'T_EMC_PROJECT.REPORTEDITUSERID',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730082784,
+'T_EMC_PROJECT.REPORTEDITUSERNAME',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730058208,
+'T_EMC_PROJECT.REPORTISSUEUSERID',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730066400,
+'T_EMC_PROJECT.REPORTISSUEUSERNAME',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729869792,
+'T_EMC_PROJECT.REPORTORGID',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730050016,
+'T_EMC_PROJECT.REPORTREVIEWERID',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730050017,
+'T_EMC_PROJECT.REPORTREVIEWERNAME',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730017249,
+'T_EMC_PROJECT.REPORTTYPE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730000864,
+'T_EMC_PROJECT.SAMPLE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729886176,
+'T_EMC_PROJECT.SENDDATE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729894368,
+'T_EMC_PROJECT.SENDTYPE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729910752,
+'T_EMC_PROJECT.SENDUSERNAME',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729968096,
+'T_EMC_PROJECT.SOURCE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729984480,
+'T_EMC_PROJECT.STARTTIME',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729927136,
+'T_EMC_PROJECT.STATUS',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730009056,
+'T_EMC_PROJECT.SUBPACKAGE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729902560,
+'T_EMC_PROJECT.SUBPACKAGEDESC',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729910753,
+'T_EMC_PROJECT.TASKDATE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729861600,
+'T_EMC_PROJECT.TASKNO',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729943520,
+'T_EMC_PROJECT.TESTORGCONTACT',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729837024,
+'T_EMC_PROJECT.TESTORGID',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134729943521,
+'T_EMC_PROJECT.TESTORGPHONE',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1631134730033632,
+'T_EMC_PROJECT.URGENT',
+1630039276722656,
+1631134722128352);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805719776,
+'GIKAM.BUTTON.DELETE',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805727968,
+'GIKAM.BUTTON.INSERT',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805826272,
+'T_EMC_REPORT.ADDINFOINDEXFLAG',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805834464,
+'T_EMC_REPORT.ARCHIVEDFLAG',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805908192,
+'T_EMC_REPORT.COMPLETEDATE',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805900000,
+'T_EMC_REPORT.COMPLETESTATUS',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805760736,
+'T_EMC_REPORT.CREATEDBYID',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805752544,
+'T_EMC_REPORT.CREATEDBYNAME',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805744352,
+'T_EMC_REPORT.CREATEDBYORGID',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805736160,
+'T_EMC_REPORT.CREATEDBYORGNAME',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805744353,
+'T_EMC_REPORT.CREATEDTIME',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805932768,
+'T_EMC_REPORT.DATASHEETID',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805900001,
+'T_EMC_REPORT.DELIVERYDATE',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805883617,
+'T_EMC_REPORT.DISPLAYAVGRESULT',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805891808,
+'T_EMC_REPORT.DISPLAYCONVERTEDRESULT',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805883616,
+'T_EMC_REPORT.DISPLAYPARAMETER',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805916385,
+'T_EMC_REPORT.DISPLAYRECRATE',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805924576,
+'T_EMC_REPORT.DISPLAYSTD',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805940960,
+'T_EMC_REPORT.IFSTATISTICS',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805801696,
+'T_EMC_REPORT.INSTALLSITUATION',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805875424,
+'T_EMC_REPORT.MERGEFLAG',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805785312,
+'T_EMC_REPORT.MONITORINFO',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805965537,
+'T_EMC_REPORT.MONITORTMPLID',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805867232,
+'T_EMC_REPORT.NDDISPLAYMODE',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805965536,
+'T_EMC_REPORT.ORDERCATEGORY',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805793504,
+'T_EMC_REPORT.PREFACE',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805949153,
+'T_EMC_REPORT.PROCESSSTATUS',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805973728,
+'T_EMC_REPORT.PROJID',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805834465,
+'T_EMC_REPORT.QCREPORT',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805916384,
+'T_EMC_REPORT.QCREPORTLINEID',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805818080,
+'T_EMC_REPORT.REMARK',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805842656,
+'T_EMC_REPORT.REPORTAPTITUDE',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805957345,
+'T_EMC_REPORT.REPORTCONFIGLINEID',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805949152,
+'T_EMC_REPORT.REPORTNO',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805859040,
+'T_EMC_REPORT.REPORTTEMPLATEID',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805850848,
+'T_EMC_REPORT.REPORTTEMPLATENAME',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805777121,
+'T_EMC_REPORT.REPORTUNDOSTATUS',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805940961,
+'T_EMC_REPORT.RSREPORTCONFIGLINEID',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805818081,
+'T_EMC_REPORT.SHOWLIMIT',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805957344,
+'T_EMC_REPORT.STATUS',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805768928,
+'T_EMC_REPORT.SYNCNCDESC',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805777120,
+'T_EMC_REPORT.SYNCNCSTATUS',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805801697,
+'T_EMC_REPORT.TESTCONCLUSION',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805859041,
+'T_EMC_REPORT.TOARCHIVINGFLAG',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1699784805809888,
+'T_EMC_REPORT.WORKCONDITION',
+1631067840535008,
+1699784763219680);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508045120,
+'GIKAM.BUTTON.DELETE',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508036928,
+'GIKAM.BUTTON.INSERT',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508266305,
+'T_EMC_SAMPLE.ACCEPTEDDATE',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508102464,
+'T_EMC_SAMPLE.ACCEPTEDTIME',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508282688,
+'T_EMC_SAMPLE.ACCEPTEDUSERID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508274496,
+'T_EMC_SAMPLE.ACCEPTEUSERNAME',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508094272,
+'T_EMC_SAMPLE.ACCEPTSTATUS',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508135232,
+'T_EMC_SAMPLE.ARCHIVEREPORTLINEID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508127041,
+'T_EMC_SAMPLE.ASSIGNDATE',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508086080,
+'T_EMC_SAMPLE.ASSIGNSTATUS',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508151616,
+'T_EMC_SAMPLE.AUDITDATE',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508192576,
+'T_EMC_SAMPLE.CALIBRATIONID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508184385,
+'T_EMC_SAMPLE.CALIREPORTLINEID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508159808,
+'T_EMC_SAMPLE.COMPELETEDATE',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508208961,
+'T_EMC_SAMPLE.CONTAINERVALID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508233536,
+'T_EMC_SAMPLE.EXCHANGEVALID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508061504,
+'T_EMC_SAMPLE.EXISTLNGLAT',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508061505,
+'T_EMC_SAMPLE.EXISTTIME',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508102465,
+'T_EMC_SAMPLE.HANDSTATUS',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508069696,
+'T_EMC_SAMPLE.INTOLNGLAT',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508077888,
+'T_EMC_SAMPLE.INTOTIME',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508217152,
+'T_EMC_SAMPLE.MARKVALID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508266304,
+'T_EMC_SAMPLE.MOBILEID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508290881,
+'T_EMC_SAMPLE.MONITORTMPLID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508323648,
+'T_EMC_SAMPLE.ORDERCATEGORY',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508143424,
+'T_EMC_SAMPLE.ORDERNUMS',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508168001,
+'T_EMC_SAMPLE.ORGID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508168000,
+'T_EMC_SAMPLE.ORGNAME',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508176192,
+'T_EMC_SAMPLE.PRINTFLAG',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508307264,
+'T_EMC_SAMPLE.PROCESSSTATUS',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508323649,
+'T_EMC_SAMPLE.PROJID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508315456,
+'T_EMC_SAMPLE.PROPERTYTMPLID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508208960,
+'T_EMC_SAMPLE.QCUSERID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508200768,
+'T_EMC_SAMPLE.QCUSERNAME',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508127040,
+'T_EMC_SAMPLE.RECEIVEDATE',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508184384,
+'T_EMC_SAMPLE.RECEIVEREPORTLINEID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508315457,
+'T_EMC_SAMPLE.REMARK',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508290880,
+'T_EMC_SAMPLE.REPORTCONFIGLINEID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508151617,
+'T_EMC_SAMPLE.REVIEWDATE',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508249920,
+'T_EMC_SAMPLE.SAMPLECHECK',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508331840,
+'T_EMC_SAMPLE.SAMPLENO',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508118848,
+'T_EMC_SAMPLE.SAMPLEUSERID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508110656,
+'T_EMC_SAMPLE.SAMPLEUSERNAME',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508249921,
+'T_EMC_SAMPLE.SAMPLINGEQUIPTID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508258112,
+'T_EMC_SAMPLE.SAMPLINGEQUIPTNAME',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508225344,
+'T_EMC_SAMPLE.SAMPLINGVALID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508282689,
+'T_EMC_SAMPLE.SEPSAMPLETIME',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508299073,
+'T_EMC_SAMPLE.SOURCE',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508299072,
+'T_EMC_SAMPLE.STATUS',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508233537,
+'T_EMC_SAMPLE.STORAGEVALID',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508053312,
+'T_EMC_SAMPLE.UNDOFLAG',
+1654892685304660,
+1654966506939200);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1654966508241728,
+'T_EMC_SAMPLE.USEDCONTAINER',
+1654892685304660,
+1654966506939200);
 COMMIT;

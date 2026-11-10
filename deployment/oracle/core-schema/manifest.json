@@ -657,22 +657,22 @@
       "sha256": "34c43de299eb20a45435b6d343badb43ebc16cefece4df9d9415f865a8093638"
     },
     {
-      "bytes": 865232,
+      "bytes": 1211783,
       "path": "70-bootstrap.sql",
       "role": "bootstrap",
-      "sha256": "116b927707a8bc7c1af5cce99bd326144b7ba187c61a015948c62af6c31055fa"
+      "sha256": "c2c26c6cc9afae946675cf0f1649d95e8bad1f2376c87c3ff4e9f597fb05882a"
     },
     {
-      "bytes": 1677157,
+      "bytes": 2120205,
       "path": "80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "50b94c08c92dea28d9479ecfb9c1a782e16c2814d8da35ea3af1badf49fe9bc7"
+      "sha256": "d0008028cc85c4abfa284b10fbb1e2bf0c10d8324925e457583fcd8ed12d46c5"
     },
     {
-      "bytes": 1075693,
+      "bytes": 1214835,
       "path": "bootstrap-provenance.json",
       "role": "source-metadata",
-      "sha256": "a5e4d333911f8e86359c8d30c7d0a925db66d129b5ef4d8a6fc3d7af10d71513"
+      "sha256": "c763b9632a0c8b30b0b147124fc777c472bcf951a672958c5167252de72848e3"
     }
   ],
   "limitations": [
@@ -13520,7 +13520,7 @@
   },
   "technical_bootstrap": {
     "complete": false,
-    "excluded_rows": 41,
+    "excluded_rows": 35,
     "path": "bootstrap-provenance.json",
     "row_counts": {
       "T_CORE_ADMIN_SELECT_CONFIG": 37,
@@ -13531,15 +13531,15 @@
       "T_CORE_I18N_CONFIG": 2,
       "T_CORE_I18N_MESSAGE": 1375,
       "T_CORE_LOGIN_CONFIG": 1,
-      "T_CORE_MENU": 396,
+      "T_CORE_MENU": 402,
       "T_CORE_SYSTEM_CONFIG": 1,
       "T_CORE_TABLE": 467,
       "T_CORE_TABLE_HIERARCHY": 170,
-      "T_LCDP_MODULE_PAGE_COMP": 78,
-      "T_LCDP_MODULE_PAGE_I18N": 61,
-      "T_LCDP_PAGE_I18N_CODE": 12,
-      "T_LCDP_RESOURCE": 10,
-      "T_LCDP_RESOURCE_HISTORY": 8
+      "T_LCDP_MODULE_PAGE_COMP": 229,
+      "T_LCDP_MODULE_PAGE_I18N": 123,
+      "T_LCDP_PAGE_I18N_CODE": 242,
+      "T_LCDP_RESOURCE": 37,
+      "T_LCDP_RESOURCE_HISTORY": 29
     }
   }
 }

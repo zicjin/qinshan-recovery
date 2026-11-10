@@ -13552,7 +13552,7 @@ BEGIN
       || CASE WHEN r.MENUPARAM IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.MENUPARAM)||':'||r.MENUPARAM||';' END
       || CASE WHEN r.HREF IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.HREF)||':'||r.HREF||';' END;
   END LOOP;
-  IF actual.COUNT <> 396 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_MENU'); END IF;
+  IF actual.COUNT <> 402 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_MENU'); END IF;
   IF NOT actual.EXISTS('10') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU'); END IF;
   IF actual('10') <>
     'V2:10;V6:全面资源管理;N;V2:10;V6:全面资源管理;V7:004.svg;V7:025.png;N;N;N;N;N;N;N;'
@@ -15923,6 +15923,42 @@ BEGIN
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU'); END IF;
   SELECT COUNT(*) INTO n FROM T_CORE_MENU WHERE ID='20250300003' AND CLIENTSCRIPT IS NULL;
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_CORE_MENU.CLIENTSCRIPT'); END IF;
+  IF NOT actual.EXISTS('20250300004') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU'); END IF;
+  IF actual('20250300004') <>
+    'V11:20250300004;V6:样品信息修改;V2:25;V2:11;V6:样品信息修改;V7:060.svg;N;N;V16:1597703224613312;V23:OrderInfoModifyEditPage;N;V48:emc.OrderInfoModify.page.OrderInfoModifyEditPage;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU'); END IF;
+  SELECT COUNT(*) INTO n FROM T_CORE_MENU WHERE ID='20250300004' AND CLIENTSCRIPT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_CORE_MENU.CLIENTSCRIPT'); END IF;
+  IF NOT actual.EXISTS('20250300005') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU'); END IF;
+  IF actual('20250300005') <>
+    'V11:20250300005;V6:点位信息修改;V2:25;V2:10;V6:点位信息修改;V7:043.svg;N;N;V16:1605674000347936;V24:FloderInfoModifyEditPage;N;V50:emc.FloderInfoModify.page.FloderInfoModifyEditPage;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU'); END IF;
+  SELECT COUNT(*) INTO n FROM T_CORE_MENU WHERE ID='20250300005' AND CLIENTSCRIPT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_CORE_MENU.CLIENTSCRIPT'); END IF;
+  IF NOT actual.EXISTS('20250400001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU'); END IF;
+  IF actual('20250400001') <>
+    'V11:20250400001;V6:任务状态修改;V2:25;V1:9;V6:任务状态修改;V7:019.svg;N;N;V16:1630039276722656;V25:ProjectInfoModifyEditPage;N;V52:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU'); END IF;
+  SELECT COUNT(*) INTO n FROM T_CORE_MENU WHERE ID='20250400001' AND CLIENTSCRIPT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_CORE_MENU.CLIENTSCRIPT'); END IF;
+  IF NOT actual.EXISTS('20250400002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU'); END IF;
+  IF actual('20250400002') <>
+    'V11:20250400002;V8:报告查询(业务);V4:1525;V6:152511;V9:报告查询(业务员);V7:073.svg;N;N;V16:1631067840535008;V24:ReportSearchByYWEditPage;N;V50:emc.ReportSearchByYW.page.ReportSearchByYWEditPage;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU'); END IF;
+  SELECT COUNT(*) INTO n FROM T_CORE_MENU WHERE ID='20250400002' AND CLIENTSCRIPT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_CORE_MENU.CLIENTSCRIPT'); END IF;
+  IF NOT actual.EXISTS('20250500001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU'); END IF;
+  IF actual('20250500001') <>
+    'V11:20250500001;V7:采样单信息修改;V2:25;V1:7;V7:采样单信息修改;V7:035.svg;N;N;V16:1654892685304660;V24:SampleInfoModifyEditPage;N;V50:emc.SampleInfoModify.page.SampleInfoModifyEditPage;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU'); END IF;
+  SELECT COUNT(*) INTO n FROM T_CORE_MENU WHERE ID='20250500001' AND CLIENTSCRIPT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_CORE_MENU.CLIENTSCRIPT'); END IF;
+  IF NOT actual.EXISTS('20250700001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU'); END IF;
+  IF actual('20250700001') <>
+    'V11:20250700001;V7:快递回签单登记;V11:20250200001;V1:3;V7:快递回签单登记;V7:058.svg;V7:018.png;N;V16:1587156564485600;V33:reportSendExpressDeliveryEditPage;N;V68:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU'); END IF;
+  SELECT COUNT(*) INTO n FROM T_CORE_MENU WHERE ID='20250700001' AND CLIENTSCRIPT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_CORE_MENU.CLIENTSCRIPT'); END IF;
   IF NOT actual.EXISTS('20250900001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU'); END IF;
   IF actual('20250900001') <>
     'V11:20250900001;V7:仪器出库未入库;V11:20250300001;V1:3;V7:仪器出库未入库;V7:045.svg;N;N;V16:1734443928132640;V17:equiptInOutStatus;N;V38:emc.equiptInOut.page.equiptInOutStatus;V23:{"dates_ISNOTNULL":"1"};N;'
@@ -16812,7 +16848,1741 @@ BEGIN
       || CASE WHEN r.DATATYPE IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.DATATYPE)||':'||r.DATATYPE||';' END
       || CASE WHEN r.CLASSNAME IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.CLASSNAME)||':'||r.CLASSNAME||';' END;
   END LOOP;
-  IF actual.COUNT <> 10 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_RESOURCE'); END IF;
+  IF actual.COUNT <> 37 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_RESOURCE'); END IF;
+  IF NOT actual.EXISTS('1605674001560352') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1605674001560352') <>
+    'V16:1605674001560352;V24:LcdpEmcFolderMysqlMapper;V6:mapper;V16:1605673968390944;V1:1;V1:1;V52:emc.FloderInfoModify.mapper.LcdpEmcFolderMysqlMapper;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001560352 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001560352 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_FOLDER T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001560352 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674001789728') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1605674001789728') <>
+    'V16:1605674001789728;V25:LcdpEmcFolderOracleMapper;V6:mapper;V16:1605673968390944;V1:1;V1:1;V53:emc.FloderInfoModify.mapper.LcdpEmcFolderOracleMapper;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001789728 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001789728 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_FOLDER T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001789728 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674002264864') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1605674002264864') <>
+    'V16:1605674002264864;V29:LcdpEmcFolderPostgresqlMapper;V6:mapper;V16:1605673968390944;V1:1;V1:1;V57:emc.FloderInfoModify.mapper.LcdpEmcFolderPostgresqlMapper;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674002264864 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674002264864 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_FOLDER T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674002264864 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674002436896') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1605674002436896') <>
+    'V16:1605674002436896;V28:LcdpEmcFolderSqlserverMapper;V6:mapper;V16:1605673968390944;V1:1;V1:1;V56:emc.FloderInfoModify.mapper.LcdpEmcFolderSqlserverMapper;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674002436896 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674002436896 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_FOLDER T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674002436896 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674000347936') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1605674000347936') <>
+    'V16:1605674000347936;V24:FloderInfoModifyEditPage;V4:view;V16:1605673968390944;V1:1;V1:2;V50:emc.FloderInfoModify.page.FloderInfoModifyEditPage;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674000347936 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=427;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674000347936 AND DBMS_LOB.SUBSTR(CONTENT,427,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.FloderInfoModify.server.LcdpEmcFolderService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.FloderInfoModify.page.FloderInfoModifyDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function loadDetailPage(field, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    if (field === ''folderno''){'
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10);
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674000347936 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674001404724') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1605674001404724') <>
+    'V16:1605674001404724;V20:LcdpEmcFolderService;V4:java;V16:1605673968390944;V1:1;V1:1;V48:emc.FloderInfoModify.server.LcdpEmcFolderService;V1:0;N;V38:FloderInfoModifyLcdpEmcFolderServicev1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001404724 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1552;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001404724 AND DBMS_LOB.SUBSTR(CONTENT,1552,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcFolderService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_FOLDER";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.FloderInfoModify.mapper.LcdpEmcFolderMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001404724 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1570;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605674001404724 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1570,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class FloderInfoModifyLcdpEmcFolderServicev1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_FOLDER";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.FloderInfoModify.mapper.LcdpEmcFolderMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1597703226128832') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1597703226128832') <>
+    'V16:1597703226128832;V24:LcdpEmcOrderOracleMapper;V6:mapper;V16:1597703216355776;V1:1;V1:2;V51:emc.OrderInfoModify.mapper.LcdpEmcOrderOracleMapper;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703226128832 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1270;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703226128832 AND DBMS_LOB.SUBSTR(CONTENT,1270,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.OrderInfoModify.mapper.LcdpEmcOrderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.* FROM'
+ || CHR(10)
+ || '          (SELECT teo.*,tep.PROJNO,tep.PROJNAME FROM T_EMC_ORDER teo '
+ || CHR(10)
+ || '            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =teo.PROJID'
+ || CHR(10)
+ || '          )  T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703226128832 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1597703224613312') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1597703224613312') <>
+    'V16:1597703224613312;V23:OrderInfoModifyEditPage;V4:view;V16:1597703216355776;V1:1;V1:6;V48:emc.OrderInfoModify.page.OrderInfoModifyEditPage;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703224613312 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=422;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703224613312 AND DBMS_LOB.SUBSTR(CONTENT,422,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.OrderInfoModify.server.LcdpEmcOrderService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.OrderInfoModify.page.OrderInfoModifyDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function loadDetailPage(field, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    if (field === ''orderno''){'
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10);
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703224613312 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1597703225768386') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1597703225768386') <>
+    'V16:1597703225768386;V19:LcdpEmcOrderService;V4:java;V16:1597703216355776;V1:1;V1:1;V46:emc.OrderInfoModify.server.LcdpEmcOrderService;V1:0;N;V36:OrderInfoModifyLcdpEmcOrderServicev1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703225768386 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1548;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703225768386 AND DBMS_LOB.SUBSTR(CONTENT,1548,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcOrderService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_ORDER";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.OrderInfoModify.mapper.LcdpEmcOrderMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703225768386 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1565;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703225768386 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1565,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class OrderInfoModifyLcdpEmcOrderServicev1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_ORDER";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.OrderInfoModify.mapper.LcdpEmcOrderMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1630039278516704') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1630039278516704') <>
+    'V16:1630039278516704;V26:LcdpEmcProjectOracleMapper;V6:mapper;V16:1630039212923360;V1:1;V1:4;V55:emc.ProjectInfoModify.mapper.LcdpEmcProjectOracleMapper;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039278516704 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1752;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039278516704 AND DBMS_LOB.SUBSTR(CONTENT,1752,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM '
+ || CHR(10)
+ || '          (SELECT tep.ID,tep.PROJNO,tep.PROJNAME,tep.PROJNODE,tep.status,tep.TOREPORTEDITDATE '
+ || CHR(10)
+ || '            FROM T_EMC_PROJECT tep'
+ || CHR(10)
+ || '            WHERE tep.STATUS = ''auditFinished'' AND tep.STATUS <![CDATA[<>]]> ''cancel'''
+ || CHR(10)
+ || '            AND NOT EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK teot WHERE tep.ID =teot.PROJID AND teot.STATUS <![CDATA[<>]]> ''done'' AND teot.ANALYSISTYPE <![CDATA[<>]]> ''calculate'')'
+ || CHR(10)
+ || '            AND NOT EXISTS (SELECT 1 FROM T_EMC_SAMPLE tes WHERE tes.PROJID =tep.ID AND tes.STATUS <![CDATA[<>]]> ''done'')'
+ || CHR(10)
+ || '            AND EXISTS (SELECT 1 FROM T_EMC_SAMPLE tes WHERE tes.PROJID = tep.ID)'
+ || CHR(10)
+ || '            ) T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039278516704 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1630039276722656') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1630039276722656') <>
+    'V16:1630039276722656;V25:ProjectInfoModifyEditPage;V4:view;V16:1630039212923360;V1:1;V1:5;V52:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039276722656 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=946;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039276722656 AND DBMS_LOB.SUBSTR(CONTENT,946,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.ProjectInfoModify.server.LcdpEmcProjectService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.ProjectInfoModify.page.ProjectInfoModifyDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_1_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    var selections = Gikam.getComp(''projectinfomodify-edit-grid'').getSelections();'
+ || CHR(13)
+ || CHR(10)
+ || '    if (Gikam.isEmpty(selections)) {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');'
+ || CHR(13)
+ || CHR(10)
+ || '        return;'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.confirm(''确认更新'', ''更新至报告编制'', function () {'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.showMask(true);'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.put(IFM_CONTEXT + ''/secure/emc/module/bp/project/projects/action/to-report'', Gikam.getJsonWrapper({}, [''emcProjectServiceImpl'', selections])).done(function (id) {'
+ || CHR(13)
+ || CHR(10)
+ || '            Gikam.getComp(''projectinfomodify-edit-grid'').refresh();'
+ || CHR(13)
+ || CHR(10)
+ || '        }).always(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '            workspace.window.closeMask();'
+ || CHR(13)
+ || CHR(10)
+ || '        });'
+ || CHR(13)
+ || CHR(10)
+ || '    })'
+ || CHR(13)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039276722656 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1630039278172660') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1630039278172660') <>
+    'V16:1630039278172660;V21:LcdpEmcProjectService;V4:java;V16:1630039212923360;V1:1;V1:1;V50:emc.ProjectInfoModify.server.LcdpEmcProjectService;V1:0;N;V40:ProjectInfoModifyLcdpEmcProjectServicev1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039278172660 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1556;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039278172660 AND DBMS_LOB.SUBSTR(CONTENT,1556,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcProjectService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_PROJECT";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039278172660 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1575;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039278172660 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1575,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class ProjectInfoModifyLcdpEmcProjectServicev1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_PROJECT";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1631067842468320') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1631067842468320') <>
+    'V16:1631067842468320;V25:LcdpEmcReportOracleMapper;V6:mapper;V16:1631067705645536;V1:1;V1:2;V53:emc.ReportSearchByYW.mapper.LcdpEmcReportOracleMapper;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067842468320 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1812;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067842468320 AND DBMS_LOB.SUBSTR(CONTENT,1812,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.ReportSearchByYW.mapper.LcdpEmcReportMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM('
+ || CHR(10)
+ || '          SELECT '
+ || CHR(10)
+ || '            ter.ID,'
+ || CHR(10)
+ || '            tebc.BIZCATEGORYNAME,'
+ || CHR(10)
+ || '            CASE ter.STATUS '
+ || CHR(10)
+ || '            WHEN ''reportArchiving'' THEN ''报告归档'''
+ || CHR(10)
+ || '            WHEN ''reportPrint'' THEN ''报告打印'''
+ || CHR(10)
+ || '            WHEN ''reportSeal'' THEN ''报告发送'''
+ || CHR(10)
+ || '            END AS STATUS,'
+ || CHR(10)
+ || '            ter.REPORTNO,'
+ || CHR(10)
+ || '            tep.ENTRUSTORGNAME,'
+ || CHR(10)
+ || '            tep.TESTORGNAME,'
+ || CHR(10)
+ || '            tep.BUSINESSUSERNAME,'
+ || CHR(10)
+ || '            tep.BUSINESSUSERID'
+ || CHR(10)
+ || '            FROM T_EMC_REPORT ter '
+ || CHR(10)
+ || '            LEFT JOIN t_emc_project tep ON tep.id=ter.PROJID'
+ || CHR(10)
+ || '            LEFT JOIN T_EMC_BIZ_CATEGORY tebc ON tebc.id=tep.BIZCATEGORYID'
+ || CHR(10)
+ || '            WHERE ter.STATUS IN (''reportArchiving'',''reportPrint'',''reportSeal'')'
+ || CHR(10)
+ || '          ) T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067842468320 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1631067840535008') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1631067840535008') <>
+    'V16:1631067840535008;V24:ReportSearchByYWEditPage;V4:view;V16:1631067705645536;V1:1;V1:6;V50:emc.ReportSearchByYW.page.ReportSearchByYWEditPage;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067840535008 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1038;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067840535008 AND DBMS_LOB.SUBSTR(CONTENT,1038,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.ReportSearchByYW.server.LcdpEmcReportService";'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    pageParam.BUSINESSUSERID_SEQ = workspace.user.id;'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function reportsearchbyyw_edit_grid_onrowactive(index, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.getComp(''Uploader_1'').setOptions({'
+ || CHR(13)
+ || CHR(10)
+ || '        bizId: row.id,'
+ || CHR(13)
+ || CHR(10)
+ || '        ext_SEQ: ''sealPdf'''
+ || CHR(13)
+ || CHR(10)
+ || '    });'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_1_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    var _this = this;'
+ || CHR(13)
+ || CHR(10)
+ || '    var selections = Gikam.getComp(''reportsearchbyyw-edit-grid'').getSelections();'
+ || CHR(13)
+ || CHR(10)
+ || '    if (Gikam.isEmpty(selections)) {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');'
+ || CHR(13)
+ || CHR(10)
+ || '        return;'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.postText(IFM_CONTEXT + ''/secure/emc/module/bp/report/reports/action/report-pack'', Gikam.getJsonWrapper({}, ['''', selections])'
+ || CHR(13)
+ || CHR(10)
+ || '    ).done(function (fileUrl) {'
+ || CHR(13)
+ || CHR(10)
+ || '        if (fileUrl != '''' && fileUrl != undefined) {'
+ || CHR(13)
+ || CHR(10)
+ || '            Gikam.download(IFM_CONTEXT + fileUrl);'
+ || CHR(13)
+ || CHR(10)
+ || '        } else {'
+ || CHR(13)
+ || CHR(10)
+ || '            Gikam.alert(''没有可下载的附件'');'
+ || CHR(13)
+ || CHR(10)
+ || '        }'
+ || CHR(13)
+ || CHR(10)
+ || '    })'
+ || CHR(13)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067840535008 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1631067842025978') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1631067842025978') <>
+    'V16:1631067842025978;V20:LcdpEmcReportService;V4:java;V16:1631067705645536;V1:1;V1:1;V48:emc.ReportSearchByYW.server.LcdpEmcReportService;V1:0;N;V38:ReportSearchByYWLcdpEmcReportServicev1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067842025978 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1552;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067842025978 AND DBMS_LOB.SUBSTR(CONTENT,1552,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcReportService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_REPORT";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.ReportSearchByYW.mapper.LcdpEmcReportMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067842025978 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1570;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067842025978 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1570,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class ReportSearchByYWLcdpEmcReportServicev1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_REPORT";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.ReportSearchByYW.mapper.LcdpEmcReportMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1654892686623552') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1654892686623552') <>
+    'V16:1654892686623552;V25:LcdpEmcSampleOracleMapper;V6:mapper;V16:1654892682027840;V1:1;V1:1;V53:emc.SampleInfoModify.mapper.LcdpEmcSampleOracleMapper;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892686623552 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892686623552 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.SampleInfoModify.mapper.LcdpEmcSampleMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_SAMPLE T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892686623552 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1654892685304660') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1654892685304660') <>
+    'V16:1654892685304660;V24:SampleInfoModifyEditPage;V4:view;V16:1654892682027840;V1:1;V1:2;V50:emc.SampleInfoModify.page.SampleInfoModifyEditPage;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892685304660 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=427;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892685304660 AND DBMS_LOB.SUBSTR(CONTENT,427,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.SampleInfoModify.server.LcdpEmcSampleService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.SampleInfoModify.page.SampleInfoModifyDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function loadDetailPage(field, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    if (field === ''sampleno''){'
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10);
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892685304660 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1654892686369620') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1654892686369620') <>
+    'V16:1654892686369620;V20:LcdpEmcSampleService;V4:java;V16:1654892682027840;V1:1;V1:1;V48:emc.SampleInfoModify.server.LcdpEmcSampleService;V1:0;N;V38:SampleInfoModifyLcdpEmcSampleServicev1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892686369620 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1552;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892686369620 AND DBMS_LOB.SUBSTR(CONTENT,1552,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcSampleService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_SAMPLE";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.SampleInfoModify.mapper.LcdpEmcSampleMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892686369620 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1570;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892686369620 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1570,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class SampleInfoModifyLcdpEmcSampleServicev1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_SAMPLE";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.SampleInfoModify.mapper.LcdpEmcSampleMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
   IF NOT actual.EXISTS('1734450104704032') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
   IF actual('1734450104704032') <>
     'V16:1734450104704032;V26:LcdpEmcEquiptIOracleMapper;V6:mapper;V16:1596797905263584;V1:1;V1:5;V49:emc.equiptInOut.mapper.LcdpEmcEquiptIOracleMapper;V1:0;N;N;'
@@ -18362,13 +20132,586 @@ BEGIN
  || '}'
  || CHR(10);
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
-  IF NOT actual.EXISTS('1596797905263584') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
-  IF actual('1596797905263584') <>
-    'V16:1596797905263584;V11:equiptInOut;V6:module;V16:1583426288284192;V1:1;N;N;V1:0;N;N;'
+  IF NOT actual.EXISTS('1587156565566944') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1587156565566944') <>
+    'V16:1587156565566944;V33:LcdpEmcReportSendInfoOracleMapper;V6:mapper;V16:1587156555744736;V1:1;V1:4;V70:emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoOracleMapper;V1:0;N;N;'
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
-  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1596797905263584 AND CONTENT IS NULL;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156565566944 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1735;
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
-  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1596797905263584 AND CLASSCONTENT IS NULL;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156565566944 AND DBMS_LOB.SUBSTR(CONTENT,1735,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM '
+ || CHR(10)
+ || '          ('
+ || CHR(10)
+ || '            select '
+ || CHR(10)
+ || '                tersi.ID,'
+ || CHR(10)
+ || '                tersi.EXPRESSNO,'
+ || CHR(10)
+ || '                tersi.EXPRESSTYPE,'
+ || CHR(10)
+ || '                tersi.ISSURER,'
+ || CHR(10)
+ || '                tersi.ISSURERDATE,'
+ || CHR(10)
+ || '                tersi.PIC,'
+ || CHR(10)
+ || '                tep.ENTRUSTORGNAME,'
+ || CHR(10)
+ || '                tep.PROJNO,'
+ || CHR(10)
+ || '                tep.CONTRACTNO'
+ || CHR(10)
+ || '            from T_EMC_REPORT_SEND_INFO tersi '
+ || CHR(10)
+ || '            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =tersi.PROJID '
+ || CHR(10)
+ || '            WHERE tersi.EXPRESSNO IS NOT NULL'
+ || CHR(10)
+ || '            AND tersi.EXPRESSNO NOT LIKE ''%自提%'''
+ || CHR(10)
+ || '            AND tersi.EXPRESSNO NOT LIKE ''%/%'''
+ || CHR(10)
+ || '          )T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '              T.ISSURERDATE'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156565566944 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1587156564485600') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1587156564485600') <>
+    'V16:1587156564485600;V33:reportSendExpressDeliveryEditPage;V4:view;V16:1587156555744736;V1:1;V2:10;V68:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156564485600 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=3573;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156564485600 AND DBMS_LOB.SUBSTR(CONTENT,1977,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.reportSendExpressDelivery.page.reportSendExpressDeliveryDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function loadDetailPage(field, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    if (field === ''projid'') {'
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.loadPage(detailPagePath, { id: row.id, sourcePage: ''edit'' });'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_1_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    var selections = Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections();'
+ || CHR(13)
+ || CHR(10)
+ || '    if (Gikam.isEmpty(selections)) {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');'
+ || CHR(13)
+ || CHR(10)
+ || '        return;'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '    var _this = this;'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.create(''simpleUploader'', {'
+ || CHR(13)
+ || CHR(10)
+ || '        id: ''reportsendexpressdelivery-edit-uploader'','
+ || CHR(13)
+ || CHR(10)
+ || '        dbTable: ''T_EMC_REPORT_SEND_INFO'','
+ || CHR(13)
+ || CHR(10)
+ || '        bizId: Date.now(),'
+ || CHR(13)
+ || CHR(10)
+ || '        multiple: false,'
+ || CHR(13)
+ || CHR(10)
+ || '        accept: ''image'','
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '        onAfterClose: function (fileList) {'
+ || CHR(13)
+ || CHR(10)
+ || '            if (!Gikam.isEmpty(fileList)) {'
+ || CHR(13)
+ || CHR(10)
+ || '                Gikam.getJson(IFM_CONTEXT + ''/core/module/item/files/'' + fileList[0].id).done(function (coreFile) {'
+ || CHR(13)
+ || CHR(10)
+ || '                    var saveData = selections.map(function (row) {'
+ || CHR(13)
+ || CHR(10)
+ || '                        return {'
+ || CHR(13)
+ || CHR(10)
+ || '                            id: row.id,'
+ || CHR(13)
+ || CHR(10)
+ || '                            pic: coreFile.downloadUrl'
+ || CHR(13)
+ || CHR(10)
+ || '                        };'
+ || CHR(13)
+ || CHR(10)
+ || '                    });'
+ || CHR(13)
+ || CHR(10)
+ || '                    var updUrl = baseUrl + ''.updateData'';'
+ || CHR(13)
+ || CHR(10)
+ || '                    workspace.window.showMask(true);'
+ || CHR(13)
+ || CHR(10)
+ || '                    Gikam.put(updUrl, Gikam.getJsonWrapper({}, [null, saveData])).done(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '                        Gikam.getComp(''reportsendexpressdelivery-edit-grid'').refresh();'
+ || CHR(13)
+ || CHR(10)
+ || '                    }).always(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '                        workspace.window.closeMask();'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '                    });'
+ || CHR(13)
+ || CHR(10)
+ || '                });'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '            }'
+ || CHR(13)
+ || CHR(10)
+ || '        }'
+ || CHR(13)
+ || CHR(10)
+ || '    })'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_2_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    var selections = Gikam.getComp(''repo';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156564485600 AND DBMS_LOB.SUBSTR(CONTENT,1596,1978)=
+    'rtsendexpressdelivery-edit-grid'').getSelections();'
+ || CHR(13)
+ || CHR(10)
+ || '    if (Gikam.isEmpty(selections)) {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');'
+ || CHR(13)
+ || CHR(10)
+ || '        return;'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '    var _this = this;'
+ || CHR(13)
+ || CHR(10)
+ || '    var modal = Gikam.create(''modal'', {'
+ || CHR(13)
+ || CHR(10)
+ || '        title: ''签字'','
+ || CHR(13)
+ || CHR(10)
+ || '        width: ''100%'','
+ || CHR(13)
+ || CHR(10)
+ || '        height: ''100%'','
+ || CHR(13)
+ || CHR(10)
+ || '        onAfterClose: function (data) {'
+ || CHR(13)
+ || CHR(10)
+ || '            if (!Gikam.isEmpty(data)) {'
+ || CHR(13)
+ || CHR(10)
+ || '                var saveData = selections.map(function (row) {'
+ || CHR(13)
+ || CHR(10)
+ || '                    return {'
+ || CHR(13)
+ || CHR(10)
+ || '                        id: row.id,'
+ || CHR(13)
+ || CHR(10)
+ || '                        pic: data.downloadUrl'
+ || CHR(13)
+ || CHR(10)
+ || '                    };'
+ || CHR(13)
+ || CHR(10)
+ || '                });'
+ || CHR(13)
+ || CHR(10)
+ || '                var updUrl = baseUrl + ''.updateData'';'
+ || CHR(13)
+ || CHR(10)
+ || '                workspace.window.showMask(true);'
+ || CHR(13)
+ || CHR(10)
+ || '                Gikam.put(updUrl, Gikam.getJsonWrapper({}, [null, saveData])).done(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '                    Gikam.getComp(''reportsendexpressdelivery-edit-grid'').refresh();'
+ || CHR(13)
+ || CHR(10)
+ || '                }).always(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '                    workspace.window.closeMask();'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '                });'
+ || CHR(13)
+ || CHR(10)
+ || '            }'
+ || CHR(13)
+ || CHR(10)
+ || '        }'
+ || CHR(13)
+ || CHR(10)
+ || '    });'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.finalDelay("drawBoard", function () {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.create(''layout'', {'
+ || CHR(13)
+ || CHR(10)
+ || '            renderTo: modal.window.$dom,'
+ || CHR(13)
+ || CHR(10)
+ || '            center: {'
+ || CHR(13)
+ || CHR(10)
+ || '                items: [{'
+ || CHR(13)
+ || CHR(10)
+ || '                    type: ''iframe'','
+ || CHR(13)
+ || CHR(10)
+ || '                    id: ''create-draw-board-ifram'','
+ || CHR(13)
+ || CHR(10)
+ || '                    src: ''/secure/emc/module/bp/project/projects/page/draw-board'''
+ || CHR(13)
+ || CHR(10)
+ || '                }]'
+ || CHR(13)
+ || CHR(10)
+ || '            }'
+ || CHR(13)
+ || CHR(10)
+ || '        });'
+ || CHR(13)
+ || CHR(10)
+ || '    })'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_3_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.viewReport(''HQD'', Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections());'
+ || CHR(13)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156564485600 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1587156565214717') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1587156565214717') <>
+    'V16:1587156565214717;V28:LcdpEmcReportSendInfoService;V4:java;V16:1587156555744736;V1:1;V1:1;V65:emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService;V1:0;N;V55:ReportSendExpressDeliveryLcdpEmcReportSendInfoServicev1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156565214717 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1587;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156565214717 AND DBMS_LOB.SUBSTR(CONTENT,1587,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcReportSendInfoService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_REPORT_SEND_INFO";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156565214717 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1614;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156565214717 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1614,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class ReportSendExpressDeliveryLcdpEmcReportSendInfoServicev1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_REPORT_SEND_INFO";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605673968390944') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1605673968390944') <>
+    'V16:1605673968390944;V16:FloderInfoModify;V6:module;V16:1583426288284192;V1:1;N;N;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605673968390944 AND CONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1605673968390944 AND CLASSCONTENT IS NULL;
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
   IF NOT actual.EXISTS('1583426288284192') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
   IF actual('1583426288284192') <>
@@ -18377,6 +20720,54 @@ BEGIN
   SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1583426288284192 AND CONTENT IS NULL;
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
   SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1583426288284192 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1597703216355776') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1597703216355776') <>
+    'V16:1597703216355776;V15:OrderInfoModify;V6:module;V16:1583426288284192;V1:1;N;N;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703216355776 AND CONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1597703216355776 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1630039212923360') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1630039212923360') <>
+    'V16:1630039212923360;V17:ProjectInfoModify;V6:module;V16:1583426288284192;V1:1;N;N;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039212923360 AND CONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1630039212923360 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1631067705645536') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1631067705645536') <>
+    'V16:1631067705645536;V16:ReportSearchByYW;V6:module;V16:1583426288284192;V1:1;N;N;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067705645536 AND CONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1631067705645536 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1654892682027840') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1654892682027840') <>
+    'V16:1654892682027840;V16:SampleInfoModify;V6:module;V16:1583426288284192;V1:1;N;N;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892682027840 AND CONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1654892682027840 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1596797905263584') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1596797905263584') <>
+    'V16:1596797905263584;V11:equiptInOut;V6:module;V16:1583426288284192;V1:1;N;N;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1596797905263584 AND CONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1596797905263584 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1587156555744736') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1587156555744736') <>
+    'V16:1587156555744736;V25:reportSendExpressDelivery;V6:module;V16:1583426288284192;V1:1;N;N;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156555744736 AND CONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156555744736 AND CLASSCONTENT IS NULL;
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
 END;
 /
@@ -18397,7 +20788,580 @@ BEGIN
       || CASE WHEN r.MODIFYVERSION IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(r.MODIFYVERSION,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(r.MODIFYVERSION,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
       || CASE WHEN r.DELETEFLAG IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.DELETEFLAG)||':'||r.DELETEFLAG||';' END;
   END LOOP;
-  IF actual.COUNT <> 8 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual.COUNT <> 29 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF NOT actual.EXISTS('1794420245005760') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1794420245005760') <>
+    'V16:1794420245005760;V16:1587156564485600;V33:reportSendExpressDeliveryEditPage;V4:view;V2:10;V3:yes;V3:yes;V68:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1794420245005760 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=3573;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1794420245005760 AND DBMS_LOB.SUBSTR(CONTENT,1977,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.reportSendExpressDelivery.page.reportSendExpressDeliveryDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function loadDetailPage(field, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    if (field === ''projid'') {'
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.loadPage(detailPagePath, { id: row.id, sourcePage: ''edit'' });'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_1_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    var selections = Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections();'
+ || CHR(13)
+ || CHR(10)
+ || '    if (Gikam.isEmpty(selections)) {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');'
+ || CHR(13)
+ || CHR(10)
+ || '        return;'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '    var _this = this;'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.create(''simpleUploader'', {'
+ || CHR(13)
+ || CHR(10)
+ || '        id: ''reportsendexpressdelivery-edit-uploader'','
+ || CHR(13)
+ || CHR(10)
+ || '        dbTable: ''T_EMC_REPORT_SEND_INFO'','
+ || CHR(13)
+ || CHR(10)
+ || '        bizId: Date.now(),'
+ || CHR(13)
+ || CHR(10)
+ || '        multiple: false,'
+ || CHR(13)
+ || CHR(10)
+ || '        accept: ''image'','
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '        onAfterClose: function (fileList) {'
+ || CHR(13)
+ || CHR(10)
+ || '            if (!Gikam.isEmpty(fileList)) {'
+ || CHR(13)
+ || CHR(10)
+ || '                Gikam.getJson(IFM_CONTEXT + ''/core/module/item/files/'' + fileList[0].id).done(function (coreFile) {'
+ || CHR(13)
+ || CHR(10)
+ || '                    var saveData = selections.map(function (row) {'
+ || CHR(13)
+ || CHR(10)
+ || '                        return {'
+ || CHR(13)
+ || CHR(10)
+ || '                            id: row.id,'
+ || CHR(13)
+ || CHR(10)
+ || '                            pic: coreFile.downloadUrl'
+ || CHR(13)
+ || CHR(10)
+ || '                        };'
+ || CHR(13)
+ || CHR(10)
+ || '                    });'
+ || CHR(13)
+ || CHR(10)
+ || '                    var updUrl = baseUrl + ''.updateData'';'
+ || CHR(13)
+ || CHR(10)
+ || '                    workspace.window.showMask(true);'
+ || CHR(13)
+ || CHR(10)
+ || '                    Gikam.put(updUrl, Gikam.getJsonWrapper({}, [null, saveData])).done(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '                        Gikam.getComp(''reportsendexpressdelivery-edit-grid'').refresh();'
+ || CHR(13)
+ || CHR(10)
+ || '                    }).always(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '                        workspace.window.closeMask();'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '                    });'
+ || CHR(13)
+ || CHR(10)
+ || '                });'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '            }'
+ || CHR(13)
+ || CHR(10)
+ || '        }'
+ || CHR(13)
+ || CHR(10)
+ || '    })'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_2_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    var selections = Gikam.getComp(''repo';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1794420245005760 AND DBMS_LOB.SUBSTR(CONTENT,1596,1978)=
+    'rtsendexpressdelivery-edit-grid'').getSelections();'
+ || CHR(13)
+ || CHR(10)
+ || '    if (Gikam.isEmpty(selections)) {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');'
+ || CHR(13)
+ || CHR(10)
+ || '        return;'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '    var _this = this;'
+ || CHR(13)
+ || CHR(10)
+ || '    var modal = Gikam.create(''modal'', {'
+ || CHR(13)
+ || CHR(10)
+ || '        title: ''签字'','
+ || CHR(13)
+ || CHR(10)
+ || '        width: ''100%'','
+ || CHR(13)
+ || CHR(10)
+ || '        height: ''100%'','
+ || CHR(13)
+ || CHR(10)
+ || '        onAfterClose: function (data) {'
+ || CHR(13)
+ || CHR(10)
+ || '            if (!Gikam.isEmpty(data)) {'
+ || CHR(13)
+ || CHR(10)
+ || '                var saveData = selections.map(function (row) {'
+ || CHR(13)
+ || CHR(10)
+ || '                    return {'
+ || CHR(13)
+ || CHR(10)
+ || '                        id: row.id,'
+ || CHR(13)
+ || CHR(10)
+ || '                        pic: data.downloadUrl'
+ || CHR(13)
+ || CHR(10)
+ || '                    };'
+ || CHR(13)
+ || CHR(10)
+ || '                });'
+ || CHR(13)
+ || CHR(10)
+ || '                var updUrl = baseUrl + ''.updateData'';'
+ || CHR(13)
+ || CHR(10)
+ || '                workspace.window.showMask(true);'
+ || CHR(13)
+ || CHR(10)
+ || '                Gikam.put(updUrl, Gikam.getJsonWrapper({}, [null, saveData])).done(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '                    Gikam.getComp(''reportsendexpressdelivery-edit-grid'').refresh();'
+ || CHR(13)
+ || CHR(10)
+ || '                }).always(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '                    workspace.window.closeMask();'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '                });'
+ || CHR(13)
+ || CHR(10)
+ || '            }'
+ || CHR(13)
+ || CHR(10)
+ || '        }'
+ || CHR(13)
+ || CHR(10)
+ || '    });'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.finalDelay("drawBoard", function () {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.create(''layout'', {'
+ || CHR(13)
+ || CHR(10)
+ || '            renderTo: modal.window.$dom,'
+ || CHR(13)
+ || CHR(10)
+ || '            center: {'
+ || CHR(13)
+ || CHR(10)
+ || '                items: [{'
+ || CHR(13)
+ || CHR(10)
+ || '                    type: ''iframe'','
+ || CHR(13)
+ || CHR(10)
+ || '                    id: ''create-draw-board-ifram'','
+ || CHR(13)
+ || CHR(10)
+ || '                    src: ''/secure/emc/module/bp/project/projects/page/draw-board'''
+ || CHR(13)
+ || CHR(10)
+ || '                }]'
+ || CHR(13)
+ || CHR(10)
+ || '            }'
+ || CHR(13)
+ || CHR(10)
+ || '        });'
+ || CHR(13)
+ || CHR(10)
+ || '    })'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_3_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.viewReport(''HQD'', Gikam.getComp(''reportsendexpressdelivery-edit-grid'').getSelections());'
+ || CHR(13)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1794420245005760 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1587156565222880') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1587156565222880') <>
+    'V16:1587156565222880;V16:1587156565214717;V28:LcdpEmcReportSendInfoService;V4:java;V1:1;V3:yes;V3:yes;V65:emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1587156565222880 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1587;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1587156565222880 AND DBMS_LOB.SUBSTR(CONTENT,1587,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcReportSendInfoService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_REPORT_SEND_INFO";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1587156565222880 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1616;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1587156565222880 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1616,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class reportSendExpressDeliveryLcdpEmcReportSendInfoServicev1m1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_REPORT_SEND_INFO";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1794420016489920') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1794420016489920') <>
+    'V16:1794420016489920;V16:1587156565566944;V33:LcdpEmcReportSendInfoOracleMapper;V6:mapper;V1:4;V3:yes;V3:yes;V70:emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoOracleMapper;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1794420016489920 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1735;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1794420016489920 AND DBMS_LOB.SUBSTR(CONTENT,1735,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM '
+ || CHR(10)
+ || '          ('
+ || CHR(10)
+ || '            select '
+ || CHR(10)
+ || '                tersi.ID,'
+ || CHR(10)
+ || '                tersi.EXPRESSNO,'
+ || CHR(10)
+ || '                tersi.EXPRESSTYPE,'
+ || CHR(10)
+ || '                tersi.ISSURER,'
+ || CHR(10)
+ || '                tersi.ISSURERDATE,'
+ || CHR(10)
+ || '                tersi.PIC,'
+ || CHR(10)
+ || '                tep.ENTRUSTORGNAME,'
+ || CHR(10)
+ || '                tep.PROJNO,'
+ || CHR(10)
+ || '                tep.CONTRACTNO'
+ || CHR(10)
+ || '            from T_EMC_REPORT_SEND_INFO tersi '
+ || CHR(10)
+ || '            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =tersi.PROJID '
+ || CHR(10)
+ || '            WHERE tersi.EXPRESSNO IS NOT NULL'
+ || CHR(10)
+ || '            AND tersi.EXPRESSNO NOT LIKE ''%自提%'''
+ || CHR(10)
+ || '            AND tersi.EXPRESSNO NOT LIKE ''%/%'''
+ || CHR(10)
+ || '          )T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '              T.ISSURERDATE'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1794420016489920 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
   IF NOT actual.EXISTS('1607008533293824') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
   IF actual('1607008533293824') <>
     'V16:1607008533293824;V16:1596797917215712;V19:equiptInOutEditPage;V4:view;V2:11;V3:yes;V3:yes;V40:emc.equiptInOut.page.equiptInOutEditPage;V1:1;V1:0;'
@@ -19519,6 +22483,1740 @@ BEGIN
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
   SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1704403149227776 AND CLASSCONTENT IS NULL;
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1630288250714592') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1630288250714592') <>
+    'V16:1630288250714592;V16:1597703224613312;V23:OrderInfoModifyEditPage;V4:view;V1:6;V3:yes;V3:yes;V48:emc.OrderInfoModify.page.OrderInfoModifyEditPage;V1:3;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1630288250714592 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=422;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1630288250714592 AND DBMS_LOB.SUBSTR(CONTENT,422,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.OrderInfoModify.server.LcdpEmcOrderService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.OrderInfoModify.page.OrderInfoModifyDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function loadDetailPage(field, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    if (field === ''orderno''){'
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10);
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1630288250714592 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1597703225776576') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1597703225776576') <>
+    'V16:1597703225776576;V16:1597703225768386;V19:LcdpEmcOrderService;V4:java;V1:1;V3:yes;V3:yes;V46:emc.OrderInfoModify.server.LcdpEmcOrderService;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1597703225776576 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1548;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1597703225776576 AND DBMS_LOB.SUBSTR(CONTENT,1548,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcOrderService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_ORDER";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.OrderInfoModify.mapper.LcdpEmcOrderMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1597703225776576 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1567;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1597703225776576 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1567,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class OrderInfoModifyLcdpEmcOrderServicev1m1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_ORDER";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.OrderInfoModify.mapper.LcdpEmcOrderMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1622456642169440') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1622456642169440') <>
+    'V16:1622456642169440;V16:1597703226128832;V24:LcdpEmcOrderOracleMapper;V6:mapper;V1:2;V3:yes;V3:yes;V51:emc.OrderInfoModify.mapper.LcdpEmcOrderOracleMapper;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1622456642169440 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1270;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1622456642169440 AND DBMS_LOB.SUBSTR(CONTENT,1270,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.OrderInfoModify.mapper.LcdpEmcOrderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.* FROM'
+ || CHR(10)
+ || '          (SELECT teo.*,tep.PROJNO,tep.PROJNAME FROM T_EMC_ORDER teo '
+ || CHR(10)
+ || '            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =teo.PROJID'
+ || CHR(10)
+ || '          )  T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1622456642169440 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1616648289373824') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1616648289373824') <>
+    'V16:1616648289373824;V16:1605674000347936;V24:FloderInfoModifyEditPage;V4:view;V1:2;V3:yes;V3:yes;V50:emc.FloderInfoModify.page.FloderInfoModifyEditPage;V1:3;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1616648289373824 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=427;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1616648289373824 AND DBMS_LOB.SUBSTR(CONTENT,427,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.FloderInfoModify.server.LcdpEmcFolderService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.FloderInfoModify.page.FloderInfoModifyDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function loadDetailPage(field, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    if (field === ''folderno''){'
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10);
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1616648289373824 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674001404725') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1605674001404725') <>
+    'V16:1605674001404725;V16:1605674001404724;V20:LcdpEmcFolderService;V4:java;V1:1;V3:yes;V3:yes;V48:emc.FloderInfoModify.server.LcdpEmcFolderService;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001404725 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1552;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001404725 AND DBMS_LOB.SUBSTR(CONTENT,1552,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcFolderService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_FOLDER";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.FloderInfoModify.mapper.LcdpEmcFolderMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001404725 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1572;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001404725 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1572,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class FloderInfoModifyLcdpEmcFolderServicev1m1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_FOLDER";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.FloderInfoModify.mapper.LcdpEmcFolderMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674001568544') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1605674001568544') <>
+    'V16:1605674001568544;V16:1605674001560352;V24:LcdpEmcFolderMysqlMapper;V6:mapper;V1:1;V3:yes;V3:yes;V52:emc.FloderInfoModify.mapper.LcdpEmcFolderMysqlMapper;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001568544 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001568544 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_FOLDER T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001568544 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674001789729') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1605674001789729') <>
+    'V16:1605674001789729;V16:1605674001789728;V25:LcdpEmcFolderOracleMapper;V6:mapper;V1:1;V3:yes;V3:yes;V53:emc.FloderInfoModify.mapper.LcdpEmcFolderOracleMapper;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001789729 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001789729 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_FOLDER T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674001789729 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674002273056') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1605674002273056') <>
+    'V16:1605674002273056;V16:1605674002264864;V29:LcdpEmcFolderPostgresqlMapper;V6:mapper;V1:1;V3:yes;V3:yes;V57:emc.FloderInfoModify.mapper.LcdpEmcFolderPostgresqlMapper;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674002273056 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674002273056 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_FOLDER T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674002273056 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1605674002445088') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1605674002445088') <>
+    'V16:1605674002445088;V16:1605674002436896;V28:LcdpEmcFolderSqlserverMapper;V6:mapper;V1:1;V3:yes;V3:yes;V56:emc.FloderInfoModify.mapper.LcdpEmcFolderSqlserverMapper;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674002445088 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674002445088 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.FloderInfoModify.mapper.LcdpEmcFolderMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_FOLDER T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1605674002445088 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1631134722128352') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1631134722128352') <>
+    'V16:1631134722128352;V16:1630039276722656;V25:ProjectInfoModifyEditPage;V4:view;V1:5;V3:yes;V3:yes;V52:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1631134722128352 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=946;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1631134722128352 AND DBMS_LOB.SUBSTR(CONTENT,946,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.ProjectInfoModify.server.LcdpEmcProjectService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.ProjectInfoModify.page.ProjectInfoModifyDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_1_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    var selections = Gikam.getComp(''projectinfomodify-edit-grid'').getSelections();'
+ || CHR(13)
+ || CHR(10)
+ || '    if (Gikam.isEmpty(selections)) {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');'
+ || CHR(13)
+ || CHR(10)
+ || '        return;'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.confirm(''确认更新'', ''更新至报告编制'', function () {'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.showMask(true);'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.put(IFM_CONTEXT + ''/secure/emc/module/bp/project/projects/action/to-report'', Gikam.getJsonWrapper({}, [''emcProjectServiceImpl'', selections])).done(function (id) {'
+ || CHR(13)
+ || CHR(10)
+ || '            Gikam.getComp(''projectinfomodify-edit-grid'').refresh();'
+ || CHR(13)
+ || CHR(10)
+ || '        }).always(function () {'
+ || CHR(13)
+ || CHR(10)
+ || '            workspace.window.closeMask();'
+ || CHR(13)
+ || CHR(10)
+ || '        });'
+ || CHR(13)
+ || CHR(10)
+ || '    })'
+ || CHR(13)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1631134722128352 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1630039278180832') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1630039278180832') <>
+    'V16:1630039278180832;V16:1630039278172660;V21:LcdpEmcProjectService;V4:java;V1:1;V3:yes;V3:yes;V50:emc.ProjectInfoModify.server.LcdpEmcProjectService;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1630039278180832 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1556;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1630039278180832 AND DBMS_LOB.SUBSTR(CONTENT,1556,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcProjectService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_PROJECT";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1630039278180832 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1577;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1630039278180832 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1577,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class ProjectInfoModifyLcdpEmcProjectServicev1m1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_PROJECT";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1640700360159968') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1640700360159968') <>
+    'V16:1640700360159968;V16:1630039278516704;V26:LcdpEmcProjectOracleMapper;V6:mapper;V1:4;V3:yes;V3:yes;V55:emc.ProjectInfoModify.mapper.LcdpEmcProjectOracleMapper;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1640700360159968 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1752;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1640700360159968 AND DBMS_LOB.SUBSTR(CONTENT,1752,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.ProjectInfoModify.mapper.LcdpEmcProjectMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM '
+ || CHR(10)
+ || '          (SELECT tep.ID,tep.PROJNO,tep.PROJNAME,tep.PROJNODE,tep.status,tep.TOREPORTEDITDATE '
+ || CHR(10)
+ || '            FROM T_EMC_PROJECT tep'
+ || CHR(10)
+ || '            WHERE tep.STATUS = ''auditFinished'' AND tep.STATUS <![CDATA[<>]]> ''cancel'''
+ || CHR(10)
+ || '            AND NOT EXISTS (SELECT 1 FROM T_EMC_ORDER_TASK teot WHERE tep.ID =teot.PROJID AND teot.STATUS <![CDATA[<>]]> ''done'' AND teot.ANALYSISTYPE <![CDATA[<>]]> ''calculate'')'
+ || CHR(10)
+ || '            AND NOT EXISTS (SELECT 1 FROM T_EMC_SAMPLE tes WHERE tes.PROJID =tep.ID AND tes.STATUS <![CDATA[<>]]> ''done'')'
+ || CHR(10)
+ || '            AND EXISTS (SELECT 1 FROM T_EMC_SAMPLE tes WHERE tes.PROJID = tep.ID)'
+ || CHR(10)
+ || '            ) T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1640700360159968 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1699784763219680') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1699784763219680') <>
+    'V16:1699784763219680;V16:1631067840535008;V24:ReportSearchByYWEditPage;V4:view;V1:6;V3:yes;V3:yes;V50:emc.ReportSearchByYW.page.ReportSearchByYWEditPage;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1699784763219680 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1038;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1699784763219680 AND DBMS_LOB.SUBSTR(CONTENT,1038,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.ReportSearchByYW.server.LcdpEmcReportService";'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    pageParam.BUSINESSUSERID_SEQ = workspace.user.id;'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function reportsearchbyyw_edit_grid_onrowactive(index, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.getComp(''Uploader_1'').setOptions({'
+ || CHR(13)
+ || CHR(10)
+ || '        bizId: row.id,'
+ || CHR(13)
+ || CHR(10)
+ || '        ext_SEQ: ''sealPdf'''
+ || CHR(13)
+ || CHR(10)
+ || '    });'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function button_1_onclick() {'
+ || CHR(13)
+ || CHR(10)
+ || '    var _this = this;'
+ || CHR(13)
+ || CHR(10)
+ || '    var selections = Gikam.getComp(''reportsearchbyyw-edit-grid'').getSelections();'
+ || CHR(13)
+ || CHR(10)
+ || '    if (Gikam.isEmpty(selections)) {'
+ || CHR(13)
+ || CHR(10)
+ || '        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');'
+ || CHR(13)
+ || CHR(10)
+ || '        return;'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '    Gikam.postText(IFM_CONTEXT + ''/secure/emc/module/bp/report/reports/action/report-pack'', Gikam.getJsonWrapper({}, ['''', selections])'
+ || CHR(13)
+ || CHR(10)
+ || '    ).done(function (fileUrl) {'
+ || CHR(13)
+ || CHR(10)
+ || '        if (fileUrl != '''' && fileUrl != undefined) {'
+ || CHR(13)
+ || CHR(10)
+ || '            Gikam.download(IFM_CONTEXT + fileUrl);'
+ || CHR(13)
+ || CHR(10)
+ || '        } else {'
+ || CHR(13)
+ || CHR(10)
+ || '            Gikam.alert(''没有可下载的附件'');'
+ || CHR(13)
+ || CHR(10)
+ || '        }'
+ || CHR(13)
+ || CHR(10)
+ || '    })'
+ || CHR(13)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1699784763219680 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1631067842042336') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1631067842042336') <>
+    'V16:1631067842042336;V16:1631067842025978;V20:LcdpEmcReportService;V4:java;V1:1;V3:yes;V3:yes;V48:emc.ReportSearchByYW.server.LcdpEmcReportService;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1631067842042336 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1552;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1631067842042336 AND DBMS_LOB.SUBSTR(CONTENT,1552,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcReportService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_REPORT";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.ReportSearchByYW.mapper.LcdpEmcReportMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1631067842042336 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1572;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1631067842042336 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1572,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class ReportSearchByYWLcdpEmcReportServicev1m1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_REPORT";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.ReportSearchByYW.mapper.LcdpEmcReportMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1632479276270112') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1632479276270112') <>
+    'V16:1632479276270112;V16:1631067842468320;V25:LcdpEmcReportOracleMapper;V6:mapper;V1:2;V3:yes;V3:yes;V53:emc.ReportSearchByYW.mapper.LcdpEmcReportOracleMapper;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1632479276270112 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1812;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1632479276270112 AND DBMS_LOB.SUBSTR(CONTENT,1812,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.ReportSearchByYW.mapper.LcdpEmcReportMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM('
+ || CHR(10)
+ || '          SELECT '
+ || CHR(10)
+ || '            ter.ID,'
+ || CHR(10)
+ || '            tebc.BIZCATEGORYNAME,'
+ || CHR(10)
+ || '            CASE ter.STATUS '
+ || CHR(10)
+ || '            WHEN ''reportArchiving'' THEN ''报告归档'''
+ || CHR(10)
+ || '            WHEN ''reportPrint'' THEN ''报告打印'''
+ || CHR(10)
+ || '            WHEN ''reportSeal'' THEN ''报告发送'''
+ || CHR(10)
+ || '            END AS STATUS,'
+ || CHR(10)
+ || '            ter.REPORTNO,'
+ || CHR(10)
+ || '            tep.ENTRUSTORGNAME,'
+ || CHR(10)
+ || '            tep.TESTORGNAME,'
+ || CHR(10)
+ || '            tep.BUSINESSUSERNAME,'
+ || CHR(10)
+ || '            tep.BUSINESSUSERID'
+ || CHR(10)
+ || '            FROM T_EMC_REPORT ter '
+ || CHR(10)
+ || '            LEFT JOIN t_emc_project tep ON tep.id=ter.PROJID'
+ || CHR(10)
+ || '            LEFT JOIN T_EMC_BIZ_CATEGORY tebc ON tebc.id=tep.BIZCATEGORYID'
+ || CHR(10)
+ || '            WHERE ter.STATUS IN (''reportArchiving'',''reportPrint'',''reportSeal'')'
+ || CHR(10)
+ || '          ) T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1632479276270112 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1654966506939200') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1654966506939200') <>
+    'V16:1654966506939200;V16:1654892685304660;V24:SampleInfoModifyEditPage;V4:view;V1:2;V3:yes;V3:yes;V50:emc.SampleInfoModify.page.SampleInfoModifyEditPage;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654966506939200 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=427;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654966506939200 AND DBMS_LOB.SUBSTR(CONTENT,427,1)=
+    CHR(13)
+ || CHR(10)
+ || 'var baseUrl = "emc.SampleInfoModify.server.LcdpEmcSampleService";'
+ || CHR(13)
+ || CHR(10)
+ || 'var pageParam = CURRENT_WINDOW.getPageParam();'
+ || CHR(13)
+ || CHR(10)
+ || 'var detailPagePath = "emc.SampleInfoModify.page.SampleInfoModifyDetailPage";'
+ || CHR(13)
+ || CHR(10)
+ || 'function getGridRequestData() {'
+ || CHR(13)
+ || CHR(10)
+ || '    return pageParam;'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'function loadDetailPage(field, row) {'
+ || CHR(13)
+ || CHR(10)
+ || '    if (field === ''sampleno''){'
+ || CHR(13)
+ || CHR(10)
+ || '        workspace.window.loadPage(detailPagePath, {id : row.id,sourcePage: ''edit''});'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10);
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654966506939200 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1654892686377792') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1654892686377792') <>
+    'V16:1654892686377792;V16:1654892686369620;V20:LcdpEmcSampleService;V4:java;V1:1;V3:yes;V3:yes;V48:emc.SampleInfoModify.server.LcdpEmcSampleService;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654892686377792 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1552;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654892686377792 AND DBMS_LOB.SUBSTR(CONTENT,1552,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpEmcSampleService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_SAMPLE";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.SampleInfoModify.mapper.LcdpEmcSampleMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654892686377792 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=1572;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654892686377792 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1572,1)=
+    'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class SampleInfoModifyLcdpEmcSampleServicev1m1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getTable() {'
+ || CHR(10)
+ || '        return "T_EMC_SAMPLE";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Override'
+ || CHR(10)
+ || '    public String getQuerySqlMapperId() {'
+ || CHR(10)
+ || '        return "emc.SampleInfoModify.mapper.LcdpEmcSampleMapper.selectByCondition";'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 新增数据'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp新增数据",type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    @Audit(AuditConstant.INSERT)'
+ || CHR(10)
+ || '    public String insertData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '        return this.lcdpInsert(list);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1654892686631744') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1654892686631744') <>
+    'V16:1654892686631744;V16:1654892686623552;V25:LcdpEmcSampleOracleMapper;V6:mapper;V1:1;V3:yes;V3:yes;V53:emc.SampleInfoModify.mapper.LcdpEmcSampleOracleMapper;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654892686631744 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=1150;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654892686631744 AND DBMS_LOB.SUBSTR(CONTENT,1150,1)=
+    '<?xml version="1.0" encoding="UTF-8"?>'
+ || CHR(10)
+ || '<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'
+ || CHR(10)
+ || '<mapper namespace="emc.SampleInfoModify.mapper.LcdpEmcSampleMapper">'
+ || CHR(10)
+ || '    <select id="selectByCondition" parameterType="map" resultType="map">'
+ || CHR(10)
+ || '        SELECT T.*'
+ || CHR(10)
+ || '          FROM T_EMC_SAMPLE T'
+ || CHR(10)
+ || '        <where>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />'
+ || CHR(10)
+ || '            <if test=''authority_audit == "1"''>'
+ || CHR(10)
+ || '                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '            </if>'
+ || CHR(10)
+ || '            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />'
+ || CHR(10)
+ || '        </where>'
+ || CHR(10)
+ || '        ORDER BY'
+ || CHR(10)
+ || '        <choose>'
+ || CHR(10)
+ || '            <when test="orderParams != null and orderParams.size > 0">'
+ || CHR(10)
+ || '                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />'
+ || CHR(10)
+ || '            </when>'
+ || CHR(10)
+ || '            <otherwise>'
+ || CHR(10)
+ || '                T.ID DESC'
+ || CHR(10)
+ || '            </otherwise>'
+ || CHR(10)
+ || '        </choose>'
+ || CHR(10)
+ || '    </select>'
+ || CHR(10)
+ || CHR(10)
+ || '</mapper>';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1654892686631744 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
   IF NOT actual.EXISTS('1754830408176672') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
   IF actual('1754830408176672') <>
     'V16:1754830408176672;V16:1734443928132640;V17:equiptInOutStatus;V4:view;V1:5;V3:yes;V3:yes;V38:emc.equiptInOut.page.equiptInOutStatus;V1:3;V1:0;'
@@ -19952,23 +24650,108 @@ END;
 DECLARE
   TYPE row_map IS TABLE OF VARCHAR2(32767) INDEX BY VARCHAR2(128);
   actual row_map;
-  oversized NUMBER;
+  n NUMBER;
 BEGIN
-  FOR r IN (SELECT TO_CHAR(ID) AS ROW_ID, CASE WHEN ID IS NULL THEN 'N;' ELSE 'V'||LENGTH(ID)||':'||ID||';' END
-      || CASE WHEN MODULEPAGEHISTORYID IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(MODULEPAGEHISTORYID,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(MODULEPAGEHISTORYID,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
-      || CASE WHEN MODULEPAGEID IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(MODULEPAGEID,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(MODULEPAGEID,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
-      || CASE WHEN MODULEPAGEVERSION IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(MODULEPAGEVERSION,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(MODULEPAGEVERSION,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
-      || CASE WHEN COMPID IS NULL THEN 'N;' ELSE 'V'||LENGTH(COMPID)||':'||COMPID||';' END
-      || CASE WHEN TYPE IS NULL THEN 'N;' ELSE 'V'||LENGTH(TYPE)||':'||TYPE||';' END
-      || CASE WHEN PARENTID IS NULL THEN 'N;' ELSE 'V'||LENGTH(PARENTID)||':'||PARENTID||';' END
-      || CASE WHEN PREVIOUSID IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(PREVIOUSID,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(PREVIOUSID,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
-      || CASE WHEN VISIBLE IS NULL THEN 'N;' ELSE 'V'||LENGTH(VISIBLE)||':'||VISIBLE||';' END
-      || CASE WHEN EDITABLE IS NULL THEN 'N;' ELSE 'V'||LENGTH(EDITABLE)||':'||EDITABLE||';' END
-      || CASE WHEN CONFIG IS NULL THEN 'N;' ELSE 'V'||LENGTH(CONFIG)||':'||CONFIG||';' END
-      || CASE WHEN CONFIGEXTEND IS NULL THEN 'N;' ELSE 'V'||LENGTH(CONFIGEXTEND)||':'||CONFIGEXTEND||';' END AS SIGNATURE FROM T_LCDP_MODULE_PAGE_COMP) LOOP
-    actual(r.ROW_ID) := r.SIGNATURE;
+  FOR r IN (SELECT TO_CHAR(ID) AS ROW_ID, ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND FROM T_LCDP_MODULE_PAGE_COMP) LOOP
+    actual(r.ROW_ID) := CASE WHEN r.ID IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.ID)||':'||r.ID||';' END
+      || CASE WHEN r.MODULEPAGEHISTORYID IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(r.MODULEPAGEHISTORYID,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(r.MODULEPAGEHISTORYID,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
+      || CASE WHEN r.MODULEPAGEID IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(r.MODULEPAGEID,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(r.MODULEPAGEID,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
+      || CASE WHEN r.MODULEPAGEVERSION IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(r.MODULEPAGEVERSION,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(r.MODULEPAGEVERSION,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
+      || CASE WHEN r.COMPID IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.COMPID)||':'||r.COMPID||';' END
+      || CASE WHEN r.TYPE IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.TYPE)||':'||r.TYPE||';' END
+      || CASE WHEN r.PARENTID IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.PARENTID)||':'||r.PARENTID||';' END
+      || CASE WHEN r.PREVIOUSID IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(r.PREVIOUSID,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(r.PREVIOUSID,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
+      || CASE WHEN r.VISIBLE IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.VISIBLE)||':'||r.VISIBLE||';' END
+      || CASE WHEN r.EDITABLE IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.EDITABLE)||':'||r.EDITABLE||';' END
+      || CASE WHEN r.CONFIG IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.CONFIG)||':'||r.CONFIG||';' END
+      || CASE WHEN r.CONFIGEXTEND IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.CONFIGEXTEND)||':'||r.CONFIGEXTEND||';' END;
   END LOOP;
-  IF actual.COUNT <> 78 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual.COUNT <> 229 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('03d3fb8056c4455ea31cc109399b49da') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('03d3fb8056c4455ea31cc109399b49da') <>
+    'V32:03d3fb8056c4455ea31cc109399b49da;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V150:{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"03d3fb8056c4455ea31cc109399b49da"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('0e032a480e3d486689e316f58f218758') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('0e032a480e3d486689e316f58f218758') <>
+    'V32:0e032a480e3d486689e316f58f218758;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V781:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"custom","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.projno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"0e032a480e3d486689e316f58f218758","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projno","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('15d5dc2adff84425a5055dedf4ba0395') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('15d5dc2adff84425a5055dedf4ba0395') <>
+    'V32:15d5dc2adff84425a5055dedf4ba0395;V16:1794420245005760;V16:1587156564485600;V2:10;N;V6:Button;V32:d2308cb8c10f4fc3939389036be3457e;N;N;N;V377:{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"result-record-2","id":"Button_2","text":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_2.text","type":"i18n"},"uuid":"15d5dc2adff84425a5055dedf4ba0395","onClick__$S$__":"button_2_onclick","visibleRoles":[]};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('3a2d384e4c83460db0cf7a8b18078f3a') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('3a2d384e4c83460db0cf7a8b18078f3a') <>
+    'V32:3a2d384e4c83460db0cf7a8b18078f3a;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V617:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"source":"dataSource","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.pic.title","type":"i18n"},"gridColumnType":"image","type":"image","uuid":"3a2d384e4c83460db0cf7a8b18078f3a","visibleRoles":[],"children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_pic","renderType":"","value":"","editRoles":[],"onClick__$S$__":"","height":50,"editor":false,"contentAlign":"center","sort":true,"filter":true,"formatter__$S$__":"","field":"pic","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('3e9cb257b4f6483c92e23c28053065ec') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('3e9cb257b4f6483c92e23c28053065ec') <>
+    'V32:3e9cb257b4f6483c92e23c28053065ec;V16:1794420245005760;V16:1587156564485600;V2:10;N;V6:Button;V32:d2308cb8c10f4fc3939389036be3457e;N;N;N;V372:{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"send-cloud","id":"Button_1","text":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_1.text","type":"i18n"},"uuid":"3e9cb257b4f6483c92e23c28053065ec","onClick__$S$__":"button_1_onclick","visibleRoles":[]};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('4359437e9449430f8aa2ab7c78743ef2') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('4359437e9449430f8aa2ab7c78743ef2') <>
+    'V32:4359437e9449430f8aa2ab7c78743ef2;V16:1794420245005760;V16:1587156564485600;V2:10;N;V6:Button;V32:d2308cb8c10f4fc3939389036be3457e;N;N;N;V369:{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"preview","id":"Button_3","text":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_3.text","type":"i18n"},"uuid":"4359437e9449430f8aa2ab7c78743ef2","onClick__$S$__":"button_3_onclick","visibleRoles":[]};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('4bf9c990bf754486b67c88dd315266b4') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('4bf9c990bf754486b67c88dd315266b4') <>
+    'V32:4bf9c990bf754486b67c88dd315266b4;V16:1794420245005760;V16:1587156564485600;V2:10;N;V11:LayoutNorth;V32:cec1f0851ec44d3bb0b71b4c4e19c9d6;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"4bf9c990bf754486b67c88dd315266b4","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('66a576f4e78947dc8e0fdf53cb8b8dd5') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('66a576f4e78947dc8e0fdf53cb8b8dd5') <>
+    'V32:66a576f4e78947dc8e0fdf53cb8b8dd5;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V793:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"custom","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.contractno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"66a576f4e78947dc8e0fdf53cb8b8dd5","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_contractno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"contractno","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('6ec897738b6649219bc2233406058492') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('6ec897738b6649219bc2233406058492') <>
+    'V32:6ec897738b6649219bc2233406058492;V16:1794420245005760;V16:1587156564485600;V2:10;N;V11:LayoutSouth;V32:cec1f0851ec44d3bb0b71b4c4e19c9d6;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"6ec897738b6649219bc2233406058492","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('7542dcb866ee4528ac25ebe46a0c40ee') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('7542dcb866ee4528ac25ebe46a0c40ee') <>
+    'V32:7542dcb866ee4528ac25ebe46a0c40ee;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V794:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expressno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"7542dcb866ee4528ac25ebe46a0c40ee","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_expressno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"expressno","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('93d29592746a4aa9a4d7323005a78a63') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('93d29592746a4aa9a4d7323005a78a63') <>
+    'V32:93d29592746a4aa9a4d7323005a78a63;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V788:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurer.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"93d29592746a4aa9a4d7323005a78a63","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_issurer","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"issurer","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('94a1c5ea281742b2b34191ead98a7e39') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('94a1c5ea281742b2b34191ead98a7e39') <>
+    'V32:94a1c5ea281742b2b34191ead98a7e39;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V800:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expresstype.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"94a1c5ea281742b2b34191ead98a7e39","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_expresstype","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"expresstype","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('9cdc4af4439f426e884d7b082be9421f') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('9cdc4af4439f426e884d7b082be9421f') <>
+    'V32:9cdc4af4439f426e884d7b082be9421f;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V805:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"custom","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.entrustorgname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"9cdc4af4439f426e884d7b082be9421f","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_entrustorgname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"entrustorgname","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('a934c49411cb4c959ac894eaf3d141c2') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('a934c49411cb4c959ac894eaf3d141c2') <>
+    'V32:a934c49411cb4c959ac894eaf3d141c2;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:LayoutWest;V32:cec1f0851ec44d3bb0b71b4c4e19c9d6;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"a934c49411cb4c959ac894eaf3d141c2"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('bfeafee3587a4cc49b70371bf7f7209d') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('bfeafee3587a4cc49b70371bf7f7209d') <>
+    'V32:bfeafee3587a4cc49b70371bf7f7209d;V16:1794420245005760;V16:1587156564485600;V2:10;N;V12:LayoutCenter;V32:cec1f0851ec44d3bb0b71b4c4e19c9d6;N;N;N;V121:{"childrenWidgetId":["d370cfe8af584569b2dd10c4696b1126"],"id":"LayoutCenter_1","uuid":"bfeafee3587a4cc49b70371bf7f7209d"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('c36cc9805580481b94c0dfb5f140f5dc') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('c36cc9805580481b94c0dfb5f140f5dc') <>
+    'V32:c36cc9805580481b94c0dfb5f140f5dc;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:LayoutEast;V32:cec1f0851ec44d3bb0b71b4c4e19c9d6;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"c36cc9805580481b94c0dfb5f140f5dc"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('cec1f0851ec44d3bb0b71b4c4e19c9d6') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('cec1f0851ec44d3bb0b71b4c4e19c9d6') <>
+    'V32:cec1f0851ec44d3bb0b71b4c4e19c9d6;V16:1794420245005760;V16:1587156564485600;V2:10;N;V6:Layout;N;N;N;N;V286:{"layout":"all","childrenWidgetId":["4bf9c990bf754486b67c88dd315266b4","6ec897738b6649219bc2233406058492","c36cc9805580481b94c0dfb5f140f5dc","a934c49411cb4c959ac894eaf3d141c2","bfeafee3587a4cc49b70371bf7f7209d"],"id":"Layout_1","uuid":"cec1f0851ec44d3bb0b71b4c4e19c9d6","height":"100%"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('d2308cb8c10f4fc3939389036be3457e') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('d2308cb8c10f4fc3939389036be3457e') <>
+    'V32:d2308cb8c10f4fc3939389036be3457e;V16:1794420245005760;V16:1587156564485600;V2:10;N;V11:GridToolbar;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V311:{"childrenWidgetId":["3e9cb257b4f6483c92e23c28053065ec","15d5dc2adff84425a5055dedf4ba0395","4359437e9449430f8aa2ab7c78743ef2"],"generalPanelTrigger":[],"toolbarAlign":"left","toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"d2308cb8c10f4fc3939389036be3457e"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('d370cfe8af584569b2dd10c4696b1126') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('d370cfe8af584569b2dd10c4696b1126') <>
+    'V32:d370cfe8af584569b2dd10c4696b1126;V16:1794420245005760;V16:1587156564485600;V2:10;N;V4:Grid;V32:bfeafee3587a4cc49b70371bf7f7209d;N;N;N;V3000:{"onCheckboxClick__$S$__":"","columnAutoFill":false,"pageSize":50,"autoSave":true,"onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"checkOnActiveGroupRow":true,"exportWithStyle":true,"onValidating__$S$__":"","id":"reportsendexpressdelivery-edit-grid","height":"100%","order":{},"onCellClick__$S$__":"loadDetailPage","deleteFormatter__$S$__":"","textLineFeed":false,"showPagination":true,"allowMultiColSort":false,"columnResize":true,"onBeforeDelete__$S$__":"","checkOneOnActive":true,"activateFormatter__$S$__":"","childrenWidgetId":["da0fe38357984af6a5d4ea299da77a72","03d3fb8056c4455ea31cc109399b49da","0e032a480e3d486689e316f58f218758","9cdc4af4439f426e884d7b082be9421f","66a576f4e78947dc8e0fdf53cb8b8dd5","f2cd30d5446f4d3f805c97c1a020328f","93d29592746a4aa9a4d7323005a78a63","94a1c5ea281742b2b34191ead98a7e39","7542dcb866ee4528ac25ebe46a0c40ee","3a2d384e4c83460db0cf7a8b18078f3a"],"headRequestData":{},"columns":[],"commonSearch":false,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onColumnsWidthChange__$S$__":"","keyDownSelectContent":true,"toolbarAlign":"left","formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","showCheckedNum":false,"contextmenu_childrenWidgetId":[],"toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"requestData":{},"activateFirstRow":false,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","onBeforeLoad__$S$__":"","toolbarHidden":false,"url":"emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService.selectPaginationData","instantSavePath":"emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService.updateData","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":fa'
+ || 'lse,"showCheckedBadgeGt":1,"onBeforeHeadRequest__$S$__":"","onRendered__$S$__":"","advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"projid","filterOpen":true,"suspendFormatter__$S$__":"","uuid":"d2308cb8c10f4fc3939389036be3457e","contextMenuConfig":false,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","activeOnCheck":false,"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":[],"sortEnable":true},"initRequest":true,"onAfterChoose__$S$__":"","onBeforeSuspend__$S$__":"","sort":true,"exportExcelHeader":"","onColumnActive__$S$__":"","onBeforeActivate__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"formatterParamOnExportExcel__$S$__":"","toggleCheckOnActive":true,"appendButtonsToGeneral_childrenWidgetId":[],"serverSearch":true,"onUpdated__$S$__":"","exportHiddenColumns":true,"onDrag__$S$__":"","loadingMode":"normal","onRowDblclick__$S$__":"","cellValueFillByDrag":false,"showSortArrow":true,"enterKeyDownActive":true,"onAllSelect__$S$__":"","onBeforeUpdate__$S$;V238:__":"","generalButtonGroup":[],"onBeforeEditorRender__$S$__":"","enableKeySwitchEditor":true,"checkedIds":[],"toolbar_childrenWidgetId":["d2308cb8c10f4fc3939389036be3457e"],"pageList":[50,100,150,200,"grid.all.data"],"checkOnActive":true};'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('da0fe38357984af6a5d4ea299da77a72') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('da0fe38357984af6a5d4ea299da77a72') <>
+    'V32:da0fe38357984af6a5d4ea299da77a72;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V161:{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"da0fe38357984af6a5d4ea299da77a72"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('f2cd30d5446f4d3f805c97c1a020328f') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('f2cd30d5446f4d3f805c97c1a020328f') <>
+    'V32:f2cd30d5446f4d3f805c97c1a020328f;V16:1794420245005760;V16:1587156564485600;V2:10;N;V10:GridColumn;V32:d370cfe8af584569b2dd10c4696b1126;N;N;N;V785:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"source":"dataSource","title":{"i18nCode":"emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurerdate.title","type":"i18n"},"gridColumnType":"date","type":"date","uuid":"f2cd30d5446f4d3f805c97c1a020328f","visibleRoles":[],"getDateRanger__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_issurerdate","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"issurerdate","width":150,"fixed":false,"getPrefixIcons__$S$__":""};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
   IF NOT actual.EXISTS('2f972d1103fc4e2db50660c3757aa68a') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
   IF actual('2f972d1103fc4e2db50660c3757aa68a') <>
     'V32:2f972d1103fc4e2db50660c3757aa68a;V16:1607008533293824;V16:1596797917215712;V2:11;N;V11:LayoutSouth;V32:64ad0bca270c4a79b8645013179b70d8;N;N;N;V131:{"childrenWidgetId":[],"id":"LayoutSouth_1","title":{"en-US":"","zh-CN":""},"uuid":"2f972d1103fc4e2db50660c3757aa68a","height":"0"};N;'
@@ -20167,6 +24950,532 @@ BEGIN
   IF actual('fef75eca8ad245ff96dc0fdd929bdbd8') <>
     'V32:fef75eca8ad245ff96dc0fdd929bdbd8;V16:1704403149227776;V16:1597040296782016;V1:4;N;V10:GridColumn;V32:cca8e08855904864a87dc503e70fca35;N;N;N;V754:{"getStyle__$S$__":"","childrenWidgetId":[],"enableSecond":true,"lcdpVisible":true,"validators":[],"source":"dataSource","title":{"i18nCode":"emc.equiptInOut.page.equiptInOutRecord.Grid_1.operatetime.title","type":"i18n"},"gridColumnType":"dateTime","type":"dateTime","uuid":"fef75eca8ad245ff96dc0fdd929bdbd8","visibleRoles":[],"getDateRanger__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_operatetime","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"operatetime","width":150,"fixed":false,"getPrefixIcons__$S$__":""};N;'
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('108b0230ec614cbcb2bea515434865ea') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('108b0230ec614cbcb2bea515434865ea') <>
+    'V32:108b0230ec614cbcb2bea515434865ea;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V755:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"108b0230ec614cbcb2bea515434865ea","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projno","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('1ecd94c33aac49b59542f8f6a66159df') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('1ecd94c33aac49b59542f8f6a66159df') <>
+    'V32:1ecd94c33aac49b59542f8f6a66159df;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V312:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"accepteusername","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_accepteusername","title":{"i18nCode":"T_EMC_ORDER.ACCEPTEUSERNAME","type":"i18n","zh-CN":"接收人"},"gridColumnType":"text","uuid":"1ecd94c33aac49b59542f8f6a66159df"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('269d57c9717f49538ffb412deb58ae49') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('269d57c9717f49538ffb412deb58ae49') <>
+    'V32:269d57c9717f49538ffb412deb58ae49;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V291:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"ordernum","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_ordernum","title":{"i18nCode":"T_EMC_ORDER.ORDERNUM","type":"i18n","zh-CN":"排序码"},"gridColumnType":"text","uuid":"269d57c9717f49538ffb412deb58ae49"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('2843c346eabb40789612338b2d49121f') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('2843c346eabb40789612338b2d49121f') <>
+    'V32:2843c346eabb40789612338b2d49121f;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V477:{"editor":false,"childrenWidgetId":[],"visible":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_ORDER.SENDDATE","type":"i18n","zh-CN":"送样日期"},"gridColumnType":"date","type":"date","uuid":"2843c346eabb40789612338b2d49121f","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","field":"senddate","children":[{}],"width":150,"fixed":false,"id":"GridColumn_senddate"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('2d7084b974c74de4ab62de1c56516bb9') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('2d7084b974c74de4ab62de1c56516bb9') <>
+    'V32:2d7084b974c74de4ab62de1c56516bb9;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V576:{"editor":false,"childrenWidgetId":[],"enableSecond":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_ORDER.ACCEPTEDDATE","type":"i18n","zh-CN":"接收日期"},"gridColumnType":"dateTime","type":"dateTime","uuid":"2d7084b974c74de4ab62de1c56516bb9","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","formatter__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","field":"accepteddate","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"width":150,"fixed":false,"id":"GridColumn_accepteddate","onDataChange__$S$__":"","getPrefixIcons__$S$__":""};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('31427b7ed84f47e9ba1d5f8c125b8ff0') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('31427b7ed84f47e9ba1d5f8c125b8ff0') <>
+    'V32:31427b7ed84f47e9ba1d5f8c125b8ff0;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V526:{"editor":false,"childrenWidgetId":[],"validators":[],"onInput__$S$__":"","sort":true,"autoCompleteUrl":"","title":{"i18nCode":"T_EMC_ORDER.ORDERNO","type":"i18n","zh-CN":"样品编号"},"gridColumnType":"text","type":"text","uuid":"31427b7ed84f47e9ba1d5f8c125b8ff0","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","onKeyDown__$S$__":"","textStyleFormatter__$S$__":"","field":"orderno","children":[{}],"width":150,"fixed":false,"id":"GridColumn_orderno","placeholder":{"en-US":"","zh-CN":""},"value":"","onDataChange__$S$__":""};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('36f3d9f3b1b44aca9244d1b72563b3a0') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('36f3d9f3b1b44aca9244d1b72563b3a0') <>
+    'V32:36f3d9f3b1b44aca9244d1b72563b3a0;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V293:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"structure","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_structure","title":{"i18nCode":"T_EMC_ORDER.STRUCTURE","type":"i18n","zh-CN":"结构"},"gridColumnType":"text","uuid":"36f3d9f3b1b44aca9244d1b72563b3a0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('3e1a96df3345489bb8e4ebd73d447ac4') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('3e1a96df3345489bb8e4ebd73d447ac4') <>
+    'V32:3e1a96df3345489bb8e4ebd73d447ac4;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V761:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"3e1a96df3345489bb8e4ebd73d447ac4","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projname","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('43c57fcfd1054494b585034799ca904d') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('43c57fcfd1054494b585034799ca904d') <>
+    'V32:43c57fcfd1054494b585034799ca904d;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V307:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"ordercategory","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_ordercategory","title":{"i18nCode":"T_EMC_ORDER.ORDERCATEGORY","type":"i18n","zh-CN":"样品类型"},"gridColumnType":"text","uuid":"43c57fcfd1054494b585034799ca904d"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('459228db6c56446bba0a667efbb7affe') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('459228db6c56446bba0a667efbb7affe') <>
+    'V32:459228db6c56446bba0a667efbb7affe;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V307:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplingdepth","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplingdepth","title":{"i18nCode":"T_EMC_ORDER.SAMPLINGDEPTH","type":"i18n","zh-CN":"采样深度"},"gridColumnType":"text","uuid":"459228db6c56446bba0a667efbb7affe"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('4b01c7a3a6eb4e748be0fff02d82b5af') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('4b01c7a3a6eb4e748be0fff02d82b5af') <>
+    'V32:4b01c7a3a6eb4e748be0fff02d82b5af;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V311:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"accepteduserid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_accepteduserid","title":{"i18nCode":"T_EMC_ORDER.ACCEPTEDUSERID","type":"i18n","zh-CN":"接收人编码"},"gridColumnType":"text","uuid":"4b01c7a3a6eb4e748be0fff02d82b5af"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('53f7cae5046148ae8c9b3203af8c5d3a') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('53f7cae5046148ae8c9b3203af8c5d3a') <>
+    'V32:53f7cae5046148ae8c9b3203af8c5d3a;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V288:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"qcname","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_qcname","title":{"i18nCode":"T_EMC_ORDER.QCNAME","type":"i18n","zh-CN":"QC类型中文"},"gridColumnType":"text","uuid":"53f7cae5046148ae8c9b3203af8c5d3a"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('540cb3b381f543f88c1765b8da449b9f') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('540cb3b381f543f88c1765b8da449b9f') <>
+    'V32:540cb3b381f543f88c1765b8da449b9f;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V324:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplecompletetime","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplecompletetime","title":{"i18nCode":"T_EMC_ORDER.SAMPLECOMPLETETIME","type":"i18n","zh-CN":"采样完成时间"},"gridColumnType":"text","uuid":"540cb3b381f543f88c1765b8da449b9f"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('5ab019b222d24f3582a512fd97e9dff9') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('5ab019b222d24f3582a512fd97e9dff9') <>
+    'V32:5ab019b222d24f3582a512fd97e9dff9;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:LayoutWest;V32:82eb4560aafe45a0bea03b5fa9aaf7d5;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"5ab019b222d24f3582a512fd97e9dff9"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('63cfcd1874644531b676ed28c70676ad') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('63cfcd1874644531b676ed28c70676ad') <>
+    'V32:63cfcd1874644531b676ed28c70676ad;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V500:{"editor":false,"childrenWidgetId":[],"visible":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_ORDER.SAMPLEBEGINDATE","type":"i18n","zh-CN":"采样开始日期"},"gridColumnType":"date","type":"date","uuid":"63cfcd1874644531b676ed28c70676ad","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","field":"samplebegindate","children":[{}],"width":150,"fixed":false,"id":"GridColumn_samplebegindate"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('75a3ca1dc1434599b2fc22f08d43b21f') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('75a3ca1dc1434599b2fc22f08d43b21f') <>
+    'V32:75a3ca1dc1434599b2fc22f08d43b21f;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V312:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"qccategorycode","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_qccategorycode","title":{"i18nCode":"T_EMC_ORDER.QCCATEGORYCODE","type":"i18n","zh-CN":"QC类型编码"},"gridColumnType":"text","uuid":"75a3ca1dc1434599b2fc22f08d43b21f"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('7e3c7d95cb914ef0888f3d65450b75ec') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('7e3c7d95cb914ef0888f3d65450b75ec') <>
+    'V32:7e3c7d95cb914ef0888f3d65450b75ec;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V300:{"editor":true,"childrenWidgetId":[],"visible":true,"field":"termination","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_termination","title":{"i18nCode":"T_EMC_ORDER.TERMINATION","type":"i18n","zh-CN":"是否终止"},"gridColumnType":"text","uuid":"7e3c7d95cb914ef0888f3d65450b75ec"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('82eb4560aafe45a0bea03b5fa9aaf7d5') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('82eb4560aafe45a0bea03b5fa9aaf7d5') <>
+    'V32:82eb4560aafe45a0bea03b5fa9aaf7d5;V16:1630288250714592;V16:1597703224613312;V1:6;N;V6:Layout;N;N;N;N;V286:{"layout":"all","childrenWidgetId":["99dd6c4163324f1387cd6e2e806b6171","93b879eaba884a26b20f3145f09d7fb8","e40b4295908d4d7280d66733a94739b2","5ab019b222d24f3582a512fd97e9dff9","bcbdf5275742463e90c78656c035a6ce"],"id":"Layout_1","uuid":"82eb4560aafe45a0bea03b5fa9aaf7d5","height":"100%"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8bbb3277d837410ba717444064d898f3') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8bbb3277d837410ba717444064d898f3') <>
+    'V32:8bbb3277d837410ba717444064d898f3;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V782:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.clientordername.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"8bbb3277d837410ba717444064d898f3","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_clientordername","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"clientordername","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8df4d54376d14ef0afd8ef43c16a1ddd') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8df4d54376d14ef0afd8ef43c16a1ddd') <>
+    'V32:8df4d54376d14ef0afd8ef43c16a1ddd;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V309:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"monitortmplid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_monitortmplid","title":{"i18nCode":"T_EMC_ORDER.MONITORTMPLID","type":"i18n","zh-CN":"监测模板ID"},"gridColumnType":"text","uuid":"8df4d54376d14ef0afd8ef43c16a1ddd"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8f38a478364c4d0087960556a9d7d925') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8f38a478364c4d0087960556a9d7d925') <>
+    'V32:8f38a478364c4d0087960556a9d7d925;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V278:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"odor","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_odor","title":{"i18nCode":"T_EMC_ORDER.ODOR","type":"i18n","zh-CN":"气味"},"gridColumnType":"text","uuid":"8f38a478364c4d0087960556a9d7d925"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('90207590e68d4f62a5c5a6efa25bbabe') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('90207590e68d4f62a5c5a6efa25bbabe') <>
+    'V32:90207590e68d4f62a5c5a6efa25bbabe;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V348:{"editor":true,"childrenWidgetId":[],"visible":true,"field":"samplenum","children":[{}],"width":100,"fixed":false,"sort":true,"id":"GridColumn_samplenum","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.samplenum.title","type":"i18n"},"gridColumnType":"text","uuid":"90207590e68d4f62a5c5a6efa25bbabe"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('91ca9866f9cf4961a2d4bbccd88b639c') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('91ca9866f9cf4961a2d4bbccd88b639c') <>
+    'V32:91ca9866f9cf4961a2d4bbccd88b639c;V16:1630288250714592;V16:1597703224613312;V1:6;N;V4:Grid;V32:bcbdf5275742463e90c78656c035a6ce;N;N;N;V3000:{"onCheckboxClick__$S$__":"","onRendered__$S$__":"","columnAutoFill":false,"advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"orderno","pageSize":50,"filterOpen":true,"autoSave":true,"suspendFormatter__$S$__":"","uuid":"af7cc05d27ac451f8c6e8e5eeb1d6f71","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"contextMenuConfig":false,"checkOnActiveGroupRow":true,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"orderinfomodify-edit-grid","activeOnCheck":false,"height":"100%","order":{},"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":["projno"],"sortEnable":true},"onCellClick__$S$__":"loadDetailPage","initRequest":true,"onAfterChoose__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"exportExcelHeader":"","allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["aa79e8be03e34401b02711b4a7e9029c","95bdb3c7e42c4ae9bbddc46c47cc1133","108b0230ec614cbcb2bea515434865ea","3e1a96df3345489bb8e4ebd73d447ac4","31427b7ed84f47e9ba1d5f8c125b8ff0","8bbb3277d837410ba717444064d898f3","2843c346eabb40789612338b2d49121f","c786a11a672e40f6b4431305d98fe4d9","a137fdbcc16c413c8ffc7732223e865a","d0bc83b141ed440a85490609144d2d5f","90207590e68d4f62a5c5a6efa25bbabe","af3f3561059c49e789a4ba528506fc29","63cfcd1874644531b676ed28c70676ad","d13147b31b7d4c8290bcbf9fccb37f9f","91deda402c214c40a7f5cb49596ff371","540cb3b381f543f88c1765b8da449b9f","e0891d7bf5e643899f212cf5432797ee","75a3ca1dc143459'
+ || '9b2fc22f08d43b21f","53f7cae5046148ae8c9b3203af8c5d3a","8df4d54376d14ef0afd8ef43c16a1ddd","43c57fcfd1054494b585034799ca904d","269d57c9717f49538ffb412deb58ae49","7e3c7d95cb914ef0888f3d65450b75ec","4b01c7a3a6eb4e748be0fff02d82b5af","1ecd94c33aac49b59542f8f6a66159df","2d7084b974c74de4ab62de1c56516bb9","d9c2fe7d541f4b3c809acd0752c15a54","ee6d9ee1bb274596b5e2f6cd8823dea3","459228db6c56446bba0a667efbb7affe","99f9eaec78524632a47eb70716732b09","9cc5b7fd6c38422fb71afaaa8a334013","8f38a478364c4d0087960556a9d7d925","e7a4047364af4f6f9b20c06c90b7903c","36f3d9f3b1b44aca9244d1b72563b3a0","c75c05f8ad3b4cb9910af0197a9b50de"],"headRequestData":{},"formatterParamOnExportExcel__$S$__":"","columns":[],"commonSearch":false,"appendButtonsToGeneral_childrenWidgetId":[],"serverSearch":true,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","onDrag__$S$__":"","keyDownSelectContent":true,"formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","loadingMode":"normal","showCheckedNum":false,"contextmenu_childrenWidgetId":;V979:[],"onRowDblclick__$S$__":"","toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"cellValueFillByDrag":false,"requestData":{},"activateFirstRow":true,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"enterKeyDownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.OrderInfoModify.server.LcdpEmcOrderService.selectPaginationData","instantSavePath":"emc.OrderInfoModify.server.LcdpEmcOrderService.updateData","onBeforeEditorRender__$S$__":"","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_chi'
+ || 'ldrenWidgetId":["af7cc05d27ac451f8c6e8e5eeb1d6f71"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""};'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('91deda402c214c40a7f5cb49596ff371') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('91deda402c214c40a7f5cb49596ff371') <>
+    'V32:91deda402c214c40a7f5cb49596ff371;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V509:{"editor":false,"childrenWidgetId":[],"visible":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_ORDER.SAMPLECOMPLETEDATE","type":"i18n","zh-CN":"采样完成日期"},"gridColumnType":"date","type":"date","uuid":"91deda402c214c40a7f5cb49596ff371","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","field":"samplecompletedate","children":[{}],"width":150,"fixed":false,"id":"GridColumn_samplecompletedate"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('93b879eaba884a26b20f3145f09d7fb8') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('93b879eaba884a26b20f3145f09d7fb8') <>
+    'V32:93b879eaba884a26b20f3145f09d7fb8;V16:1630288250714592;V16:1597703224613312;V1:6;N;V11:LayoutSouth;V32:82eb4560aafe45a0bea03b5fa9aaf7d5;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"93b879eaba884a26b20f3145f09d7fb8","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('95bdb3c7e42c4ae9bbddc46c47cc1133') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('95bdb3c7e42c4ae9bbddc46c47cc1133') <>
+    'V32:95bdb3c7e42c4ae9bbddc46c47cc1133;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V150:{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"95bdb3c7e42c4ae9bbddc46c47cc1133"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('99dd6c4163324f1387cd6e2e806b6171') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('99dd6c4163324f1387cd6e2e806b6171') <>
+    'V32:99dd6c4163324f1387cd6e2e806b6171;V16:1630288250714592;V16:1597703224613312;V1:6;N;V11:LayoutNorth;V32:82eb4560aafe45a0bea03b5fa9aaf7d5;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"99dd6c4163324f1387cd6e2e806b6171","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('99f9eaec78524632a47eb70716732b09') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('99f9eaec78524632a47eb70716732b09') <>
+    'V32:99f9eaec78524632a47eb70716732b09;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V281:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"color","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_color","title":{"i18nCode":"T_EMC_ORDER.COLOR","type":"i18n","zh-CN":"颜色"},"gridColumnType":"text","uuid":"99f9eaec78524632a47eb70716732b09"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('9cc5b7fd6c38422fb71afaaa8a334013') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('9cc5b7fd6c38422fb71afaaa8a334013') <>
+    'V32:9cc5b7fd6c38422fb71afaaa8a334013;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V287:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"texture","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_texture","title":{"i18nCode":"T_EMC_ORDER.TEXTURE","type":"i18n","zh-CN":"质地"},"gridColumnType":"text","uuid":"9cc5b7fd6c38422fb71afaaa8a334013"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('a137fdbcc16c413c8ffc7732223e865a') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('a137fdbcc16c413c8ffc7732223e865a') <>
+    'V32:a137fdbcc16c413c8ffc7732223e865a;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V280:{"editor":true,"childrenWidgetId":[],"visible":true,"field":"cycle","children":[{}],"width":100,"fixed":false,"sort":true,"id":"GridColumn_cycle","title":{"i18nCode":"T_EMC_ORDER.CYCLE","type":"i18n","zh-CN":"周期"},"gridColumnType":"text","uuid":"a137fdbcc16c413c8ffc7732223e865a"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('aa79e8be03e34401b02711b4a7e9029c') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('aa79e8be03e34401b02711b4a7e9029c') <>
+    'V32:aa79e8be03e34401b02711b4a7e9029c;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V161:{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"aa79e8be03e34401b02711b4a7e9029c"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('af3f3561059c49e789a4ba528506fc29') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('af3f3561059c49e789a4ba528506fc29') <>
+    'V32:af3f3561059c49e789a4ba528506fc29;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V293:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleid","title":{"i18nCode":"T_EMC_ORDER.SAMPLEID","type":"i18n","zh-CN":"采样单编码"},"gridColumnType":"text","uuid":"af3f3561059c49e789a4ba528506fc29"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('af7cc05d27ac451f8c6e8e5eeb1d6f71') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('af7cc05d27ac451f8c6e8e5eeb1d6f71') <>
+    'V32:af7cc05d27ac451f8c6e8e5eeb1d6f71;V16:1630288250714592;V16:1597703224613312;V1:6;N;V11:GridToolbar;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V185:{"childrenWidgetId":[],"generalPanelTrigger":[],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"af7cc05d27ac451f8c6e8e5eeb1d6f71"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('bcbdf5275742463e90c78656c035a6ce') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('bcbdf5275742463e90c78656c035a6ce') <>
+    'V32:bcbdf5275742463e90c78656c035a6ce;V16:1630288250714592;V16:1597703224613312;V1:6;N;V12:LayoutCenter;V32:82eb4560aafe45a0bea03b5fa9aaf7d5;N;N;N;V121:{"childrenWidgetId":["91ca9866f9cf4961a2d4bbccd88b639c"],"id":"LayoutCenter_1","uuid":"bcbdf5275742463e90c78656c035a6ce"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('c75c05f8ad3b4cb9910af0197a9b50de') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('c75c05f8ad3b4cb9910af0197a9b50de') <>
+    'V32:c75c05f8ad3b4cb9910af0197a9b50de;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V763:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.orderdesc.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"c75c05f8ad3b4cb9910af0197a9b50de","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_orderdesc","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"orderdesc","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('c786a11a672e40f6b4431305d98fe4d9') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('c786a11a672e40f6b4431305d98fe4d9') <>
+    'V32:c786a11a672e40f6b4431305d98fe4d9;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V292:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sendtime","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sendtime","title":{"i18nCode":"T_EMC_ORDER.SENDTIME","type":"i18n","zh-CN":"送样时间"},"gridColumnType":"text","uuid":"c786a11a672e40f6b4431305d98fe4d9"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('d0bc83b141ed440a85490609144d2d5f') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('d0bc83b141ed440a85490609144d2d5f') <>
+    'V32:d0bc83b141ed440a85490609144d2d5f;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V292:{"editor":true,"childrenWidgetId":[],"visible":true,"field":"frequency","children":[{}],"width":100,"fixed":false,"sort":true,"id":"GridColumn_frequency","title":{"i18nCode":"T_EMC_ORDER.FREQUENCY","type":"i18n","zh-CN":"频次"},"gridColumnType":"text","uuid":"d0bc83b141ed440a85490609144d2d5f"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('d13147b31b7d4c8290bcbf9fccb37f9f') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('d13147b31b7d4c8290bcbf9fccb37f9f') <>
+    'V32:d13147b31b7d4c8290bcbf9fccb37f9f;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V315:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplebegintime","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplebegintime","title":{"i18nCode":"T_EMC_ORDER.SAMPLEBEGINTIME","type":"i18n","zh-CN":"采样开始时间"},"gridColumnType":"text","uuid":"d13147b31b7d4c8290bcbf9fccb37f9f"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('d9c2fe7d541f4b3c809acd0752c15a54') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('d9c2fe7d541f4b3c809acd0752c15a54') <>
+    'V32:d9c2fe7d541f4b3c809acd0752c15a54;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V307:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleaddress","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleaddress","title":{"i18nCode":"T_EMC_ORDER.SAMPLEADDRESS","type":"i18n","zh-CN":"采样地点"},"gridColumnType":"text","uuid":"d9c2fe7d541f4b3c809acd0752c15a54"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('e0891d7bf5e643899f212cf5432797ee') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('e0891d7bf5e643899f212cf5432797ee') <>
+    'V32:e0891d7bf5e643899f212cf5432797ee;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V300:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"qccategoryid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_qccategoryid","title":{"i18nCode":"T_EMC_ORDER.QCCATEGORYID","type":"i18n","zh-CN":""},"gridColumnType":"text","uuid":"e0891d7bf5e643899f212cf5432797ee"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('e40b4295908d4d7280d66733a94739b2') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('e40b4295908d4d7280d66733a94739b2') <>
+    'V32:e40b4295908d4d7280d66733a94739b2;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:LayoutEast;V32:82eb4560aafe45a0bea03b5fa9aaf7d5;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"e40b4295908d4d7280d66733a94739b2"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('e7a4047364af4f6f9b20c06c90b7903c') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('e7a4047364af4f6f9b20c06c90b7903c') <>
+    'V32:e7a4047364af4f6f9b20c06c90b7903c;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V287:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"density","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_density","title":{"i18nCode":"T_EMC_ORDER.DENSITY","type":"i18n","zh-CN":"密度"},"gridColumnType":"text","uuid":"e7a4047364af4f6f9b20c06c90b7903c"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('ee6d9ee1bb274596b5e2f6cd8823dea3') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('ee6d9ee1bb274596b5e2f6cd8823dea3') <>
+    'V32:ee6d9ee1bb274596b5e2f6cd8823dea3;V16:1630288250714592;V16:1597703224613312;V1:6;N;V10:GridColumn;V32:91ca9866f9cf4961a2d4bbccd88b639c;N;N;N;V313:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplecontainer","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplecontainer","title":{"i18nCode":"T_EMC_ORDER.SAMPLECONTAINER","type":"i18n","zh-CN":"样品容器"},"gridColumnType":"text","uuid":"ee6d9ee1bb274596b5e2f6cd8823dea3"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('1bf90623aafc488abfae1ce327b0eeeb') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('1bf90623aafc488abfae1ce327b0eeeb') <>
+    'V32:1bf90623aafc488abfae1ce327b0eeeb;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V300:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"riverdepth","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_riverdepth","title":{"i18nCode":"T_EMC_FOLDER.RIVERDEPTH","type":"i18n","zh-CN":"河深(m)"},"gridColumnType":"text","uuid":"1bf90623aafc488abfae1ce327b0eeeb"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('1cb38f6c1beb4db2b82554703f19e150') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('1cb38f6c1beb4db2b82554703f19e150') <>
+    'V32:1cb38f6c1beb4db2b82554703f19e150;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V330:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"monitorpointcategory","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_monitorpointcategory","title":{"i18nCode":"T_EMC_FOLDER.MONITORPOINTCATEGORY","type":"i18n","zh-CN":"监测点类型"},"gridColumnType":"text","uuid":"1cb38f6c1beb4db2b82554703f19e150"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('21781c2052a84ba2921afc9740966055') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('21781c2052a84ba2921afc9740966055') <>
+    'V32:21781c2052a84ba2921afc9740966055;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V311:{"editor":true,"childrenWidgetId":[],"visible":true,"field":"monitorpointno","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_monitorpointno","title":{"i18nCode":"T_EMC_FOLDER.MONITORPOINTNO","type":"i18n","zh-CN":"监测点编码"},"gridColumnType":"text","uuid":"21781c2052a84ba2921afc9740966055"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('26e92898467d41b2a97963e7f8539885') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('26e92898467d41b2a97963e7f8539885') <>
+    'V32:26e92898467d41b2a97963e7f8539885;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V161:{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"26e92898467d41b2a97963e7f8539885"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('363f39986b4d4cc49891a967fbde45e4') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('363f39986b4d4cc49891a967fbde45e4') <>
+    'V32:363f39986b4d4cc49891a967fbde45e4;V16:1616648289373824;V16:1605674000347936;V1:2;N;V12:LayoutCenter;V32:b0ec156560dd46b6a60037c72614ae6f;N;N;N;V121:{"childrenWidgetId":["961384ebb25a4cca98512ae7eb21fe00"],"id":"LayoutCenter_1","uuid":"363f39986b4d4cc49891a967fbde45e4"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('3b111e3102b54b10ada2699e40b5557c') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('3b111e3102b54b10ada2699e40b5557c') <>
+    'V32:3b111e3102b54b10ada2699e40b5557c;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V285:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"remark","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_remark","title":{"i18nCode":"T_EMC_FOLDER.REMARK","type":"i18n","zh-CN":"备注"},"gridColumnType":"text","uuid":"3b111e3102b54b10ada2699e40b5557c"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('3b5e63e03c2645a1802a39cd2329f582') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('3b5e63e03c2645a1802a39cd2329f582') <>
+    'V32:3b5e63e03c2645a1802a39cd2329f582;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V291:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"latitude","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_latitude","title":{"i18nCode":"T_EMC_FOLDER.LATITUDE","type":"i18n","zh-CN":"纬度"},"gridColumnType":"text","uuid":"3b5e63e03c2645a1802a39cd2329f582"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('4121f4ccfd004be0a5f163e61e246194') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('4121f4ccfd004be0a5f163e61e246194') <>
+    'V32:4121f4ccfd004be0a5f163e61e246194;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V288:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"section","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_section","title":{"i18nCode":"T_EMC_FOLDER.SECTION","type":"i18n","zh-CN":"断面"},"gridColumnType":"text","uuid":"4121f4ccfd004be0a5f163e61e246194"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('445fc5c67d64458f92b89888773e9957') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('445fc5c67d64458f92b89888773e9957') <>
+    'V32:445fc5c67d64458f92b89888773e9957;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V693:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":false,"addon":"","validators":[],"range":"","source":"table","title":{"i18nCode":"T_EMC_FOLDER.PROJID","en-US":"","zh-CN":"项目编码"},"gridColumnType":"number","type":"number","uuid":"445fc5c67d64458f92b89888773e9957","visibleRoles":[],"isInteger":false,"readonly":false,"children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projid","value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeUpdate__$S$__":"","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","thousandSeparator":false,"hasArrow":true,"field":"projid","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('44f1c573014a4dd7958397fa0fff3cb3') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('44f1c573014a4dd7958397fa0fff3cb3') <>
+    'V32:44f1c573014a4dd7958397fa0fff3cb3;V16:1616648289373824;V16:1605674000347936;V1:2;N;V11:LayoutNorth;V32:b0ec156560dd46b6a60037c72614ae6f;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"44f1c573014a4dd7958397fa0fff3cb3","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('471754e6503a4045936dde80ae8abbe3') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('471754e6503a4045936dde80ae8abbe3') <>
+    'V32:471754e6503a4045936dde80ae8abbe3;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V305:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sceneuserid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sceneuserid","title":{"i18nCode":"T_EMC_FOLDER.SCENEUSERID","type":"i18n","zh-CN":"现场负责人编码"},"gridColumnType":"text","uuid":"471754e6503a4045936dde80ae8abbe3"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('4ae9ed8dca8a41df8833a3e485ed32d4') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('4ae9ed8dca8a41df8833a3e485ed32d4') <>
+    'V32:4ae9ed8dca8a41df8833a3e485ed32d4;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V308:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"currentspeed","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_currentspeed","title":{"i18nCode":"T_EMC_FOLDER.CURRENTSPEED","type":"i18n","zh-CN":"流速(m/s)"},"gridColumnType":"text","uuid":"4ae9ed8dca8a41df8833a3e485ed32d4"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('55b2fb7bd6fe4dc8947f1a56b254d504') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('55b2fb7bd6fe4dc8947f1a56b254d504') <>
+    'V32:55b2fb7bd6fe4dc8947f1a56b254d504;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V308:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"samplingdepth","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_samplingdepth","title":{"i18nCode":"T_EMC_FOLDER.SAMPLINGDEPTH","type":"i18n","zh-CN":"采样深度"},"gridColumnType":"text","uuid":"55b2fb7bd6fe4dc8947f1a56b254d504"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('65675ef8166c47b092ecd64236862a43') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('65675ef8166c47b092ecd64236862a43') <>
+    'V32:65675ef8166c47b092ecd64236862a43;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V294:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"longitude","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_longitude","title":{"i18nCode":"T_EMC_FOLDER.LONGITUDE","type":"i18n","zh-CN":"经度"},"gridColumnType":"text","uuid":"65675ef8166c47b092ecd64236862a43"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('6d46bf63cf4d4bc781102a808c1a4d2e') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('6d46bf63cf4d4bc781102a808c1a4d2e') <>
+    'V32:6d46bf63cf4d4bc781102a808c1a4d2e;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V307:{"editor":false,"childrenWidgetId":[],"visible":true,"sort":true,"title":{"i18nCode":"T_EMC_FOLDER.FOLDERNO","type":"i18n","zh-CN":"点位编号"},"gridColumnType":"link","type":"link","uuid":"6d46bf63cf4d4bc781102a808c1a4d2e","field":"folderno","children":[{}],"width":150,"fixed":false,"id":"GridColumn_folderno"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('7427785e76bd4a2a9d9de563cdbd8238') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('7427785e76bd4a2a9d9de563cdbd8238') <>
+    'V32:7427785e76bd4a2a9d9de563cdbd8238;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V498:{"editor":false,"childrenWidgetId":[],"visible":true,"validators":[],"sort":true,"title":{"i18nCode":"T_EMC_FOLDER.PLANSAMPLEDATE","type":"i18n","zh-CN":"计划采样日期"},"gridColumnType":"date","type":"date","uuid":"7427785e76bd4a2a9d9de563cdbd8238","onBeforeEditorRender__$S$__":"","onChange__$S$__":"","getDateRanger__$S$__":"","textStyleFormatter__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","field":"plansampledate","children":[{}],"width":150,"fixed":false,"id":"GridColumn_plansampledate"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('75cdb023abd24a32a43fad74e8bcec08') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('75cdb023abd24a32a43fad74e8bcec08') <>
+    'V32:75cdb023abd24a32a43fad74e8bcec08;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V282:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"river","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_river","title":{"i18nCode":"T_EMC_FOLDER.RIVER","type":"i18n","zh-CN":"河流"},"gridColumnType":"text","uuid":"75cdb023abd24a32a43fad74e8bcec08"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('77c84bf071f2472cae4e1d53f31805a6') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('77c84bf071f2472cae4e1d53f31805a6') <>
+    'V32:77c84bf071f2472cae4e1d53f31805a6;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V324:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"plansampleusername","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_plansampleusername","title":{"i18nCode":"T_EMC_FOLDER.PLANSAMPLEUSERNAME","type":"i18n","zh-CN":"计划采样人"},"gridColumnType":"text","uuid":"77c84bf071f2472cae4e1d53f31805a6"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('81078140f5a64ae3a33f40b1d00f7934') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('81078140f5a64ae3a33f40b1d00f7934') <>
+    'V32:81078140f5a64ae3a33f40b1d00f7934;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V312:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleusername","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleusername","title":{"i18nCode":"T_EMC_FOLDER.SAMPLEUSERNAME","type":"i18n","zh-CN":"采样人名称"},"gridColumnType":"text","uuid":"81078140f5a64ae3a33f40b1d00f7934"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8187f7d24fa04a09b031db0ae3f6fc08') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8187f7d24fa04a09b031db0ae3f6fc08') <>
+    'V32:8187f7d24fa04a09b031db0ae3f6fc08;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:LayoutWest;V32:b0ec156560dd46b6a60037c72614ae6f;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"8187f7d24fa04a09b031db0ae3f6fc08"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8b09a9fa8dff41ddbf739cf9dca07b0b') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8b09a9fa8dff41ddbf739cf9dca07b0b') <>
+    'V32:8b09a9fa8dff41ddbf739cf9dca07b0b;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V306:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleuserid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleuserid","title":{"i18nCode":"T_EMC_FOLDER.SAMPLEUSERID","type":"i18n","zh-CN":"采样人编码"},"gridColumnType":"text","uuid":"8b09a9fa8dff41ddbf739cf9dca07b0b"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8ebd2c4e8e7d4c559440d10953d45ba9') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8ebd2c4e8e7d4c559440d10953d45ba9') <>
+    'V32:8ebd2c4e8e7d4c559440d10953d45ba9;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V320:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"plansampleuserid","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_plansampleuserid","title":{"i18nCode":"T_EMC_FOLDER.PLANSAMPLEUSERID","type":"i18n","zh-CN":"计划采样人编码"},"gridColumnType":"text","uuid":"8ebd2c4e8e7d4c559440d10953d45ba9"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('94dcf07b5b6a4506a9f54082e74e27cd') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('94dcf07b5b6a4506a9f54082e74e27cd') <>
+    'V32:94dcf07b5b6a4506a9f54082e74e27cd;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V150:{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"94dcf07b5b6a4506a9f54082e74e27cd"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('961384ebb25a4cca98512ae7eb21fe00') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('961384ebb25a4cca98512ae7eb21fe00') <>
+    'V32:961384ebb25a4cca98512ae7eb21fe00;V16:1616648289373824;V16:1605674000347936;V1:2;N;V4:Grid;V32:363f39986b4d4cc49891a967fbde45e4;N;N;N;V3000:{"onCheckboxClick__$S$__":"","onRendered__$S$__":"","columnAutoFill":false,"advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"folderno","pageSize":50,"filterOpen":true,"autoSave":true,"suspendFormatter__$S$__":"","uuid":"c924880e6c364a8fa3b8a058a68b2a89","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"contextMenuConfig":false,"checkOnActiveGroupRow":true,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"floderinfomodify-edit-grid","activeOnCheck":false,"height":"100%","order":{},"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":["projid"],"sortEnable":true},"onCellClick__$S$__":"loadDetailPage","initRequest":true,"onAfterChoose__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"exportExcelHeader":"","allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["26e92898467d41b2a97963e7f8539885","94dcf07b5b6a4506a9f54082e74e27cd","445fc5c67d64458f92b89888773e9957","6d46bf63cf4d4bc781102a808c1a4d2e","f5d29f4101f2435098241a51c6aced48","21781c2052a84ba2921afc9740966055","9a2c7531e6314041bf80be2e356a6c58","7427785e76bd4a2a9d9de563cdbd8238","471754e6503a4045936dde80ae8abbe3","9934b07fa57a432089acb92fcea96f15","1cb38f6c1beb4db2b82554703f19e150","65675ef8166c47b092ecd64236862a43","3b5e63e03c2645a1802a39cd2329f582","d3ebafb96ed34585a5e844955f5d1c6d","75cdb023abd24a32a43fad74e8bcec08","cb023f0a4b9c425db16f2a045b953a9d","8ebd2c4e8e7d4c559440d10953d45ba9","77c84bf071f24'
+ || '72cae4e1d53f31805a6","b7221c29984e4ed592d1439e1cca40c2","55b2fb7bd6fe4dc8947f1a56b254d504","1bf90623aafc488abfae1ce327b0eeeb","4ae9ed8dca8a41df8833a3e485ed32d4","f77d70e2ddf84bfc89ceec195df9e785","c1c27c364feb4e6f9c2bc80d0ec2477c","8b09a9fa8dff41ddbf739cf9dca07b0b","81078140f5a64ae3a33f40b1d00f7934","3b111e3102b54b10ada2699e40b5557c","4121f4ccfd004be0a5f163e61e246194"],"headRequestData":{},"formatterParamOnExportExcel__$S$__":"","columns":[],"commonSearch":false,"serverSearch":true,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","onDrag__$S$__":"","keyDownSelectContent":true,"formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","loadingMode":"normal","showCheckedNum":false,"onRowDblclick__$S$__":"","toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"cellValueFillByDrag":false,"requestData":{},"activateFirstRow":true,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"enterKeyD;V661:ownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.FloderInfoModify.server.LcdpEmcFolderService.selectPaginationData","instantSavePath":"emc.FloderInfoModify.server.LcdpEmcFolderService.updateData","onBeforeEditorRender__$S$__":"","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_childrenWidgetId":["c924880e6c364a8fa3b8a058a68b2a89"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""};'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('9934b07fa57a432089acb92fcea96f15') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('9934b07fa57a432089acb92fcea96f15') <>
+    'V32:9934b07fa57a432089acb92fcea96f15;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V311:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sceneusername","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sceneusername","title":{"i18nCode":"T_EMC_FOLDER.SCENEUSERNAME","type":"i18n","zh-CN":"现场负责人名称"},"gridColumnType":"text","uuid":"9934b07fa57a432089acb92fcea96f15"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('9a2c7531e6314041bf80be2e356a6c58') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('9a2c7531e6314041bf80be2e356a6c58') <>
+    'V32:9a2c7531e6314041bf80be2e356a6c58;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V317:{"editor":true,"childrenWidgetId":[],"visible":true,"field":"monitorpointname","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_monitorpointname","title":{"i18nCode":"T_EMC_FOLDER.MONITORPOINTNAME","type":"i18n","zh-CN":"监测点名称"},"gridColumnType":"text","uuid":"9a2c7531e6314041bf80be2e356a6c58"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('b0ec156560dd46b6a60037c72614ae6f') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('b0ec156560dd46b6a60037c72614ae6f') <>
+    'V32:b0ec156560dd46b6a60037c72614ae6f;V16:1616648289373824;V16:1605674000347936;V1:2;N;V6:Layout;N;N;N;N;V286:{"layout":"all","childrenWidgetId":["44f1c573014a4dd7958397fa0fff3cb3","eff27739c1594f5cbf6177b8be636b7b","df258faa989b4c9588598aa997526541","8187f7d24fa04a09b031db0ae3f6fc08","363f39986b4d4cc49891a967fbde45e4"],"id":"Layout_1","uuid":"b0ec156560dd46b6a60037c72614ae6f","height":"100%"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('b7221c29984e4ed592d1439e1cca40c2') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('b7221c29984e4ed592d1439e1cca40c2') <>
+    'V32:b7221c29984e4ed592d1439e1cca40c2;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V293:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"isrange","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_isrange","title":{"i18nCode":"T_EMC_FOLDER.ISRANGE","type":"i18n","zh-CN":"是否采样范围内"},"gridColumnType":"text","uuid":"b7221c29984e4ed592d1439e1cca40c2"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('c1c27c364feb4e6f9c2bc80d0ec2477c') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('c1c27c364feb4e6f9c2bc80d0ec2477c') <>
+    'V32:c1c27c364feb4e6f9c2bc80d0ec2477c;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V310:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"sampleorgname","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_sampleorgname","title":{"i18nCode":"T_EMC_FOLDER.SAMPLEORGNAME","type":"i18n","zh-CN":"采样科室名称"},"gridColumnType":"text","uuid":"c1c27c364feb4e6f9c2bc80d0ec2477c"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('c924880e6c364a8fa3b8a058a68b2a89') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('c924880e6c364a8fa3b8a058a68b2a89') <>
+    'V32:c924880e6c364a8fa3b8a058a68b2a89;V16:1616648289373824;V16:1605674000347936;V1:2;N;V11:GridToolbar;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V185:{"childrenWidgetId":[],"generalPanelTrigger":[],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"c924880e6c364a8fa3b8a058a68b2a89"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('cb023f0a4b9c425db16f2a045b953a9d') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('cb023f0a4b9c425db16f2a045b953a9d') <>
+    'V32:cb023f0a4b9c425db16f2a045b953a9d;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V296:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"tributary","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_tributary","title":{"i18nCode":"T_EMC_FOLDER.TRIBUTARY","type":"i18n","zh-CN":"支流断面"},"gridColumnType":"text","uuid":"cb023f0a4b9c425db16f2a045b953a9d"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('d3ebafb96ed34585a5e844955f5d1c6d') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('d3ebafb96ed34585a5e844955f5d1c6d') <>
+    'V32:d3ebafb96ed34585a5e844955f5d1c6d;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V302:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"termination","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_termination","title":{"i18nCode":"T_EMC_FOLDER.TERMINATION","type":"i18n","zh-CN":"是否终止"},"gridColumnType":"text","uuid":"d3ebafb96ed34585a5e844955f5d1c6d"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('df258faa989b4c9588598aa997526541') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('df258faa989b4c9588598aa997526541') <>
+    'V32:df258faa989b4c9588598aa997526541;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:LayoutEast;V32:b0ec156560dd46b6a60037c72614ae6f;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"df258faa989b4c9588598aa997526541"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('eff27739c1594f5cbf6177b8be636b7b') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('eff27739c1594f5cbf6177b8be636b7b') <>
+    'V32:eff27739c1594f5cbf6177b8be636b7b;V16:1616648289373824;V16:1605674000347936;V1:2;N;V11:LayoutSouth;V32:b0ec156560dd46b6a60037c72614ae6f;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"eff27739c1594f5cbf6177b8be636b7b","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('f5d29f4101f2435098241a51c6aced48') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('f5d29f4101f2435098241a51c6aced48') <>
+    'V32:f5d29f4101f2435098241a51c6aced48;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V308:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"ordercategory","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_ordercategory","title":{"i18nCode":"T_EMC_FOLDER.ORDERCATEGORY","type":"i18n","zh-CN":"样品类型"},"gridColumnType":"text","uuid":"f5d29f4101f2435098241a51c6aced48"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('f77d70e2ddf84bfc89ceec195df9e785') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('f77d70e2ddf84bfc89ceec195df9e785') <>
+    'V32:f77d70e2ddf84bfc89ceec195df9e785;V16:1616648289373824;V16:1605674000347936;V1:2;N;V10:GridColumn;V32:961384ebb25a4cca98512ae7eb21fe00;N;N;N;V285:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"flow","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_flow","title":{"i18nCode":"T_EMC_FOLDER.FLOW","type":"i18n","zh-CN":"流量(m3/h)"},"gridColumnType":"text","uuid":"f77d70e2ddf84bfc89ceec195df9e785"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('02dc422ea45c4044b215b51f68a43644') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('02dc422ea45c4044b215b51f68a43644') <>
+    'V32:02dc422ea45c4044b215b51f68a43644;V16:1631134722128352;V16:1630039276722656;V1:5;N;V10:GridColumn;V32:f547917743af462d83f9fcf67e7e6b97;N;N;N;V766:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projnode.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"02dc422ea45c4044b215b51f68a43644","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projnode","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projnode","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('042bf38d0be34c77aa2b813325f77089') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('042bf38d0be34c77aa2b813325f77089') <>
+    'V32:042bf38d0be34c77aa2b813325f77089;V16:1631134722128352;V16:1630039276722656;V1:5;N;V10:GridColumn;V32:f547917743af462d83f9fcf67e7e6b97;N;N;N;V150:{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"042bf38d0be34c77aa2b813325f77089"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('0fd0a596330e41c79aaf49eda7f98250') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('0fd0a596330e41c79aaf49eda7f98250') <>
+    'V32:0fd0a596330e41c79aaf49eda7f98250;V16:1631134722128352;V16:1630039276722656;V1:5;N;V10:GridColumn;V32:f547917743af462d83f9fcf67e7e6b97;N;N;N;V161:{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"0fd0a596330e41c79aaf49eda7f98250"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('1d1490eead0f4184a6190897132085e1') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('1d1490eead0f4184a6190897132085e1') <>
+    'V32:1d1490eead0f4184a6190897132085e1;V16:1631134722128352;V16:1630039276722656;V1:5;N;V11:LayoutNorth;V32:ddb7285ef49449d6bce85b74189e5cf8;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"1d1490eead0f4184a6190897132085e1","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('247c51b60f4a47c490c95648f736afa1') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('247c51b60f4a47c490c95648f736afa1') <>
+    'V32:247c51b60f4a47c490c95648f736afa1;V16:1631134722128352;V16:1630039276722656;V1:5;N;V12:LayoutCenter;V32:ddb7285ef49449d6bce85b74189e5cf8;N;N;N;V121:{"childrenWidgetId":["f547917743af462d83f9fcf67e7e6b97"],"id":"LayoutCenter_1","uuid":"247c51b60f4a47c490c95648f736afa1"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('2cb67878fe7b477fb915bcca22ba98f2') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('2cb67878fe7b477fb915bcca22ba98f2') <>
+    'V32:2cb67878fe7b477fb915bcca22ba98f2;V16:1631134722128352;V16:1630039276722656;V1:5;N;V11:LayoutSouth;V32:ddb7285ef49449d6bce85b74189e5cf8;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"2cb67878fe7b477fb915bcca22ba98f2","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('31086e9ceb6e4ca887a7da5c80f25e14') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('31086e9ceb6e4ca887a7da5c80f25e14') <>
+    'V32:31086e9ceb6e4ca887a7da5c80f25e14;V16:1631134722128352;V16:1630039276722656;V1:5;N;V10:GridColumn;V32:f547917743af462d83f9fcf67e7e6b97;N;N;N;V767:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"31086e9ceb6e4ca887a7da5c80f25e14","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projname","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('32c686f5a7974ac4b156ce7c5018c272') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('32c686f5a7974ac4b156ce7c5018c272') <>
+    'V32:32c686f5a7974ac4b156ce7c5018c272;V16:1631134722128352;V16:1630039276722656;V1:5;N;V10:GridColumn;V32:f547917743af462d83f9fcf67e7e6b97;N;N;N;V760:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.status.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"32c686f5a7974ac4b156ce7c5018c272","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_status","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"status","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('7446f54f0bae4d949a9b03f18e21bb97') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('7446f54f0bae4d949a9b03f18e21bb97') <>
+    'V32:7446f54f0bae4d949a9b03f18e21bb97;V16:1631134722128352;V16:1630039276722656;V1:5;N;V10:LayoutWest;V32:ddb7285ef49449d6bce85b74189e5cf8;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"7446f54f0bae4d949a9b03f18e21bb97"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('7b75b2c566bb4d26a1b3a2fa8b9dff4d') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('7b75b2c566bb4d26a1b3a2fa8b9dff4d') <>
+    'V32:7b75b2c566bb4d26a1b3a2fa8b9dff4d;V16:1631134722128352;V16:1630039276722656;V1:5;N;V10:GridColumn;V32:f547917743af462d83f9fcf67e7e6b97;N;N;N;V761:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"7b75b2c566bb4d26a1b3a2fa8b9dff4d","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_projno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"projno","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8ee2a4890eae403c9d29332e20c7669b') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8ee2a4890eae403c9d29332e20c7669b') <>
+    'V32:8ee2a4890eae403c9d29332e20c7669b;V16:1631134722128352;V16:1630039276722656;V1:5;N;V11:GridToolbar;V32:f547917743af462d83f9fcf67e7e6b97;N;N;N;V219:{"childrenWidgetId":["bb3d4a57ea0f48ea845bed0f63bcb2d1"],"generalPanelTrigger":[],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"8ee2a4890eae403c9d29332e20c7669b"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('9005536ab65d4ec890bbd4665ff825ef') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('9005536ab65d4ec890bbd4665ff825ef') <>
+    'V32:9005536ab65d4ec890bbd4665ff825ef;V16:1631134722128352;V16:1630039276722656;V1:5;N;V10:GridColumn;V32:f547917743af462d83f9fcf67e7e6b97;N;N;N;V803:{"getStyle__$S$__":"","childrenWidgetId":[],"enableSecond":true,"lcdpVisible":true,"validators":[],"source":"dataSource","title":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.toreporteditdate.title","type":"i18n"},"gridColumnType":"dateTime","type":"dateTime","uuid":"9005536ab65d4ec890bbd4665ff825ef","visibleRoles":[],"getDateRanger__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_toreporteditdate","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"toreporteditdate","width":150,"fixed":false,"getPrefixIcons__$S$__":""};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('bb3d4a57ea0f48ea845bed0f63bcb2d1') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('bb3d4a57ea0f48ea845bed0f63bcb2d1') <>
+    'V32:bb3d4a57ea0f48ea845bed0f63bcb2d1;V16:1631134722128352;V16:1630039276722656;V1:5;N;V6:Button;V32:8ee2a4890eae403c9d29332e20c7669b;N;N;N;V356:{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"archived-2","id":"Button_1","text":{"i18nCode":"emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.Button_1.text","type":"i18n"},"uuid":"bb3d4a57ea0f48ea845bed0f63bcb2d1","onClick__$S$__":"button_1_onclick","visibleRoles":[]};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('ddb7285ef49449d6bce85b74189e5cf8') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('ddb7285ef49449d6bce85b74189e5cf8') <>
+    'V32:ddb7285ef49449d6bce85b74189e5cf8;V16:1631134722128352;V16:1630039276722656;V1:5;N;V6:Layout;N;N;N;N;V286:{"layout":"all","childrenWidgetId":["1d1490eead0f4184a6190897132085e1","2cb67878fe7b477fb915bcca22ba98f2","f346d6020394409f80d95f8a3b5e1b76","7446f54f0bae4d949a9b03f18e21bb97","247c51b60f4a47c490c95648f736afa1"],"id":"Layout_1","uuid":"ddb7285ef49449d6bce85b74189e5cf8","height":"100%"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('f346d6020394409f80d95f8a3b5e1b76') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('f346d6020394409f80d95f8a3b5e1b76') <>
+    'V32:f346d6020394409f80d95f8a3b5e1b76;V16:1631134722128352;V16:1630039276722656;V1:5;N;V10:LayoutEast;V32:ddb7285ef49449d6bce85b74189e5cf8;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"f346d6020394409f80d95f8a3b5e1b76"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('f547917743af462d83f9fcf67e7e6b97') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('f547917743af462d83f9fcf67e7e6b97') <>
+    'V32:f547917743af462d83f9fcf67e7e6b97;V16:1631134722128352;V16:1630039276722656;V1:5;N;V4:Grid;V32:247c51b60f4a47c490c95648f736afa1;N;N;N;V2889:{"onCheckboxClick__$S$__":"","onRendered__$S$__":"","columnAutoFill":false,"advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"projno","pageSize":50,"autoSave":true,"suspendFormatter__$S$__":"","uuid":"8ee2a4890eae403c9d29332e20c7669b","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"contextMenuConfig":false,"checkOnActiveGroupRow":true,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"projectinfomodify-edit-grid","activeOnCheck":false,"height":"100%","order":{},"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":[],"sortEnable":true},"onCellClick__$S$__":"","initRequest":true,"onAfterChoose__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"exportExcelHeader":"","allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["0fd0a596330e41c79aaf49eda7f98250","042bf38d0be34c77aa2b813325f77089","7b75b2c566bb4d26a1b3a2fa8b9dff4d","31086e9ceb6e4ca887a7da5c80f25e14","32c686f5a7974ac4b156ce7c5018c272","02dc422ea45c4044b215b51f68a43644","9005536ab65d4ec890bbd4665ff825ef"],"headRequestData":{},"formatterParamOnExportExcel__$S$__":"","columns":[],"commonSearch":false,"serverSearch":true,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","onDrag__$S$__":"","keyDownSelectContent":true,"formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"'
+ || '","loadingMode":"normal","showCheckedNum":false,"onRowDblclick__$S$__":"","toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"cellValueFillByDrag":false,"requestData":{},"activateFirstRow":true,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"enterKeyDownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.ProjectInfoModify.server.LcdpEmcProjectService.selectPaginationData","instantSavePath":"emc.ProjectInfoModify.server.LcdpEmcProjectService.updateData","onBeforeEditorRender__$S$__":"","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_childrenWidgetId":["8ee2a4890eae403c9d29332e20c7669b"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('0a4633c0e8bc440eb6c46e04cee23950') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('0a4633c0e8bc440eb6c46e04cee23950') <>
+    'V32:0a4633c0e8bc440eb6c46e04cee23950;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:GridColumn;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V776:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.signusername.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"0a4633c0e8bc440eb6c46e04cee23950","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_signusername","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"signusername","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('1d572b98abec496eb6e38a844dd85fd6') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('1d572b98abec496eb6e38a844dd85fd6') <>
+    'V32:1d572b98abec496eb6e38a844dd85fd6;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:GridColumn;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V785:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.bizcategoryname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"1d572b98abec496eb6e38a844dd85fd6","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_bizcategoryname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"bizcategoryname","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('317c770fc4a647a4a347e4022c2f359e') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('317c770fc4a647a4a347e4022c2f359e') <>
+    'V32:317c770fc4a647a4a347e4022c2f359e;V16:1699784763219680;V16:1631067840535008;V1:6;N;V11:GridToolbar;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V170:{"childrenWidgetId":["cacc09fe70dc4c8e8afd1cbd28aedf71"],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","uuid":"317c770fc4a647a4a347e4022c2f359e"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('3651e586684c43d389fb0f608cb6d1b3') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('3651e586684c43d389fb0f608cb6d1b3') <>
+    'V32:3651e586684c43d389fb0f608cb6d1b3;V16:1699784763219680;V16:1631067840535008;V1:6;N;V8:TabPanel;V32:627cb9850a0c4f0fad5a990361ac0126;N;N;N;V237:{"childrenWidgetId":["8bbc7744faff4656a89b507350282cd2"],"hidden":false,"tip":{"en-US":"","zh-CN":""},"id":"TabPanel_4","title":{"en-US":"New tab2","zh-CN":"附件"},"uuid":"3651e586684c43d389fb0f608cb6d1b3","editRoles":[],"visibleRoles":[]};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('541e1fdb3c1b4c67a4ba439cb521f114') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('541e1fdb3c1b4c67a4ba439cb521f114') <>
+    'V32:541e1fdb3c1b4c67a4ba439cb521f114;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:LayoutWest;V32:8d0f45c3a32b4958b0c295830d5e2d02;N;N;N;V129:{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","title":{"en-US":"","zh-CN":""},"uuid":"541e1fdb3c1b4c67a4ba439cb521f114"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('627cb9850a0c4f0fad5a990361ac0126') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('627cb9850a0c4f0fad5a990361ac0126') <>
+    'V32:627cb9850a0c4f0fad5a990361ac0126;V16:1699784763219680;V16:1631067840535008;V1:6;N;V3:Tab;V32:9ce007fdd8b54398a16e5d926dcdc358;N;N;N;V217:{"onRendered__$S$__":"","childrenWidgetId":["3651e586684c43d389fb0f608cb6d1b3"],"onActived__$S$__":"","id":"Tab_1","type":"Tab","refreshOnPanelActivated":true,"uuid":"627cb9850a0c4f0fad5a990361ac0126","height":"100%"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('763c539fd26a4974a9b83f03d7423a0d') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('763c539fd26a4974a9b83f03d7423a0d') <>
+    'V32:763c539fd26a4974a9b83f03d7423a0d;V16:1699784763219680;V16:1631067840535008;V1:6;N;V11:LayoutNorth;V32:8d0f45c3a32b4958b0c295830d5e2d02;N;N;N;V167:{"childrenWidgetId":["e263a2a2049a4301b35751509c3f28a3"],"id":"LayoutNorth_1","title":{"en-US":"","zh-CN":""},"uuid":"763c539fd26a4974a9b83f03d7423a0d","height":"70%"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('77ac0d6c61f742d98f1dc9634e4a0304') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('77ac0d6c61f742d98f1dc9634e4a0304') <>
+    'V32:77ac0d6c61f742d98f1dc9634e4a0304;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:GridColumn;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V773:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.testorgname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"77ac0d6c61f742d98f1dc9634e4a0304","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_testorgname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"testorgname","width":200,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('799d083e1b6a4b6a9b90b639fb34a351') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('799d083e1b6a4b6a9b90b639fb34a351') <>
+    'V32:799d083e1b6a4b6a9b90b639fb34a351;V16:1699784763219680;V16:1631067840535008;V1:6;N;V11:LayoutSouth;V32:8d0f45c3a32b4958b0c295830d5e2d02;N;N;N;V131:{"childrenWidgetId":[],"id":"LayoutSouth_1","title":{"en-US":"","zh-CN":""},"uuid":"799d083e1b6a4b6a9b90b639fb34a351","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8bbc7744faff4656a89b507350282cd2') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8bbc7744faff4656a89b507350282cd2') <>
+    'V32:8bbc7744faff4656a89b507350282cd2;V16:1699784763219680;V16:1631067840535008;V1:6;N;V8:Uploader;V32:3651e586684c43d389fb0f608cb6d1b3;N;N;N;V974:{"preview":true,"server":"lcdp.file.server.FileScript.upload","onRendered__$S$__":"","childrenWidgetId":[],"gridPage":true,"dbTable":"T_EMC_REPORT","getOrder__$S$__":"","type":"uploader","batchPreview":false,"onBeforeUpload__$S$__":"","uuid":"8bbc7744faff4656a89b507350282cd2","formatterGridToolbar__$S$__":"","onGridLoadSuccess__$S$__":"","download":true,"onAfterClose__$S$__":"","readonly":true,"bizCategory":"","scope":"","onBeforeRefresh__$S$__":"","onBeforeFilesUpload__$S$__":"","searchUrl":"lcdp.file.server.FileScript.selectPagination","deleteUrl":"lcdp.file.server.FileScript.delete","id":"Uploader_1","onGridRowActive__$S$__":"","height":"100%","batchDownload":false,"gridFilter":true,"immediateUpload":false,"onAfterDelete__$S$__":"","multiple":true,"fileViewType":"view","formatterGridColumns__$S$__":"","popupIsModal":true,"onUploadSuccess__$S$__":"","onBeforeDelete__$S$__":"","beforeDownloadRender__$S$__":"","autoClose":false,"beforePreviewRender__$S$__":""};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8d024a9f798a4dc5ae4afe2c539402cf') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8d024a9f798a4dc5ae4afe2c539402cf') <>
+    'V32:8d024a9f798a4dc5ae4afe2c539402cf;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:GridColumn;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V758:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.status.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"8d024a9f798a4dc5ae4afe2c539402cf","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_status","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"status","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8d0f45c3a32b4958b0c295830d5e2d02') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8d0f45c3a32b4958b0c295830d5e2d02') <>
+    'V32:8d0f45c3a32b4958b0c295830d5e2d02;V16:1699784763219680;V16:1631067840535008;V1:6;N;V6:Layout;N;N;N;N;V285:{"layout":"tb","childrenWidgetId":["763c539fd26a4974a9b83f03d7423a0d","799d083e1b6a4b6a9b90b639fb34a351","f7bc85894fe444d382e5265cc3552f67","541e1fdb3c1b4c67a4ba439cb521f114","9ce007fdd8b54398a16e5d926dcdc358"],"id":"Layout_1","uuid":"8d0f45c3a32b4958b0c295830d5e2d02","height":"100%"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('9ce007fdd8b54398a16e5d926dcdc358') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('9ce007fdd8b54398a16e5d926dcdc358') <>
+    'V32:9ce007fdd8b54398a16e5d926dcdc358;V16:1699784763219680;V16:1631067840535008;V1:6;N;V12:LayoutCenter;V32:8d0f45c3a32b4958b0c295830d5e2d02;N;N;N;V153:{"childrenWidgetId":["627cb9850a0c4f0fad5a990361ac0126"],"id":"LayoutCenter_1","title":{"en-US":"","zh-CN":""},"uuid":"9ce007fdd8b54398a16e5d926dcdc358"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('b88cd9fb83fb49d6ac192e40ccad27ab') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('b88cd9fb83fb49d6ac192e40ccad27ab') <>
+    'V32:b88cd9fb83fb49d6ac192e40ccad27ab;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:GridColumn;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V150:{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"b88cd9fb83fb49d6ac192e40ccad27ab"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('bea5250f86314436a2363eb5c8230103') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('bea5250f86314436a2363eb5c8230103') <>
+    'V32:bea5250f86314436a2363eb5c8230103;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:GridColumn;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V764:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.reportno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"bea5250f86314436a2363eb5c8230103","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_reportno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"reportno","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('c35734c7bae94f909be4b675e04f4989') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('c35734c7bae94f909be4b675e04f4989') <>
+    'V32:c35734c7bae94f909be4b675e04f4989;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:GridColumn;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V782:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.entrustorgname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"c35734c7bae94f909be4b675e04f4989","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_entrustorgname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"entrustorgname","width":200,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('cacc09fe70dc4c8e8afd1cbd28aedf71') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('cacc09fe70dc4c8e8afd1cbd28aedf71') <>
+    'V32:cacc09fe70dc4c8e8afd1cbd28aedf71;V16:1699784763219680;V16:1631067840535008;V1:6;N;V6:Button;V32:317c770fc4a647a4a347e4022c2f359e;N;N;N;V316:{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"batch-download","id":"Button_1","text":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.Button_1.text","type":"i18n"},"onClick__$S$__":"button_1_onclick","visibleRoles":[]};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('da4dc3da95c9418394cb8ce59df97de4') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('da4dc3da95c9418394cb8ce59df97de4') <>
+    'V32:da4dc3da95c9418394cb8ce59df97de4;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:GridColumn;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V788:{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.businessusername.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"da4dc3da95c9418394cb8ce59df97de4","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_businessusername","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"businessusername","width":150,"fixed":false};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('e263a2a2049a4301b35751509c3f28a3') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('e263a2a2049a4301b35751509c3f28a3') <>
+    'V32:e263a2a2049a4301b35751509c3f28a3;V16:1699784763219680;V16:1631067840535008;V1:6;N;V4:Grid;V32:763c539fd26a4974a9b83f03d7423a0d;N;N;N;V2946:{"onRendered__$S$__":"","onCheckboxClick__$S$__":"","rowStyleFormatter__$S$__":"","advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"title":""},"confirmField":"projid","getOrder__$S$__":"","pageSize":50,"filterOpen":true,"onFocus__$S$__":"","autoSave":true,"suspendFormatter__$S$__":"","uuid":"317c770fc4a647a4a347e4022c2f359e","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","contextMenuConfig":false,"filterImmediate":false,"checkOnActiveGroupRow":true,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"reportsearchbyyw-edit-grid","appendButtonsToGeneral":[],"activeOnCheck":false,"height":"100%","group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":["entrustorgname"]},"onCellClick__$S$__":"","getHeadRequestData__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["fa449093ed574db9bb72f7f0a9de0545","b88cd9fb83fb49d6ac192e40ccad27ab","1d572b98abec496eb6e38a844dd85fd6","8d024a9f798a4dc5ae4afe2c539402cf","bea5250f86314436a2363eb5c8230103","c35734c7bae94f909be4b675e04f4989","77ac0d6c61f742d98f1dc9634e4a0304","da4dc3da95c9418394cb8ce59df97de4"],"getColumnGroup__$S$__":"","columns":[],"commonSearch":false,"appendButtonsToGeneral_childrenWidgetId":[],"serverSearch":true,"dependentWidgetId":"","columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","keyDownSelectContent":true,"loadingMode":"normal","formatter'
+ || 'KeyDirection__$S$__":"","onLoadFail__$S$__":"","showCheckedNum":true,"contextmenu_childrenWidgetId":[],"onRowDblclick__$S$__":"","onSelect__$S$__":"","toolbarWrap":false,"generalButtonGroupShow":true,"cellValueFillByDrag":false,"activateFirstRow":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"contextmenu":[],"enterKeyDownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.ReportSearchByYW.server.LcdpEmcReportService.selectPaginationData","instantSavePath":"emc.ReportSearchByYW.server.LcdpEmcReportService.updateData","onRowActive__$S$__":"reportsearchbyyw_edit_grid_onrowactive","enableGetDataByUrl":true,"toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_childrenWidgetId":["317c770fc4a647a4a347e4022c2f359e"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('f7bc85894fe444d382e5265cc3552f67') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('f7bc85894fe444d382e5265cc3552f67') <>
+    'V32:f7bc85894fe444d382e5265cc3552f67;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:LayoutEast;V32:8d0f45c3a32b4958b0c295830d5e2d02;N;N;N;V129:{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","title":{"en-US":"","zh-CN":""},"uuid":"f7bc85894fe444d382e5265cc3552f67"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('fa449093ed574db9bb72f7f0a9de0545') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('fa449093ed574db9bb72f7f0a9de0545') <>
+    'V32:fa449093ed574db9bb72f7f0a9de0545;V16:1699784763219680;V16:1631067840535008;V1:6;N;V10:GridColumn;V32:e263a2a2049a4301b35751509c3f28a3;N;N;N;V161:{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"fa449093ed574db9bb72f7f0a9de0545"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('20f3ea3ac9f948c18115c6352019745d') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('20f3ea3ac9f948c18115c6352019745d') <>
+    'V32:20f3ea3ac9f948c18115c6352019745d;V16:1654966506939200;V16:1654892685304660;V1:2;N;V7:Caption;V32:e9f7a79d2e1a4c048d4a779eb3f2f3b1;N;N;N;V245:{"getStyle__$S$__":"","childrenWidgetId":[],"color":"#007AFF","getHidden__$S$__":"","id":"Caption_1","text":{"i18nCode":"emc.SampleInfoModify.page.SampleInfoModifyEditPage.Caption_1.text","type":"i18n"},"uuid":"20f3ea3ac9f948c18115c6352019745d"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('2a6c88cab27f4a0e8b8568173857f356') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('2a6c88cab27f4a0e8b8568173857f356') <>
+    'V32:2a6c88cab27f4a0e8b8568173857f356;V16:1654966506939200;V16:1654892685304660;V1:2;N;V10:LayoutWest;V32:33e6a05b8c764fcdaf36b05d08b8701e;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"2a6c88cab27f4a0e8b8568173857f356"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('3325d65a6b8f4327b640b0f6e2efa049') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('3325d65a6b8f4327b640b0f6e2efa049') <>
+    'V32:3325d65a6b8f4327b640b0f6e2efa049;V16:1654966506939200;V16:1654892685304660;V1:2;N;V11:LayoutNorth;V32:33e6a05b8c764fcdaf36b05d08b8701e;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"3325d65a6b8f4327b640b0f6e2efa049","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('33e6a05b8c764fcdaf36b05d08b8701e') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('33e6a05b8c764fcdaf36b05d08b8701e') <>
+    'V32:33e6a05b8c764fcdaf36b05d08b8701e;V16:1654966506939200;V16:1654892685304660;V1:2;N;V6:Layout;N;N;N;N;V286:{"layout":"all","childrenWidgetId":["3325d65a6b8f4327b640b0f6e2efa049","fe1c1986381d4f00981ad38445a0666b","3e796779ed284533907253bdc533ffa2","2a6c88cab27f4a0e8b8568173857f356","449683f131b54314a1076ecb1a054a9b"],"id":"Layout_1","uuid":"33e6a05b8c764fcdaf36b05d08b8701e","height":"100%"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('3e796779ed284533907253bdc533ffa2') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('3e796779ed284533907253bdc533ffa2') <>
+    'V32:3e796779ed284533907253bdc533ffa2;V16:1654966506939200;V16:1654892685304660;V1:2;N;V10:LayoutEast;V32:33e6a05b8c764fcdaf36b05d08b8701e;N;N;N;V97:{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"3e796779ed284533907253bdc533ffa2"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('449683f131b54314a1076ecb1a054a9b') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('449683f131b54314a1076ecb1a054a9b') <>
+    'V32:449683f131b54314a1076ecb1a054a9b;V16:1654966506939200;V16:1654892685304660;V1:2;N;V12:LayoutCenter;V32:33e6a05b8c764fcdaf36b05d08b8701e;N;N;N;V121:{"childrenWidgetId":["5cace00b431f4d7ebfe1b4adb807c058"],"id":"LayoutCenter_1","uuid":"449683f131b54314a1076ecb1a054a9b"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('4e04b3d4a01448dcbd4b6c04ebd21bb9') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('4e04b3d4a01448dcbd4b6c04ebd21bb9') <>
+    'V32:4e04b3d4a01448dcbd4b6c04ebd21bb9;V16:1654966506939200;V16:1654892685304660;V1:2;N;V10:GridColumn;V32:5cace00b431f4d7ebfe1b4adb807c058;N;N;N;V161:{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"4e04b3d4a01448dcbd4b6c04ebd21bb9"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('5cace00b431f4d7ebfe1b4adb807c058') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('5cace00b431f4d7ebfe1b4adb807c058') <>
+    'V32:5cace00b431f4d7ebfe1b4adb807c058;V16:1654966506939200;V16:1654892685304660;V1:2;N;V4:Grid;V32:449683f131b54314a1076ecb1a054a9b;N;N;N;V2848:{"onCheckboxClick__$S$__":"","onRendered__$S$__":"","columnAutoFill":false,"advancedSearch":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"sampleno","pageSize":50,"filterOpen":true,"autoSave":true,"suspendFormatter__$S$__":"","uuid":"e9f7a79d2e1a4c048d4a779eb3f2f3b1","onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"contextMenuConfig":false,"checkOnActiveGroupRow":true,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","exportWithStyle":true,"onValidating__$S$__":"","id":"sampleinfomodify-edit-grid","activeOnCheck":false,"height":"100%","order":{},"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":[],"sortEnable":true},"onCellClick__$S$__":"loadDetailPage","initRequest":true,"onAfterChoose__$S$__":"","deleteFormatter__$S$__":"","textLineFeed":false,"onBeforeSuspend__$S$__":"","showPagination":true,"sort":true,"exportExcelHeader":"","allowMultiColSort":false,"onColumnActive__$S$__":"","columnResize":true,"onBeforeActivate__$S$__":"","onBeforeDelete__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"activateFormatter__$S$__":"","childrenWidgetId":["4e04b3d4a01448dcbd4b6c04ebd21bb9","e9137ddeb02c4e2d8c80b2338aa00266","85792843027648b88d2e2e5c5197dda9","e59bd0f8c54b4883812bce8f21f8a852","8093682674634f7faebfec7734b207b6"],"headRequestData":{},"formatterParamOnExportExcel__$S$__":"","columns":[],"commonSearch":false,"serverSearch":true,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onUpdated__$S$__":"","exportHiddenColumns":true,"onColumnsWidthChange__$S$__":"","onDrag__$S$__":"","keyDownSelectContent":true,"formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","loadingMode":"normal","showChecked'
+ || 'Num":false,"onRowDblclick__$S$__":"","toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"cellValueFillByDrag":false,"requestData":{},"activateFirstRow":true,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","showSortArrow":true,"enterKeyDownActive":true,"onBeforeLoad__$S$__":"","onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","toolbarHidden":false,"generalButtonGroup":[],"url":"emc.SampleInfoModify.server.LcdpEmcSampleService.selectPaginationData","instantSavePath":"emc.SampleInfoModify.server.LcdpEmcSampleService.updateData","onBeforeEditorRender__$S$__":"","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"enableKeySwitchEditor":true,"showCheckedBadgeGt":1,"checkedIds":[],"toolbar_childrenWidgetId":["e9f7a79d2e1a4c048d4a779eb3f2f3b1"],"pageList":[50,100,150,200,"grid.all.data"],"onBeforeHeadRequest__$S$__":""};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('8093682674634f7faebfec7734b207b6') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('8093682674634f7faebfec7734b207b6') <>
+    'V32:8093682674634f7faebfec7734b207b6;V16:1654966506939200;V16:1654892685304660;V1:2;N;V10:GridColumn;V32:5cace00b431f4d7ebfe1b4adb807c058;N;N;N;V298:{"editor":true,"childrenWidgetId":[],"visible":true,"field":"handstatus","children":[{}],"width":150,"fixed":false,"sort":true,"id":"GridColumn_handstatus","title":{"i18nCode":"T_EMC_SAMPLE.HANDSTATUS","type":"i18n","zh-CN":"交接状态"},"gridColumnType":"text","uuid":"8093682674634f7faebfec7734b207b6"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('85792843027648b88d2e2e5c5197dda9') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('85792843027648b88d2e2e5c5197dda9') <>
+    'V32:85792843027648b88d2e2e5c5197dda9;V16:1654966506939200;V16:1654892685304660;V1:2;N;V10:GridColumn;V32:5cace00b431f4d7ebfe1b4adb807c058;N;N;N;V307:{"editor":false,"childrenWidgetId":[],"visible":true,"sort":true,"title":{"i18nCode":"T_EMC_SAMPLE.SAMPLENO","type":"i18n","zh-CN":"采样单号"},"gridColumnType":"link","type":"link","uuid":"85792843027648b88d2e2e5c5197dda9","field":"sampleno","children":[{}],"width":250,"fixed":false,"id":"GridColumn_sampleno"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('e59bd0f8c54b4883812bce8f21f8a852') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('e59bd0f8c54b4883812bce8f21f8a852') <>
+    'V32:e59bd0f8c54b4883812bce8f21f8a852;V16:1654966506939200;V16:1654892685304660;V1:2;N;V10:GridColumn;V32:5cace00b431f4d7ebfe1b4adb807c058;N;N;N;V308:{"editor":false,"childrenWidgetId":[],"visible":true,"field":"ordercategory","children":[{}],"width":250,"fixed":false,"sort":true,"id":"GridColumn_ordercategory","title":{"i18nCode":"T_EMC_SAMPLE.ORDERCATEGORY","type":"i18n","zh-CN":"样品类型"},"gridColumnType":"text","uuid":"e59bd0f8c54b4883812bce8f21f8a852"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('e9137ddeb02c4e2d8c80b2338aa00266') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('e9137ddeb02c4e2d8c80b2338aa00266') <>
+    'V32:e9137ddeb02c4e2d8c80b2338aa00266;V16:1654966506939200;V16:1654892685304660;V1:2;N;V10:GridColumn;V32:5cace00b431f4d7ebfe1b4adb807c058;N;N;N;V150:{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"e9137ddeb02c4e2d8c80b2338aa00266"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('e9f7a79d2e1a4c048d4a779eb3f2f3b1') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('e9f7a79d2e1a4c048d4a779eb3f2f3b1') <>
+    'V32:e9f7a79d2e1a4c048d4a779eb3f2f3b1;V16:1654966506939200;V16:1654892685304660;V1:2;N;V11:GridToolbar;V32:5cace00b431f4d7ebfe1b4adb807c058;N;N;N;V219:{"childrenWidgetId":["20f3ea3ac9f948c18115c6352019745d"],"generalPanelTrigger":[],"toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"e9f7a79d2e1a4c048d4a779eb3f2f3b1"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF NOT actual.EXISTS('fe1c1986381d4f00981ad38445a0666b') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
+  IF actual('fe1c1986381d4f00981ad38445a0666b') <>
+    'V32:fe1c1986381d4f00981ad38445a0666b;V16:1654966506939200;V16:1654892685304660;V1:2;N;V11:LayoutSouth;V32:33e6a05b8c764fcdaf36b05d08b8701e;N;N;N;V99:{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"fe1c1986381d4f00981ad38445a0666b","height":"0"};N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_COMP'); END IF;
   IF NOT actual.EXISTS('052d6ffad4fc4c4b8b7865f0a2e8c10e') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_COMP'); END IF;
   IF actual('052d6ffad4fc4c4b8b7865f0a2e8c10e') <>
     'V32:052d6ffad4fc4c4b8b7865f0a2e8c10e;V16:1754830408176672;V16:1734443928132640;V1:5;N;V10:GridColumn;V32:637f64b97e644b55a46e810041094ad8;N;N;N;V161:{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"052d6ffad4fc4c4b8b7865f0a2e8c10e"};N;'
@@ -20300,7 +25609,95 @@ BEGIN
       || CASE WHEN MESSAGE IS NULL THEN 'N;' ELSE 'V'||LENGTH(MESSAGE)||':'||MESSAGE||';' END AS SIGNATURE FROM T_LCDP_MODULE_PAGE_I18N) LOOP
     actual(r.ROW_ID) := r.SIGNATURE;
   END LOOP;
-  IF actual.COUNT <> 61 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual.COUNT <> 123 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782802') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782802') <>
+    'V16:1794420304782802;V16:1587156564485600;V16:1794420245005760;V82:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_1.text;V5:en-US;V6:Button;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782800') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782800') <>
+    'V16:1794420304782800;V16:1587156564485600;V16:1794420245005760;V82:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_2.text;V5:en-US;V6:Button;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782788') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782788') <>
+    'V16:1794420304782788;V16:1587156564485600;V16:1794420245005760;V82:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_3.text;V5:en-US;V6:Button;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782798') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782798') <>
+    'V16:1794420304782798;V16:1587156564485600;V16:1794420245005760;V121:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.contractno.title;V5:en-US;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782784') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782784') <>
+    'V16:1794420304782784;V16:1587156564485600;V16:1794420245005760;V125:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.entrustorgname.title;V5:en-US;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782794') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782794') <>
+    'V16:1794420304782794;V16:1587156564485600;V16:1794420245005760;V120:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expressno.title;V5:en-US;V9:expressno;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782786') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782786') <>
+    'V16:1794420304782786;V16:1587156564485600;V16:1794420245005760;V122:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expresstype.title;V5:en-US;V11:expresstype;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782804') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782804') <>
+    'V16:1794420304782804;V16:1587156564485600;V16:1794420245005760;V118:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurer.title;V5:en-US;V7:issurer;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782792') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782792') <>
+    'V16:1794420304782792;V16:1587156564485600;V16:1794420245005760;V122:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurerdate.title;V5:en-US;V11:issurerdate;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782790') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782790') <>
+    'V16:1794420304782790;V16:1587156564485600;V16:1794420245005760;V114:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.pic.title;V5:en-US;V3:pic;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782796') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782796') <>
+    'V16:1794420304782796;V16:1587156564485600;V16:1794420245005760;V117:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.projno.title;V5:en-US;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782803') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782803') <>
+    'V16:1794420304782803;V16:1587156564485600;V16:1794420245005760;V82:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_1.text;V5:zh-CN;V6:上传签收图片;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782801') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782801') <>
+    'V16:1794420304782801;V16:1587156564485600;V16:1794420245005760;V82:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_2.text;V5:zh-CN;V4:领取签名;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782789') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782789') <>
+    'V16:1794420304782789;V16:1587156564485600;V16:1794420245005760;V82:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.Button_3.text;V5:zh-CN;V3:回签单;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782799') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782799') <>
+    'V16:1794420304782799;V16:1587156564485600;V16:1794420245005760;V121:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.contractno.title;V5:zh-CN;V3:合同号;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782785') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782785') <>
+    'V16:1794420304782785;V16:1587156564485600;V16:1794420245005760;V125:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.entrustorgname.title;V5:zh-CN;V4:委托单位;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782795') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782795') <>
+    'V16:1794420304782795;V16:1587156564485600;V16:1794420245005760;V120:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expressno.title;V5:zh-CN;V4:快递单号;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782787') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782787') <>
+    'V16:1794420304782787;V16:1587156564485600;V16:1794420245005760;V122:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.expresstype.title;V5:zh-CN;V4:发送方式;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782805') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782805') <>
+    'V16:1794420304782805;V16:1587156564485600;V16:1794420245005760;V118:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurer.title;V5:zh-CN;V3:发送人;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782793') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782793') <>
+    'V16:1794420304782793;V16:1587156564485600;V16:1794420245005760;V122:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.issurerdate.title;V5:zh-CN;V4:发送日期;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782791') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782791') <>
+    'V16:1794420304782791;V16:1587156564485600;V16:1794420245005760;V114:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.pic.title;V5:zh-CN;V9:签名/快递回签截图;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1794420304782797') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1794420304782797') <>
+    'V16:1794420304782797;V16:1587156564485600;V16:1794420245005760;V117:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage.reportsendexpressdelivery-edit-grid.projno.title;V5:zh-CN;V4:任务单号;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
   IF NOT actual.EXISTS('1607008543091457') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
   IF actual('1607008543091457') <>
     'V16:1607008543091457;V16:1596797917215712;V16:1607008533293824;V54:emc.equiptInOut.page.equiptInOutEditPage.Button_5.text;V5:en-US;V6:Button;'
@@ -20453,6 +25850,166 @@ BEGIN
   IF actual('1704404002154242') <>
     'V16:1704404002154242;V16:1597040296782016;V16:1704403149227776;V60:emc.equiptInOut.page.equiptInOutRecord.Grid_1.username.title;V5:zh-CN;V3:操作人;'
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084706') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084706') <>
+    'V16:1630288604084706;V16:1597703224613312;V16:1630288250714592;V96:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.clientordername.title;V5:en-US;V15:clientordername;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084712') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084712') <>
+    'V16:1630288604084712;V16:1597703224613312;V16:1630288250714592;V90:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.orderdesc.title;V5:en-US;V9:orderdesc;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084704') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084704') <>
+    'V16:1630288604084704;V16:1597703224613312;V16:1630288250714592;V89:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projname.title;V5:en-US;V8:projname;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084710') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084710') <>
+    'V16:1630288604084710;V16:1597703224613312;V16:1630288250714592;V87:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projno.title;V5:en-US;V6:projno;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084708') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084708') <>
+    'V16:1630288604084708;V16:1597703224613312;V16:1630288250714592;V90:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.samplenum.title;V5:en-US;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084707') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084707') <>
+    'V16:1630288604084707;V16:1597703224613312;V16:1630288250714592;V96:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.clientordername.title;V5:zh-CN;V4:样品名称;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084713') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084713') <>
+    'V16:1630288604084713;V16:1597703224613312;V16:1630288250714592;V90:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.orderdesc.title;V5:zh-CN;V4:样品描述;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084705') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084705') <>
+    'V16:1630288604084705;V16:1597703224613312;V16:1630288250714592;V89:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projname.title;V5:zh-CN;V4:任务名称;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084711') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084711') <>
+    'V16:1630288604084711;V16:1597703224613312;V16:1630288250714592;V87:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.projno.title;V5:zh-CN;V4:任务编号;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1630288604084709') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1630288604084709') <>
+    'V16:1630288604084709;V16:1597703224613312;V16:1630288250714592;V90:emc.OrderInfoModify.page.OrderInfoModifyEditPage.orderinfomodify-edit-grid.samplenum.title;V5:zh-CN;V2:频次;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146916') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146916') <>
+    'V16:1631134832146916;V16:1630039276722656;V16:1631134722128352;V66:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.Button_1.text;V5:en-US;V6:Button;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146918') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146918') <>
+    'V16:1631134832146918;V16:1630039276722656;V16:1631134722128352;V95:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projname.title;V5:en-US;V8:projname;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146914') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146914') <>
+    'V16:1631134832146914;V16:1630039276722656;V16:1631134722128352;V93:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projno.title;V5:en-US;V6:projno;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146920') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146920') <>
+    'V16:1631134832146920;V16:1630039276722656;V16:1631134722128352;V95:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projnode.title;V5:en-US;V8:projnode;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146922') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146922') <>
+    'V16:1631134832146922;V16:1630039276722656;V16:1631134722128352;V93:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.status.title;V5:en-US;V6:status;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146912') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146912') <>
+    'V16:1631134832146912;V16:1630039276722656;V16:1631134722128352;V103:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.toreporteditdate.title;V5:en-US;V16:toreporteditdate;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146917') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146917') <>
+    'V16:1631134832146917;V16:1630039276722656;V16:1631134722128352;V66:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.Button_1.text;V5:zh-CN;V7:更新至报告编制;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146919') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146919') <>
+    'V16:1631134832146919;V16:1630039276722656;V16:1631134722128352;V95:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projname.title;V5:zh-CN;V4:任务名称;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146915') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146915') <>
+    'V16:1631134832146915;V16:1630039276722656;V16:1631134722128352;V93:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projno.title;V5:zh-CN;V4:任务编号;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146921') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146921') <>
+    'V16:1631134832146921;V16:1630039276722656;V16:1631134722128352;V95:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.projnode.title;V5:zh-CN;V4:任务阶段;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146923') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146923') <>
+    'V16:1631134832146923;V16:1630039276722656;V16:1631134722128352;V93:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.status.title;V5:zh-CN;V2:状态;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1631134832146913') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1631134832146913') <>
+    'V16:1631134832146913;V16:1630039276722656;V16:1631134722128352;V103:emc.ProjectInfoModify.page.ProjectInfoModifyEditPage.projectinfomodify-edit-grid.toreporteditdate.title;V5:zh-CN;V7:至报告编制日期;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413934') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413934') <>
+    'V16:1699787896413934;V16:1631067840535008;V16:1699784763219680;V64:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.Button_1.text;V5:en-US;V6:Button;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413924') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413924') <>
+    'V16:1699787896413924;V16:1631067840535008;V16:1699784763219680;V99:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.bizcategoryname.title;V5:en-US;V15:bizcategoryname;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413926') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413926') <>
+    'V16:1699787896413926;V16:1631067840535008;V16:1699784763219680;V100:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.businessusername.title;V5:en-US;V16:businessusername;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413932') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413932') <>
+    'V16:1699787896413932;V16:1631067840535008;V16:1699784763219680;V98:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.entrustorgname.title;V5:en-US;V14:entrustorgname;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413930') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413930') <>
+    'V16:1699787896413930;V16:1631067840535008;V16:1699784763219680;V92:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.reportno.title;V5:en-US;V8:reportno;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413922') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413922') <>
+    'V16:1699787896413922;V16:1631067840535008;V16:1699784763219680;V96:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.signusername.title;V5:en-US;V12:signusername;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413920') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413920') <>
+    'V16:1699787896413920;V16:1631067840535008;V16:1699784763219680;V90:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.status.title;V5:en-US;V6:status;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413928') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413928') <>
+    'V16:1699787896413928;V16:1631067840535008;V16:1699784763219680;V95:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.testorgname.title;V5:en-US;V11:testorgname;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413935') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413935') <>
+    'V16:1699787896413935;V16:1631067840535008;V16:1699784763219680;V64:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.Button_1.text;V5:zh-CN;V4:批量下载;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413925') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413925') <>
+    'V16:1699787896413925;V16:1631067840535008;V16:1699784763219680;V99:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.bizcategoryname.title;V5:zh-CN;V4:业务类型;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413927') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413927') <>
+    'V16:1699787896413927;V16:1631067840535008;V16:1699784763219680;V100:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.businessusername.title;V5:zh-CN;V3:业务员;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413933') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413933') <>
+    'V16:1699787896413933;V16:1631067840535008;V16:1699784763219680;V98:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.entrustorgname.title;V5:zh-CN;V4:委托单位;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413931') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413931') <>
+    'V16:1699787896413931;V16:1631067840535008;V16:1699784763219680;V92:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.reportno.title;V5:zh-CN;V4:报告编号;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413923') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413923') <>
+    'V16:1699787896413923;V16:1631067840535008;V16:1699784763219680;V96:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.signusername.title;V5:zh-CN;V3:业务员;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413921') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413921') <>
+    'V16:1699787896413921;V16:1631067840535008;V16:1699784763219680;V90:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.status.title;V5:zh-CN;V4:报告阶段;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1699787896413929') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1699787896413929') <>
+    'V16:1699787896413929;V16:1631067840535008;V16:1699784763219680;V95:emc.ReportSearchByYW.page.ReportSearchByYWEditPage.reportsearchbyyw-edit-grid.testorgname.title;V5:zh-CN;V4:受检单位;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1654966576317248') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1654966576317248') <>
+    'V16:1654966576317248;V16:1654892685304660;V16:1654966506939200;V65:emc.SampleInfoModify.page.SampleInfoModifyEditPage.Caption_1.text;V5:en-US;V8:captionn;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF NOT actual.EXISTS('1654966576317249') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
+  IF actual('1654966576317249') <>
+    'V16:1654966576317249;V16:1654892685304660;V16:1654966506939200;V65:emc.SampleInfoModify.page.SampleInfoModifyEditPage.Caption_1.text;V5:zh-CN;V15:未提交样品接收状态：draft;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_MODULE_PAGE_I18N'); END IF;
   IF NOT actual.EXISTS('1754833173918753') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_MODULE_PAGE_I18N'); END IF;
   IF actual('1754833173918753') <>
     'V16:1754833173918753;V16:1734443928132640;V16:1754830408176672;V66:emc.equiptInOut.page.equiptInOutStatus.Form_1.simpleCheckbox.title;V5:en-US;V14:simpleCheckbox;'
@@ -20558,7 +26115,123 @@ BEGIN
       || CASE WHEN MODULEPAGEHISTORYID IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(MODULEPAGEHISTORYID,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(MODULEPAGEHISTORYID,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END AS SIGNATURE FROM T_LCDP_PAGE_I18N_CODE) LOOP
     actual(r.ROW_ID) := r.SIGNATURE;
   END LOOP;
-  IF actual.COUNT <> 12 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual.COUNT <> 242 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247561664') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247561664') <>
+    'V16:1794420247561664;V19:GIKAM.BUTTON.DELETE;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247553472') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247553472') <>
+    'V16:1794420247553472;V19:GIKAM.BUTTON.INSERT;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247619009') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247619009') <>
+    'V16:1794420247619009;V30:T_EMC_REPORT_SEND_INFO.ADDRESS;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247610817') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247610817') <>
+    'V16:1794420247610817;V33:T_EMC_REPORT_SEND_INFO.BACKSENDNO;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247635393') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247635393') <>
+    'V16:1794420247635393;V36:T_EMC_REPORT_SEND_INFO.CNENREPORTCNT;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247659968') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247659968') <>
+    'V16:1794420247659968;V34:T_EMC_REPORT_SEND_INFO.CNREPORTCNT;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247586241') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247586241') <>
+    'V16:1794420247586241;V34:T_EMC_REPORT_SEND_INFO.CREATEDBYID;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247586240') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247586240') <>
+    'V16:1794420247586240;V36:T_EMC_REPORT_SEND_INFO.CREATEDBYNAME;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247578048') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247578048') <>
+    'V16:1794420247578048;V37:T_EMC_REPORT_SEND_INFO.CREATEDBYORGID;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247569856') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247569856') <>
+    'V16:1794420247569856;V39:T_EMC_REPORT_SEND_INFO.CREATEDBYORGNAME;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247578049') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247578049') <>
+    'V16:1794420247578049;V34:T_EMC_REPORT_SEND_INFO.CREATEDTIME;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247643585') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247643585') <>
+    'V16:1794420247643585;V34:T_EMC_REPORT_SEND_INFO.ENREPORTCNT;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247668161') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247668161') <>
+    'V16:1794420247668161;V32:T_EMC_REPORT_SEND_INFO.EXPRESSNO;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247676352') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247676352') <>
+    'V16:1794420247676352;V34:T_EMC_REPORT_SEND_INFO.EXPRESSTYPE;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247594432') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247594432') <>
+    'V16:1794420247594432;V33:T_EMC_REPORT_SEND_INFO.ISRECEIVED;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247602625') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247602625') <>
+    'V16:1794420247602625;V30:T_EMC_REPORT_SEND_INFO.ISSURER;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247602624') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247602624') <>
+    'V16:1794420247602624;V34:T_EMC_REPORT_SEND_INFO.ISSURERDATE;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247643584') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247643584') <>
+    'V16:1794420247643584;V37:T_EMC_REPORT_SEND_INFO.NEEDCNENREPORT;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247659969') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247659969') <>
+    'V16:1794420247659969;V35:T_EMC_REPORT_SEND_INFO.NEEDCNREPORT;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247651776') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247651776') <>
+    'V16:1794420247651776;V35:T_EMC_REPORT_SEND_INFO.NEEDENREPORT;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247610816') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247610816') <>
+    'V16:1794420247610816;V28:T_EMC_REPORT_SEND_INFO.ORGID;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247627200') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247627200') <>
+    'V16:1794420247627200;V28:T_EMC_REPORT_SEND_INFO.PHONE;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247619008') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247619008') <>
+    'V16:1794420247619008;V26:T_EMC_REPORT_SEND_INFO.PIC;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247700928') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247700928') <>
+    'V16:1794420247700928;V29:T_EMC_REPORT_SEND_INFO.PROJID;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247668160') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247668160') <>
+    'V16:1794420247668160;V29:T_EMC_REPORT_SEND_INFO.REMARK;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247684544') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247684544') <>
+    'V16:1794420247684544;V32:T_EMC_REPORT_SEND_INFO.SENDEMAIL;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247692736') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247692736') <>
+    'V16:1794420247692736;V35:T_EMC_REPORT_SEND_INFO.SENDTOQUOTER;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247684545') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247684545') <>
+    'V16:1794420247684545;V34:T_EMC_REPORT_SEND_INFO.SENDTOSALER;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1794420247635392') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1794420247635392') <>
+    'V16:1794420247635392;V31:T_EMC_REPORT_SEND_INFO.USERNAME;V16:1587156564485600;V16:1794420245005760;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
   IF NOT actual.EXISTS('1607008544336641') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
   IF actual('1607008544336641') <>
     'V16:1607008544336641;V19:GIKAM.BUTTON.DELETE;V16:1596797917215712;V16:1607008533293824;'
@@ -20606,6 +26279,810 @@ BEGIN
   IF NOT actual.EXISTS('1607008544295680') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
   IF actual('1607008544295680') <>
     'V16:1607008544295680;V34:T_EMC_EQUIPT_INOUT.OPERATEUSERNAME;V16:1596797917215712;V16:1607008533293824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338419328') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338419328') <>
+    'V16:1616648338419328;V19:GIKAM.BUTTON.DELETE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338402944') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338402944') <>
+    'V16:1616648338402944;V19:GIKAM.BUTTON.INSERT;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338566784') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338566784') <>
+    'V16:1616648338566784;V19:T_EMC_FOLDER.CARNUM;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338476672') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338476672') <>
+    'V16:1616648338476672;V28:T_EMC_FOLDER.CONTRACTPOTNAME;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338542208') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338542208') <>
+    'V16:1616648338542208;V25:T_EMC_FOLDER.CURRENTSPEED;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338460289') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338460289') <>
+    'V16:1616648338460289;V27:T_EMC_FOLDER.EMISSIONSTATUS;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338427521') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338427521') <>
+    'V16:1616648338427521;V24:T_EMC_FOLDER.EXISTLNGLAT;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338435712') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338435712') <>
+    'V16:1616648338435712;V22:T_EMC_FOLDER.EXISTTIME;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338534017') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338534017') <>
+    'V16:1616648338534017;V17:T_EMC_FOLDER.FLOW;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338615937') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338615937') <>
+    'V16:1616648338615937;V26:T_EMC_FOLDER.FLOWDIRECTION;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338787968') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338787968') <>
+    'V16:1616648338787968;V21:T_EMC_FOLDER.FOLDERNO;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338452096') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338452096') <>
+    'V16:1616648338452096;V23:T_EMC_FOLDER.INTOLNGLAT;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338460288') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338460288') <>
+    'V16:1616648338460288;V21:T_EMC_FOLDER.INTOTIME;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338615936') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338615936') <>
+    'V16:1616648338615936;V20:T_EMC_FOLDER.ISRANGE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338697856') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338697856') <>
+    'V16:1616648338697856;V21:T_EMC_FOLDER.LATITUDE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338706048') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338706048') <>
+    'V16:1616648338706048;V22:T_EMC_FOLDER.LONGITUDE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338665088') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338665088') <>
+    'V16:1616648338665088;V21:T_EMC_FOLDER.MOBILEID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338714240') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338714240') <>
+    'V16:1616648338714240;V33:T_EMC_FOLDER.MONITORPOINTCATEGORY;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338722432') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338722432') <>
+    'V16:1616648338722432;V35:T_EMC_FOLDER.MONITORPOINTCATEGORYID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338763392') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338763392') <>
+    'V16:1616648338763392;V27:T_EMC_FOLDER.MONITORPOINTID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338509440') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338509440') <>
+    'V16:1616648338509440;V29:T_EMC_FOLDER.MONITORPOINTNAME;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338755200') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338755200') <>
+    'V16:1616648338755200;V27:T_EMC_FOLDER.MONITORPOINTNO;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338656896') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338656896') <>
+    'V16:1616648338656896;V26:T_EMC_FOLDER.MONITORTMPLID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338763393') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338763393') <>
+    'V16:1616648338763393;V26:T_EMC_FOLDER.ORDERCATEGORY;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338525824') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338525824') <>
+    'V16:1616648338525824;V24:T_EMC_FOLDER.PARAMPROJID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338747008') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338747008') <>
+    'V16:1616648338747008;V27:T_EMC_FOLDER.PLANSAMPLEDATE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338632320') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338632320') <>
+    'V16:1616648338632320;V29:T_EMC_FOLDER.PLANSAMPLEUSERID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338624128') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338624128') <>
+    'V16:1616648338624128;V31:T_EMC_FOLDER.PLANSAMPLEUSERNAME;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338689665') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338689665') <>
+    'V16:1616648338689665;V26:T_EMC_FOLDER.PROCESSSTATUS;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338779776') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338779776') <>
+    'V16:1616648338779776;V19:T_EMC_FOLDER.PROJID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338591360') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338591360') <>
+    'V16:1616648338591360;V28:T_EMC_FOLDER.REALITYDISTANCE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338599552') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338599552') <>
+    'V16:1616648338599552;V28:T_EMC_FOLDER.REALITYLATITUDE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338607744') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338607744') <>
+    'V16:1616648338607744;V29:T_EMC_FOLDER.REALITYLONGITUDE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338484864') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338484864') <>
+    'V16:1616648338484864;V19:T_EMC_FOLDER.REMARK;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338648704') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338648704') <>
+    'V16:1616648338648704;V18:T_EMC_FOLDER.RIVER;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338550400') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338550400') <>
+    'V16:1616648338550400;V23:T_EMC_FOLDER.RIVERDEPTH;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338558592') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338558592') <>
+    'V16:1616648338558592;V23:T_EMC_FOLDER.RIVERWIDTH;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338534016') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338534016') <>
+    'V16:1616648338534016;V18:T_EMC_FOLDER.RUNID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338771584') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338771584') <>
+    'V16:1616648338771584;V24:T_EMC_FOLDER.SAMPLEORGID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338517632') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338517632') <>
+    'V16:1616648338517632;V26:T_EMC_FOLDER.SAMPLEORGNAME;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338501248') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338501248') <>
+    'V16:1616648338501248;V25:T_EMC_FOLDER.SAMPLEUSERID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338493056') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338493056') <>
+    'V16:1616648338493056;V27:T_EMC_FOLDER.SAMPLEUSERNAME;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338574976') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338574976') <>
+    'V16:1616648338574976;V26:T_EMC_FOLDER.SAMPLINGDEPTH;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338583168') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338583168') <>
+    'V16:1616648338583168;V26:T_EMC_FOLDER.SAMPLINGRANGE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338738816') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338738816') <>
+    'V16:1616648338738816;V24:T_EMC_FOLDER.SCENEUSERID;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338730624') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338730624') <>
+    'V16:1616648338730624;V26:T_EMC_FOLDER.SCENEUSERNAME;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338427520') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338427520') <>
+    'V16:1616648338427520;V20:T_EMC_FOLDER.SECTION;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338681472') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338681472') <>
+    'V16:1616648338681472;V19:T_EMC_FOLDER.SOURCE;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338689664') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338689664') <>
+    'V16:1616648338689664;V19:T_EMC_FOLDER.STATUS;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338673280') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338673280') <>
+    'V16:1616648338673280;V24:T_EMC_FOLDER.TERMINATION;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338640512') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338640512') <>
+    'V16:1616648338640512;V22:T_EMC_FOLDER.TRIBUTARY;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1616648338566785') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1616648338566785') <>
+    'V16:1616648338566785;V24:T_EMC_FOLDER.USEDEPTNAME;V16:1605674000347936;V16:1616648289373824;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730090977') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730090977') <>
+    'V16:1631134730090977;V19:GIKAM.BUTTON.DELETE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730099168') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730099168') <>
+    'V16:1631134730099168;V19:GIKAM.BUTTON.INSERT;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729869793') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729869793') <>
+    'V16:1631134729869793;V24:T_EMC_PROJECT.ACCEPTDATE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730041824') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730041824') <>
+    'V16:1631134730041824;V26:T_EMC_PROJECT.BEFORESTATUS;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729959904') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729959904') <>
+    'V16:1631134729959904;V29:T_EMC_PROJECT.BIZCATEGORYCODE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729853408') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729853408') <>
+    'V16:1631134729853408;V27:T_EMC_PROJECT.BIZCATEGORYID;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730090976') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730090976') <>
+    'V16:1631134730090976;V26:T_EMC_PROJECT.CANCELREASON;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729927137') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729927137') <>
+    'V16:1631134729927137;V26:T_EMC_PROJECT.CANCLEREASON;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729877984') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729877984') <>
+    'V16:1631134729877984;V24:T_EMC_PROJECT.COMPLEDATE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730000865') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730000865') <>
+    'V16:1631134730000865;V24:T_EMC_PROJECT.CONTRACTID;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730033633') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730033633') <>
+    'V16:1631134730033633;V20:T_EMC_PROJECT.DETECT;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729984481') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729984481') <>
+    'V16:1631134729984481;V21:T_EMC_PROJECT.ENDTIME;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729877985') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729877985') <>
+    'V16:1631134729877985;V25:T_EMC_PROJECT.ENTRUSTDATE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729894369') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729894369') <>
+    'V16:1631134729894369;V27:T_EMC_PROJECT.ENTRUSTMETHOD;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729935328') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729935328') <>
+    'V16:1631134729935328;V31:T_EMC_PROJECT.ENTRUSTORGCONTACT;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729845216') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729845216') <>
+    'V16:1631134729845216;V26:T_EMC_PROJECT.ENTRUSTORGID;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729935329') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729935329') <>
+    'V16:1631134729935329;V29:T_EMC_PROJECT.ENTRUSTORGPHONE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729976289') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729976289') <>
+    'V16:1631134729976289;V22:T_EMC_PROJECT.MOBILEID;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729951712') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729951712') <>
+    'V16:1631134729951712;V28:T_EMC_PROJECT.MONITORORGNAME;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729902561') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729902561') <>
+    'V16:1631134729902561;V19:T_EMC_PROJECT.NDCAL;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729976288') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729976288') <>
+    'V16:1631134729976288;V26:T_EMC_PROJECT.NEXTTASKDATE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730066401') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730066401') <>
+    'V16:1631134730066401;V26:T_EMC_PROJECT.OPERATIONORG;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729918944') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729918944') <>
+    'V16:1631134729918944;V27:T_EMC_PROJECT.PROCESSSTATUS;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729837025') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729837025') <>
+    'V16:1631134729837025;V25:T_EMC_PROJECT.PROJADDRESS;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729820640') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729820640') <>
+    'V16:1631134729820640;V20:T_EMC_PROJECT.PROJNO;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729992672') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729992672') <>
+    'V16:1631134729992672;V22:T_EMC_PROJECT.PROJNODE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730082785') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730082785') <>
+    'V16:1631134730082785;V21:T_EMC_PROJECT.QCCHECK;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730017248') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730017248') <>
+    'V16:1631134730017248;V28:T_EMC_PROJECT.QUALITYCONTROL;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729861601') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729861601') <>
+    'V16:1631134729861601;V24:T_EMC_PROJECT.REGISTDATE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730074592') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730074592') <>
+    'V16:1631134730074592;V30:T_EMC_PROJECT.REPORTEDITUSERID;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730082784') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730082784') <>
+    'V16:1631134730082784;V32:T_EMC_PROJECT.REPORTEDITUSERNAME;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730058208') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730058208') <>
+    'V16:1631134730058208;V31:T_EMC_PROJECT.REPORTISSUEUSERID;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730066400') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730066400') <>
+    'V16:1631134730066400;V33:T_EMC_PROJECT.REPORTISSUEUSERNAME;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729869792') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729869792') <>
+    'V16:1631134729869792;V25:T_EMC_PROJECT.REPORTORGID;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730050016') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730050016') <>
+    'V16:1631134730050016;V30:T_EMC_PROJECT.REPORTREVIEWERID;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730050017') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730050017') <>
+    'V16:1631134730050017;V32:T_EMC_PROJECT.REPORTREVIEWERNAME;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730017249') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730017249') <>
+    'V16:1631134730017249;V24:T_EMC_PROJECT.REPORTTYPE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730000864') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730000864') <>
+    'V16:1631134730000864;V20:T_EMC_PROJECT.SAMPLE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729886176') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729886176') <>
+    'V16:1631134729886176;V22:T_EMC_PROJECT.SENDDATE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729894368') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729894368') <>
+    'V16:1631134729894368;V22:T_EMC_PROJECT.SENDTYPE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729910752') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729910752') <>
+    'V16:1631134729910752;V26:T_EMC_PROJECT.SENDUSERNAME;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729968096') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729968096') <>
+    'V16:1631134729968096;V20:T_EMC_PROJECT.SOURCE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729984480') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729984480') <>
+    'V16:1631134729984480;V23:T_EMC_PROJECT.STARTTIME;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729927136') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729927136') <>
+    'V16:1631134729927136;V20:T_EMC_PROJECT.STATUS;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730009056') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730009056') <>
+    'V16:1631134730009056;V24:T_EMC_PROJECT.SUBPACKAGE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729902560') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729902560') <>
+    'V16:1631134729902560;V28:T_EMC_PROJECT.SUBPACKAGEDESC;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729910753') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729910753') <>
+    'V16:1631134729910753;V22:T_EMC_PROJECT.TASKDATE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729861600') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729861600') <>
+    'V16:1631134729861600;V20:T_EMC_PROJECT.TASKNO;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729943520') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729943520') <>
+    'V16:1631134729943520;V28:T_EMC_PROJECT.TESTORGCONTACT;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729837024') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729837024') <>
+    'V16:1631134729837024;V23:T_EMC_PROJECT.TESTORGID;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134729943521') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134729943521') <>
+    'V16:1631134729943521;V26:T_EMC_PROJECT.TESTORGPHONE;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1631134730033632') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1631134730033632') <>
+    'V16:1631134730033632;V20:T_EMC_PROJECT.URGENT;V16:1630039276722656;V16:1631134722128352;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805719776') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805719776') <>
+    'V16:1699784805719776;V19:GIKAM.BUTTON.DELETE;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805727968') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805727968') <>
+    'V16:1699784805727968;V19:GIKAM.BUTTON.INSERT;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805826272') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805826272') <>
+    'V16:1699784805826272;V29:T_EMC_REPORT.ADDINFOINDEXFLAG;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805834464') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805834464') <>
+    'V16:1699784805834464;V25:T_EMC_REPORT.ARCHIVEDFLAG;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805908192') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805908192') <>
+    'V16:1699784805908192;V25:T_EMC_REPORT.COMPLETEDATE;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805900000') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805900000') <>
+    'V16:1699784805900000;V27:T_EMC_REPORT.COMPLETESTATUS;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805760736') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805760736') <>
+    'V16:1699784805760736;V24:T_EMC_REPORT.CREATEDBYID;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805752544') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805752544') <>
+    'V16:1699784805752544;V26:T_EMC_REPORT.CREATEDBYNAME;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805744352') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805744352') <>
+    'V16:1699784805744352;V27:T_EMC_REPORT.CREATEDBYORGID;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805736160') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805736160') <>
+    'V16:1699784805736160;V29:T_EMC_REPORT.CREATEDBYORGNAME;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805744353') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805744353') <>
+    'V16:1699784805744353;V24:T_EMC_REPORT.CREATEDTIME;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805932768') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805932768') <>
+    'V16:1699784805932768;V24:T_EMC_REPORT.DATASHEETID;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805900001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805900001') <>
+    'V16:1699784805900001;V25:T_EMC_REPORT.DELIVERYDATE;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805883617') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805883617') <>
+    'V16:1699784805883617;V29:T_EMC_REPORT.DISPLAYAVGRESULT;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805891808') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805891808') <>
+    'V16:1699784805891808;V35:T_EMC_REPORT.DISPLAYCONVERTEDRESULT;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805883616') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805883616') <>
+    'V16:1699784805883616;V29:T_EMC_REPORT.DISPLAYPARAMETER;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805916385') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805916385') <>
+    'V16:1699784805916385;V27:T_EMC_REPORT.DISPLAYRECRATE;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805924576') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805924576') <>
+    'V16:1699784805924576;V23:T_EMC_REPORT.DISPLAYSTD;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805940960') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805940960') <>
+    'V16:1699784805940960;V25:T_EMC_REPORT.IFSTATISTICS;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805801696') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805801696') <>
+    'V16:1699784805801696;V29:T_EMC_REPORT.INSTALLSITUATION;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805875424') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805875424') <>
+    'V16:1699784805875424;V22:T_EMC_REPORT.MERGEFLAG;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805785312') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805785312') <>
+    'V16:1699784805785312;V24:T_EMC_REPORT.MONITORINFO;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805965537') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805965537') <>
+    'V16:1699784805965537;V26:T_EMC_REPORT.MONITORTMPLID;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805867232') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805867232') <>
+    'V16:1699784805867232;V26:T_EMC_REPORT.NDDISPLAYMODE;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805965536') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805965536') <>
+    'V16:1699784805965536;V26:T_EMC_REPORT.ORDERCATEGORY;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805793504') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805793504') <>
+    'V16:1699784805793504;V20:T_EMC_REPORT.PREFACE;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805949153') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805949153') <>
+    'V16:1699784805949153;V26:T_EMC_REPORT.PROCESSSTATUS;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805973728') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805973728') <>
+    'V16:1699784805973728;V19:T_EMC_REPORT.PROJID;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805834465') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805834465') <>
+    'V16:1699784805834465;V21:T_EMC_REPORT.QCREPORT;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805916384') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805916384') <>
+    'V16:1699784805916384;V27:T_EMC_REPORT.QCREPORTLINEID;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805818080') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805818080') <>
+    'V16:1699784805818080;V19:T_EMC_REPORT.REMARK;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805842656') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805842656') <>
+    'V16:1699784805842656;V27:T_EMC_REPORT.REPORTAPTITUDE;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805957345') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805957345') <>
+    'V16:1699784805957345;V31:T_EMC_REPORT.REPORTCONFIGLINEID;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805949152') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805949152') <>
+    'V16:1699784805949152;V21:T_EMC_REPORT.REPORTNO;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805859040') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805859040') <>
+    'V16:1699784805859040;V29:T_EMC_REPORT.REPORTTEMPLATEID;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805850848') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805850848') <>
+    'V16:1699784805850848;V31:T_EMC_REPORT.REPORTTEMPLATENAME;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805777121') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805777121') <>
+    'V16:1699784805777121;V29:T_EMC_REPORT.REPORTUNDOSTATUS;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805940961') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805940961') <>
+    'V16:1699784805940961;V33:T_EMC_REPORT.RSREPORTCONFIGLINEID;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805818081') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805818081') <>
+    'V16:1699784805818081;V22:T_EMC_REPORT.SHOWLIMIT;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805957344') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805957344') <>
+    'V16:1699784805957344;V19:T_EMC_REPORT.STATUS;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805768928') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805768928') <>
+    'V16:1699784805768928;V23:T_EMC_REPORT.SYNCNCDESC;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805777120') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805777120') <>
+    'V16:1699784805777120;V25:T_EMC_REPORT.SYNCNCSTATUS;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805801697') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805801697') <>
+    'V16:1699784805801697;V27:T_EMC_REPORT.TESTCONCLUSION;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805859041') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805859041') <>
+    'V16:1699784805859041;V28:T_EMC_REPORT.TOARCHIVINGFLAG;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1699784805809888') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1699784805809888') <>
+    'V16:1699784805809888;V26:T_EMC_REPORT.WORKCONDITION;V16:1631067840535008;V16:1699784763219680;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508045120') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508045120') <>
+    'V16:1654966508045120;V19:GIKAM.BUTTON.DELETE;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508036928') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508036928') <>
+    'V16:1654966508036928;V19:GIKAM.BUTTON.INSERT;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508266305') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508266305') <>
+    'V16:1654966508266305;V25:T_EMC_SAMPLE.ACCEPTEDDATE;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508102464') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508102464') <>
+    'V16:1654966508102464;V25:T_EMC_SAMPLE.ACCEPTEDTIME;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508282688') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508282688') <>
+    'V16:1654966508282688;V27:T_EMC_SAMPLE.ACCEPTEDUSERID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508274496') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508274496') <>
+    'V16:1654966508274496;V28:T_EMC_SAMPLE.ACCEPTEUSERNAME;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508094272') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508094272') <>
+    'V16:1654966508094272;V25:T_EMC_SAMPLE.ACCEPTSTATUS;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508135232') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508135232') <>
+    'V16:1654966508135232;V32:T_EMC_SAMPLE.ARCHIVEREPORTLINEID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508127041') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508127041') <>
+    'V16:1654966508127041;V23:T_EMC_SAMPLE.ASSIGNDATE;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508086080') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508086080') <>
+    'V16:1654966508086080;V25:T_EMC_SAMPLE.ASSIGNSTATUS;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508151616') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508151616') <>
+    'V16:1654966508151616;V22:T_EMC_SAMPLE.AUDITDATE;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508192576') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508192576') <>
+    'V16:1654966508192576;V26:T_EMC_SAMPLE.CALIBRATIONID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508184385') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508184385') <>
+    'V16:1654966508184385;V29:T_EMC_SAMPLE.CALIREPORTLINEID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508159808') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508159808') <>
+    'V16:1654966508159808;V26:T_EMC_SAMPLE.COMPELETEDATE;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508208961') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508208961') <>
+    'V16:1654966508208961;V27:T_EMC_SAMPLE.CONTAINERVALID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508233536') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508233536') <>
+    'V16:1654966508233536;V26:T_EMC_SAMPLE.EXCHANGEVALID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508061504') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508061504') <>
+    'V16:1654966508061504;V24:T_EMC_SAMPLE.EXISTLNGLAT;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508061505') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508061505') <>
+    'V16:1654966508061505;V22:T_EMC_SAMPLE.EXISTTIME;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508102465') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508102465') <>
+    'V16:1654966508102465;V23:T_EMC_SAMPLE.HANDSTATUS;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508069696') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508069696') <>
+    'V16:1654966508069696;V23:T_EMC_SAMPLE.INTOLNGLAT;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508077888') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508077888') <>
+    'V16:1654966508077888;V21:T_EMC_SAMPLE.INTOTIME;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508217152') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508217152') <>
+    'V16:1654966508217152;V22:T_EMC_SAMPLE.MARKVALID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508266304') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508266304') <>
+    'V16:1654966508266304;V21:T_EMC_SAMPLE.MOBILEID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508290881') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508290881') <>
+    'V16:1654966508290881;V26:T_EMC_SAMPLE.MONITORTMPLID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508323648') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508323648') <>
+    'V16:1654966508323648;V26:T_EMC_SAMPLE.ORDERCATEGORY;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508143424') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508143424') <>
+    'V16:1654966508143424;V22:T_EMC_SAMPLE.ORDERNUMS;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508168001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508168001') <>
+    'V16:1654966508168001;V18:T_EMC_SAMPLE.ORGID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508168000') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508168000') <>
+    'V16:1654966508168000;V20:T_EMC_SAMPLE.ORGNAME;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508176192') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508176192') <>
+    'V16:1654966508176192;V22:T_EMC_SAMPLE.PRINTFLAG;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508307264') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508307264') <>
+    'V16:1654966508307264;V26:T_EMC_SAMPLE.PROCESSSTATUS;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508323649') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508323649') <>
+    'V16:1654966508323649;V19:T_EMC_SAMPLE.PROJID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508315456') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508315456') <>
+    'V16:1654966508315456;V27:T_EMC_SAMPLE.PROPERTYTMPLID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508208960') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508208960') <>
+    'V16:1654966508208960;V21:T_EMC_SAMPLE.QCUSERID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508200768') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508200768') <>
+    'V16:1654966508200768;V23:T_EMC_SAMPLE.QCUSERNAME;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508127040') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508127040') <>
+    'V16:1654966508127040;V24:T_EMC_SAMPLE.RECEIVEDATE;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508184384') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508184384') <>
+    'V16:1654966508184384;V32:T_EMC_SAMPLE.RECEIVEREPORTLINEID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508315457') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508315457') <>
+    'V16:1654966508315457;V19:T_EMC_SAMPLE.REMARK;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508290880') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508290880') <>
+    'V16:1654966508290880;V31:T_EMC_SAMPLE.REPORTCONFIGLINEID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508151617') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508151617') <>
+    'V16:1654966508151617;V23:T_EMC_SAMPLE.REVIEWDATE;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508249920') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508249920') <>
+    'V16:1654966508249920;V24:T_EMC_SAMPLE.SAMPLECHECK;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508331840') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508331840') <>
+    'V16:1654966508331840;V21:T_EMC_SAMPLE.SAMPLENO;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508118848') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508118848') <>
+    'V16:1654966508118848;V25:T_EMC_SAMPLE.SAMPLEUSERID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508110656') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508110656') <>
+    'V16:1654966508110656;V27:T_EMC_SAMPLE.SAMPLEUSERNAME;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508249921') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508249921') <>
+    'V16:1654966508249921;V29:T_EMC_SAMPLE.SAMPLINGEQUIPTID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508258112') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508258112') <>
+    'V16:1654966508258112;V31:T_EMC_SAMPLE.SAMPLINGEQUIPTNAME;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508225344') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508225344') <>
+    'V16:1654966508225344;V26:T_EMC_SAMPLE.SAMPLINGVALID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508282689') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508282689') <>
+    'V16:1654966508282689;V26:T_EMC_SAMPLE.SEPSAMPLETIME;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508299073') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508299073') <>
+    'V16:1654966508299073;V19:T_EMC_SAMPLE.SOURCE;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508299072') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508299072') <>
+    'V16:1654966508299072;V19:T_EMC_SAMPLE.STATUS;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508233537') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508233537') <>
+    'V16:1654966508233537;V25:T_EMC_SAMPLE.STORAGEVALID;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508053312') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508053312') <>
+    'V16:1654966508053312;V21:T_EMC_SAMPLE.UNDOFLAG;V16:1654892685304660;V16:1654966506939200;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF NOT actual.EXISTS('1654966508241728') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_PAGE_I18N_CODE'); END IF;
+  IF actual('1654966508241728') <>
+    'V16:1654966508241728;V26:T_EMC_SAMPLE.USEDCONTAINER;V16:1654892685304660;V16:1654966506939200;'
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
 END;
 /

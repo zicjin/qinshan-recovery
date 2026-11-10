@@ -131,8 +131,9 @@ Its finite `70-bootstrap.sql` supplies reviewed technical locale, menu,
 entity and UI configuration, plus the 27 explicitly referenced dictionary
 categories, 118 options and their translation dependencies. Captures are bound
 separately; empty production categories remain empty.
-It additionally carries the reviewed published equipment-in/out LCDP module,
-its four menus and module-specific dictionary/selector. Other dynamic modules,
+It additionally carries seven reviewed published LCDP modules for equipment,
+folder/order/project/sample information, report lookup and delivery, with ten
+menus and the equipment dictionary/selector. Other dynamic modules,
 workflow and permission bootstrap remain incomplete; draft scripts containing
 embedded business data are excluded.
 Complete permissions, workflows and dynamic LCDP initialization remain

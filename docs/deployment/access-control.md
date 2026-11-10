@@ -50,6 +50,14 @@ definition remain suspended. GRID URLs and column settings are preserved only
 after finite declarative syntax and source-hash review. No production user,
 role membership, organization grant or permission grant is shipped by this seed.
 
+Workflow service definitions use a separate `T_CORE_MENU_EXT` table. The finite
+bootstrap includes all 41 captured `audit_def` rows with their source table
+references and enable flags, without production identity or grant rows. The
+original service selectors and generic detail queries require `ENABLE='1'`, so
+only 40 are visible there; the disabled row is preserved in the database. This
+does not install process XML, candidate identities or organization assignments,
+and it does not alter the optional request-access setting above.
+
 Apply and verify the technical bootstrap before creating installation identities
 and starting the application. The full new-device installer remains partial;
 see [clean-device-contract.md](clean-device-contract.md). This finite set does

@@ -188,6 +188,11 @@ See [access-control.md](docs/deployment/access-control.md) for its matching rule
 permission-panel definitions and installation order.
 Complete permissions, workflows and dynamic LCDP initialization remain
 incomplete; the phase is not a replacement for the full bootstrap.
+The bootstrap also supplies the 41 production-captured workflow service
+definitions in `T_CORE_MENU_EXT`, preserving 40 enabled and one disabled entry.
+Service definitions are separate from process XML, versions, organization scope
+and candidate assignments; those workflow dependencies are not installed by
+these metadata rows.
 The distribution now includes a one-time
 [first-administrator command](docs/deployment/first-administrator.md), accepting
 private installer identities, password and policy. It initializes a verified

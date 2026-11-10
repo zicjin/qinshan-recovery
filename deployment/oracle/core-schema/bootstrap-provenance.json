@@ -52,6 +52,25 @@
     "unshipped_menu_references": [],
     "whole_table_closure": true
   },
+  "audit_definition": {
+    "business_rows": false,
+    "disabled_rows": 1,
+    "enabled_rows": 40,
+    "identity_or_history_rows_copied": false,
+    "source_class": "current-production",
+    "source_manifest": {
+      "path": "private/workflow-bootstrap-20261111/20261110T203035Z-static-config-manifest-private.json",
+      "sha256": "83b8da3b92ad058d3e8155b6d6a2fb0cb59b6217931fb8176238da59882294eb"
+    },
+    "source_receipts": [
+      {
+        "label": "audit_definition",
+        "path": "private/workflow-bootstrap-20261111/20261110T203035Z-audit_definition-private.json",
+        "sha256": "7a39ecd8dfc6fd156420dacea8712526f36078982a2e728b9c57d032bd769878"
+      }
+    ],
+    "whole_selected_table_closure": true
+  },
   "business_rows": false,
   "captured_at": "2026-11-10T15:09:32.106604+00:00",
   "dictionary": {
@@ -454,7 +473,8 @@
     "Technical table registry includes only the selected core schema closure; no missing tables or parent relationships invented.",
     "Finite dictionary categories follow shipped select configuration references, not sys/biz class labels; generic and non-dictionary selectors remain outside this closure.",
     "Source categories contain no code rows; preserved empty without invented options: dsCategory, dsType, fieldCategory, publishState",
-    "Finite technical request mappings and permission type definitions only; source orphan menu references and suspension flags retained. No identities or grants copied; check-access-permission remains an explicit runtime setting and menu_ext audit definitions remain excluded.",
+    "Finite technical request mappings and permission type definitions only; source orphan menu references and suspension flags retained. No identities or grants copied; check-access-permission remains an explicit runtime setting.",
+    "Finite source-bound audit_def definitions only; original enabled/disabled state and NULL EXT retained. No identities, grants, workflow instances or audit history copied; full workflow/application installation remains incomplete.",
     "Published 7 reviewed LCDP modules, 10 reviewed menus and 2 original file Java resources only; FileScript retains its original active-only parent0/no-history exception. Import/export templates and file storage acceptance remain incomplete; remaining dynamic LCDP/workflow/permission bootstrap remains incomplete."
   ],
   "row_counts": {
@@ -468,6 +488,7 @@
     "T_CORE_I18N_MESSAGE": 1375,
     "T_CORE_LOGIN_CONFIG": 1,
     "T_CORE_MENU": 402,
+    "T_CORE_MENU_EXT": 41,
     "T_CORE_REQUEST_URL": 188,
     "T_CORE_ROLE_PERMISSION_TYPE": 3,
     "T_CORE_SYSTEM_CONFIG": 1,
@@ -29376,6 +29397,252 @@
       "source_row_sha256": "93ef281653637c19dea31d87bb78b719676def66a5a075223dda1370cc624b00",
       "statement_sha256": "f1831e8bca88fa0ebcdd0b1a3def52973609d7d87f7703fa66a5a519eba24644",
       "table": "T_CORE_USER_PERMISSION_TYPE"
+    },
+    {
+      "id": "100529",
+      "source_row_sha256": "4883f650a10529f1a90477f5676679346ec10094f30e7b250b72874832b3e92c",
+      "statement_sha256": "043346031ffc6b04916153038c201b784a915abe4113df3a93f4d0ad9bb3bde2",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1018",
+      "source_row_sha256": "6bf03fadb2dc138cb8f2597072d67762ec644bd53615240fe722bb02766f481e",
+      "statement_sha256": "3c26da95ff966c6b5922eb4838a5671cbe559f385e41b49bc3bc9653bec30707",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1020",
+      "source_row_sha256": "ab6759a44ebbdf6d5cae7d2d85df986c27a986b0ff8567c14765e0cde50eee34",
+      "statement_sha256": "2e1b520d6f77cb12b4140fa7c9b9480c326821bb8b4c51dcb67cd60669e29f60",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1021",
+      "source_row_sha256": "56467694d7d20f430fe9a1f48115f55d19735115f07ca036b46b124a9c24bfd6",
+      "statement_sha256": "55f44fea0b2ac7f0b82289ec161845d7bc651d769815cdcb4a23dff190c24b1a",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1024",
+      "source_row_sha256": "28ed2d50ee833dc3d7b30bbaa3e8a1d5fbae43bbbf0126cca4dbbbbf3727d204",
+      "statement_sha256": "87a7300a7bfd017de3c442d865ce3aa00b622d834a4e15a37bc8baeacccb52c8",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1025",
+      "source_row_sha256": "8ba3d9c6798fddac0595f971b96ea8c15d0cf1283a2e3d9533f09ecdbefe7848",
+      "statement_sha256": "edde619a95ea52c35c02f4db1be20a20455ee86556ea6d2cff2ab394b4affdf8",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1201",
+      "source_row_sha256": "dae8a1a23bdf74fa5ec749f79742ab1503be7f7cdb210eccb13bacc21df1132a",
+      "statement_sha256": "97d6f2478105aa6fb914d97eb505a547e902530375fe788a021cf742223a192d",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1202",
+      "source_row_sha256": "7df5c1862e2fb32c9463c2ac54940e3be75c8f7db0ac8bfee0508bcd863dd8df",
+      "statement_sha256": "3c761212a3de5f3468a22c7ad1284b680df5f76434a3298d57083e72bc429eb4",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1203",
+      "source_row_sha256": "97e6fdf87586c5d9446349729bc06ed16475d24c0d396d723c57bf2d78db0b8d",
+      "statement_sha256": "c4d388f7c2c3f460e50f3a285b9f49d111e48045a25de47022a9440220e9351b",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "150001",
+      "source_row_sha256": "958e020355f7acb0a817c820131f5cbaef8ff4233d52c43f5857569f612c46a8",
+      "statement_sha256": "e6a7893db30faa9644489e1e4b042e9013237e013a21efe639b3ccb94d370573",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "151001",
+      "source_row_sha256": "c3594d22ecd65861c09ede28f0ad2ce5703589fd34f0495bf3a2281df04dd37e",
+      "statement_sha256": "da20050c9260478aad36b24552e1fad6a2946cf62c6465a29c172e7c2adfd604",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "151003",
+      "source_row_sha256": "248ffe2faf9aae0a47ab2efcf1d47bcc6eeef7dec11723ef8a9ee0a10b597fae",
+      "statement_sha256": "66c2675b353bac1dfbc298361db73ca4fd68254d8d31711eef17b253c80b7634",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "15120201",
+      "source_row_sha256": "b060363552b2187cc968ead1980d203cd49a90d08c4d4e01fdf4b6469be04762",
+      "statement_sha256": "5500c93342c4cba61f8a5a89474585e128ffae1cd36a1299d7e7545c1f3aabba",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "152002",
+      "source_row_sha256": "c811621d8cc25e4034d905d8d436876e310249355a210658e73e8d3f25d993c7",
+      "statement_sha256": "92cefa690db8a43afa078b38fb7380d75e9c5579612e54d4671e78429b13fbdc",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "152501",
+      "source_row_sha256": "534cdfd4b442ce96794bb500fbbb221b5f7a3ac1c9598b2ebda59f9d6aaa9abf",
+      "statement_sha256": "88a45efd430fb4d28521ba4fa972b06bb646a2dd41d3f8582fb3040ebec8d7c1",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "152502",
+      "source_row_sha256": "4e1e85767393da1f7f5d49b205a95a4bb60423e57bdb586e6c8c44d1140e392c",
+      "statement_sha256": "4afab858c3776dd1f307b641640ff44c897ed58bf90ab5b075ecc8d262da67aa",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "152503",
+      "source_row_sha256": "e96bdf7b20dd1b6a624a503e32d7f533b0d0bdd3028f3c3f341dc705da8da719",
+      "statement_sha256": "f40423ecbf68d71d61f9c6cd81debd3615364d839d40cea653d65d10256b86bc",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "152504",
+      "source_row_sha256": "92f56f408586425414a0a0bae94f445790013beec4df1f3d7936e32d16443845",
+      "statement_sha256": "f039167369b230f9b526708fc7d4e9e83cd1a13d014ec8cc00926b1bdbd5c7e1",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "152505",
+      "source_row_sha256": "3281f7147279f1dfc78939f8261df97e93f757a69356968ee99922f9aac26d00",
+      "statement_sha256": "03216559022f8e9b68156f3fb40ea66e69a1984a67087872feab909b0d896e44",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "152506",
+      "source_row_sha256": "5a483cfa8459b0e0576124b1130c146f29bd560a546b6ae2350bd4b6c5c1240e",
+      "statement_sha256": "ada7667833c67abe5abd55afaa5c00b2b77db0a34d9bc5512bb29c54725bb4b9",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1530",
+      "source_row_sha256": "7cb63ff2ee976f4c9b622a595428da80df75f8ebd43267babd779658020949e7",
+      "statement_sha256": "f0ac3f1953004715839769016c1ea6182d2f348bb93700462272ea7080eb92bc",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "153001",
+      "source_row_sha256": "ca4a7e6a9eaa773e8a2d1b039de91251018f73391b2639e939397a681554a907",
+      "statement_sha256": "be16bd965c4054fcfc60cb77f2a4659bda6d77ce57d04e89fcc172e36196a202",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "153002",
+      "source_row_sha256": "8f462bdd0bb065ded88627ea9858d05a925307b2315c74c044223f5c15cb775f",
+      "statement_sha256": "25a2bf65000fa7fc7b081350a530fa39b8f5aa4cc9ddefbaea8b5e133b422ea6",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "2420",
+      "source_row_sha256": "cb75ef43a1155578270cd4645546fe109c5ae25ca99fb165b837159ae1a0b75e",
+      "statement_sha256": "0e22fcad0d7b02bd57b0704b7d35880e0b81378fc7a2d22b3355b8190beae41d",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "2550",
+      "source_row_sha256": "af765079491b0c7d2883fe6b9bf601b7c05d21c2e413993eb3d17206cc369f1e",
+      "statement_sha256": "9c571ac1daf34ab23c76ec49c6791a7090e508837e0a4f81df1c7f59afffa61c",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "4002",
+      "source_row_sha256": "03911d14624ab26062718fa1a19353e42c937f60c8ef9a28d7981d15ae61ebdd",
+      "statement_sha256": "a3921b30502d8d2e6e18fe4808254eb8b96ca0c56de7a99241dbdea7193482e2",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "4005",
+      "source_row_sha256": "932df5c5dcde7665c19635f6122287828d20cd53718e7f60baf53a1483d4db73",
+      "statement_sha256": "5db9c540ef750cf50fee1a65289cc46cc740ebe49640ac3eac1fc906e49e7cba",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "4006",
+      "source_row_sha256": "ad531f7b4772e3f63ce565f6c6126c9ba4d718c81b947de7e59cb60d38445205",
+      "statement_sha256": "e2385b66990e6f89e42f978da3b1f5330f3ba33c6e647b09a3f76b85ff186f99",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "400701",
+      "source_row_sha256": "6c2b470f01621fd223f35e785be179f2cae860e241eace71fab445433ea12bb9",
+      "statement_sha256": "86a6facf7e4013abfcc6196ab76dcd41dbbf250f04e28fb173607a2a8e228375",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "4008",
+      "source_row_sha256": "8638cfaaad71d9fdd294f3da8f5cbcb9cfa138e0686c3b9cb259e504e8298542",
+      "statement_sha256": "96a002396bf96f9f5b594fd5070f953b07c1a52afc313a849125018fd43df9c1",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "4031",
+      "source_row_sha256": "13adb6bf0c5f143148b871858f3ef2a3bf8df7f466df7f8fdad02776dce5158c",
+      "statement_sha256": "ddc3f30fedf8aec22cbac59bf8ec8a8a7c7bda76be903f6ff216ee71a3457a63",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "4307",
+      "source_row_sha256": "b335d1cf746d96ea2df62350657479d17f04352c30e4c9e2dd7048bb9b348c49",
+      "statement_sha256": "4e8541fb2c6bd5a2e044bb582bbadace929674d269bab16cf46cf29b2157163e",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "430801",
+      "source_row_sha256": "154c3b4f84f6ba037f9e00142226e453acce617a5173e78a4b32eb38a7a448fd",
+      "statement_sha256": "15c67abd367d9d9fb9f172c385aa955d46a7cd6b2f89d210caa9fff193a055ed",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "4310",
+      "source_row_sha256": "79d1c5aa647c993928e37f9b7bf666840b9273ec943a1fe7295b12bbfd129f11",
+      "statement_sha256": "982d114d6deaa9fc5244416107259365e7e941d0e0ee13817e196509938c2a98",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "4311",
+      "source_row_sha256": "b7d761d4fa6f92a0ca675dd6e6123ac65be5fcb5f3574f9eba7f5c067181a3e1",
+      "statement_sha256": "4ff3c4c968a1aca03592beaa6f9c92adf177373ead096bc872f88e8769dff0bb",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "9323",
+      "source_row_sha256": "a76d4beb4c12cf707194f46eafc7a0c9cd96036da6a4c5641e42dcbd74fa5e04",
+      "statement_sha256": "239b58035c86d725456873ec5631a67492ff22afa788a932427e4997aec299ef",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "9330",
+      "source_row_sha256": "2923cb4a1edb103c23934b539c03ae52adb39b0c128e63023f0f50ecbe7d5e43",
+      "statement_sha256": "a05511d6dca6b70411407f0d5ac60f847b125506ee7c82f0c7a840a4f2bce6fa",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "9501",
+      "source_row_sha256": "f798823d8df614fc784123391597de73c7de3a18aa4aa665b07c576c3da3802d",
+      "statement_sha256": "ca6e1be1a656397b06ac95e9d1996b383cbdfccbce5323b5ebc0ff1b1383d9db",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "9601",
+      "source_row_sha256": "939b17673d7ec92ce2610813fbdd2f01b39d53b8b18b19ec76f33d0ffde0bbf7",
+      "statement_sha256": "438e1254a949d51f6bbeb8cf5a27e1a8ce6044a354910764b8c690dcb19f1a76",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "9760",
+      "source_row_sha256": "b52613dfcb4352485edcc35467c0e8fef5220d78052ee2c0529106c400208b95",
+      "statement_sha256": "973d4d14fc4bfc2a732b7cd118f34491185e1f50130badaa6fff652a9021138f",
+      "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "9901012",
+      "source_row_sha256": "fbe0638a9c61ce3b6123e94d253506a10612502093b169203c5d999798f5d58a",
+      "statement_sha256": "84bc618db30bd89a63033cfea51ef1ff11898d383693d72edbea4ad21136c2bd",
+      "table": "T_CORE_MENU_EXT"
     }
   ],
   "schema": "core-technical-bootstrap-v1",
@@ -29419,6 +29686,10 @@
     {
       "path": "private/access-bootstrap-20261111/reviewed-access-private.json",
       "sha256": "9d3e4bc00cb671b8f0e826ebba4ccbfe2bbc03dab705ae2ea404d206c1111e5f"
+    },
+    {
+      "path": "private/workflow-bootstrap-20261111/reviewed-audit-definitions-private.json",
+      "sha256": "ebb8795e8995279e17361d0b19a30b80488e19d9004da3bab11128e8adac9bc1"
     }
   ],
   "source_class": "current-production-at-capture"

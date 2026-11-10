@@ -16,7 +16,7 @@
     {
       "id": "core",
       "path": "core-schema/manifest.json",
-      "sha256": "0aa217b9eceee20fa1eb47e7fc5e51fe192c9d16956afd964f99c9c1ed71755a"
+      "sha256": "e287ceb15da3599f2f98fe39b618caaff9a7b651605716553154b2ccfd3858aa"
     }
   ],
   "files": [
@@ -124,17 +124,17 @@
       "package": "core"
     },
     {
-      "bytes": 1482853,
+      "bytes": 1489152,
       "path": "core-schema/70-bootstrap.sql",
       "role": "bootstrap",
-      "sha256": "31e7458df84ec597c09f37c5664223c27caa9b8a256caabccdca5dfaacd35637",
+      "sha256": "2162b70e951573c26053cdcab899f78ffb5c7d9421243ebe3a7d12391b8218b3",
       "package": "core"
     },
     {
-      "bytes": 2408990,
+      "bytes": 2423578,
       "path": "core-schema/80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "1a833bbe89d780f72a3e13370b8306d889fae0625d1040fd5f2c6e5615d0e748",
+      "sha256": "e3c320f6de1a253437aab3f8a8dc4f9327b2823f45a3ac01d70b44d2c19cf414",
       "package": "core"
     },
     {

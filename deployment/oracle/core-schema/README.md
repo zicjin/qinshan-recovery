@@ -37,7 +37,7 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 4,816 rows across twenty-one explicitly selected
+The technical bootstrap contains 4,857 rows across twenty-two explicitly selected
 configuration tables: 2 locales, 1,350 internationalization keys, 1,375 messages,
 392 static and 10 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
 relations, one system UI config, one login UI config and 37 source-referenced
@@ -62,7 +62,14 @@ panel GRID settings are limited to the reviewed declarative column grammar.
 No accounts, memberships or grants are copied, and this seed does not turn on
 `sunway.api.check-access-permission`. That original aspect is explicitly opt-in;
 the captured external production configuration does not set it. The separate
-`T_CORE_MENU_EXT` audit definitions remain outside this subset.
+`T_CORE_MENU_EXT` now includes all 41 captured `audit_def` service definitions,
+with their exact service labels and structural table references. Forty remain
+enabled and one remains disabled; `EXT` is NULL in every captured row. These
+definitions let the original workflow selectors and process queries resolve the
+business service. They contain no process instances, candidate identities,
+organizations, role grants or workflow XML. The original list and generic detail
+queries apply `ENABLE='1'`; a disabled definition is not made visible by this
+installation.
 `bootstrap-provenance.json` pins every emitted statement and selected
 source row. Identity/audit-origin columns are not copied. No users, organizations,
 roles, passwords or permission grants are copied from production.

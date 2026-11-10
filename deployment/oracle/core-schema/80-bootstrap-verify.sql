@@ -33393,4 +33393,184 @@ BEGIN
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_USER_PERMISSION_TYPE'); END IF;
 END;
 /
+DECLARE
+  TYPE row_map IS TABLE OF VARCHAR2(32767) INDEX BY VARCHAR2(128);
+  actual row_map;
+  oversized NUMBER;
+BEGIN
+  FOR r IN (SELECT TO_CHAR(ID) AS ROW_ID, CASE WHEN ID IS NULL THEN 'N;' ELSE 'V'||LENGTH(ID)||':'||ID||';' END
+      || CASE WHEN SERVICENAME IS NULL THEN 'N;' ELSE 'V'||LENGTH(SERVICENAME)||':'||SERVICENAME||';' END
+      || CASE WHEN TABLENAME IS NULL THEN 'N;' ELSE 'V'||LENGTH(TABLENAME)||':'||TABLENAME||';' END
+      || CASE WHEN TYPE IS NULL THEN 'N;' ELSE 'V'||LENGTH(TYPE)||':'||TYPE||';' END
+      || CASE WHEN ENABLE IS NULL THEN 'N;' ELSE 'V'||LENGTH(ENABLE)||':'||ENABLE||';' END
+      || CASE WHEN EXT IS NULL THEN 'N;' ELSE 'V'||LENGTH(EXT)||':'||EXT||';' END AS SIGNATURE FROM T_CORE_MENU_EXT) LOOP
+    actual(r.ROW_ID) := r.SIGNATURE;
+  END LOOP;
+  IF actual.COUNT <> 41 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('100529') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('100529') <>
+    'V6:100529;V4:仪器领用;V24:T_EMC_EQUIPT_REQUISITION;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('1018') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('1018') <>
+    'V4:1018;V4:合同管理;V14:T_EMC_CONTRACT;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('1020') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('1020') <>
+    'V4:1020;V6:文件修改申请;V20:T_DINGAN_FILE_MODIFY;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('1021') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('1021') <>
+    'V4:1021;V4:采购申请;V14:T_DINGAN_PURCH;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('1024') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('1024') <>
+    'V4:1024;V4:仪器验收;V17:T_EMC_EQUIP_CHECK;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('1025') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('1025') <>
+    'V4:1025;V6:检定结果确认;V24:T_EMC_EQUIP_VERIFICATION;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('1201') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('1201') <>
+    'V4:1201;V6:数据报告查用;V18:T_EMC_REPORT_QUERY;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('1202') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('1202') <>
+    'V4:1202;V4:日常请假;V17:T_EMC_LEAVE_APPLY;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('1203') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('1203') <>
+    'V4:1203;V3:补休假;V21:T_EMC_LEAVE_REPLENISH;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('150001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('150001') <>
+    'V6:150001;V4:项目登记;V13:T_EMC_PROJECT;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('151001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('151001') <>
+    'V6:151001;V4:采样安排;V12:T_EMC_FOLDER;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('151003') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('151003') <>
+    'V6:151003;V4:采样互审;V12:T_EMC_SAMPLE;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('15120201') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('15120201') <>
+    'V8:15120201;V4:留样申请;V18:T_EMC_ORDER_RETAIN;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('152002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('152002') <>
+    'V6:152002;V4:分析校核;V9:T_EMC_RUN;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('152501') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('152501') <>
+    'V6:152501;V4:报告管理;V12:T_EMC_REPORT;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('152502') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('152502') <>
+    'V6:152502;V4:仪器采购;V18:T_EMC_EQUIPT_PURCH;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('152503') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('152503') <>
+    'V6:152503;V4:常规物资;V16:T_EMC_CONVEN_MTL;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('152504') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('152504') <>
+    'V6:152504;V4:办公用品;V16:T_EMC_OFFICE_MTL;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('152505') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('152505') <>
+    'V6:152505;V4:标准物质;V18:T_EMC_STANDARD_MTL;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('152506') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('152506') <>
+    'V6:152506;V6:管理评审计划;V19:T_EMC_MANAGE_REVIEW;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('1530') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('1530') <>
+    'V4:1530;V6:咨询报告管理;V21:T_EMC_ADVISORY_REPORT;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('153001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('153001') <>
+    'V6:153001;V2:用车;V9:T_EMC_CAR;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('153002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('153002') <>
+    'V6:153002;V2:加班;V14:T_EMC_OVERTIME;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('2420') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('2420') <>
+    'V4:2420;V6:质量控制计划;V21:T_EMC_QUALITY_CONTROL;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('2550') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('2550') <>
+    'V4:2550;V4:项目变更;V20:T_EMC_PROJECT_CHANGE;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('4002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('4002') <>
+    'V4:4002;V6:预防措施计划;V16:T_EMC_PRECAUTION;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('4005') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('4005') <>
+    'V4:4005;V6:纠正措施计划;V16:T_EMC_CORRECTION;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('4006') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('4006') <>
+    'V4:4006;V6:改进措施计划;V17:T_EMC_IMPROVEMENT;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('400701') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('400701') <>
+    'V6:400701;V6:质量监督计划;V25:T_EMC_QUALITY_SUPERVISION;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('4008') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('4008') <>
+    'V4:4008;V5:申投诉申请;V15:T_EMC_COMPLAINT;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('4031') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('4031') <>
+    'V4:4031;V6:不符合项登记;V18:T_EMC_INCONFORMITY;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('4307') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('4307') <>
+    'V4:4307;V4:材料领用;V15:T_EMC_MTL_APPLY;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('430801') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('430801') <>
+    'V6:430801;V4:文件申请;V16:T_EMC_FILE_APPLY;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('4310') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('4310') <>
+    'V4:4310;V8:校准结果确认记录;V24:T_EMC_EQUIPT_CALI_RESULT;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('4311') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('4311') <>
+    'V4:4311;V8:仪器期间核查记录;V22:T_EMC_EQUIPT_PER_CHECK;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('9323') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('9323') <>
+    'V4:9323;V4:培训计划;V17:T_CORE_TRAIN_PLAN;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('9330') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('9330') <>
+    'V4:9330;V4:内审计划;V20:T_EMC_INTERNAL_AUDIT;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('9501') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('9501') <>
+    'V4:9501;V4:通知公告;V13:T_CORE_NOTICE;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('9601') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('9601') <>
+    'V4:9601;V7:LES模板审核;V19:T_CORE_LES_TEMPLATE;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('9760') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('9760') <>
+    'V4:9760;V6:OA电子签名;V29:T_EMC_OA_ELECTRONIC_SIGNATURE;V9:audit_def;V1:1;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+  IF NOT actual.EXISTS('9901012') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_MENU_EXT'); END IF;
+  IF actual('9901012') <>
+    'V7:9901012;V5:报价单流程;V24:T_EMC_QUOTATION_REGISTER;V9:audit_def;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_MENU_EXT'); END IF;
+END;
+/
 PROMPT Selected technical bootstrap content verified; full installation remains partial.

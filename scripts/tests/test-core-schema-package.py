@@ -377,6 +377,60 @@ COMMIT;
             self.write('manifest.json',json.dumps(self.manifest))
             self.assert_rejected()
 
+    def test_audit_definitions_require_the_exact_technical_projection(self):
+        columns = ('ID', 'SERVICENAME', 'TABLENAME', 'TYPE', 'ENABLE', 'EXT')
+        values = ("'audit-example'", "'example.audit.Service'", "'T_CORE_EXAMPLE'",
+                  "'operation'", "'1'", 'NULL')
+        prefix = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT (SELECT COUNT(*) FROM T_CORE_MENU_EXT) INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+'''
+
+        def statement(names, expressions):
+            return ('INSERT INTO T_CORE_MENU_EXT (' + ','.join(names) + ') VALUES ('
+                    + ','.join(expressions) + ');\n')
+
+        def pin_bootstrap(text):
+            self.write('70-bootstrap.sql', text)
+            self.pin()
+            raw = (self.root / '70-bootstrap.sql').read_bytes()
+            self.manifest['files'].append({'path': '70-bootstrap.sql', 'role': 'bootstrap',
+                                          'sha256': sha(raw), 'bytes': len(raw)})
+            self.write('manifest.json', json.dumps(self.manifest))
+
+        initializer = (self.root / 'install.sql').read_text()
+        self.write('install.sql', initializer.replace('@@90-verify.sql', '@@70-bootstrap.sql\n@@90-verify.sql'))
+        enabled = statement(columns, values)
+        disabled = statement(columns, ("'audit-disabled'", *values[1:4], "'0'", 'NULL'))
+        pin_bootstrap(prefix + enabled + disabled + 'COMMIT;\n')
+        result = self.run_verifier()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(json.loads(result.stdout)['deployment_ready'])
+
+        for index, column in enumerate(columns):
+            with self.subTest(missing_column=column):
+                pin_bootstrap(prefix + statement(columns[:index] + columns[index + 1:],
+                                                 values[:index] + values[index + 1:]) + 'COMMIT;\n')
+                self.assert_rejected()
+        for column in ('CREATEDBYID', 'CREATEDBYNAME', 'CREATEDBYORGID', 'LASTMODIFIEDBYID', 'UNREVIEWED'):
+            with self.subTest(extra_column=column):
+                pin_bootstrap(prefix + statement((*columns, column), (*values, 'NULL')) + 'COMMIT;\n')
+                self.assert_rejected()
+        for bad in (
+                statement((*columns[:-1], 'CREATEDBYID'), values),
+                statement((*columns, 'ID'), (*values, "'duplicate'")),
+                statement(columns, (*values[:-1], "TO_CLOB('https://example.invalid/private')")),
+                statement(columns, ("AUDIT_SEQUENCE.NEXTVAL", *values[1:])),
+                enabled + 'DELETE FROM T_CORE_MENU_EXT;\n'):
+            with self.subTest(unapproved_seed=bad):
+                pin_bootstrap(prefix + bad + 'COMMIT;\n')
+                self.assert_rejected()
+
     def test_file_constants_require_the_reviewed_technical_projection(self):
         text = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
 SET DEFINE OFF

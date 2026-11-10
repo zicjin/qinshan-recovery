@@ -18,6 +18,10 @@
     {
       "path": "private/production-baseline-20261110/external-schema-remote-full-metadata-private.json",
       "sha256": "652ff5f9e04ca15eb0896aceeac5493be97d8c92083dd5736c5282cf684a2d97"
+    },
+    {
+      "path": "private/production-baseline-20261110/external-channel-capability-assessment-20261110.json",
+      "sha256": "781d9a5365591a81bf21c4c088776d6a10a928be0e66585de22292cda5ce8f2e"
     }
   ],
   "domains": [

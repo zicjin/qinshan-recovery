@@ -136,6 +136,23 @@ def package_installation(output):
             and all(type(counts[key]) is int and counts[key] == value for key, value in expected_counts.items()),
             'workflow counts do not match the exact arrays')
         inputs.update(workflow_paths)
+        template_script = verifier.core.package_file(REPO_ROOT, 'scripts/install-import-template-assets.py')
+        template_spec = importlib.util.spec_from_file_location('import_template_assets', template_script)
+        assert template_spec and template_spec.loader
+        template_installer = importlib.util.module_from_spec(template_spec)
+        template_spec.loader.exec_module(template_installer)
+        template_manifest = verifier.core.package_file(REPO_ROOT, 'deployment/oracle/import-templates/manifest.json')
+        template_asset, _ = template_installer.verify(template_manifest)
+        bootstrap_path = verifier.core.package_file(REPO_ROOT, 'deployment/oracle/core-schema/bootstrap-provenance.json')
+        bootstrap = json.loads(bootstrap_path.read_text(encoding='utf-8'))
+        verifier.core.require(bootstrap.get('import_template', {}).get('asset_manifest') == {
+            'path': 'deployment/oracle/import-templates/manifest.json',
+            'sha256': digest(template_manifest.read_bytes()),
+        }, 'template asset manifest differs from the source-bound SQL bootstrap')
+        inputs.update(('scripts/install-import-template-assets.py',
+                       'deployment/oracle/import-templates/manifest.json',
+                       'deployment/oracle/import-templates/README.md',
+                       'deployment/oracle/import-templates/' + template_asset['source']))
         installation = output / 'installation'
         verifier.core.require(not installation.is_symlink(), 'installation output may not be a symbolic link')
         readme = verifier.core.package_file(REPO_ROOT, 'owned-distribution/installation-README.md')
@@ -154,7 +171,9 @@ def package_installation(output):
             'manifest': 'installation/deployment/oracle/installation-manifest.json',
             'integrity_verifier': 'installation/scripts/verify-combined-oracle-installation.py --check-plan',
             'workflow': {'manifest': 'installation/deployment/oracle/workflow/manifest.json',
-                         'status': 'partial', 'deployment_ready': False, 'counts': counts}}
+                         'status': 'partial', 'deployment_ready': False, 'counts': counts},
+            'import_templates': {'manifest': 'installation/deployment/oracle/import-templates/manifest.json',
+                                 'status': 'partial', 'deployment_ready': False, 'assets': 1, 'blocked': 1}}
 
 
 def normalized_jar(source):

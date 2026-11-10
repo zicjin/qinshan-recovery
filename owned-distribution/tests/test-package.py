@@ -155,6 +155,14 @@ def verify_distribution(ROOT, build_environment):
     assert manifest['installation']['workflow']['deployment_ready'] is False
     assert workflow_manifest['status'] == 'partial' and workflow_manifest['deployment_ready'] is False
     assert 'installation/deployment/oracle/workflow/manifest.json' in manifest['files']
+    template_script = installation / 'scripts/install-import-template-assets.py'
+    template_check = subprocess.run([sys.executable, str(template_script), '--check-package'],
+                                    cwd=installation, text=True, capture_output=True)
+    assert template_check.returncode == 0, template_check.stdout + template_check.stderr
+    assert json.loads(template_check.stdout)['deployment_ready'] is False
+    assert manifest['installation']['import_templates']['assets'] == 1
+    assert manifest['installation']['import_templates']['blocked'] == 1
+    assert 'installation/deployment/oracle/import-templates/assets/reportSendInfo.xlsx' in manifest['files']
     schema_contract = manifest['external_schema']
     expected_schema_mode = 'original-db-link'
     if build_environment.get('EXTERNAL_SCHEMA_PROFILE'):

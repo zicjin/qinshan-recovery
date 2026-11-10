@@ -314,6 +314,48 @@
     }
   ],
   "identities_or_permissions_copied": false,
+  "import_template": {
+    "asset_manifest": {
+      "path": "deployment/oracle/import-templates/manifest.json",
+      "sha256": "b91cc1fae1e833dcd51b23bcf8d10f600f62d93d6dafb733176faf5cc9d8de61"
+    },
+    "blocked": [
+      {
+        "reason": "source-no-file-and-no-mapped-columns",
+        "template_code": "grjl"
+      }
+    ],
+    "business_rows": false,
+    "identity_or_history_rows_copied": false,
+    "source_asset": {
+      "path": "private/installation-inputs-20261111/captured-template-private.xlsx",
+      "sha256": "7a706ac04c253499e4fb7303a573f2abe47157b26b927eec721b8e9e67bd87b6"
+    },
+    "source_class": "current-production",
+    "source_receipts": [
+      {
+        "label": "import_template",
+        "path": "private/installation-inputs-20261111/20261110T221927Z-import_template-private.json",
+        "sha256": "1b24b40078d8165ae8800a61b07c7f53058d7380436ca09b33008d64452f6e07"
+      },
+      {
+        "label": "import_template_config",
+        "path": "private/installation-inputs-20261111/20261110T221927Z-import_template_config-private.json",
+        "sha256": "3e8c04ecf1f5bdabb9679bfad429a227cb79ea20b13161fed1f5e235a0629dac"
+      },
+      {
+        "label": "import_template_file_retry",
+        "path": "private/installation-inputs-20261111/20261110T221956Z-import_template_file_retry-private.json",
+        "sha256": "602665752945094c066b0ab1dc2504abf3aec0a2bc7ea1ebabffffdbc5760ea1"
+      }
+    ],
+    "transformations": [
+      "Source technical IDs, relationships and path timestamp retained; authors and null optional file metadata omitted.",
+      "File TIMES initialized to zero for a new installation; SIZE follows the reviewed sanitized asset bytes.",
+      "Unmapped source configuration rows preserved; grjl remains source-incomplete, without an invented file."
+    ],
+    "unmapped_configuration_rows": 2
+  },
   "lcdp": {
     "draft_history_included": false,
     "file_bootstrap": {
@@ -475,6 +517,7 @@
     "Source categories contain no code rows; preserved empty without invented options: dsCategory, dsType, fieldCategory, publishState",
     "Finite technical request mappings and permission type definitions only; source orphan menu references and suspension flags retained. No identities or grants copied; check-access-permission remains an explicit runtime setting.",
     "Finite source-bound audit_def definitions only; original enabled/disabled state and NULL EXT retained. No identities, grants, workflow instances or audit history copied; full workflow/application installation remains incomplete.",
+    "Finite captured import-template metadata and reviewed file bytes only; grjl has no source file or mapped columns and remains explicitly blocked. File assets require separate placement in the persistent application working directory; definitions do not prove import/export business acceptance.",
     "Published 7 reviewed LCDP modules, 10 reviewed menus and 2 original file Java resources only; FileScript retains its original active-only parent0/no-history exception. Import/export templates and file storage acceptance remain incomplete; remaining dynamic LCDP/workflow/permission bootstrap remains incomplete."
   ],
   "row_counts": {
@@ -483,9 +526,12 @@
     "T_CORE_CODE_CATEGORY": 28,
     "T_CORE_CODE_CLASS": 2,
     "T_CORE_CONSTANT": 2,
+    "T_CORE_FILE": 1,
     "T_CORE_I18N": 1350,
     "T_CORE_I18N_CONFIG": 2,
     "T_CORE_I18N_MESSAGE": 1375,
+    "T_CORE_IMPORT_TMPL": 2,
+    "T_CORE_IMPORT_TMPL_CONFIG": 11,
     "T_CORE_LOGIN_CONFIG": 1,
     "T_CORE_MENU": 402,
     "T_CORE_MENU_EXT": 41,
@@ -29643,6 +29689,90 @@
       "source_row_sha256": "fbe0638a9c61ce3b6123e94d253506a10612502093b169203c5d999798f5d58a",
       "statement_sha256": "84bc618db30bd89a63033cfea51ef1ff11898d383693d72edbea4ad21136c2bd",
       "table": "T_CORE_MENU_EXT"
+    },
+    {
+      "id": "1586190030509952",
+      "source_row_sha256": "a2f691eaaef263aa6eeca7352ed8cdfdfeb149b49ac38968f4b7c96d97870030",
+      "statement_sha256": "dc003d074691c08e9862cbc3ad2f6fb1c39cf18f1884a74548a4252d45d0c6d5",
+      "table": "T_CORE_IMPORT_TMPL"
+    },
+    {
+      "id": "1676797364794112",
+      "source_row_sha256": "5d949966fb1cdffe4cbc739dc55f5d5158d78e8504145aaac1741798d19a962a",
+      "statement_sha256": "a5d5f49ead9c4ecb8bd0078de8017821bcde4db2a39f215d1bfa5c2b00d0d642",
+      "table": "T_CORE_IMPORT_TMPL"
+    },
+    {
+      "id": "1586190149613440",
+      "source_row_sha256": "244e4b0e77cc24324599d2dcd27ed27346d4896b900dab3e22cc081927d40237",
+      "statement_sha256": "e2ac0d293b85f167efdff83f25f697e6bcfc25047ef145d3c2c70c805c82bc20",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1586190149613460",
+      "source_row_sha256": "815e252b76567acab4b0ff52f76ca5efe9d904c1085d3164d31ff92e36f2efb1",
+      "statement_sha256": "7b265887298b610d32b21db58ed9c019e881701f6d2df9e645d55569d07d955a",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1586190149613458",
+      "source_row_sha256": "aa238f14e40ab544ed000677ba78c8b57f92f4c5368e8b53217beb8aa110d8d0",
+      "statement_sha256": "90be707aab175e5c0958bb387281aeeaa923c1e6c18bd65fe49cc32b84d3baa4",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1586190149613459",
+      "source_row_sha256": "e612656ef79d598c2d40cd454888375fa16f9f7573fb4d4f70e6f89d77c0fd5d",
+      "statement_sha256": "2ad3cd8106666102a82607c0a3741ec04a5161256cb1e529ca35c2064fc3f40c",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1586190149613464",
+      "source_row_sha256": "cd75d2df22c929a29acd615131ac2a78061bb92f2fefbfda7888e4701f2b87f6",
+      "statement_sha256": "5cad06e64156132910b98ed25a9702dabae091ecf4245a78a99e762fd673f5a5",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1586190149613465",
+      "source_row_sha256": "cd5a5739f60f58320e7b6f95ae4036bf1b40991b5f3aeafef47f64d0c5d7a205",
+      "statement_sha256": "2a6792ad14b6742a1731182a3a3e246ff44c9ed9b32180cfd5b2b04379334e9f",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1586190149613444",
+      "source_row_sha256": "fdadbb2f5d77da893fab36461f6f8a75691c9329ff7bb521fb7b143cb47123bb",
+      "statement_sha256": "8f49f5c0b95436650346f293cf8c13a563e792b525eb22053b5d253f5526540a",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1586190149613445",
+      "source_row_sha256": "029abb9a9ff1d8432932f9317c19d5714666ea6b8b56a170791b894c6062d5dc",
+      "statement_sha256": "5f833a484c49a9d62c10d5a7e79e9b79819d7942020c3c5e237b25835059cab2",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1586190149613466",
+      "source_row_sha256": "39f79d19d35987f28f863ba31a40511af9502592db0c0a260ae73e5fc914f12d",
+      "statement_sha256": "a6e07d54eee2d9f7d2ad1a97384f22de0c7e99cdb162e70b452bcf64cc09509c",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1676797817565952",
+      "source_row_sha256": "104c93794d40eec9fcd018d416e93d6f844fca50267566fce16cba0f565da8dc",
+      "statement_sha256": "d1d89416a31cc36bd5706081c5b7ffd3868a2abafbf963baa9083ba825f26d21",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1676797543174912",
+      "source_row_sha256": "a3e914aeab898d844d2c9e9e2365f5aed756dfa98c99864356f263557cc83f01",
+      "statement_sha256": "55f9f7e3b07b138dfdc8782882f5bd4a77f0d0212891c34982e4dc648fc90e2d",
+      "table": "T_CORE_IMPORT_TMPL_CONFIG"
+    },
+    {
+      "id": "1586193098192768",
+      "source_row_sha256": "2ced3dcf4f29db43be6537c4a8a0884e54ce729c2dd5b176f0f22b8ea861983b",
+      "statement_sha256": "a59abfe9ef78fb80a59808b9dd390d6b40a4ff503ea216ef373683bbd92d209f",
+      "table": "T_CORE_FILE"
     }
   ],
   "schema": "core-technical-bootstrap-v1",
@@ -29690,6 +29820,10 @@
     {
       "path": "private/workflow-bootstrap-20261111/reviewed-audit-definitions-private.json",
       "sha256": "ebb8795e8995279e17361d0b19a30b80488e19d9004da3bab11128e8adac9bc1"
+    },
+    {
+      "path": "private/installation-inputs-20261111/reviewed-import-templates-private.json",
+      "sha256": "7e28c55f04daaed124149207beeacc65845061dd3e5273e4a3df205c6411098b"
     }
   ],
   "source_class": "current-production-at-capture"

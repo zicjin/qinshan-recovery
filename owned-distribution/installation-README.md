@@ -67,3 +67,20 @@ outside the distribution and source control. Follow the workflow package's
 instructions and installer validation for the private JSON contract. Real HTTP
 organization/candidate/notification/lifecycle/audit/rollback/cleanup acceptance
 and complete workflow restoration remain outstanding.
+
+`deployment/oracle/import-templates/` carries one reviewed header-only import
+workbook, its original/delivered hash provenance and an explicit source-empty
+template blocker. The matching core bootstrap seeds its template/config/file
+metadata. Before application startup, install the bytes into the target's
+existing persistent application working directory, using the application account:
+
+```bash
+python3 installation/scripts/install-import-template-assets.py --check-package
+python3 installation/scripts/install-import-template-assets.py --workdir /var/lib/lims-owned
+```
+
+The command performs no SQL, refuses conflicting files and symbolic links, and
+does not overwrite an existing application's uploads. Select
+`owned.files.storage=local` for this local file path and keep the same working
+directory across starts. Full file/bootstrap/business acceptance remains
+separate; see the bundled import-template README.

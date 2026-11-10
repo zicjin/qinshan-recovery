@@ -83,6 +83,12 @@ python3 scripts/verify-source-only-checkpoint.py \
 SOURCE_ONLY_CHECKPOINT=1 python3 owned-distribution/tests/test-package.py
 ```
 
+The package gate performs two clean builds and a repackage in temporary
+snapshots. Give `TMPDIR` enough disk space for those snapshots and public
+libraries; a small RAM-backed `/tmp` can fail with `No space left on device`.
+For example, set `TMPDIR` to an existing task-owned directory on the build disk
+before running the package gate. This does not change its checks.
+
 Use `LIMS_DEPLOY_DIST` as the resolved deployment/mount directory. Keep it intact
 while the application runs; build cache activation may change the
 `target/distribution` link. Set exactly one
@@ -173,7 +179,7 @@ python3 scripts/verify-core-schema-package.py --check-package
 
 This does not grant deployment readiness. The normal package gate and SQL
 installer still reject the incomplete package before applying DDL.
-Its finite `70-bootstrap.sql` supplies 4,857 reviewed technical rows across 22
+Its finite `70-bootstrap.sql` supplies 4,871 reviewed technical rows across 25
 tables, including locale, menu, entity and UI configuration, 28 dictionary
 categories, 120 options and their translation dependencies. Captures are bound
 separately; empty production categories remain empty.
@@ -183,8 +189,12 @@ menus and the equipment dictionary/selector, plus the two original file-service
 Java resources. `lcdp.file.server.FileScript` retains its captured active-only
 resource and root sentinel; no published history is invented. The original
 upload validator's `FILE-EXTENSIONS` and `FILE-SPACELIMIT` constants are also
-source-bound in the bootstrap. Excel import/export template records and bytes
-remain outside this subset. Other dynamic modules,
+source-bound in the bootstrap. The original two import-template definitions,
+eleven column configurations and one file metadata row are also included.
+The separate [template asset package](deployment/oracle/import-templates/README.md)
+supplies one metadata-sanitized header-only workbook and its offline placement
+command. The other source template has no file or mapped columns and remains
+explicitly blocked. Other dynamic modules,
 workflow and permission bootstrap remain incomplete; draft scripts containing
 embedded business data are excluded.
 The package also preserves 188 captured request-to-menu mappings and six

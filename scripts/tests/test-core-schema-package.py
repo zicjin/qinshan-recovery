@@ -431,6 +431,63 @@ END;
                 pin_bootstrap(prefix + bad + 'COMMIT;\n')
                 self.assert_rejected()
 
+    def test_import_templates_and_file_metadata_require_exact_technical_projections(self):
+        projections = {
+            'T_CORE_IMPORT_TMPL': (
+                ('ID','TMPLCODE','TMPLNAME','TABLENAME','STARTROWINDEX'),
+                ('101',"'reportSendInfo'","'Technical template'","'T_CORE_EXAMPLE'",'1')),
+            'T_CORE_IMPORT_TMPL_CONFIG': (
+                ('ID','IMPORTTMPLID','EXCELCOLUMNNO','EXCELCOLUMN','DBFIELD','FIELDTYPE','DATASOURCE','DEFAULTVALUE','REMARK'),
+                ('201','101','1',"'Title'","'TEXT'","'string'",'NULL','NULL','NULL')),
+            'T_CORE_FILE': (
+                ('ID','TARGETID','MD5NAME','FILEEXT','SCOPE','TIMES','CREATEDTIME','PERMANENT','DOWNLOADABLE','SIZE','VERSION','NAME'),
+                ('301',"'T_CORE_IMPORT_TMPL$101'","'"+'a'*32+"'","'xlsx'","'imp'",'0',
+                 "TO_DATE('2025-02-18 09:18:07','YYYY-MM-DD HH24:MI:SS')","'1'","'1'",'100','1',"'technical.xlsx'")),
+        }
+        def statement(table, names, values):
+            return 'INSERT INTO '+table+' ('+','.join('"'+name+'"' for name in names)+') VALUES ('+','.join(values)+');\n'
+        prefix = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT '''+' + '.join('(SELECT COUNT(*) FROM '+table+')' for table in projections)+''' INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+'''
+        initializer = (self.root / 'install.sql').read_text()
+        self.write('install.sql', initializer.replace('@@90-verify.sql', '@@70-bootstrap.sql\n@@90-verify.sql'))
+        def pin_bootstrap(text):
+            self.write('70-bootstrap.sql',prefix+text+'COMMIT;\n')
+            self.pin()
+            raw=(self.root/'70-bootstrap.sql').read_bytes()
+            self.manifest['files'].append(dict(path='70-bootstrap.sql',role='bootstrap',sha256=sha(raw),bytes=len(raw)))
+            self.write('manifest.json',json.dumps(self.manifest))
+        def statements(replaced=None):
+            return ''.join(replaced[1] if replaced and table==replaced[0] else statement(table,*scope)
+                           for table,scope in projections.items())
+        pin_bootstrap(statements())
+        result=self.run_verifier()
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        self.assertFalse(json.loads(result.stdout)['deployment_ready'])
+        for table,(columns,values) in projections.items():
+            for i,column in enumerate(columns):
+                with self.subTest(table=table,missing_column=column):
+                    bad=statement(table,columns[:i]+columns[i+1:],values[:i]+values[i+1:])
+                    pin_bootstrap(statements((table,bad)))
+                    self.assert_rejected()
+            for extra in ('CREATEDBYID','CREATEDBYNAME','CREATEDBYORGID','UNREVIEWED'):
+                with self.subTest(table=table,extra_column=extra):
+                    bad=statement(table,(*columns,extra),(*values,'NULL'))
+                    pin_bootstrap(statements((table,bad)))
+                    self.assert_rejected()
+        for extra in ('EXT','BIZCATEGORY','REMARK'):
+            with self.subTest(file_extra=extra):
+                columns,values=projections['T_CORE_FILE']
+                bad=statement('T_CORE_FILE',(*columns,extra),(*values,'NULL'))
+                pin_bootstrap(statements(('T_CORE_FILE',bad)))
+                self.assert_rejected()
+
     def test_file_constants_require_the_reviewed_technical_projection(self):
         text = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
 SET DEFINE OFF

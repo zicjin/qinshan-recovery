@@ -253,6 +253,19 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    domain/access and full configuration acceptance remain project work. The
    older fixture's aggregate statistics are not proof of empty tables or a
    replacement for the combined installation verifiers.
+   Install the separately bundled [import template bytes](../../deployment/oracle/import-templates/README.md)
+   into the target application's existing persistent working directory before
+   startup. Its database file metadata is part of the matching technical
+   bootstrap; copying bytes alone does not create those rows:
+
+   ```bash
+   python3 "$LIMS_DEPLOY_DIST/installation/scripts/install-import-template-assets.py" \
+     --workdir /var/lib/lims-owned
+   ```
+
+   Create and assign that directory to the application account first, as in
+   step 6. This command refuses conflicting bytes and symbolic-link targets;
+   the source-empty `grjl` template remains blocked.
 5. Prepare the private runtime file for the exact schema, Redis database and
    artifact mode. Use the already obtained distribution's one-time installer:
 

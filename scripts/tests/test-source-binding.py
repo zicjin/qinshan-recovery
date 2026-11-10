@@ -189,7 +189,10 @@ class SourceBindingTest(unittest.TestCase):
                          'owned-distribution/initialize-workflows.sh',
                          'deployment/oracle/workflow/manifest.json',
                          'deployment/oracle/workflow/definitions.json',
-                         'deployment/oracle/workflow/README.md'):
+                         'deployment/oracle/workflow/README.md',
+                         'deployment/oracle/import-templates/manifest.json',
+                         'deployment/oracle/import-templates/assets/reportSendInfo.xlsx',
+                         'scripts/install-import-template-assets.py'):
             with self.subTest(relative=relative):
                 first = self.capture()
                 target = self.root / relative

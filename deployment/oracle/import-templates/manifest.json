@@ -1,0 +1,186 @@
+{
+  "schema": "owned-import-template-assets-v1",
+  "status": "partial",
+  "deployment_ready": false,
+  "source_class": "current-production-at-capture",
+  "assets": [
+    {
+      "template_code": "reportSendInfo",
+      "file_id": "1586193098192768",
+      "target_id": "T_CORE_IMPORT_TMPL$1586190030509952",
+      "source": "assets/reportSendInfo.xlsx",
+      "relative_path": "files/imp/20250218/fc901f4bab55367e554210da65eccfa3/快递单号导入模板.xlsx",
+      "bytes": 8090,
+      "sha256": "0cf6b0dc339d6247ce4b533584178660d2ac542f47b98f0ae57b9f60f3d64ebb",
+      "source_sha256": "7a706ac04c253499e4fb7303a573f2abe47157b26b927eec721b8e9e67bd87b6"
+    }
+  ],
+  "blocked": [
+    {
+      "template_code": "grjl",
+      "reason": "source-no-file-and-no-mapped-columns"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "path": "lims-recovery/private/installation-inputs-20261111/captured-template-private.xlsx",
+      "sha256": "7a706ac04c253499e4fb7303a573f2abe47157b26b927eec721b8e9e67bd87b6"
+    },
+    {
+      "path": "lims-recovery/private/installation-inputs-20261111/20261110T221956Z-import_template_file_retry-private.json",
+      "sha256": "602665752945094c066b0ab1dc2504abf3aec0a2bc7ea1ebabffffdbc5760ea1"
+    }
+  ],
+  "transformations": [
+    {
+      "part": "docProps/core.xml",
+      "transformation": "remove-dc:creator",
+      "matches": 1
+    },
+    {
+      "part": "docProps/core.xml",
+      "transformation": "remove-cp:lastModifiedBy",
+      "matches": 1
+    },
+    {
+      "part": "docProps/core.xml",
+      "transformation": "remove-dcterms:created",
+      "matches": 1
+    },
+    {
+      "part": "docProps/core.xml",
+      "transformation": "remove-dcterms:modified",
+      "matches": 1
+    },
+    {
+      "part": "_rels/.rels",
+      "transformation": "remove-custom-properties-relationship",
+      "matches": 1
+    },
+    {
+      "part": "[Content_Types].xml",
+      "transformation": "remove-custom-properties-content-type",
+      "matches": 1
+    },
+    {
+      "part": "docProps/custom.xml",
+      "transformation": "remove-custom-properties-part",
+      "matches": 1
+    },
+    {
+      "part": "xl/workbook.xml",
+      "transformation": "remove-original-save-path",
+      "matches": 1
+    },
+    {
+      "part": "xl/workbook.xml",
+      "transformation": "remove-document-revision-identifiers",
+      "matches": 1
+    },
+    {
+      "part": "xl/workbook.xml",
+      "transformation": "remove-workbook-view-identity",
+      "matches": 1
+    },
+    {
+      "part": "xl/worksheets/sheet1.xml",
+      "transformation": "remove-sheet-edit-identity",
+      "matches": 1
+    },
+    {
+      "part": "xl/worksheets/sheet2.xml",
+      "transformation": "remove-sheet-edit-identity",
+      "matches": 1
+    },
+    {
+      "part": "xl/worksheets/sheet3.xml",
+      "transformation": "remove-sheet-edit-identity",
+      "matches": 1
+    }
+  ],
+  "parts": [
+    {
+      "part": "[Content_Types].xml",
+      "source_sha256": "a03123d4129b6b40d95e7c1238aca5109164cf98ba93405f8dfb857bc16c92fa",
+      "sha256": "c4a1f43e67c4b83794c6550522a6a01eb240c073349aa613fa06545a0ec40cf9",
+      "action": "metadata-only"
+    },
+    {
+      "part": "_rels/.rels",
+      "source_sha256": "ad78dfe44ec71f967f96e95bdf6baf2545c39e1a5e4413e7b8e9413eb95fd922",
+      "sha256": "73e5a29f48d5ab979eeda062493bc7e679265c1344ef936978b8becec5549497",
+      "action": "metadata-only"
+    },
+    {
+      "part": "docProps/app.xml",
+      "source_sha256": "862ebc0751da0f18bfe499581be9ecf524ba0a83e12441728ac40c87cb0701b7",
+      "sha256": "862ebc0751da0f18bfe499581be9ecf524ba0a83e12441728ac40c87cb0701b7",
+      "action": "unchanged"
+    },
+    {
+      "part": "docProps/core.xml",
+      "source_sha256": "a57a80e87325c553314658225ca1d9bef4889a70ed58866bb88f8f73d0efcefb",
+      "sha256": "5c210fe533ddfa9a6ddbedcd0881ce69e768d4740f5d0d719f3ac75703e694b2",
+      "action": "metadata-only"
+    },
+    {
+      "part": "docProps/custom.xml",
+      "source_sha256": "310440d95a8b7d9abcba4e5c1d03175944ecc050acc5479b08c1969f18e43527",
+      "sha256": null,
+      "action": "removed"
+    },
+    {
+      "part": "xl/_rels/workbook.xml.rels",
+      "source_sha256": "24612fb23445b0b316a33b6bfc513e887916020d875f6b64b7a48f56a21e5fb2",
+      "sha256": "24612fb23445b0b316a33b6bfc513e887916020d875f6b64b7a48f56a21e5fb2",
+      "action": "unchanged"
+    },
+    {
+      "part": "xl/sharedStrings.xml",
+      "source_sha256": "ac922f27380d1a6442ea1b186cd3e9f727a38a920ff180ab1473b1079cf667a6",
+      "sha256": "ac922f27380d1a6442ea1b186cd3e9f727a38a920ff180ab1473b1079cf667a6",
+      "action": "unchanged"
+    },
+    {
+      "part": "xl/styles.xml",
+      "source_sha256": "c18df0da157c75d3a2969ca881fd62c1cd7379fa8fe35bcf3f2f3b5ada9b5191",
+      "sha256": "c18df0da157c75d3a2969ca881fd62c1cd7379fa8fe35bcf3f2f3b5ada9b5191",
+      "action": "unchanged"
+    },
+    {
+      "part": "xl/theme/theme1.xml",
+      "source_sha256": "8312281e94ff27f484e718519b9aa7487ec67e4fb4b334d724a22fc1d6731f19",
+      "sha256": "8312281e94ff27f484e718519b9aa7487ec67e4fb4b334d724a22fc1d6731f19",
+      "action": "unchanged"
+    },
+    {
+      "part": "xl/workbook.xml",
+      "source_sha256": "8177c367978fcfa9c7af9dfaf6f97188e229e2de51c2b36e009172c38a1488f8",
+      "sha256": "0836df8d45b98ec706e299df78acad4e6a60ad706e6544b93d42bc817ef10233",
+      "action": "metadata-only"
+    },
+    {
+      "part": "xl/worksheets/sheet1.xml",
+      "source_sha256": "b940af5e4fb9824cf82da5571708362277d88c3a839a5111efbe26a8cf0faa77",
+      "sha256": "4f9bf62d3116d2b55f195e62296ce0eab5aa5b56c8019a07b10f29f73573bfa7",
+      "action": "metadata-only"
+    },
+    {
+      "part": "xl/worksheets/sheet2.xml",
+      "source_sha256": "9674c52108362d19af016bbca62e6c6a9ed5f0fb1f2a1ba8bc9873e2818d01de",
+      "sha256": "3aaa19aa2bba8461511db59a80acf8be6a03966ede206361ff45048af9efd96a",
+      "action": "metadata-only"
+    },
+    {
+      "part": "xl/worksheets/sheet3.xml",
+      "source_sha256": "ef6a441491af5d2e6fc87349420ad8eb2068b233963ede08a0a9d9355c50417b",
+      "sha256": "3aaa19aa2bba8461511db59a80acf8be6a03966ede206361ff45048af9efd96a",
+      "action": "metadata-only"
+    }
+  ],
+  "limitations": [
+    "Header-only template asset; no production identities, filled business rows or grants.",
+    "Preserve original technical file identifiers/date path; initialize download count to zero.",
+    "Asset installation and configuration do not establish business import/export acceptance."
+  ]
+}

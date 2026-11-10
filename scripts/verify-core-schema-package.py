@@ -44,6 +44,14 @@ AUDIT_DEFINITION_COLUMNS = {
     "T_CORE_MENU_EXT": {"ID", "SERVICENAME", "TABLENAME", "TYPE", "ENABLE", "EXT"},
 }
 BOOTSTRAP_TABLES.update(AUDIT_DEFINITION_COLUMNS)
+IMPORT_COLUMNS = {
+    "T_CORE_IMPORT_TMPL": {"ID", "TMPLCODE", "TMPLNAME", "TABLENAME", "STARTROWINDEX"},
+    "T_CORE_IMPORT_TMPL_CONFIG": {"ID", "IMPORTTMPLID", "EXCELCOLUMNNO", "EXCELCOLUMN", "DBFIELD",
+        "FIELDTYPE", "DATASOURCE", "DEFAULTVALUE", "REMARK"},
+    "T_CORE_FILE": {"ID", "TARGETID", "MD5NAME", "FILEEXT", "SCOPE", "TIMES", "CREATEDTIME",
+        "PERMANENT", "DOWNLOADABLE", "SIZE", "VERSION", "NAME"},
+}
+BOOTSTRAP_TABLES.update(IMPORT_COLUMNS)
 LCDP_COLUMNS = {
     "T_LCDP_RESOURCE": {"ID","RESOURCENAME","RESOURCECATEGORY","PARENTID","ORDERNO","CONTENT","EFFECTVERSION","PATH","DELETEFLAG","DATATYPE","CLASSCONTENT","CLASSNAME"},
     "T_LCDP_RESOURCE_HISTORY": {"ID","RESOURCEID","RESOURCENAME","RESOURCECATEGORY","CONTENT","VERSION","SUBMITFLAG","EFFECTFLAG","PATH","MODIFYVERSION","DELETEFLAG","CLASSCONTENT"},
@@ -275,7 +283,8 @@ def check_bootstrap(text: str) -> None:
         table = identifier(insert.group(1))
         require(table in BOOTSTRAP_TABLES,
                 "bootstrap inserts into a table outside the technical configuration allowlist")
-        projections = {**DICTIONARY_COLUMNS, **LCDP_COLUMNS, **ACCESS_COLUMNS, **AUDIT_DEFINITION_COLUMNS}
+        projections = {**DICTIONARY_COLUMNS, **LCDP_COLUMNS, **ACCESS_COLUMNS,
+                       **AUDIT_DEFINITION_COLUMNS, **IMPORT_COLUMNS}
         if table in projections:
             columns = [identifier(name.strip()) for name in insert.group("columns").split(",")]
             require(len(columns) == len(set(columns)) and set(columns) == projections[table],

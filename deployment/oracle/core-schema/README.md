@@ -37,7 +37,7 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 4,857 rows across twenty-two explicitly selected
+The technical bootstrap contains 4,871 rows across twenty-five explicitly selected
 configuration tables: 2 locales, 1,350 internationalization keys, 1,375 messages,
 392 static and 10 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
 relations, one system UI config, one login UI config and 37 source-referenced
@@ -99,10 +99,15 @@ the installer or represented as fully accepted business/security behavior.
 Five additional title keys were confirmed absent by exact production metadata
 reads. Five detail page targets referenced by the source are also absent from
 the acquired resource inventory. File upload controls require storage acceptance
-in addition to the shipped file-service resources. Excel import/export also
-requires actual import template records, configuration and file bytes, which this
-subset does not include. A page DTO does not prove those controls or missing
-detail paths work.
+in addition to the shipped file-service resources. Two original import-template
+definitions, eleven configuration rows and one technical file metadata row are
+included. The original unmapped rows are preserved; `grjl` has no linked file or
+mapped columns and remains blocked. The separately shipped
+[template asset package](../import-templates/README.md) supplies the reviewed
+`reportSendInfo` workbook and explicit file placement. Production authors are
+excluded, the fresh download count is zero, and the delivered file size reflects
+metadata sanitization. Template installation does not prove business import/export
+or missing detail paths work.
 
 The bootstrap checks all selected target tables are empty before any INSERT,
 then commits the technical configuration together. It is an initial-install

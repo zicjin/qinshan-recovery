@@ -60,6 +60,13 @@ class InstallationBundleTest(unittest.TestCase):
                              hashlib.sha256((installation / 'deployment/oracle/workflow/definitions.json').read_bytes()).hexdigest())
             self.assertEqual(sorted(path.name for path in (installation / 'deployment/oracle/workflow').iterdir()),
                              ['README.md', 'definitions.json', 'manifest.json'])
+            self.assertEqual(manifest['installation']['import_templates']['assets'], 1)
+            self.assertEqual(manifest['installation']['import_templates']['blocked'], 1)
+            asset_script = installation / 'scripts/install-import-template-assets.py'
+            asset_check = subprocess.run([sys.executable, str(asset_script), '--check-package'],
+                                         cwd=installation, capture_output=True, text=True)
+            self.assertEqual(asset_check.returncode, 0, asset_check.stdout + asset_check.stderr)
+            self.assertFalse(json.loads(asset_check.stdout)['deployment_ready'])
             for name in ('core-schema', 'external-schema'):
                 relative = 'installation/deployment/oracle/' + name + '/manifest.json'
                 self.assertEqual(manifest['files'][relative], hashlib.sha256((output / relative).read_bytes()).hexdigest())
@@ -124,7 +131,8 @@ class InstallationBundleTest(unittest.TestCase):
             checkout = Path(temporary) / 'source'
             shutil.copytree(ROOT / 'deployment/oracle', checkout / 'deployment/oracle')
             (checkout / 'scripts').mkdir()
-            for name in ('verify-core-schema-package.py', 'verify-combined-oracle-installation.py'):
+            for name in ('verify-core-schema-package.py', 'verify-combined-oracle-installation.py',
+                         'install-import-template-assets.py'):
                 shutil.copy2(ROOT / 'scripts' / name, checkout / 'scripts' / name)
             (checkout / 'owned-distribution').mkdir()
             shutil.copy2(ROOT / 'owned-distribution/installation-README.md', checkout / 'owned-distribution/installation-README.md')
@@ -134,6 +142,17 @@ class InstallationBundleTest(unittest.TestCase):
             self.assertFalse(result['workflow']['deployment_ready'])
             self.assertFalse((checkout / 'private').exists())
             self.assertFalse((checkout / 'project').exists())
+            asset_manifest_path = checkout / 'deployment/oracle/import-templates/manifest.json'
+            asset_original = asset_manifest_path.read_bytes()
+            changed = json.loads(asset_original)
+            changed['assets'][0]['relative_path'] = changed['assets'][0]['relative_path'].replace('.xlsx', '-changed.xlsx')
+            asset_manifest_path.write_text(json.dumps(changed))
+            try:
+                # Internally valid file metadata must still match the SQL bootstrap pin.
+                with self.assertRaisesRegex(SystemExit, 'installation bundle integrity failed'):
+                    packager.package_installation(output)
+            finally:
+                asset_manifest_path.write_bytes(asset_original)
             path = checkout / 'deployment/oracle/workflow/manifest.json'
             original = path.read_bytes()
             for change in ('schema', 'ready', 'path', 'hash', 'bytes', 'count', 'extra-count', 'reference-list', 'reference-extra'):

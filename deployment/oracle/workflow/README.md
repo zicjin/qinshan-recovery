@@ -38,3 +38,53 @@ Real HTTP process selection/version/diagram, candidates, organization scope,
 notifications, business lifecycle/audit/rollback and cleanup remain separate
 acceptance. This package is not included in the guarded combined Oracle
 installation plan and does not change its readiness status.
+
+## Private target installation input
+
+From the distribution root, with `JAVA_HOME` set to the pinned complete JDK 8:
+
+```bash
+./initialize-workflows.sh /private/runtime.properties < /private/workflows.json
+```
+
+The properties file contains the target datasource URL, user and password. The
+launcher resolves this bundled manifest; no acquisition directory is required.
+The JSON has exactly the following shape. Mapping entries are abbreviated here;
+supply every symbol in `definitions.json`, using actual target IDs:
+
+```json
+{
+  "expected_schema": "INSTALL_TARGET",
+  "installer_user_id": "target-installer",
+  "application_stopped": true,
+  "redis_namespace_unused": true,
+  "mapping": {
+    "roles": {"ROLE_001": "target-numeric-role-id"},
+    "users": {"USER_001": "target-user-id"},
+    "organizations": {"ORG_001": "target-org-id"}
+  }
+}
+```
+
+Use an approved prepared schema with technical bootstrap and target identities.
+Roles must be active with active members, direct users must be active with valid
+organizations, and the installation author must be a valid active target user.
+Mappings must cover exactly 80 role, nine user and two organization symbols;
+different symbols within one category must have different target IDs. No
+identity, membership or permission is created by this command. Names are read
+from the target database and escaped as literal XML data.
+
+Finish active verification, stop the application using the target schema and
+use a dedicated Redis logical database with no previous workflow cache on the
+next startup. Cache keys are not schema-qualified. A restart does not clear
+Redis; never flush a shared database. The two boolean inputs acknowledge these
+operator preconditions; they do not independently inspect processes or Redis.
+
+The command requires all 12 definition/draft/runtime BPMN tables to be empty,
+locks them with NOWAIT and holds read locks on referenced identity/service
+tables. It writes only DIAGRAM, PROC and PROC_ORG, uses new local IDs and target
+authorship, verifies CLOBs and relationships, then commits once. Failure rolls
+back; repeat execution refuses existing workflow state. Existing installations
+need a reviewed migration rather than this command. Output is always partial:
+the seven missing source payloads, actual business authorization/audit/recovery
+and complete new-device acceptance remain separate requirements.

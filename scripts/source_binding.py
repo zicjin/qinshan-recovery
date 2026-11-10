@@ -158,6 +158,7 @@ _APPLICATION_SUFFIXES = (
     "scripts/build-owned-scheduler.sh",
     "scripts/build-reconstituted-framework.sh",
     "scripts/build-source-only-application.py",
+    "scripts/update-project-source-closure-snapshot.py",
     "scripts/stage-source-only-public-deps.py",
     "scripts/prepare-reconstituted-maven-repo.py",
     "scripts/record-reconstituted-framework-build.py",

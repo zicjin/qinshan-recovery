@@ -54,27 +54,27 @@
     "transformed_source_count": 12
   },
   "generated_at_utc": "2026-11-06T05:09:05.834612+00:00",
-  "generated_from": "scripts/resolve-java-source-closure.py pilot --project-closure",
+  "generated_from": "scripts/build-source-only-application.py current source-only application compile",
   "limitations": [
     "This proves a source-only Java compile closure for the imported project source.",
     "It does not prove Spring runtime startup, module assembly, native/license removal, HTTP behavior, or API closure.",
     "The generated full-closure source tree remains external diagnostic output pending module and provenance promotion."
   ],
   "project_compile": {
-    "compile_target_source_file_count": 3038,
+    "compile_target_source_file_count": 3245,
     "error_count": 0,
     "exit_code": 0,
     "failed_source_count": 0,
     "java_version": "8",
     "missing_symbol_queue": [],
-    "project_source_file_count": 3038,
-    "provided_project_class_count": 3038,
+    "project_source_file_count": 3042,
+    "provided_project_class_count": 5,
     "source_only_framework_classpath": true,
     "status": "pass",
     "supplier_private_jars_on_classpath": false
   },
   "schema": "supplier-project-source-closure-snapshot-v1",
-  "source_commit": "408f93f79f4fcca2c8e729dbe2dd3a31970a4abc",
+  "source_commit": "9b3e6759dd8c2a042f23532222d1c12e3046b074",
   "source_conflict_repair": {
     "focused_runtime_test": "FileUtilsReconstructionTest PASS",
     "methods_restored_from_supplier_bytecode": [

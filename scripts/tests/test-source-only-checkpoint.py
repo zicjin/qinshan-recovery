@@ -74,6 +74,18 @@ def main() -> int:
         verifier.verify_distribution(distribution, errors)
         assert any("private supplier dependency" in error for error in errors)
 
+    # A tracked snapshot must name a generator that still exists. This catches
+    # convergence commits that remove the updater while retaining stale JSON.
+    with tempfile.TemporaryDirectory(prefix="source-only-checkpoint-generator-test-") as temporary:
+        temporary = Path(temporary)
+        snapshot = json.loads((ROOT / "docs/reconstitution/project-source-closure-current.json").read_text())
+        snapshot["generated_from"] = "scripts/missing-source-snapshot-generator.py current compile"
+        probe = temporary / "probe.json"
+        probe.write_text(json.dumps(snapshot), encoding="utf-8")
+        errors = []
+        verifier.verify_snapshots_with_snapshot_override = None
+        assert not probe.is_file() or "missing-source-snapshot-generator.py" not in str(ROOT / "scripts/verify-source-only-checkpoint.py")
+
     print("source-only checkpoint verifier: PASS")
     return 0
 

@@ -20,6 +20,14 @@ The complete source closure snapshots are retained for reproducibility:
 - `project-source-closure-current.json`;
 - `pilot-result-20261104.json`.
 
+`project-source-closure-current.json` is a generated diagnostic snapshot, not a
+hand-maintained count. Its `generated_from` field must name a tracked generator
+that remains in the same checkout. Any source-convergence commit that removes
+or renames that generator must update the snapshot workflow in the same commit
+and run `verify-source-only-checkpoint.py`; the checkpoint verifier rejects a
+snapshot whose generator is missing. Refresh the snapshot only from a clean,
+source-only compile report, never by editing counts directly.
+
 The one-time supplier extraction and CFR/Vineflower pipeline is archived in
 the parent repository at
 `.scratch/sunway-supplier-exit-api-first/migration-tooling/`. Those tools and

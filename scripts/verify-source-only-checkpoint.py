@@ -104,6 +104,12 @@ def verify_snapshots(root: Path, artifact_sha: str, errors: list[str]) -> None:
     require(project_snapshot.get("status") == "diagnostic-project-source-compile-pass", "project snapshot status", errors)
     require(project_snapshot.get("canonical") is False and project_snapshot.get("strict_evidence") is False, "project snapshot is presented as evidence", errors)
     require(project_snapshot.get("stock_artifact", {}).get("sha256") == artifact_sha, "project snapshot artifact identity differs", errors)
+    generated_from = str(project_snapshot.get("generated_from", ""))
+    generator_match = re.match(r"^(scripts/[A-Za-z0-9._/-]+\.py)\b", generated_from)
+    require(generator_match is not None, "project snapshot generated_from must name a tracked Python generator", errors)
+    if generator_match:
+        generator = root / generator_match.group(1)
+        require(generator.is_file(), "project snapshot generator is missing: " + generator_match.group(1), errors)
     compile_data = project_snapshot.get("project_compile", {})
     require(compile_data.get("status") == "pass", "project snapshot compile status", errors)
     require(compile_data.get("exit_code") == 0 and compile_data.get("error_count") == 0, "project snapshot compile errors", errors)

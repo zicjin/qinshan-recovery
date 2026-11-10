@@ -241,7 +241,7 @@ def local_url(value):
     try:
         parts = urlsplit(value)
         if (parts.scheme != 'http' or parts.hostname not in ('127.0.0.1', 'localhost')
-                or parts.port not in (None, 18087) or parts.username or parts.password
+                or parts.port != 18087 or parts.username or parts.password
                 or parts.path not in ('', '/') or parts.query or parts.fragment):
             raise ValueError()
     except ValueError:

@@ -159,7 +159,9 @@ class RestoreTest(unittest.TestCase):
             with self.subTest(url=url), self.assertRaises(M.RestoreError):
                 M.local_url(url)
         self.assertEqual(M.local_url('http://127.0.0.1:18087'), 'http://127.0.0.1:18087')
-        self.assertEqual(M.local_url('http://localhost/'), 'http://localhost')
+        self.assertEqual(M.local_url('http://localhost:18087/'), 'http://localhost:18087')
+        with self.assertRaises(M.RestoreError):
+            M.local_url('http://localhost/')
         with self.assertRaises(M.RestoreError):
             M.local_url('http://localhost:18187/')
         with self.assertRaises(M.RestoreError):

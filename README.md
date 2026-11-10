@@ -127,8 +127,10 @@ python3 scripts/verify-core-schema-package.py --check-package
 
 This does not grant deployment readiness. The normal package gate and SQL
 installer still reject the incomplete package before applying DDL.
-Its finite `70-bootstrap.sql` now supplies reviewed technical locale, menu,
-entity and UI configuration from a separate 2026-11-10 production capture.
+Its finite `70-bootstrap.sql` supplies reviewed technical locale, menu,
+entity and UI configuration, plus the 27 explicitly referenced dictionary
+categories, 118 options and their translation dependencies. Captures are bound
+separately; empty production categories remain empty.
 Complete permissions, workflows and dynamic LCDP initialization remain
 incomplete; the phase is not a replacement for the full bootstrap.
 The distribution now includes a one-time

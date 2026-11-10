@@ -312,6 +312,39 @@ COMMIT;
         self.pin()
         self.assert_rejected()
 
+    def test_dictionary_bootstrap_remains_finite_technical_configuration(self):
+        bootstrap = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT (SELECT COUNT(*) FROM T_CORE_CODE_CLASS) + (SELECT COUNT(*) FROM T_CORE_CODE_CATEGORY) + (SELECT COUNT(*) FROM T_CORE_CODE) INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+INSERT INTO T_CORE_CODE_CLASS (ID,CODECLASSNAME,ORDERNO) VALUES ('sys','System',1);
+INSERT INTO T_CORE_CODE_CATEGORY (ID,CODECATEGORYNAME,CODECLASSID,ORDERNO) VALUES ('yesorno','Yes or no','sys',1);
+INSERT INTO T_CORE_CODE (ID,CODE,CODENAME,CODECATEGORYID,ORDERNO,LASTSUSPENDEDFLAG,I18NCODE) VALUES (1,'yes','Yes','yesorno',1,'0',NULL);
+COMMIT;
+'''
+        self.write('70-bootstrap.sql', bootstrap)
+        initializer = (self.root / 'install.sql').read_text()
+        self.write('install.sql', initializer.replace('@@90-verify.sql', '@@70-bootstrap.sql\n@@90-verify.sql'))
+        self.pin()
+        raw = (self.root / '70-bootstrap.sql').read_bytes()
+        self.manifest['files'].append({'path':'70-bootstrap.sql','role':'bootstrap',
+                                      'sha256':sha(raw),'bytes':len(raw)})
+        self.write('manifest.json',json.dumps(self.manifest))
+        result = self.run_verifier()
+        self.assertEqual(result.returncode,0,result.stdout + result.stderr)
+
+        changed = bootstrap.replace('(ID,CODECLASSNAME,ORDERNO)', '(ID,CODECLASSNAME,CREATEDBYNAME)')
+        self.write('70-bootstrap.sql',changed)
+        raw = (self.root / '70-bootstrap.sql').read_bytes()
+        entry = next(item for item in self.manifest['files'] if item['path']=='70-bootstrap.sql')
+        entry['sha256'],entry['bytes'] = sha(raw),len(raw)
+        self.write('manifest.json',json.dumps(self.manifest))
+        self.assert_rejected()
+
     def test_bootstrap_verifier_accepts_read_cursors_and_rejects_mutations(self):
         good = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
 SET DEFINE OFF

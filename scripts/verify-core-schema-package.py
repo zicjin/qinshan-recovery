@@ -24,7 +24,13 @@ ROLES = {"types", "tables", "indexes", "constraints", "stored-code", "sequences"
          "bootstrap", "bootstrap-verifier", "source-metadata", "preflight", "verifier", "initializer", "registry", "blockers"}
 BOOTSTRAP_TABLES = {"T_CORE_I18N_CONFIG", "T_CORE_I18N", "T_CORE_I18N_MESSAGE", "T_CORE_TABLE",
                     "T_CORE_TABLE_HIERARCHY", "T_CORE_MENU", "T_CORE_SYSTEM_CONFIG",
-                    "T_CORE_LOGIN_CONFIG", "T_CORE_PASSWORD_POLICY", "T_CORE_ADMIN_SELECT_CONFIG"}
+                    "T_CORE_LOGIN_CONFIG", "T_CORE_PASSWORD_POLICY", "T_CORE_ADMIN_SELECT_CONFIG",
+                    "T_CORE_CODE_CLASS", "T_CORE_CODE_CATEGORY", "T_CORE_CODE"}
+DICTIONARY_COLUMNS = {
+    "T_CORE_CODE_CLASS": {"ID", "CODECLASSNAME", "ORDERNO"},
+    "T_CORE_CODE_CATEGORY": {"ID", "CODECATEGORYNAME", "CODECLASSID", "ORDERNO"},
+    "T_CORE_CODE": {"ID", "CODE", "CODENAME", "CODECATEGORYID", "ORDERNO", "LASTSUSPENDEDFLAG", "I18NCODE"},
+}
 OBJECT_ROLES = {
     "TABLE": "tables", "INDEX": "indexes", "TYPE": "types", "TYPE BODY": "types",
     "FUNCTION": "stored-code", "PROCEDURE": "stored-code", "PACKAGE": "stored-code",
@@ -235,12 +241,17 @@ def check_bootstrap(text: str) -> None:
     for statement in statements[:-1]:
         statement = statement.strip()
         insert = re.fullmatch(r"INSERT\s+INTO\s+(" + IDENTIFIER + r")\s*"
-                              r"\(\s*(?:" + IDENTIFIER + r"\s*,\s*)*" + IDENTIFIER
-                              + r"\s*\)\s+VALUES\s*\(([\s\S]*)\)", statement, re.I)
+                              r"\(\s*(?P<columns>(?:" + IDENTIFIER + r"\s*,\s*)*" + IDENTIFIER
+                              + r")\s*\)\s+VALUES\s*\((?P<values>[\s\S]*)\)", statement, re.I)
         require(insert is not None, "bootstrap must contain only explicit INSERT VALUES and COMMIT")
-        require(identifier(insert.group(1)) in BOOTSTRAP_TABLES,
+        table = identifier(insert.group(1))
+        require(table in BOOTSTRAP_TABLES,
                 "bootstrap inserts into a table outside the technical configuration allowlist")
-        expression = insert.group(2)
+        if table in DICTIONARY_COLUMNS:
+            columns = [identifier(name.strip()) for name in insert.group("columns").split(",")]
+            require(len(columns) == len(set(columns)) and set(columns) == DICTIONARY_COLUMNS[table],
+                    "dictionary bootstrap columns differ from the reviewed technical projection")
+        expression = insert.group("values")
         words = re.findall(r"[A-Za-z_$#][A-Za-z0-9_$#]*", expression)
         require(all(word.upper() in {"NULL", "TO_CLOB", "CHR", "TO_DATE", "TO_TIMESTAMP"}
                     for word in words), "bootstrap VALUES contains an unapproved SQL expression")

@@ -657,22 +657,22 @@
       "sha256": "34c43de299eb20a45435b6d343badb43ebc16cefece4df9d9415f865a8093638"
     },
     {
-      "bytes": 555667,
+      "bytes": 582239,
       "path": "70-bootstrap.sql",
       "role": "bootstrap",
-      "sha256": "d8dd94c45d5e7597b9d1338ef08125ef59c2403df3d50bcc475abfae1319b252"
+      "sha256": "72f9b1f058fe4a9b0fed5afe3ba93b513cb682a5eef6a50ee5beff6add871239"
     },
     {
-      "bytes": 1272039,
+      "bytes": 1331026,
       "path": "80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "01e8c185b55ca29f1737ad85d5df3e8566aa6e5d1c85c66a94400ae00417dab7"
+      "sha256": "5f1303b23e00c50d50585acd525c126755e182e64c6242be33d798e76c7d2f85"
     },
     {
-      "bytes": 975052,
+      "bytes": 1022879,
       "path": "bootstrap-provenance.json",
       "role": "source-metadata",
-      "sha256": "f4dbb0b66eb712e11461c5373bbc2e07901f7740f62f86ee10dfdb2fe712bbd5"
+      "sha256": "729ca5c6323a6744d59ebdf29fb83fd804d8734ae8ea6af761c6c9295fe2ed5b"
     }
   ],
   "limitations": [
@@ -13524,9 +13524,12 @@
     "path": "bootstrap-provenance.json",
     "row_counts": {
       "T_CORE_ADMIN_SELECT_CONFIG": 36,
-      "T_CORE_I18N": 1340,
+      "T_CORE_CODE": 118,
+      "T_CORE_CODE_CATEGORY": 27,
+      "T_CORE_CODE_CLASS": 2,
+      "T_CORE_I18N": 1350,
       "T_CORE_I18N_CONFIG": 2,
-      "T_CORE_I18N_MESSAGE": 1355,
+      "T_CORE_I18N_MESSAGE": 1375,
       "T_CORE_LOGIN_CONFIG": 1,
       "T_CORE_MENU": 392,
       "T_CORE_SYSTEM_CONFIG": 1,

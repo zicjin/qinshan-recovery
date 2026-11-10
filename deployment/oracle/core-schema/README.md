@@ -37,13 +37,22 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 3,764 rows across nine explicitly selected
-configuration tables: 2 locales, 1,340 internationalization keys, 1,355 messages,
+The technical bootstrap contains 3,941 rows across twelve explicitly selected
+configuration tables: 2 locales, 1,350 internationalization keys, 1,375 messages,
 392 static internal menus, 467 entity metadata rows, 170 hierarchy relations,
 one system UI config, one login UI config and 36 source-referenced select
-configs. `bootstrap-provenance.json` pins every emitted statement and selected
+configs, plus 2 dictionary classes, 27 categories and 118 options.
+`bootstrap-provenance.json` pins every emitted statement and selected
 source row. Identity/audit-origin columns are not copied. No users, organizations,
 roles, passwords or permission grants are copied from production.
+
+Dictionary selection follows the explicit `codeCategoryId` references in the
+shipped select configs, not an assumption that every `sys` row is technical.
+Actual `sys`/`biz` classification and suspension flags are preserved, with each
+parent class and translation dependency. The source categories `dsCategory`,
+`dsType`, `fieldCategory` and `publishState` have no options and remain empty;
+no synthetic defaults are inserted. Generic selectors and other categories are
+outside this finite dictionary closure.
 
 The bootstrap checks all selected target tables are empty before any INSERT,
 then commits the technical configuration together. It is an initial-install
@@ -52,7 +61,7 @@ inserting rows. A deployment must resolve remaining bootstrap exclusions first.
 Two conflicting translation keys have no arbitrary winner; equal duplicate
 messages retain their original rows. Eleven dynamic-resource menus, three
 external-target menus and entity relationships outside the structural closure
-remain excluded. Select configs can still require dictionaries/workflows and
+remain excluded. Other select configs can still require dictionaries/workflows and
 other dependencies that this finite subset does not supply.
 
 `manifest.json`, `object-registry.tsv` and `blocked-objects.tsv` retain the source

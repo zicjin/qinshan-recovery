@@ -7,7 +7,7 @@ SET SQLBLANKLINES ON
 DECLARE
   n NUMBER;
 BEGIN
-  SELECT (SELECT COUNT(*) FROM T_CORE_I18N_CONFIG) + (SELECT COUNT(*) FROM T_CORE_I18N) + (SELECT COUNT(*) FROM T_CORE_I18N_MESSAGE) + (SELECT COUNT(*) FROM T_CORE_TABLE) + (SELECT COUNT(*) FROM T_CORE_TABLE_HIERARCHY) + (SELECT COUNT(*) FROM T_CORE_MENU) + (SELECT COUNT(*) FROM T_CORE_SYSTEM_CONFIG) + (SELECT COUNT(*) FROM T_CORE_LOGIN_CONFIG) + (SELECT COUNT(*) FROM T_CORE_ADMIN_SELECT_CONFIG) + (SELECT COUNT(*) FROM T_CORE_CODE_CLASS) + (SELECT COUNT(*) FROM T_CORE_CODE_CATEGORY) + (SELECT COUNT(*) FROM T_CORE_CODE) + (SELECT COUNT(*) FROM T_LCDP_RESOURCE) + (SELECT COUNT(*) FROM T_LCDP_RESOURCE_HISTORY) + (SELECT COUNT(*) FROM T_LCDP_MODULE_PAGE_COMP) + (SELECT COUNT(*) FROM T_LCDP_MODULE_PAGE_I18N) + (SELECT COUNT(*) FROM T_LCDP_PAGE_I18N_CODE) + (SELECT COUNT(*) FROM T_CORE_CONSTANT) INTO n FROM DUAL;
+  SELECT (SELECT COUNT(*) FROM T_CORE_I18N_CONFIG) + (SELECT COUNT(*) FROM T_CORE_I18N) + (SELECT COUNT(*) FROM T_CORE_I18N_MESSAGE) + (SELECT COUNT(*) FROM T_CORE_TABLE) + (SELECT COUNT(*) FROM T_CORE_TABLE_HIERARCHY) + (SELECT COUNT(*) FROM T_CORE_MENU) + (SELECT COUNT(*) FROM T_CORE_SYSTEM_CONFIG) + (SELECT COUNT(*) FROM T_CORE_LOGIN_CONFIG) + (SELECT COUNT(*) FROM T_CORE_ADMIN_SELECT_CONFIG) + (SELECT COUNT(*) FROM T_CORE_CODE_CLASS) + (SELECT COUNT(*) FROM T_CORE_CODE_CATEGORY) + (SELECT COUNT(*) FROM T_CORE_CODE) + (SELECT COUNT(*) FROM T_LCDP_RESOURCE) + (SELECT COUNT(*) FROM T_LCDP_RESOURCE_HISTORY) + (SELECT COUNT(*) FROM T_LCDP_MODULE_PAGE_COMP) + (SELECT COUNT(*) FROM T_LCDP_MODULE_PAGE_I18N) + (SELECT COUNT(*) FROM T_LCDP_PAGE_I18N_CODE) + (SELECT COUNT(*) FROM T_CORE_CONSTANT) + (SELECT COUNT(*) FROM T_CORE_REQUEST_URL) + (SELECT COUNT(*) FROM T_CORE_ROLE_PERMISSION_TYPE) + (SELECT COUNT(*) FROM T_CORE_USER_PERMISSION_TYPE) INTO n FROM DUAL;
   IF n <> 0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty.'); END IF;
 END;
 /
@@ -37769,4 +37769,995 @@ INSERT INTO T_CORE_CONSTANT (ID,CONSTANTVALUE,CONSTANTDESC,CLASSFICATION,SHOW) V
 TO_CLOB('附件大小限制，单位为M'),
 '系统',
 '1');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (5,
+'9002',
+'编制列表',
+TO_CLOB('/secure/core/module/mdm/orgs/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (6,
+'9002',
+'系统单位详情页面',
+TO_CLOB('/secure/core/module/mdm/orgs/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (7,
+'9002',
+'详情',
+TO_CLOB('/secure/core/module/mdm/orgs/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (8,
+'9003',
+'编制列表',
+TO_CLOB('/secure/core/module/sys/roles/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (9,
+'9001',
+'附件',
+TO_CLOB('/core/module/item/files/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (10,
+'9004',
+'矩阵的动态行数据查询',
+TO_CLOB('/core/module/sys/role-users/queries/matrix-rows'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (11,
+'9004',
+'矩阵的动态表头查询',
+TO_CLOB('/core/module/sys/role-users/queries/matrix-headers'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (12,
+'9010',
+'在线用户查询',
+TO_CLOB('/secure/core/module/sys/login-logs/queries/online'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (13,
+'9202',
+'获取流程图导入文件的地址',
+TO_CLOB('/secure/core/module/sys/bpmn-procs/{id}/bpmn-input-url'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (14,
+'9201',
+'编制列表',
+TO_CLOB('/secure/core/module/sys/bpmn-drafts/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (15,
+'9201',
+'详情页',
+TO_CLOB('/secure/core/module/sys/bpmn-drafts/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (16,
+'9201',
+'变更-工作流选择页',
+TO_CLOB('/secure/core/module/sys/bpmn-procs/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (17,
+'9201',
+'工作流选择页查询',
+TO_CLOB('/secure/core/module/sys/bpmn-procs/queries/choosable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (18,
+'9201',
+'系统组织-查询树',
+TO_CLOB('/secure/core/module/mdm/orgs/tree/{parentId}'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (19,
+'9201',
+'系统组织-选择页查询',
+TO_CLOB('/secure/core/module/mdm/orgs/queries/choosable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (20,
+'9233',
+'查询页查询',
+TO_CLOB('/secure/core/module/sys/bpmn-targets/queries/searchable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (21,
+'9233',
+'更新流程图-工作流程实例查询',
+TO_CLOB('/secure/core/module/sys/bpmn-insts/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (22,
+'9233',
+'更新审核人员-添加审核角色页面',
+TO_CLOB('/secure/core/module/sys/roles/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (23,
+'9233',
+'角色选择页查询',
+TO_CLOB('/secure/core/module/sys/roles/queries/choosable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (24,
+'9302',
+'菜单单选页面',
+TO_CLOB('/secure/core/module/sys/menus/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (25,
+'9302',
+'菜单选择页面查询树',
+TO_CLOB('/secure/core/module/sys/menus/tree-grid'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (26,
+'9302',
+'删除菜单',
+TO_CLOB('/secure/core/module/sys/menu-groups/{id}/menu-group-lines'),
+'DELETE');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (27,
+'9303',
+'详情',
+TO_CLOB('/secure/core/module/sys/schedule-tasks/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (28,
+'9304',
+'定时器任务配置详细页面',
+TO_CLOB('/secure/core/module/sys/schedule-task-configs/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (29,
+'9304',
+'定时任务配置详情',
+TO_CLOB('/secure/core/module/sys/schedule-task-configs/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (30,
+'9305',
+'查询页查询',
+TO_CLOB('/secure/core/module/sys/schedule-tasks/queries/searchable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (31,
+'9305',
+'详情页',
+TO_CLOB('/secure/core/module/sys/schedule-tasks/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (32,
+'9305',
+'定时器任务配置详细页面',
+TO_CLOB('/secure/core/module/sys/schedule-task-configs/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (33,
+'9305',
+'获取定时任务配置状态信息',
+TO_CLOB('/secure/core/module/sys/schedule-task-configs/{id}/info/status'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (34,
+'9305',
+'定时任务配置详情',
+TO_CLOB('/secure/core/module/sys/schedule-task-configs/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (35,
+'9001',
+'详情',
+TO_CLOB('/secure/core/module/mdm/users/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (36,
+'9001',
+'添加访问角色权限选择页面',
+TO_CLOB('/secure/core/module/sys/roles/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (37,
+'9001',
+'查询文件',
+TO_CLOB('/core/module/item/files/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (38,
+'9003',
+'单位权限查询',
+TO_CLOB('/secure/core/module/mdm/orgs/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (39,
+'9003',
+'首页方案权限查询',
+TO_CLOB('/secure/core/module/item/workspace-schemes/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (40,
+'9003',
+'添加所属用户弹出选择框',
+TO_CLOB('/secure/core/module/mdm/users/page/choose-mult-list'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (41,
+'9003',
+'权限tab页查询',
+TO_CLOB('/core/module/sys/role-permission-types/queries/selectable'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (42,
+'9314',
+'附件查询',
+TO_CLOB('/core/module/item/files/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (43,
+'9315',
+'编制页列表',
+TO_CLOB('/secure/core/module/sys/password-policies/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (44,
+'9001',
+'用户权限类型-下拉框数据查询',
+TO_CLOB('/secure/core/module/mdm/user-permission-types/queries/selectable'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (45,
+'9202',
+'查询页查询',
+TO_CLOB('/secure/core/module/sys/bpmn-procs/queries/searchable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (46,
+'9201',
+'详情页-通过流程草稿编码查询使用部门',
+TO_CLOB('/secure/core/module/sys/bpmn-drafts/{id}/bpmn-draft-orgs/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (47,
+'9201',
+'详情页-工作流草稿详细信息查询',
+TO_CLOB('/secure/core/module/sys/bpmn-drafts/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (48,
+'9201',
+'详情页-获取流程图表中所有节点审核人员信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (49,
+'9233',
+'更新审核人员-添加审核人页面',
+TO_CLOB('/secure/core/module/mdm/users/page/choose-mult-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (50,
+'9233',
+'系统用户选择页查询',
+TO_CLOB('/secure/core/module/mdm/users/queries/choosable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (51,
+'9328',
+'编辑页查询',
+TO_CLOB('/secure/core/module/equipt/acq-scripts/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (52,
+'9328',
+'详情',
+TO_CLOB('/secure/core/module/equipt/acq-scripts/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (53,
+'9301',
+'菜单配置-编辑页面查询树',
+TO_CLOB('/secure/core/module/sys/menus/edit-tree/{parentId}'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (54,
+'9301',
+'详细信息查询',
+TO_CLOB('/secure/core/module/sys/menus/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (55,
+'9301',
+'查询待办图标',
+TO_CLOB('/secure/core/module/sys/menus/todo-icons/queries'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (56,
+'9302',
+'详情',
+TO_CLOB('/secure/core/module/sys/menu-groups/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (57,
+'9303',
+'查询页查询',
+TO_CLOB('/secure/core/module/sys/schedule-tasks/queries/searchable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (58,
+'9303',
+'详情页',
+TO_CLOB('/secure/core/module/sys/schedule-tasks/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (59,
+'9304',
+'查询页查询',
+TO_CLOB('/secure/core/module/sys/schedule-tasks/queries/searchable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (60,
+'9304',
+'详情页',
+TO_CLOB('/secure/core/module/sys/schedule-tasks/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (61,
+'9304',
+'通过定时任务查询任务配置信息',
+TO_CLOB('/secure/core/module/sys/schedule-tasks/{id}/schedule-task-configs/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (62,
+'9304',
+'获取定时任务配置状态信息',
+TO_CLOB('/secure/core/module/sys/schedule-task-configs/{id}/info/status'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (63,
+'9305',
+'通过定时任务查询任务配置信息',
+TO_CLOB('/secure/core/module/sys/schedule-tasks/{id}/schedule-task-configs/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (64,
+'9306',
+'查询页查询',
+TO_CLOB('/secure/core/module/sys/schedule-task-configs/queries/searchable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (65,
+'9306',
+'通过定时任务查询执行日志',
+TO_CLOB('/secure/core/module/sys/schedule-task-configs/{id}/schedule-task-logs/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (66,
+'9001',
+'编制列表',
+TO_CLOB('/secure/core/module/mdm/users/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (67,
+'9001',
+'查询指定类型下的权限',
+TO_CLOB('/secure/core/module/mdm/user-permissions/permission-types/{permissionTypeId}/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (68,
+'9001',
+'访问角色-角色用户查询',
+TO_CLOB('/core/module/sys/role-users/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (69,
+'9001',
+'添加访问部门权限选择页面',
+TO_CLOB('/secure/core/module/mdm/orgs/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (70,
+'9002',
+'查询部门树结构',
+TO_CLOB('/secure/core/module/mdm/orgs/tree/{parentId}'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (71,
+'9003',
+'菜单权限-选择页面查询树',
+TO_CLOB('/secure/core/module/sys/menus/tree-grid'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (72,
+'9202',
+'详情页',
+TO_CLOB('/secure/core/module/sys/bpmn-procs/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (73,
+'9201',
+'详情页-系统单位选择页面（精简页面）跳转',
+TO_CLOB('/secure/core/module/mdm/orgs/page/simple-choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (74,
+'9201',
+'详情页-获取流程图的SVG',
+TO_CLOB('/secure/core/module/sys/bpmn-exts/bpmn-diagrams/{id}/svg'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (75,
+'9233',
+'更新流程图-BPMN变价页面',
+TO_CLOB('/core/module/item/files/page/bpmn-diagram-designer'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (76,
+'9233',
+'流程执行实例的任务编辑页',
+TO_CLOB('/secure/core/module/sys/bpmn-inst-tasks/page/edit-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (77,
+'9306',
+'定时器任务详细页面',
+TO_CLOB('/secure/core/module/sys/schedule-task-logs/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (78,
+'9310',
+'系统参数编制页查询',
+TO_CLOB('/secure/core/module/sys/constants/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (79,
+'9311',
+'可审计跟踪的配置查询',
+TO_CLOB('/secure/core/module/sys/at-configs/audit-trailable/tree-grid'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (80,
+'9311',
+'审计跟踪配置详情',
+TO_CLOB('/secure/core/module/sys/at-configs/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (81,
+'9311',
+'审计跟踪配置明细查询',
+TO_CLOB('/secure/core/module/sys/at-configs/{id}/at-config-lines'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (82,
+'9314',
+'报表配置编制页查询',
+TO_CLOB('/secure/core/module/sys/report-configs/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (83,
+'9314',
+'详情页',
+TO_CLOB('/secure/core/module/sys/report-configs/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (84,
+'9314',
+'详情',
+TO_CLOB('/secure/core/module/sys/report-configs/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (85,
+'9314',
+'根据主表查询报表配置明细',
+TO_CLOB('/secure/core/module/sys/report-configs/{id}/lines/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (86,
+'9314',
+'用户权限查询',
+TO_CLOB('/secure/core/module/mdm/user-permissions/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (87,
+'9314',
+'角色权限查询',
+TO_CLOB('/core/module/sys/role-permissions/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (88,
+'9314',
+'系统用户多选页面跳转',
+TO_CLOB('/secure/core/module/mdm/users/page/choose-mult-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (89,
+'9314',
+'系统用户选择页查询',
+TO_CLOB('/secure/core/module/mdm/users/queries/choosable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (90,
+'9314',
+'角色选择页跳转',
+TO_CLOB('/secure/core/module/sys/roles/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (91,
+'9314',
+'角色选择页查询',
+TO_CLOB('/secure/core/module/sys/roles/queries/choosable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (92,
+'9401',
+'操作日志查询',
+TO_CLOB('/core/module/sys/logs/queries/searchable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (93,
+'9003',
+'详情',
+TO_CLOB('/secure/core/module/sys/roles/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (94,
+'9003',
+'通过角色来查询所属用户',
+TO_CLOB('/secure/core/module/sys/roles/{id}/role-users/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (95,
+'9003',
+'菜单组权限查询',
+TO_CLOB('/secure/core/module/sys/menu-groups/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (96,
+'9003',
+'添加菜单权限弹出选择框',
+TO_CLOB('/secure/core/module/sys/menus/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (97,
+'9003',
+'添加单位权限弹出选择框',
+TO_CLOB('/secure/core/module/mdm/orgs/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (98,
+'9003',
+'添加菜单组权限弹出选择框',
+TO_CLOB('/secure/core/module/sys/menu-groups/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (99,
+'9003',
+'添加首页方案权限弹出选择框',
+TO_CLOB('/secure/core/module/item/workspace-schemes/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (100,
+'9202',
+'详情页-查看流程图',
+TO_CLOB('/core/module/item/files/page/bpmn-diagram-designer'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (101,
+'9202',
+'详情页-BPMN预览页面',
+TO_CLOB('/core/module/item/files/page/bpmn-diagram-viewer'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (102,
+'9202',
+'详情页-获取流程图表中所有节点审核人员信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (103,
+'9202',
+'详情页-获取流程图表中所有线中的条件信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (104,
+'9202',
+'详情页-过流程定义编码查询使用部门',
+TO_CLOB('/secure/core/module/sys/bpmn-procs/{id}/bpmn-proc-orgs/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (105,
+'9202',
+'详情',
+TO_CLOB('/secure/core/module/sys/bpmn-procs/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (106,
+'9201',
+'详情页-获取流程图表中所有线中的条件信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (107,
+'9201',
+'详情页-BPMN预览页面',
+TO_CLOB('/core/module/item/files/page/bpmn-diagram-viewer'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (108,
+'9201',
+'详情页-BPMN变价页面',
+TO_CLOB('/core/module/item/files/page/bpmn-diagram-designer'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (109,
+'9233',
+'流程执行实例查询',
+TO_CLOB('/secure/core/module/sys/bpmn-inst-tasks/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (110,
+'9233',
+'查询流程执行实例的任务下的审核人员',
+TO_CLOB('/secure/core/module/sys/bpmn-inst-tasks/{id}/bpmn-inst-task-users/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (111,
+'9233',
+'查询流程执行实例的任务下的审核角色',
+TO_CLOB('/secure/core/module/sys/bpmn-inst-tasks/{id}/bpmn-inst-task-roles/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (112,
+'9328',
+'详情页',
+TO_CLOB('/secure/core/module/equipt/acq-scripts/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (113,
+'9301',
+'查询菜单图标',
+TO_CLOB('/secure/core/module/sys/menus/icons/queries'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (114,
+'9302',
+'编辑页查询',
+TO_CLOB('/secure/core/module/sys/menu-groups/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (115,
+'9302',
+'详情页',
+TO_CLOB('/secure/core/module/sys/menu-groups/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (116,
+'9302',
+'查询菜单',
+TO_CLOB('/secure/core/module/sys/menu-groups/{id}/menu-group-lines/tree-grid'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (117,
+'9335',
+'查询登录配置',
+TO_CLOB('/secure/module/sys/login-configs/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (118,
+'9335',
+'查询系统配置',
+TO_CLOB('/secure/module/sys/system-configs/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (119,
+'9402',
+'系统登录日志查询',
+TO_CLOB('/secure/core/module/sys/login-logs/queries/searchable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (120,
+'9403',
+'导出日志查询',
+TO_CLOB('/secure/core/module/sys/export-logs/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (121,
+'950101',
+'系统用户选择页面（精简页面）跳转',
+TO_CLOB('/secure/core/module/mdm/users/page/simple-choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (122,
+'950101',
+'系统用户选择页查询',
+TO_CLOB('/secure/core/module/mdm/users/queries/choosable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (123,
+'950102',
+'业务流程状态详情页',
+TO_CLOB('/secure/core/module/sys/bpmn-exts/page/process-status-detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (124,
+'950102',
+'获取工作流运行中的信息',
+TO_CLOB('/secure/core/module/sys/bpmn-exts/runtime-info'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (125,
+'950102',
+'审核意见查询',
+TO_CLOB('/secure/core/module/sys/bpmn-comments/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (126,
+'950102',
+'获取流程图表中所有节点审核人员信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (127,
+'950102',
+'查询附件详情',
+TO_CLOB('/core/module/item/files/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (128,
+'950104',
+'详情',
+TO_CLOB('/secure/core/module/item/notices/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (129,
+'950104',
+'权限查询',
+TO_CLOB('/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (130,
+'9003',
+'密码策略下拉框数据查询',
+TO_CLOB('/secure/core/module/sys/password-policies/queries/selectable'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (131,
+'950101',
+'编制页查询',
+TO_CLOB('/secure/core/module/item/notices/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (132,
+'950101',
+'详情',
+TO_CLOB('/secure/core/module/item/notices/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (133,
+'950101',
+'系统单位选择页面（精简页面）跳转',
+TO_CLOB('/secure/core/module/mdm/orgs/page/simple-choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (134,
+'950101',
+'系统单位选择页查询',
+TO_CLOB('/secure/core/module/mdm/orgs/queries/choosable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (135,
+'950101',
+'审核意见查询',
+TO_CLOB('/secure/core/module/sys/bpmn-comments/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (136,
+'950102',
+'审核页查询',
+TO_CLOB('/secure/core/module/item/notices/queries/tasks'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (137,
+'950104',
+'跳转至BPMN预览页面',
+TO_CLOB('/core/module/item/files/page/bpmn-diagram-viewer'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (138,
+'950104',
+'获取流程图表中所有线中的条件信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (139,
+'9321',
+'编制页列表',
+TO_CLOB('/secure/core/module/sys/rounding-rules/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (140,
+'9322',
+'系统菜单选择页面查询树',
+TO_CLOB('/secure/core/module/sys/menus/tree-grid'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (141,
+'9330',
+'导出',
+TO_CLOB('/secure/core/module/sys/i18ns/excelDownload-url'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (142,
+'950101',
+'附件查询',
+TO_CLOB('/core/module/item/files/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (143,
+'950101',
+'查询权限',
+TO_CLOB('/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (144,
+'950101',
+'系统单位查询树',
+TO_CLOB('/secure/core/module/mdm/orgs/tree/{parentId}'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (145,
+'950101',
+'业务流程状态详情页',
+TO_CLOB('/secure/core/module/sys/bpmn-exts/page/process-status-detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (146,
+'950101',
+'获取工作流运行中的信息',
+TO_CLOB('/secure/core/module/sys/bpmn-exts/runtime-info'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (147,
+'950101',
+'跳转至BPMN预览页面',
+TO_CLOB('/core/module/item/files/page/bpmn-diagram-viewer'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (148,
+'950101',
+'获取流程图表中所有节点审核人员信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (149,
+'950101',
+'获取流程图表中所有线中的条件信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (150,
+'950102',
+'获取流程图表中所有线中的条件信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (151,
+'950102',
+'获取工作流运行中可回退节点的信息',
+TO_CLOB('/secure/core/module/sys/bpmn-exts/options/rejectable-tasks'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (152,
+'950102',
+'获取工作流任务节点的状态',
+TO_CLOB('/secure/core/module/item/notices/bpmn-task-status'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (153,
+'9322',
+'编制列表',
+TO_CLOB('/secure/core/module/sys/todo-configs/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (154,
+'9322',
+'详情',
+TO_CLOB('/secure/core/module/sys/todo-configs/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (155,
+'950101',
+'查询附件详情',
+TO_CLOB('/core/module/item/files/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (156,
+'9315',
+'详情页',
+TO_CLOB('/secure/core/module/sys/password-policies/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (157,
+'9315',
+'详情',
+TO_CLOB('/secure/core/module/sys/password-policies/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (158,
+'9318',
+'系统编码类型下拉框数据查询',
+TO_CLOB('/secure/core/module/sys/code-categories/queries/selectable'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (159,
+'9318',
+'编制页列表',
+TO_CLOB('/secure/core/module/sys/codes/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (160,
+'9318',
+'详情页',
+TO_CLOB('/secure/core/module/sys/codes/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (161,
+'9318',
+'详情',
+TO_CLOB('/secure/core/module/sys/codes/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (162,
+'9321',
+'详情页',
+TO_CLOB('/secure/core/module/sys/rounding-rules/page/detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (163,
+'9321',
+'详情',
+TO_CLOB('/secure/core/module/sys/rounding-rules/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (164,
+'9404',
+'可审计跟踪的配置查询',
+TO_CLOB('/secure/core/module/sys/at-configs/audit-trailable/tree-grid'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (165,
+'950103',
+'详情',
+TO_CLOB('/secure/core/module/item/notices/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (166,
+'950103',
+'附件查询',
+TO_CLOB('/core/module/item/files/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (167,
+'9404',
+'审计跟踪记录查询',
+TO_CLOB('/secure/core/module/sys/at-records/queries/atrecord/{tableName}/{id}'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (168,
+'950103',
+'回退页查询',
+TO_CLOB('/secure/core/module/item/notices/queries/undoable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (169,
+'950103',
+'权限查询',
+TO_CLOB('/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (170,
+'950103',
+'查看附件详情',
+TO_CLOB('/core/module/item/files/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (171,
+'950104',
+'业务流程状态详情页',
+TO_CLOB('/secure/core/module/sys/bpmn-exts/page/process-status-detail'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (172,
+'950104',
+'获取工作流运行中的信息',
+TO_CLOB('/secure/core/module/sys/bpmn-exts/runtime-info'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (173,
+'9322',
+'系统菜单选择页',
+TO_CLOB('/secure/core/module/sys/menus/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (174,
+'9322',
+'查询图标',
+TO_CLOB('/secure/core/module/sys/todo-configs/icons/queries'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (175,
+'9326',
+'编制页列表',
+TO_CLOB('/secure/core/module/item/workspace-schemes/queries/raw'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (176,
+'9326',
+'获取方案面板配置信息',
+TO_CLOB('/secure/core/module/item/workspace-schemes/{id}/panel-configs'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (177,
+'950101',
+'角色选择页（可嵌入）',
+TO_CLOB('/secure/core/module/sys/roles/page/choose-list'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (178,
+'950101',
+'获取工作流任务节点的状态',
+TO_CLOB('/secure/core/module/item/notices/bpmn-task-status'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (179,
+'950102',
+'详情',
+TO_CLOB('/secure/core/module/item/notices/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (180,
+'950101',
+'角色选择页查询',
+TO_CLOB('/secure/core/module/sys/roles/queries/choosable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (181,
+'950102',
+'附件查询',
+TO_CLOB('/core/module/item/files/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (182,
+'950102',
+'查询权限',
+TO_CLOB('/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (183,
+'950102',
+'跳转至BPMN预览页面',
+TO_CLOB('/core/module/item/files/page/bpmn-diagram-viewer'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (184,
+'950104',
+'审核意见查询',
+TO_CLOB('/secure/core/module/sys/bpmn-comments/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (185,
+'9330',
+'系统国际化查询',
+TO_CLOB('/secure/core/module/sys/i18ns/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (186,
+'9330',
+'详情',
+TO_CLOB('/secure/core/module/sys/i18ns/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (187,
+'9330',
+'通过国际化的ID查询国际化信息',
+TO_CLOB('/secure/core/module/sys/i18ns/{id}/i18n-messages/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (188,
+'950102',
+'获取状态信息',
+TO_CLOB('/secure/core/module/item/notices/{id}/info/status'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (189,
+'950104',
+'通知公告查询页查询',
+TO_CLOB('/secure/core/module/item/notices/queries/searchable'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (190,
+'950104',
+'附件查询',
+TO_CLOB('/core/module/item/files/queries'),
+'POST');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (191,
+'950104',
+'查询附件详情',
+TO_CLOB('/core/module/item/files/{id}'),
+'GET');
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (192,
+'950104',
+'获取流程图表中所有节点审核人员信息',
+TO_CLOB('/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators'),
+'POST');
+INSERT INTO T_CORE_ROLE_PERMISSION_TYPE (ID,TYPENAME,PERMISSIONTYPE,COMPCATEGORY,GRIDPRIMARYURL,GRIDCOLUMNSETTINGS,ORDERNO,LASTSUSPENDEDFLAG) VALUES ('T_CORE_MENU',
+'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MEMU',
+'menu',
+'treeGrid',
+TO_CLOB('/secure/core/module/sys/menus'),
+TO_CLOB('{title:''菜单编码'',field:''id'',type:''tree'',width:200},{title:''菜单名称'',field:''menuName'',width:150}'),
+11,
+'0');
+INSERT INTO T_CORE_ROLE_PERMISSION_TYPE (ID,TYPENAME,PERMISSIONTYPE,COMPCATEGORY,GRIDPRIMARYURL,GRIDCOLUMNSETTINGS,ORDERNO,LASTSUSPENDEDFLAG) VALUES ('T_CORE_ORG',
+'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_ORG',
+'data',
+'grid',
+NULL,
+NULL,
+21,
+'1');
+INSERT INTO T_CORE_ROLE_PERMISSION_TYPE (ID,TYPENAME,PERMISSIONTYPE,COMPCATEGORY,GRIDPRIMARYURL,GRIDCOLUMNSETTINGS,ORDERNO,LASTSUSPENDEDFLAG) VALUES ('T_CORE_WK_SCHEME',
+'CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_WK_SCHEME',
+'data',
+'grid',
+TO_CLOB('/secure/core/module/item/workspace-schemes'),
+TO_CLOB('{title:''方案名称'',field:''schemeName''}'),
+23,
+'0');
+INSERT INTO T_CORE_USER_PERMISSION_TYPE (ID,TYPENAME,PERMISSIONTYPE,GRIDCHOOSEURL,GRIDQUERYURL,GRIDCOLUMNSETTINGS,GRIDMODIFIEDQUERYURL,ORDERNO,LASTSUSPENDEDFLAG) VALUES ('T_CORE_ORG',
+'CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ORG',
+'data',
+TO_CLOB('/secure/core/module/mdm/orgs/page/choose-list'),
+'/secure/core/module/mdm/user-permissions/permission-types/T_CORE_ORG/queries',
+TO_CLOB('{title:''部门编码'',field:''targetId''},{title:''部门名称'',field:''ext$.orgname''}'),
+'/secure/core/module/mdm/m-users/{id}/user-permissions/queries?permissionType=T_CORE_ORG',
+1,
+'0');
+INSERT INTO T_CORE_USER_PERMISSION_TYPE (ID,TYPENAME,PERMISSIONTYPE,GRIDCHOOSEURL,GRIDQUERYURL,GRIDCOLUMNSETTINGS,GRIDMODIFIEDQUERYURL,ORDERNO,LASTSUSPENDEDFLAG) VALUES ('T_CORE_REPORT_CONFIG_LINE',
+'报表配置明细查询权限',
+'data',
+NULL,
+NULL,
+NULL,
+NULL,
+6,
+'1');
+INSERT INTO T_CORE_USER_PERMISSION_TYPE (ID,TYPENAME,PERMISSIONTYPE,GRIDCHOOSEURL,GRIDQUERYURL,GRIDCOLUMNSETTINGS,GRIDMODIFIEDQUERYURL,ORDERNO,LASTSUSPENDEDFLAG) VALUES ('T_CORE_ROLE',
+'CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ROLE',
+'data',
+TO_CLOB('/secure/core/module/sys/roles/page/choose-list'),
+'/core/module/sys/role-users/queries',
+TO_CLOB('{title:''角色名称'',field:''ext$.rolename''}'),
+'/secure/core/module/mdm/m-users/{id}/user-roles/queries',
+2,
+'0');
 COMMIT;

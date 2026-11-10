@@ -32559,4 +32559,838 @@ BEGIN
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CONSTANT'); END IF;
 END;
 /
+DECLARE
+  TYPE row_map IS TABLE OF VARCHAR2(32767) INDEX BY VARCHAR2(128);
+  actual row_map;
+  oversized NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO oversized FROM T_CORE_REQUEST_URL WHERE DBMS_LOB.GETLENGTH(URL)>1000;
+  IF oversized <> 0 THEN RAISE_APPLICATION_ERROR(-20123, 'Technical bootstrap text exceeds reviewed capacity.'); END IF;
+  FOR r IN (SELECT TO_CHAR(ID) AS ROW_ID, CASE WHEN ID IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(ID,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(ID,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
+      || CASE WHEN MENUID IS NULL THEN 'N;' ELSE 'V'||LENGTH(MENUID)||':'||MENUID||';' END
+      || CASE WHEN NOTE IS NULL THEN 'N;' ELSE 'V'||LENGTH(NOTE)||':'||NOTE||';' END
+      || CASE WHEN URL IS NULL THEN 'N;' ELSE 'V'||DBMS_LOB.GETLENGTH(URL)||':'||DBMS_LOB.SUBSTR(URL,1000,1)||';' END
+      || CASE WHEN METHOD IS NULL THEN 'N;' ELSE 'V'||LENGTH(METHOD)||':'||METHOD||';' END AS SIGNATURE FROM T_CORE_REQUEST_URL) LOOP
+    actual(r.ROW_ID) := r.SIGNATURE;
+  END LOOP;
+  IF actual.COUNT <> 188 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('5') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('5') <>
+    'V1:5;V4:9002;V4:编制列表;V40:/secure/core/module/mdm/orgs/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('6') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('6') <>
+    'V1:6;V4:9002;V8:系统单位详情页面;V40:/secure/core/module/mdm/orgs/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('7') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('7') <>
+    'V1:7;V4:9002;V2:详情;V33:/secure/core/module/mdm/orgs/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('8') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('8') <>
+    'V1:8;V4:9003;V4:编制列表;V41:/secure/core/module/sys/roles/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('9') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('9') <>
+    'V1:9;V4:9001;V2:附件;V31:/core/module/item/files/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('10') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('10') <>
+    'V2:10;V4:9004;V10:矩阵的动态行数据查询;V47:/core/module/sys/role-users/queries/matrix-rows;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('11') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('11') <>
+    'V2:11;V4:9004;V9:矩阵的动态表头查询;V50:/core/module/sys/role-users/queries/matrix-headers;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('12') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('12') <>
+    'V2:12;V4:9010;V6:在线用户查询;V49:/secure/core/module/sys/login-logs/queries/online;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('13') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('13') <>
+    'V2:13;V4:9202;V12:获取流程图导入文件的地址;V54:/secure/core/module/sys/bpmn-procs/{id}/bpmn-input-url;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('14') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('14') <>
+    'V2:14;V4:9201;V4:编制列表;V47:/secure/core/module/sys/bpmn-drafts/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('15') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('15') <>
+    'V2:15;V4:9201;V3:详情页;V47:/secure/core/module/sys/bpmn-drafts/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('16') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('16') <>
+    'V2:16;V4:9201;V9:变更-工作流选择页;V51:/secure/core/module/sys/bpmn-procs/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('17') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('17') <>
+    'V2:17;V4:9201;V8:工作流选择页查询;V52:/secure/core/module/sys/bpmn-procs/queries/choosable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('18') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('18') <>
+    'V2:18;V4:9201;V8:系统组织-查询树;V44:/secure/core/module/mdm/orgs/tree/{parentId};V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('19') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('19') <>
+    'V2:19;V4:9201;V10:系统组织-选择页查询;V46:/secure/core/module/mdm/orgs/queries/choosable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('20') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('20') <>
+    'V2:20;V4:9233;V5:查询页查询;V55:/secure/core/module/sys/bpmn-targets/queries/searchable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('21') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('21') <>
+    'V2:21;V4:9233;V14:更新流程图-工作流程实例查询;V42:/secure/core/module/sys/bpmn-insts/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('22') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('22') <>
+    'V2:22;V4:9233;V15:更新审核人员-添加审核角色页面;V46:/secure/core/module/sys/roles/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('23') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('23') <>
+    'V2:23;V4:9233;V7:角色选择页查询;V47:/secure/core/module/sys/roles/queries/choosable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('24') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('24') <>
+    'V2:24;V4:9302;V6:菜单单选页面;V46:/secure/core/module/sys/menus/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('25') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('25') <>
+    'V2:25;V4:9302;V9:菜单选择页面查询树;V39:/secure/core/module/sys/menus/tree-grid;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('26') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('26') <>
+    'V2:26;V4:9302;V4:删除菜单;V57:/secure/core/module/sys/menu-groups/{id}/menu-group-lines;V6:DELETE;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('27') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('27') <>
+    'V2:27;V4:9303;V2:详情;V43:/secure/core/module/sys/schedule-tasks/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('28') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('28') <>
+    'V2:28;V4:9304;V11:定时器任务配置详细页面;V57:/secure/core/module/sys/schedule-task-configs/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('29') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('29') <>
+    'V2:29;V4:9304;V8:定时任务配置详情;V50:/secure/core/module/sys/schedule-task-configs/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('30') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('30') <>
+    'V2:30;V4:9305;V5:查询页查询;V57:/secure/core/module/sys/schedule-tasks/queries/searchable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('31') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('31') <>
+    'V2:31;V4:9305;V3:详情页;V50:/secure/core/module/sys/schedule-tasks/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('32') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('32') <>
+    'V2:32;V4:9305;V11:定时器任务配置详细页面;V57:/secure/core/module/sys/schedule-task-configs/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('33') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('33') <>
+    'V2:33;V4:9305;V12:获取定时任务配置状态信息;V62:/secure/core/module/sys/schedule-task-configs/{id}/info/status;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('34') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('34') <>
+    'V2:34;V4:9305;V8:定时任务配置详情;V50:/secure/core/module/sys/schedule-task-configs/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('35') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('35') <>
+    'V2:35;V4:9001;V2:详情;V34:/secure/core/module/mdm/users/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('36') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('36') <>
+    'V2:36;V4:9001;V12:添加访问角色权限选择页面;V46:/secure/core/module/sys/roles/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('37') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('37') <>
+    'V2:37;V4:9001;V4:查询文件;V28:/core/module/item/files/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('38') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('38') <>
+    'V2:38;V4:9003;V6:单位权限查询;V36:/secure/core/module/mdm/orgs/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('39') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('39') <>
+    'V2:39;V4:9003;V8:首页方案权限查询;V50:/secure/core/module/item/workspace-schemes/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('40') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('40') <>
+    'V2:40;V4:9003;V11:添加所属用户弹出选择框;V51:/secure/core/module/mdm/users/page/choose-mult-list;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('41') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('41') <>
+    'V2:41;V4:9003;V8:权限tab页查询;V57:/core/module/sys/role-permission-types/queries/selectable;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('42') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('42') <>
+    'V2:42;V4:9314;V4:附件查询;V31:/core/module/item/files/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('43') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('43') <>
+    'V2:43;V4:9315;V5:编制页列表;V53:/secure/core/module/sys/password-policies/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('44') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('44') <>
+    'V2:44;V4:9001;V14:用户权限类型-下拉框数据查询;V64:/secure/core/module/mdm/user-permission-types/queries/selectable;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('45') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('45') <>
+    'V2:45;V4:9202;V5:查询页查询;V53:/secure/core/module/sys/bpmn-procs/queries/searchable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('46') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('46') <>
+    'V2:46;V4:9201;V18:详情页-通过流程草稿编码查询使用部门;V64:/secure/core/module/sys/bpmn-drafts/{id}/bpmn-draft-orgs/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('47') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('47') <>
+    'V2:47;V4:9201;V15:详情页-工作流草稿详细信息查询;V40:/secure/core/module/sys/bpmn-drafts/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('48') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('48') <>
+    'V2:48;V4:9201;V21:详情页-获取流程图表中所有节点审核人员信息;V67:/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('49') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('49') <>
+    'V2:49;V4:9233;V14:更新审核人员-添加审核人页面;V51:/secure/core/module/mdm/users/page/choose-mult-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('50') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('50') <>
+    'V2:50;V4:9233;V9:系统用户选择页查询;V47:/secure/core/module/mdm/users/queries/choosable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('51') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('51') <>
+    'V2:51;V4:9328;V5:编辑页查询;V50:/secure/core/module/equipt/acq-scripts/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('52') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('52') <>
+    'V2:52;V4:9328;V2:详情;V43:/secure/core/module/equipt/acq-scripts/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('53') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('53') <>
+    'V2:53;V4:9301;V12:菜单配置-编辑页面查询树;V50:/secure/core/module/sys/menus/edit-tree/{parentId};V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('54') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('54') <>
+    'V2:54;V4:9301;V6:详细信息查询;V34:/secure/core/module/sys/menus/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('55') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('55') <>
+    'V2:55;V4:9301;V6:查询待办图标;V48:/secure/core/module/sys/menus/todo-icons/queries;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('56') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('56') <>
+    'V2:56;V4:9302;V2:详情;V40:/secure/core/module/sys/menu-groups/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('57') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('57') <>
+    'V2:57;V4:9303;V5:查询页查询;V57:/secure/core/module/sys/schedule-tasks/queries/searchable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('58') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('58') <>
+    'V2:58;V4:9303;V3:详情页;V50:/secure/core/module/sys/schedule-tasks/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('59') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('59') <>
+    'V2:59;V4:9304;V5:查询页查询;V57:/secure/core/module/sys/schedule-tasks/queries/searchable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('60') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('60') <>
+    'V2:60;V4:9304;V3:详情页;V50:/secure/core/module/sys/schedule-tasks/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('61') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('61') <>
+    'V2:61;V4:9304;V14:通过定时任务查询任务配置信息;V73:/secure/core/module/sys/schedule-tasks/{id}/schedule-task-configs/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('62') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('62') <>
+    'V2:62;V4:9304;V12:获取定时任务配置状态信息;V62:/secure/core/module/sys/schedule-task-configs/{id}/info/status;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('63') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('63') <>
+    'V2:63;V4:9305;V14:通过定时任务查询任务配置信息;V73:/secure/core/module/sys/schedule-tasks/{id}/schedule-task-configs/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('64') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('64') <>
+    'V2:64;V4:9306;V5:查询页查询;V64:/secure/core/module/sys/schedule-task-configs/queries/searchable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('65') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('65') <>
+    'V2:65;V4:9306;V12:通过定时任务查询执行日志;V77:/secure/core/module/sys/schedule-task-configs/{id}/schedule-task-logs/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('66') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('66') <>
+    'V2:66;V4:9001;V4:编制列表;V41:/secure/core/module/mdm/users/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('67') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('67') <>
+    'V2:67;V4:9001;V10:查询指定类型下的权限;V84:/secure/core/module/mdm/user-permissions/permission-types/{permissionTypeId}/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('68') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('68') <>
+    'V2:68;V4:9001;V11:访问角色-角色用户查询;V35:/core/module/sys/role-users/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('69') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('69') <>
+    'V2:69;V4:9001;V12:添加访问部门权限选择页面;V45:/secure/core/module/mdm/orgs/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('70') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('70') <>
+    'V2:70;V4:9002;V7:查询部门树结构;V44:/secure/core/module/mdm/orgs/tree/{parentId};V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('71') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('71') <>
+    'V2:71;V4:9003;V12:菜单权限-选择页面查询树;V39:/secure/core/module/sys/menus/tree-grid;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('72') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('72') <>
+    'V2:72;V4:9202;V3:详情页;V46:/secure/core/module/sys/bpmn-procs/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('73') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('73') <>
+    'V2:73;V4:9201;V20:详情页-系统单位选择页面（精简页面）跳转;V52:/secure/core/module/mdm/orgs/page/simple-choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('74') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('74') <>
+    'V2:74;V4:9201;V13:详情页-获取流程图的SVG;V56:/secure/core/module/sys/bpmn-exts/bpmn-diagrams/{id}/svg;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('75') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('75') <>
+    'V2:75;V4:9233;V14:更新流程图-BPMN变价页面;V50:/core/module/item/files/page/bpmn-diagram-designer;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('76') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('76') <>
+    'V2:76;V4:9233;V12:流程执行实例的任务编辑页;V54:/secure/core/module/sys/bpmn-inst-tasks/page/edit-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('77') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('77') <>
+    'V2:77;V4:9306;V9:定时器任务详细页面;V54:/secure/core/module/sys/schedule-task-logs/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('78') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('78') <>
+    'V2:78;V4:9310;V9:系统参数编制页查询;V45:/secure/core/module/sys/constants/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('79') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('79') <>
+    'V2:79;V4:9311;V10:可审计跟踪的配置查询;V60:/secure/core/module/sys/at-configs/audit-trailable/tree-grid;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('80') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('80') <>
+    'V2:80;V4:9311;V8:审计跟踪配置详情;V39:/secure/core/module/sys/at-configs/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('81') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('81') <>
+    'V2:81;V4:9311;V10:审计跟踪配置明细查询;V55:/secure/core/module/sys/at-configs/{id}/at-config-lines;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('82') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('82') <>
+    'V2:82;V4:9314;V9:报表配置编制页查询;V50:/secure/core/module/sys/report-configs/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('83') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('83') <>
+    'V2:83;V4:9314;V3:详情页;V50:/secure/core/module/sys/report-configs/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('84') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('84') <>
+    'V2:84;V4:9314;V2:详情;V43:/secure/core/module/sys/report-configs/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('85') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('85') <>
+    'V2:85;V4:9314;V12:根据主表查询报表配置明细;V57:/secure/core/module/sys/report-configs/{id}/lines/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('86') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('86') <>
+    'V2:86;V4:9314;V6:用户权限查询;V48:/secure/core/module/mdm/user-permissions/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('87') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('87') <>
+    'V2:87;V4:9314;V6:角色权限查询;V41:/core/module/sys/role-permissions/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('88') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('88') <>
+    'V2:88;V4:9314;V10:系统用户多选页面跳转;V51:/secure/core/module/mdm/users/page/choose-mult-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('89') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('89') <>
+    'V2:89;V4:9314;V9:系统用户选择页查询;V47:/secure/core/module/mdm/users/queries/choosable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('90') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('90') <>
+    'V2:90;V4:9314;V7:角色选择页跳转;V46:/secure/core/module/sys/roles/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('91') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('91') <>
+    'V2:91;V4:9314;V7:角色选择页查询;V47:/secure/core/module/sys/roles/queries/choosable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('92') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('92') <>
+    'V2:92;V4:9401;V6:操作日志查询;V40:/core/module/sys/logs/queries/searchable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('93') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('93') <>
+    'V2:93;V4:9003;V2:详情;V34:/secure/core/module/sys/roles/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('94') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('94') <>
+    'V2:94;V4:9003;V11:通过角色来查询所属用户;V53:/secure/core/module/sys/roles/{id}/role-users/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('95') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('95') <>
+    'V2:95;V4:9003;V7:菜单组权限查询;V43:/secure/core/module/sys/menu-groups/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('96') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('96') <>
+    'V2:96;V4:9003;V11:添加菜单权限弹出选择框;V46:/secure/core/module/sys/menus/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('97') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('97') <>
+    'V2:97;V4:9003;V11:添加单位权限弹出选择框;V45:/secure/core/module/mdm/orgs/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('98') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('98') <>
+    'V2:98;V4:9003;V12:添加菜单组权限弹出选择框;V52:/secure/core/module/sys/menu-groups/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('99') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('99') <>
+    'V2:99;V4:9003;V13:添加首页方案权限弹出选择框;V59:/secure/core/module/item/workspace-schemes/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('100') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('100') <>
+    'V3:100;V4:9202;V9:详情页-查看流程图;V50:/core/module/item/files/page/bpmn-diagram-designer;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('101') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('101') <>
+    'V3:101;V4:9202;V12:详情页-BPMN预览页面;V48:/core/module/item/files/page/bpmn-diagram-viewer;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('102') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('102') <>
+    'V3:102;V4:9202;V21:详情页-获取流程图表中所有节点审核人员信息;V67:/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('103') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('103') <>
+    'V3:103;V4:9202;V20:详情页-获取流程图表中所有线中的条件信息;V75:/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('104') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('104') <>
+    'V3:104;V4:9202;V17:详情页-过流程定义编码查询使用部门;V62:/secure/core/module/sys/bpmn-procs/{id}/bpmn-proc-orgs/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('105') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('105') <>
+    'V3:105;V4:9202;V2:详情;V39:/secure/core/module/sys/bpmn-procs/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('106') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('106') <>
+    'V3:106;V4:9201;V20:详情页-获取流程图表中所有线中的条件信息;V75:/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('107') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('107') <>
+    'V3:107;V4:9201;V12:详情页-BPMN预览页面;V48:/core/module/item/files/page/bpmn-diagram-viewer;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('108') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('108') <>
+    'V3:108;V4:9201;V12:详情页-BPMN变价页面;V50:/core/module/item/files/page/bpmn-diagram-designer;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('109') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('109') <>
+    'V3:109;V4:9233;V8:流程执行实例查询;V47:/secure/core/module/sys/bpmn-inst-tasks/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('110') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('110') <>
+    'V3:110;V4:9233;V17:查询流程执行实例的任务下的审核人员;V73:/secure/core/module/sys/bpmn-inst-tasks/{id}/bpmn-inst-task-users/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('111') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('111') <>
+    'V3:111;V4:9233;V17:查询流程执行实例的任务下的审核角色;V73:/secure/core/module/sys/bpmn-inst-tasks/{id}/bpmn-inst-task-roles/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('112') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('112') <>
+    'V3:112;V4:9328;V3:详情页;V50:/secure/core/module/equipt/acq-scripts/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('113') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('113') <>
+    'V3:113;V4:9301;V6:查询菜单图标;V43:/secure/core/module/sys/menus/icons/queries;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('114') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('114') <>
+    'V3:114;V4:9302;V5:编辑页查询;V47:/secure/core/module/sys/menu-groups/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('115') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('115') <>
+    'V3:115;V4:9302;V3:详情页;V47:/secure/core/module/sys/menu-groups/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('116') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('116') <>
+    'V3:116;V4:9302;V4:查询菜单;V67:/secure/core/module/sys/menu-groups/{id}/menu-group-lines/tree-grid;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('117') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('117') <>
+    'V3:117;V4:9335;V6:查询登录配置;V37:/secure/module/sys/login-configs/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('118') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('118') <>
+    'V3:118;V4:9335;V6:查询系统配置;V38:/secure/module/sys/system-configs/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('119') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('119') <>
+    'V3:119;V4:9402;V8:系统登录日志查询;V53:/secure/core/module/sys/login-logs/queries/searchable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('120') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('120') <>
+    'V3:120;V4:9403;V6:导出日志查询;V43:/secure/core/module/sys/export-logs/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('121') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('121') <>
+    'V3:121;V6:950101;V16:系统用户选择页面（精简页面）跳转;V53:/secure/core/module/mdm/users/page/simple-choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('122') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('122') <>
+    'V3:122;V6:950101;V9:系统用户选择页查询;V47:/secure/core/module/mdm/users/queries/choosable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('123') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('123') <>
+    'V3:123;V6:950102;V9:业务流程状态详情页;V60:/secure/core/module/sys/bpmn-exts/page/process-status-detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('124') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('124') <>
+    'V3:124;V6:950102;V11:获取工作流运行中的信息;V46:/secure/core/module/sys/bpmn-exts/runtime-info;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('125') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('125') <>
+    'V3:125;V6:950102;V6:审核意见查询;V45:/secure/core/module/sys/bpmn-comments/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('126') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('126') <>
+    'V3:126;V6:950102;V17:获取流程图表中所有节点审核人员信息;V67:/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('127') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('127') <>
+    'V3:127;V6:950102;V6:查询附件详情;V28:/core/module/item/files/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('128') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('128') <>
+    'V3:128;V6:950104;V2:详情;V37:/secure/core/module/item/notices/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('129') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('129') <>
+    'V3:129;V6:950104;V4:权限查询;V91:/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('130') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('130') <>
+    'V3:130;V4:9003;V11:密码策略下拉框数据查询;V60:/secure/core/module/sys/password-policies/queries/selectable;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('131') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('131') <>
+    'V3:131;V6:950101;V5:编制页查询;V44:/secure/core/module/item/notices/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('132') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('132') <>
+    'V3:132;V6:950101;V2:详情;V37:/secure/core/module/item/notices/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('133') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('133') <>
+    'V3:133;V6:950101;V16:系统单位选择页面（精简页面）跳转;V52:/secure/core/module/mdm/orgs/page/simple-choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('134') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('134') <>
+    'V3:134;V6:950101;V9:系统单位选择页查询;V46:/secure/core/module/mdm/orgs/queries/choosable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('135') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('135') <>
+    'V3:135;V6:950101;V6:审核意见查询;V45:/secure/core/module/sys/bpmn-comments/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('136') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('136') <>
+    'V3:136;V6:950102;V5:审核页查询;V46:/secure/core/module/item/notices/queries/tasks;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('137') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('137') <>
+    'V3:137;V6:950104;V11:跳转至BPMN预览页面;V48:/core/module/item/files/page/bpmn-diagram-viewer;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('138') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('138') <>
+    'V3:138;V6:950104;V16:获取流程图表中所有线中的条件信息;V75:/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('139') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('139') <>
+    'V3:139;V4:9321;V5:编制页列表;V50:/secure/core/module/sys/rounding-rules/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('140') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('140') <>
+    'V3:140;V4:9322;V11:系统菜单选择页面查询树;V39:/secure/core/module/sys/menus/tree-grid;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('141') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('141') <>
+    'V3:141;V4:9330;V2:导出;V47:/secure/core/module/sys/i18ns/excelDownload-url;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('142') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('142') <>
+    'V3:142;V6:950101;V4:附件查询;V31:/core/module/item/files/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('143') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('143') <>
+    'V3:143;V6:950101;V4:查询权限;V91:/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('144') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('144') <>
+    'V3:144;V6:950101;V7:系统单位查询树;V44:/secure/core/module/mdm/orgs/tree/{parentId};V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('145') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('145') <>
+    'V3:145;V6:950101;V9:业务流程状态详情页;V60:/secure/core/module/sys/bpmn-exts/page/process-status-detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('146') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('146') <>
+    'V3:146;V6:950101;V11:获取工作流运行中的信息;V46:/secure/core/module/sys/bpmn-exts/runtime-info;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('147') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('147') <>
+    'V3:147;V6:950101;V11:跳转至BPMN预览页面;V48:/core/module/item/files/page/bpmn-diagram-viewer;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('148') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('148') <>
+    'V3:148;V6:950101;V17:获取流程图表中所有节点审核人员信息;V67:/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('149') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('149') <>
+    'V3:149;V6:950101;V16:获取流程图表中所有线中的条件信息;V75:/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('150') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('150') <>
+    'V3:150;V6:950102;V16:获取流程图表中所有线中的条件信息;V75:/secure/core/module/sys/bpmn-diagrams/{id}/queries/sequence-flow-conditions;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('151') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('151') <>
+    'V3:151;V6:950102;V16:获取工作流运行中可回退节点的信息;V58:/secure/core/module/sys/bpmn-exts/options/rejectable-tasks;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('152') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('152') <>
+    'V3:152;V6:950102;V12:获取工作流任务节点的状态;V49:/secure/core/module/item/notices/bpmn-task-status;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('153') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('153') <>
+    'V3:153;V4:9322;V4:编制列表;V48:/secure/core/module/sys/todo-configs/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('154') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('154') <>
+    'V3:154;V4:9322;V2:详情;V41:/secure/core/module/sys/todo-configs/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('155') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('155') <>
+    'V3:155;V6:950101;V6:查询附件详情;V28:/core/module/item/files/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('156') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('156') <>
+    'V3:156;V4:9315;V3:详情页;V53:/secure/core/module/sys/password-policies/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('157') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('157') <>
+    'V3:157;V4:9315;V2:详情;V46:/secure/core/module/sys/password-policies/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('158') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('158') <>
+    'V3:158;V4:9318;V13:系统编码类型下拉框数据查询;V58:/secure/core/module/sys/code-categories/queries/selectable;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('159') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('159') <>
+    'V3:159;V4:9318;V5:编制页列表;V41:/secure/core/module/sys/codes/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('160') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('160') <>
+    'V3:160;V4:9318;V3:详情页;V41:/secure/core/module/sys/codes/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('161') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('161') <>
+    'V3:161;V4:9318;V2:详情;V34:/secure/core/module/sys/codes/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('162') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('162') <>
+    'V3:162;V4:9321;V3:详情页;V50:/secure/core/module/sys/rounding-rules/page/detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('163') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('163') <>
+    'V3:163;V4:9321;V2:详情;V43:/secure/core/module/sys/rounding-rules/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('164') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('164') <>
+    'V3:164;V4:9404;V10:可审计跟踪的配置查询;V60:/secure/core/module/sys/at-configs/audit-trailable/tree-grid;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('165') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('165') <>
+    'V3:165;V6:950103;V2:详情;V37:/secure/core/module/item/notices/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('166') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('166') <>
+    'V3:166;V6:950103;V4:附件查询;V31:/core/module/item/files/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('167') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('167') <>
+    'V3:167;V4:9404;V8:审计跟踪记录查询;V68:/secure/core/module/sys/at-records/queries/atrecord/{tableName}/{id};V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('168') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('168') <>
+    'V3:168;V6:950103;V5:回退页查询;V49:/secure/core/module/item/notices/queries/undoable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('169') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('169') <>
+    'V3:169;V6:950103;V4:权限查询;V91:/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('170') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('170') <>
+    'V3:170;V6:950103;V6:查看附件详情;V28:/core/module/item/files/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('171') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('171') <>
+    'V3:171;V6:950104;V9:业务流程状态详情页;V60:/secure/core/module/sys/bpmn-exts/page/process-status-detail;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('172') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('172') <>
+    'V3:172;V6:950104;V11:获取工作流运行中的信息;V46:/secure/core/module/sys/bpmn-exts/runtime-info;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('173') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('173') <>
+    'V3:173;V4:9322;V7:系统菜单选择页;V46:/secure/core/module/sys/menus/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('174') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('174') <>
+    'V3:174;V4:9322;V4:查询图标;V50:/secure/core/module/sys/todo-configs/icons/queries;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('175') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('175') <>
+    'V3:175;V4:9326;V5:编制页列表;V54:/secure/core/module/item/workspace-schemes/queries/raw;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('176') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('176') <>
+    'V3:176;V4:9326;V10:获取方案面板配置信息;V61:/secure/core/module/item/workspace-schemes/{id}/panel-configs;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('177') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('177') <>
+    'V3:177;V6:950101;V10:角色选择页（可嵌入）;V46:/secure/core/module/sys/roles/page/choose-list;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('178') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('178') <>
+    'V3:178;V6:950101;V12:获取工作流任务节点的状态;V49:/secure/core/module/item/notices/bpmn-task-status;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('179') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('179') <>
+    'V3:179;V6:950102;V2:详情;V37:/secure/core/module/item/notices/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('180') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('180') <>
+    'V3:180;V6:950101;V7:角色选择页查询;V47:/secure/core/module/sys/roles/queries/choosable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('181') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('181') <>
+    'V3:181;V6:950102;V4:附件查询;V31:/core/module/item/files/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('182') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('182') <>
+    'V3:182;V6:950102;V4:查询权限;V91:/secure/core/module/item/notices/{id}/permission-types/{permissionType}/permissions/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('183') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('183') <>
+    'V3:183;V6:950102;V11:跳转至BPMN预览页面;V48:/core/module/item/files/page/bpmn-diagram-viewer;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('184') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('184') <>
+    'V3:184;V6:950104;V6:审核意见查询;V45:/secure/core/module/sys/bpmn-comments/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('185') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('185') <>
+    'V3:185;V4:9330;V7:系统国际化查询;V37:/secure/core/module/sys/i18ns/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('186') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('186') <>
+    'V3:186;V4:9330;V2:详情;V34:/secure/core/module/sys/i18ns/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('187') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('187') <>
+    'V3:187;V4:9330;V15:通过国际化的ID查询国际化信息;V56:/secure/core/module/sys/i18ns/{id}/i18n-messages/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('188') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('188') <>
+    'V3:188;V6:950102;V6:获取状态信息;V49:/secure/core/module/item/notices/{id}/info/status;V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('189') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('189') <>
+    'V3:189;V6:950104;V9:通知公告查询页查询;V51:/secure/core/module/item/notices/queries/searchable;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('190') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('190') <>
+    'V3:190;V6:950104;V4:附件查询;V31:/core/module/item/files/queries;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('191') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('191') <>
+    'V3:191;V6:950104;V6:查询附件详情;V28:/core/module/item/files/{id};V3:GET;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+  IF NOT actual.EXISTS('192') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_REQUEST_URL'); END IF;
+  IF actual('192') <>
+    'V3:192;V6:950104;V17:获取流程图表中所有节点审核人员信息;V67:/secure/core/module/sys/bpmn-diagrams/{id}/queries/task-candidators;V4:POST;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_REQUEST_URL'); END IF;
+END;
+/
+DECLARE
+  TYPE row_map IS TABLE OF VARCHAR2(32767) INDEX BY VARCHAR2(128);
+  actual row_map;
+  oversized NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO oversized FROM T_CORE_ROLE_PERMISSION_TYPE WHERE DBMS_LOB.GETLENGTH(GRIDPRIMARYURL)>1000 OR DBMS_LOB.GETLENGTH(GRIDCOLUMNSETTINGS)>1000;
+  IF oversized <> 0 THEN RAISE_APPLICATION_ERROR(-20123, 'Technical bootstrap text exceeds reviewed capacity.'); END IF;
+  FOR r IN (SELECT TO_CHAR(ID) AS ROW_ID, CASE WHEN ID IS NULL THEN 'N;' ELSE 'V'||LENGTH(ID)||':'||ID||';' END
+      || CASE WHEN TYPENAME IS NULL THEN 'N;' ELSE 'V'||LENGTH(TYPENAME)||':'||TYPENAME||';' END
+      || CASE WHEN PERMISSIONTYPE IS NULL THEN 'N;' ELSE 'V'||LENGTH(PERMISSIONTYPE)||':'||PERMISSIONTYPE||';' END
+      || CASE WHEN COMPCATEGORY IS NULL THEN 'N;' ELSE 'V'||LENGTH(COMPCATEGORY)||':'||COMPCATEGORY||';' END
+      || CASE WHEN GRIDPRIMARYURL IS NULL THEN 'N;' ELSE 'V'||DBMS_LOB.GETLENGTH(GRIDPRIMARYURL)||':'||DBMS_LOB.SUBSTR(GRIDPRIMARYURL,1000,1)||';' END
+      || CASE WHEN GRIDCOLUMNSETTINGS IS NULL THEN 'N;' ELSE 'V'||DBMS_LOB.GETLENGTH(GRIDCOLUMNSETTINGS)||':'||DBMS_LOB.SUBSTR(GRIDCOLUMNSETTINGS,1000,1)||';' END
+      || CASE WHEN ORDERNO IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(ORDERNO,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(ORDERNO,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
+      || CASE WHEN LASTSUSPENDEDFLAG IS NULL THEN 'N;' ELSE 'V'||LENGTH(LASTSUSPENDEDFLAG)||':'||LASTSUSPENDEDFLAG||';' END AS SIGNATURE FROM T_CORE_ROLE_PERMISSION_TYPE) LOOP
+    actual(r.ROW_ID) := r.SIGNATURE;
+  END LOOP;
+  IF actual.COUNT <> 3 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_ROLE_PERMISSION_TYPE'); END IF;
+  IF NOT actual.EXISTS('T_CORE_MENU') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_ROLE_PERMISSION_TYPE'); END IF;
+  IF actual('T_CORE_MENU') <>
+    'V11:T_CORE_MENU;V42:CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_MEMU;V4:menu;V8:treeGrid;V29:/secure/core/module/sys/menus;V89:{title:''菜单编码'',field:''id'',type:''tree'',width:200},{title:''菜单名称'',field:''menuName'',width:150};V2:11;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_ROLE_PERMISSION_TYPE'); END IF;
+  IF NOT actual.EXISTS('T_CORE_ORG') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_ROLE_PERMISSION_TYPE'); END IF;
+  IF actual('T_CORE_ORG') <>
+    'V10:T_CORE_ORG;V41:CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_ORG;V4:data;V4:grid;N;N;V2:21;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_ROLE_PERMISSION_TYPE'); END IF;
+  IF NOT actual.EXISTS('T_CORE_WK_SCHEME') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_ROLE_PERMISSION_TYPE'); END IF;
+  IF actual('T_CORE_WK_SCHEME') <>
+    'V16:T_CORE_WK_SCHEME;V47:CORE.MODULE.SYS.ROLES.PERMISSION_TYPE_WK_SCHEME;V4:data;V4:grid;V42:/secure/core/module/item/workspace-schemes;V33:{title:''方案名称'',field:''schemeName''};V2:23;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_ROLE_PERMISSION_TYPE'); END IF;
+END;
+/
+DECLARE
+  TYPE row_map IS TABLE OF VARCHAR2(32767) INDEX BY VARCHAR2(128);
+  actual row_map;
+  oversized NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO oversized FROM T_CORE_USER_PERMISSION_TYPE WHERE DBMS_LOB.GETLENGTH(GRIDCHOOSEURL)>1000 OR DBMS_LOB.GETLENGTH(GRIDCOLUMNSETTINGS)>1000;
+  IF oversized <> 0 THEN RAISE_APPLICATION_ERROR(-20123, 'Technical bootstrap text exceeds reviewed capacity.'); END IF;
+  FOR r IN (SELECT TO_CHAR(ID) AS ROW_ID, CASE WHEN ID IS NULL THEN 'N;' ELSE 'V'||LENGTH(ID)||':'||ID||';' END
+      || CASE WHEN TYPENAME IS NULL THEN 'N;' ELSE 'V'||LENGTH(TYPENAME)||':'||TYPENAME||';' END
+      || CASE WHEN PERMISSIONTYPE IS NULL THEN 'N;' ELSE 'V'||LENGTH(PERMISSIONTYPE)||':'||PERMISSIONTYPE||';' END
+      || CASE WHEN GRIDCHOOSEURL IS NULL THEN 'N;' ELSE 'V'||DBMS_LOB.GETLENGTH(GRIDCHOOSEURL)||':'||DBMS_LOB.SUBSTR(GRIDCHOOSEURL,1000,1)||';' END
+      || CASE WHEN GRIDQUERYURL IS NULL THEN 'N;' ELSE 'V'||LENGTH(GRIDQUERYURL)||':'||GRIDQUERYURL||';' END
+      || CASE WHEN GRIDCOLUMNSETTINGS IS NULL THEN 'N;' ELSE 'V'||DBMS_LOB.GETLENGTH(GRIDCOLUMNSETTINGS)||':'||DBMS_LOB.SUBSTR(GRIDCOLUMNSETTINGS,1000,1)||';' END
+      || CASE WHEN GRIDMODIFIEDQUERYURL IS NULL THEN 'N;' ELSE 'V'||LENGTH(GRIDMODIFIEDQUERYURL)||':'||GRIDMODIFIEDQUERYURL||';' END
+      || CASE WHEN ORDERNO IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(ORDERNO,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(ORDERNO,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
+      || CASE WHEN LASTSUSPENDEDFLAG IS NULL THEN 'N;' ELSE 'V'||LENGTH(LASTSUSPENDEDFLAG)||':'||LASTSUSPENDEDFLAG||';' END AS SIGNATURE FROM T_CORE_USER_PERMISSION_TYPE) LOOP
+    actual(r.ROW_ID) := r.SIGNATURE;
+  END LOOP;
+  IF actual.COUNT <> 3 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_USER_PERMISSION_TYPE'); END IF;
+  IF NOT actual.EXISTS('T_CORE_ORG') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_USER_PERMISSION_TYPE'); END IF;
+  IF actual('T_CORE_ORG') <>
+    'V10:T_CORE_ORG;V41:CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ORG;V4:data;V45:/secure/core/module/mdm/orgs/page/choose-list;V76:/secure/core/module/mdm/user-permissions/permission-types/T_CORE_ORG/queries;V67:{title:''部门编码'',field:''targetId''},{title:''部门名称'',field:''ext$.orgname''};V87:/secure/core/module/mdm/m-users/{id}/user-permissions/queries?permissionType=T_CORE_ORG;V1:1;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_USER_PERMISSION_TYPE'); END IF;
+  IF NOT actual.EXISTS('T_CORE_REPORT_CONFIG_LINE') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_USER_PERMISSION_TYPE'); END IF;
+  IF actual('T_CORE_REPORT_CONFIG_LINE') <>
+    'V25:T_CORE_REPORT_CONFIG_LINE;V10:报表配置明细查询权限;V4:data;N;N;N;N;V1:6;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_USER_PERMISSION_TYPE'); END IF;
+  IF NOT actual.EXISTS('T_CORE_ROLE') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_USER_PERMISSION_TYPE'); END IF;
+  IF actual('T_CORE_ROLE') <>
+    'V11:T_CORE_ROLE;V42:CORE.MODULE.SYS.USERS.PERMISSION_TYPE_ROLE;V4:data;V46:/secure/core/module/sys/roles/page/choose-list;V35:/core/module/sys/role-users/queries;V36:{title:''角色名称'',field:''ext$.rolename''};V55:/secure/core/module/mdm/m-users/{id}/user-roles/queries;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_USER_PERMISSION_TYPE'); END IF;
+END;
+/
 PROMPT Selected technical bootstrap content verified; full installation remains partial.

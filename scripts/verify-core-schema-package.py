@@ -32,6 +32,14 @@ DICTIONARY_COLUMNS = {
     "T_CORE_CODE": {"ID", "CODE", "CODENAME", "CODECATEGORYID", "ORDERNO", "LASTSUSPENDEDFLAG", "I18NCODE"},
     "T_CORE_CONSTANT": {"ID", "CONSTANTVALUE", "CONSTANTDESC", "CLASSFICATION", "SHOW"},
 }
+ACCESS_COLUMNS = {
+    "T_CORE_REQUEST_URL": {"ID", "MENUID", "NOTE", "URL", "METHOD"},
+    "T_CORE_ROLE_PERMISSION_TYPE": {"ID", "TYPENAME", "PERMISSIONTYPE", "COMPCATEGORY",
+        "GRIDPRIMARYURL", "GRIDCOLUMNSETTINGS", "ORDERNO", "LASTSUSPENDEDFLAG"},
+    "T_CORE_USER_PERMISSION_TYPE": {"ID", "TYPENAME", "PERMISSIONTYPE", "GRIDCHOOSEURL",
+        "GRIDQUERYURL", "GRIDCOLUMNSETTINGS", "GRIDMODIFIEDQUERYURL", "ORDERNO", "LASTSUSPENDEDFLAG"},
+}
+BOOTSTRAP_TABLES.update(ACCESS_COLUMNS)
 LCDP_COLUMNS = {
     "T_LCDP_RESOURCE": {"ID","RESOURCENAME","RESOURCECATEGORY","PARENTID","ORDERNO","CONTENT","EFFECTVERSION","PATH","DELETEFLAG","DATATYPE","CLASSCONTENT","CLASSNAME"},
     "T_LCDP_RESOURCE_HISTORY": {"ID","RESOURCEID","RESOURCENAME","RESOURCECATEGORY","CONTENT","VERSION","SUBMITFLAG","EFFECTFLAG","PATH","MODIFYVERSION","DELETEFLAG","CLASSCONTENT"},
@@ -263,7 +271,7 @@ def check_bootstrap(text: str) -> None:
         table = identifier(insert.group(1))
         require(table in BOOTSTRAP_TABLES,
                 "bootstrap inserts into a table outside the technical configuration allowlist")
-        projections = {**DICTIONARY_COLUMNS, **LCDP_COLUMNS}
+        projections = {**DICTIONARY_COLUMNS, **LCDP_COLUMNS, **ACCESS_COLUMNS}
         if table in projections:
             columns = [identifier(name.strip()) for name in insert.group("columns").split(",")]
             require(len(columns) == len(set(columns)) and set(columns) == projections[table],

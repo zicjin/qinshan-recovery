@@ -345,6 +345,38 @@ COMMIT;
         self.write('manifest.json',json.dumps(self.manifest))
         self.assert_rejected()
 
+    def test_access_bootstrap_accepts_only_technical_definitions_and_mapping_columns(self):
+        text = """WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT (SELECT COUNT(*) FROM T_CORE_REQUEST_URL) + (SELECT COUNT(*) FROM T_CORE_ROLE_PERMISSION_TYPE) + (SELECT COUNT(*) FROM T_CORE_USER_PERMISSION_TYPE) INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+INSERT INTO T_CORE_REQUEST_URL (ID,MENUID,NOTE,URL,METHOD) VALUES (1,'9003','Role definitions',TO_CLOB('/core/module/sys/role-permission-types/queries/selectable'),'GET');
+INSERT INTO T_CORE_ROLE_PERMISSION_TYPE (ID,TYPENAME,PERMISSIONTYPE,COMPCATEGORY,GRIDPRIMARYURL,GRIDCOLUMNSETTINGS,ORDERNO,LASTSUSPENDEDFLAG) VALUES ('T_CORE_MENU','CORE.TYPE.MENU','menu','treeGrid',TO_CLOB('/secure/core/module/sys/menus'),NULL,11,'0');
+INSERT INTO T_CORE_USER_PERMISSION_TYPE (ID,TYPENAME,PERMISSIONTYPE,GRIDCHOOSEURL,GRIDQUERYURL,GRIDCOLUMNSETTINGS,GRIDMODIFIEDQUERYURL,ORDERNO,LASTSUSPENDEDFLAG) VALUES ('T_CORE_ROLE','CORE.TYPE.ROLE','data',NULL,NULL,NULL,NULL,2,'0');
+COMMIT;
+"""
+        initializer=(self.root/'install.sql').read_text()
+        self.write('install.sql',initializer.replace('@@90-verify.sql','@@70-bootstrap.sql\n@@90-verify.sql'))
+        self.write('70-bootstrap.sql',text)
+        self.pin()
+        self.manifest['files'].append({'path':'70-bootstrap.sql','role':'bootstrap',
+            'sha256':sha(text.encode()),'bytes':len(text.encode())})
+        self.write('manifest.json',json.dumps(self.manifest))
+        result=self.run_verifier()
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        for old,new in [('NOTE,URL','CREATEDBYID,URL'),('GRIDPRIMARYURL,','LASTSUSPENDEDBYID,'),
+                        ('T_CORE_USER_PERMISSION_TYPE (','T_CORE_USER_PERMISSION (')]:
+            bad=text.replace(old,new)
+            self.write('70-bootstrap.sql',bad)
+            entry=next(x for x in self.manifest['files']if x['path']=='70-bootstrap.sql')
+            entry['sha256'],entry['bytes']=sha(bad.encode()),len(bad.encode())
+            self.write('manifest.json',json.dumps(self.manifest))
+            self.assert_rejected()
+
     def test_file_constants_require_the_reviewed_technical_projection(self):
         text = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
 SET DEFINE OFF

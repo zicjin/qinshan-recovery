@@ -657,22 +657,22 @@
       "sha256": "34c43de299eb20a45435b6d343badb43ebc16cefece4df9d9415f865a8093638"
     },
     {
-      "bytes": 1446544,
+      "bytes": 1482853,
       "path": "70-bootstrap.sql",
       "role": "bootstrap",
-      "sha256": "5574fcd86b4129c7aab1e75173b26ac64924012816329b213aa453949fb831b1"
+      "sha256": "31e7458df84ec597c09f37c5664223c27caa9b8a256caabccdca5dfaacd35637"
     },
     {
-      "bytes": 2331361,
+      "bytes": 2408990,
       "path": "80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "bd22320585d9e6ea8bc7c5c2db0e489980fa7caecba92a674dbd97349bbe4e3b"
+      "sha256": "1a833bbe89d780f72a3e13370b8306d889fae0625d1040fd5f2c6e5615d0e748"
     },
     {
-      "bytes": 1218642,
+      "bytes": 1270765,
       "path": "bootstrap-provenance.json",
       "role": "source-metadata",
-      "sha256": "aeb10c343a38ae02c610d14eb05bcb7f2cc0befd7cd64fdaea4942da2391caa6"
+      "sha256": "db72d18ec937735572190f004b24c7bf1a5c22414c9a43bfaf035a760cb5a4fd"
     }
   ],
   "limitations": [
@@ -13533,9 +13533,12 @@
       "T_CORE_I18N_MESSAGE": 1375,
       "T_CORE_LOGIN_CONFIG": 1,
       "T_CORE_MENU": 402,
+      "T_CORE_REQUEST_URL": 188,
+      "T_CORE_ROLE_PERMISSION_TYPE": 3,
       "T_CORE_SYSTEM_CONFIG": 1,
       "T_CORE_TABLE": 467,
       "T_CORE_TABLE_HIERARCHY": 170,
+      "T_CORE_USER_PERMISSION_TYPE": 3,
       "T_LCDP_MODULE_PAGE_COMP": 229,
       "T_LCDP_MODULE_PAGE_I18N": 123,
       "T_LCDP_PAGE_I18N_CODE": 242,

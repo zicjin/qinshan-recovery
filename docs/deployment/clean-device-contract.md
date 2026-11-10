@@ -17,6 +17,14 @@ initializer rejects before applying any DDL. Run
 `python3 scripts/verify-core-schema-package.py --check-package` to validate shipped
 files without private inputs; this does not establish complete deployment readiness.
 
+The bootstrap content verifier is an installation-phase check: run it immediately
+following the seed and before initializing identities or starting the application.
+The original LCDP ready listener normalizes page component configuration during
+startup, and the first-administrator command adds a target-specific organization
+constant. A later exact bootstrap check may therefore report intentional runtime
+changes. Preserve its failure and compare against the relevant original startup
+behavior; do not overwrite runtime configuration just to restore seed hashes.
+
 The current application distribution does not include the schema directory or
 these deployment documents. Deliver the matching standalone checkout alongside
 the distribution, or a future versioned, hash-pinned installation bundle carrying

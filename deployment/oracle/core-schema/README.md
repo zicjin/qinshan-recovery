@@ -37,7 +37,7 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 4,622 rows across eighteen explicitly selected
+The technical bootstrap contains 4,816 rows across twenty-one explicitly selected
 configuration tables: 2 locales, 1,350 internationalization keys, 1,375 messages,
 392 static and 10 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
 relations, one system UI config, one login UI config and 37 source-referenced
@@ -52,6 +52,17 @@ that exception without creating a history or changing another resource's contrac
 Two exact production technical constants, `FILE-EXTENSIONS` and `FILE-SPACELIMIT`,
 provide the original upload validator's allowed extensions and size limit. Their
 fields and source rows are pinned; no other system constants are copied.
+The access configuration adds all 188 captured request-to-menu mappings and
+three definitions each for role and user permission types. The two suspended
+definitions stay suspended; selectable queries return only `LASTSUSPENDEDFLAG=0`.
+Seven original request mappings refer to menu `9302`, absent from the captured
+production menu inventory. They remain recorded as source orphan references;
+the installer neither invents that menu nor drops its mappings. Permission
+panel GRID settings are limited to the reviewed declarative column grammar.
+No accounts, memberships or grants are copied, and this seed does not turn on
+`sunway.api.check-access-permission`. That original aspect is explicitly opt-in;
+the captured external production configuration does not set it. The separate
+`T_CORE_MENU_EXT` audit definitions remain outside this subset.
 `bootstrap-provenance.json` pins every emitted statement and selected
 source row. Identity/audit-origin columns are not copied. No users, organizations,
 roles, passwords or permission grants are copied from production.

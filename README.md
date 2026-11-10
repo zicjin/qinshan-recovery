@@ -143,6 +143,12 @@ source-bound in the bootstrap. Excel import/export template records and bytes
 remain outside this subset. Other dynamic modules,
 workflow and permission bootstrap remain incomplete; draft scripts containing
 embedded business data are excluded.
+The package also preserves 188 captured request-to-menu mappings and six
+permission-type definitions, including original suspension flags and seven
+references to a missing production menu. It copies no production grants and
+does not enable the optional `sunway.api.check-access-permission` setting.
+See [access-control.md](docs/deployment/access-control.md) for its matching rules,
+permission-panel definitions and installation order.
 Complete permissions, workflows and dynamic LCDP initialization remain
 incomplete; the phase is not a replacement for the full bootstrap.
 The distribution now includes a one-time

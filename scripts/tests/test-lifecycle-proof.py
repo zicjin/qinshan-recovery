@@ -159,6 +159,15 @@ else: raise AssertionError(args)
         self.assertEqual(failed['status'], 'diagnostic-failed')
         self.export(ok=False)
 
+    def test_manifest_prepared_runtime_parent_path_is_rejected(self):
+        """Prepared artifacts must remain inside the lifecycle directory."""
+        self.manifest['prepared_runtime']['path'] = '../prepared.json'
+        self.write(self.manifest_path, self.manifest)
+        failed = self.verify(ok=False)
+        self.assertFalse(failed['lifecycle_verified'])
+        self.assertEqual(failed['status'], 'diagnostic-failed')
+        self.assertEqual(failed.get('error'), 'invalid, inaccessible or incomplete milestone input')
+
     def test_declared_or_local_only_write_proof_cannot_be_finalized(self):
         self.verify(); self.export()
         case = self.report['cases'][0]

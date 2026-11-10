@@ -48,6 +48,13 @@ runs. Use the existing six-role `local-runtime-milestone-inputs` manifest, with:
   `application_binding`, `harness_binding`, `runtime_contract_binding` and the
   complete `artifact_sha256` mapping copied from the pending report.
 
+Copy the prepared manifest into the lifecycle manifest directory before writing
+this input. Set `prepared_runtime.path` to a local name such as `prepared.json`;
+parent-directory references such as `../prepared.json` are rejected by the
+verifier so pinned lifecycle inputs remain inside that directory. The `batch_id`
+belongs to the lifecycle `context`; it does not need to be added to the prepared
+runtime root.
+
 After active verification and fixture cleanup finish, stop the same app in the
 batched milestone cleanup window and run the verifier. This necessary app-only
 stop/restart requires no additional approval. Its existing double inspection

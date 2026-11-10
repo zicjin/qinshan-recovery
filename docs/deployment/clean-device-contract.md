@@ -88,8 +88,11 @@ is a shape example, not a deployable credential file.
    Rollback replaces only the application distribution; it does not recreate
    Oracle or Redis.
 
-The contract verifier intentionally exits nonzero while the core schema package
-is unavailable. That failure is a truthful deployment block, not a missing
-optional step. The current state is therefore: source-only build/package is
-available; targeted schema fixtures and the external logical clone are
-available; complete clean-device Oracle restoration remains blocked.
+The contract verifier validates the repository contract and reports
+`deployment_ready: false` while the core schema package is unavailable. A
+caller must treat that field as a deployment gate; a zero process exit only
+means that the fail-closed contract was read successfully. The block is
+truthful, not an optional warning. The current state is therefore:
+source-only build/package is available; targeted schema fixtures and the
+external logical clone are available; complete clean-device Oracle restoration
+remains blocked.

@@ -199,6 +199,14 @@ private installer identities, password and policy. It initializes a verified
 empty identity set using the original Java password encoder; it is not a public
 bootstrap endpoint or a complete application configuration installer.
 
+The separate [workflow installer](docs/deployment/workflows.md) uses the bundled
+symbolic package for 20 nonempty latest process definitions and preserves seven
+source-empty blockers. Prepare the declared target identities and memberships,
+stop the target application and supply a complete private mapping to
+`initialize-workflows.sh`. It writes only workflow configuration, preserves
+versions and candidate/organization boundaries, and does not grant permissions
+or establish business process acceptance.
+
 The source-only distribution includes `installation/`: the exact public Oracle
 SQL/metadata and two offline verifiers required by the combined plan, plus its
 own README. Every file, including the nested package manifests, is hashed in the

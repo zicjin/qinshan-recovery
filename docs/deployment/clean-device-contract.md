@@ -258,6 +258,14 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    JSON and password policy. It requires empty identity tables and technical
    prerequisites; it does not complete remaining workflow/LCDP/configuration
    bootstrap.
+   The matching distribution also includes a separate
+   [workflow configuration command](workflows.md). After preparing every target
+   identity and membership, stop the target application and provide its complete
+   private mapping to `initialize-workflows.sh`. It preserves the 20 nonempty
+   latest definitions and refuses existing workflow state; seven source-empty
+   definitions remain blocked. Restarting an application does not clear Redis:
+   use a dedicated unused workflow cache namespace for this first installation.
+   The combined structural SQL plan does not invoke this command automatically.
 6. Start one Spring application from its stable writable working directory,
    owned by the application account:
 

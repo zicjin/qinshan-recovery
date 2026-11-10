@@ -186,6 +186,7 @@ _HARNESS_SUFFIXES = (
     "tools/api/OracleContentFingerprint.java",
     "scripts/api_fixture.py",
     "scripts/schema_fixture.py",
+    "scripts/verify-external-schema-manifest.py",
     "scripts/local_schema_policy.py",
     "scripts/http_write_proof.py",
     "scripts/audit_fixture_cleanup.py",
@@ -207,6 +208,7 @@ _HARNESS_SUFFIXES = (
     "scripts/verify-harness-semantics.py",
     "scripts/tests/fixtures/harness-golden-transcript-corpus.jsonl",
     "scripts/tests/fixtures/harness-golden-transcript-expected.json",
+    "api-fixtures/schema/external-schema-clone-manifest.json",
 )
 
 # Planning inputs define route inventory, alias mapping and replay grouping.

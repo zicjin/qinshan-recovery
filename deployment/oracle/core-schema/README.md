@@ -62,15 +62,26 @@ are removed so objects belong to the connected installation user; SQL literals
 are preserved. Oracle-generated hidden columns and LOB physical objects are not
 copied as application DDL.
 
+The distribution's [first-administrator command](../../../docs/deployment/first-administrator.md)
+is now implemented. It creates new installation identities and password policy
+from private operator inputs after the structural and technical configuration
+phases; it copies no production accounts. The configuration blocker recorded
+when this partial package was generated is not a claim that this command is
+still missing. Complete application configuration remains outstanding.
+
 Remaining blockers include two tables with invalid original identifier bytes,
 two originally INVALID functions, one endpoint-bearing function requiring an
 isolated configuration decision, complete target grants and external logical
 domains, and application configuration bootstrap (remaining menus, permissions,
-dictionaries, workflows, dynamic LCDP and initial administrator). The original
+dictionaries and workflows, plus dynamic LCDP dependencies). The original
 invalid identifiers are not guessed or silently renamed. Excluded routines are
 not replaced with successful stubs. See `manifest.json` for exact dispositions.
 
 The package was tested as structural DDL in a disposable user within the existing
 local Oracle. That is separate from full application startup, real HTTP,
 write/audit/recovery acceptance and another-device restoration. Complete system
-readiness remains false; see `docs/deployment/clean-device-contract.md`.
+readiness remains false; see the [clean-device deployment contract](../../../docs/deployment/clean-device-contract.md).
+
+The current application distribution does not include this SQL directory or its
+verifiers. Retain the matching standalone checkout as installation material;
+copying only the application distribution cannot initialize a new database.

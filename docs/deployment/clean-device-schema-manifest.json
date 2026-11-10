@@ -2,10 +2,10 @@
   "schema": "clean-device-schema-contract-v1",
   "status": "blocked-incomplete-core-schema",
   "production_schema_bootstrap": {
-    "status": "unavailable",
-    "source_bound": false,
+    "status": "partial",
+    "source_bound": true,
     "complete_current_production_ddl": false,
-    "reason": "Current-production metadata and partial DDL have been acquired privately; no complete sanitized ordered core DDL/config bootstrap package is tracked or supplied for new-device installation."
+    "reason": "A sanitized ordered production-derived partial DDL package and finite technical bootstrap are tracked in deployment/oracle/core-schema. Complete schema, grants, configuration dependencies and new-device installation acceptance remain incomplete."
   },
   "historical_sql": {
     "path": "project/sql",
@@ -18,6 +18,13 @@
     "integrity_verifier": "scripts/verify-core-schema-package.py --check-package",
     "requires_private_source_at_install": false,
     "complete_application_bootstrap": false
+  },
+  "first_administrator": {
+    "launcher": "owned-distribution/initialize-admin.sh",
+    "instructions": "docs/deployment/first-administrator.md",
+    "status": "implemented",
+    "requires_prepared_schema_and_technical_bootstrap": true,
+    "completes_application_bootstrap": false
   },
   "external_logical_clone": {
     "fixture": "api-fixtures/schema/external-logical-clone.sql",

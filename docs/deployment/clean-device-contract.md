@@ -9,10 +9,19 @@ package is delivered.
 
 `deployment/oracle/core-schema/` now contains the first source-bound structural
 package: 737 tables, ordered indexes/constraints, types, selected routines and
-per-table verification. Its manifest remains partial and the initializer rejects
-before applying any DDL. `python3 scripts/verify-core-schema-package.py
---check-package` validates it using only shipped files; it does not initialize
-the missing application configuration or establish complete deployment readiness.
+per-table verification. It also ships a finite technical bootstrap for locale,
+translations, static menus, entity metadata and safe UI/select configuration,
+plus exact verification of that subset. The distribution provides the separate
+first-administrator installer. Its schema manifest remains partial and the SQL
+initializer rejects before applying any DDL. Run
+`python3 scripts/verify-core-schema-package.py --check-package` to validate shipped
+files without private inputs; this does not establish complete deployment readiness.
+
+The current application distribution does not include the schema directory or
+these deployment documents. Deliver the matching standalone checkout alongside
+the distribution, or a future versioned, hash-pinned installation bundle carrying
+the schema, verifier and instructions. A parent planning checkout and private
+acquisition directory must not be installation dependencies.
 
 `project/sql/` contains historical release and upgrade SQL. Its files are not a
 current production DDL snapshot and must not be executed as a directory-wide
@@ -76,8 +85,11 @@ An operator supplies the target environment and private inputs:
 - public dependency JARs and the Maven plugin seed listed in `README.md`.
 
 The runtime configuration must contain at least datasource URL/user/password,
-Redis URL or host/port, `server.port`, `sunway.user.password.encoder.type`, and an
-explicit `owned.external-schema.access-mode` matching the built artifact.
+Redis URL or host/port plus an explicit `spring.redis.database`, `server.port`,
+`sunway.user.password.encoder.type`, and an explicit
+`owned.external-schema.access-mode` matching the built artifact. Keep Redis's
+database property consistent with its URL. The observed original clients did not
+honor a URL-only database suffix; never flush an existing application's database.
 Do not copy production credentials, DB-link strings, license bodies, private
 keys, or business rows. `owned-distribution/example/owned-application.properties`
 is a shape example, not a deployable credential file.
@@ -85,7 +97,7 @@ is a shape example, not a deployable credential file.
 ## Reproducible sequence once the core package exists
 
 This is the required sequence for the future complete deployment package.
-Steps 2 and 3 currently have no complete repository implementation. Do not
+The full schema/grants and configuration phases remain incomplete. Do not
 replace them by replaying the historical SQL directory or applying every fixture.
 
 Run the deployment readiness gate first:
@@ -97,28 +109,12 @@ python3 scripts/verify-clean-device-contract.py
 It currently exits 2 and must stop a new-device deployment. `--check-contract`
 only validates this explicit blocked state offline; it is not a deployment gate.
 
-1. Install and start the operator-managed Oracle/PDB and Redis services.
-2. Create the application schema/user and grants using the operator-managed
-   core schema package. Do not run all files under `project/sql/`.
-3. Run the core schema verifier supplied with that package and retain its hash
-   receipt. Apply and verify versioned configuration bootstrap separately from
-   ordinary business data. The distribution's one-time
-   `initialize-admin.sh` now provides the first identity/policy installation
-   step, with explicit private operator inputs; see
-   [first-administrator.md](first-administrator.md). It refuses existing identity
-   tables and does not complete remaining workflow/LCDP/configuration bootstrap.
-4. Apply `api-fixtures/schema/external-logical-clone.sql` to the same runtime
-   schema if the selected profile uses `local-view`; otherwise apply the
-   approved direct-schema package and use its explicit mapper profile.
-5. Run `verify-external-logical-clone-runtime.py` against the disposable
-   runtime. The current implementation is specific to Docker SQLPlus,
-   `FREEPDB1` and `LIMS_RUNTIME_LOCAL`. It checks aggregate metadata counts and
-   schema-owned DB-link absence; its row figure comes from Oracle `NUM_ROWS`
-   statistics, not a live `COUNT(*)`. It is not an exact schema/grants verifier
-   or proof of empty tables. A portable deployment needs the core package's
-   exact verifier and explicit target configuration.
-6. Build and verify the source-only distribution. For the `local-view` fixture
-   selected in step 4, include its explicit Mapper profile on every build:
+1. Choose the intended database access mode, then build and verify the
+   source-only distribution, or obtain an already verified matching immutable
+   distribution. Keep the standalone schema/docs available too. Run from the
+   standalone repository root with the build prerequisites in `README.md`.
+   For the same-schema `local-view` installation, include the explicit Mapper
+   profile on every build:
 
    ```bash
    bash scripts/verify-external-artifacts.sh --source-only
@@ -135,22 +131,61 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    properties. `direct-schema` requires its reviewed profile and matching config;
    a build without a profile preserves `original-db-link` SQL. The launcher rejects
    mismatched modes before Java. It does not infer a mode from database state.
-7. Start one Spring application, then check the public-key/readiness endpoint
-   and perform a narrow authenticated smoke:
+2. Provision the operator-managed Oracle/PDB and Redis services on a new server.
+   Reuse existing services during development and validation; do not restart
+   Oracle or reimport data per check. Production remains strictly read-only.
+3. Create the dedicated application schema/user and grants using the completed
+   project-supplied installation package. Apply its ordered DDL and exact object
+   verifier, retaining its hash receipt. Apply and verify versioned configuration
+   bootstrap separately from ordinary business data. The current partial package
+   is guarded; do not bypass it or run all files under `project/sql/`.
+4. Apply the approved external logical-domain package matching the chosen mode.
+   The current `api-fixtures/schema/external-logical-clone.sql` supplies ten
+   structures for `local-view`, with no business rows. Its runtime verifier is
+   specific to Docker SQLPlus, `FREEPDB1` and `LIMS_RUNTIME_LOCAL`; it checks
+   aggregate metadata counts and schema-owned DB-link absence. Its row figure
+   comes from `NUM_ROWS` statistics, not a live `COUNT(*)`. It is not a portable
+   exact schema/grants verifier or proof of empty tables. Completing this
+   installation/verification path remains project work.
+5. Prepare the private runtime file for the exact schema, Redis database and
+   artifact mode. Use the already obtained distribution's one-time installer:
+
+   ```bash
+   "$LIMS_DEPLOY_DIST/initialize-admin.sh" /private/path/runtime.properties \
+     < /private/path/first-admin.json
+   ```
+
+   See [first-administrator.md](first-administrator.md) for its required private
+   JSON and password policy. It requires empty identity tables and technical
+   prerequisites; it does not complete remaining workflow/LCDP/configuration
+   bootstrap.
+6. Start one Spring application:
 
    ```bash
    "$LIMS_DEPLOY_DIST/start.sh" /private/path/runtime.properties
    ```
 
-   The application does
-   not create Oracle schemas or Redis data automatically. Mount the resolved
-   immutable directory; never mount the mutable `target/distribution` alias.
+   The launcher listens on `127.0.0.1` by default. To permit direct remote
+   access, choose the intended interface explicitly, for example
+   `LIMS_BIND_ADDRESS=0.0.0.0 "$LIMS_DEPLOY_DIST/start.sh" /private/path/runtime.properties`,
+   and configure container/server networking. This environment variable sets
+   JVM `server.address` and overrides that property in the runtime file;
+   `server.port` still selects the port. Use the same port for WSL/Windows
+   forwarding. Mount the resolved immutable directory; never mount the mutable
+   `target/distribution` alias. Startup does not install Oracle schemas.
+7. Wait for `GET /open/security/public-key` to return a nonempty, parseable RSA
+   X.509 public key. An empty HTTP 200 during ordered startup callbacks is not
+   readiness. Do not repeatedly restart an initializing application. Then use
+   real RSA login and read `/core/module/sys/logins/account` in the same session
+   to confirm principal, organization and roles; verify protected requests and
+   menus as described in the first-administrator guide.
 8. Retain the distribution and runtime configuration as the rollback pair.
    Rollback replaces only the application distribution; it does not recreate
    Oracle or Redis.
 
 The contract verifier reports `status: blocked`, `contract_valid: true` and
-`deployment_ready: false` while the core schema package is unavailable. The
+`deployment_ready: false` while the core schema/configuration installation package
+remains incomplete. The
 default exits 2 to stop deployment; only explicit `--check-contract` exits 0 for
 offline validation of the blocked contract. The current state is therefore:
 source-only build/package is available; targeted schema fixtures and the

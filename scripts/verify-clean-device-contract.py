@@ -17,6 +17,8 @@ REQUIRED_FIXTURES = (
     "scripts/verify-external-logical-clone-runtime.py",
     "deployment/oracle/core-schema/manifest.json",
     "scripts/verify-core-schema-package.py",
+    "owned-distribution/initialize-admin.sh",
+    "docs/deployment/first-administrator.md",
 )
 SECRET_MATERIAL = re.compile(r"(?i)(jdbc:|oracle:thin|@//|BEGIN\s+(?:RSA|OPENSSH)|-----BEGIN)")
 
@@ -43,14 +45,37 @@ def main() -> int:
     if manifest.get("status") != "blocked-incomplete-core-schema":
         fail("contract status must remain blocked until an approved core package exists")
     bootstrap = manifest.get("production_schema_bootstrap", {})
-    if bootstrap.get("status") != "unavailable" or bootstrap.get("complete_current_production_ddl") is not False:
-        fail("core schema availability must be explicit and false")
+    if (bootstrap.get("status") != "partial" or bootstrap.get("source_bound") is not True
+            or bootstrap.get("complete_current_production_ddl") is not False):
+        fail("core schema must describe the source-bound partial package, without claiming completeness")
+    core = manifest.get("core_schema_package", {})
+    if (core.get("path") != "deployment/oracle/core-schema/manifest.json"
+            or core.get("status") != "partial"
+            or core.get("requires_private_source_at_install") is not False
+            or core.get("complete_application_bootstrap") is not False):
+        fail("core package must remain partial and independently verifiable")
+    administrator = manifest.get("first_administrator", {})
+    if (administrator.get("status") != "implemented"
+            or administrator.get("launcher") != "owned-distribution/initialize-admin.sh"
+            or administrator.get("instructions") != "docs/deployment/first-administrator.md"
+            or administrator.get("requires_prepared_schema_and_technical_bootstrap") is not True
+            or administrator.get("completes_application_bootstrap") is not False):
+        fail("first administrator command requires a prepared schema and does not complete bootstrap")
     historical = manifest.get("historical_sql", {})
     if historical.get("replay_allowed") is not False:
         fail("historical project/sql replay must remain forbidden")
     for relative in REQUIRED_FIXTURES:
         if not (ROOT / relative).is_file():
             fail("required fixture/verifier is missing: " + relative)
+    try:
+        package_manifest = json.loads((ROOT / core["path"]).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        fail("core package manifest is unreadable: " + str(exc))
+    if (package_manifest.get("status") != core["status"]
+            or package_manifest.get("source_class") != "current-production-at-capture"
+            or package_manifest.get("deployment_ready") is not False
+            or not package_manifest.get("blockers")):
+        fail("deployment contract contradicts the partial production-derived core package")
     text = json.dumps(manifest, ensure_ascii=False)
     if SECRET_MATERIAL.search(text):
         fail("manifest contains secret or connection material")
@@ -82,7 +107,10 @@ def main() -> int:
         "contract_valid": True,
         "contract": str(MANIFEST.relative_to(ROOT)),
         "deployment_ready": False,
-        "reason": "complete current-production core schema package is unavailable",
+        "reason": "source-bound partial DDL and first administrator command exist; complete schema/configuration installation remains blocked",
+        "core_schema_status": bootstrap["status"],
+        "core_schema_source_bound": bootstrap["source_bound"],
+        "first_administrator_status": administrator["status"],
         "historical_sql_replay_allowed": False,
         "external_logical_clone_fixture": True,
     }, ensure_ascii=False))

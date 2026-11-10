@@ -72,11 +72,11 @@ IS
 BEGIN
     isScience := INSTR(upper(Valu), 'E') - 1; -- 将'E'之后的索引减1以匹配原始字符串的位置
     result := Valu; -- 默认使用原始值
-    
+
     IF isScience > 0 THEN
         LEFTValu := SUBSTR(Valu, 1, isScience);
         RIGHTValu := SUBSTR(Valu, isScience + 2); -- 从'E'之后开始截取
-        
+
         -- 根据RIGHTValu的值，设置RIGHTText的值
         SELECT
             CASE
@@ -99,10 +99,10 @@ BEGIN
             END
         INTO RIGHTText
         FROM DUAL;
-        
+
         result := LEFTValu || RIGHTText;
     END IF;
-    
+
     RETURN result;
 END STRINGTOSCIENCE;
 /
@@ -124,7 +124,7 @@ BEGIN
     WHILE ind <= LENGTH(str) LOOP
       sub := SUBSTR(str, ind, 1);
       val := ASCII(sub);
-      
+
       IF NOT (val BETWEEN 48 AND 57 OR
               val BETWEEN 65 AND 90 OR
               val BETWEEN 97 AND 122 OR
@@ -226,25 +226,25 @@ BEGIN
       FROM T_CORE_I18N
      WHERE CODE = PI_CODEPARAM
        AND ROWNUM = 1;
-  
+
     UPDATE T_CORE_I18N T
        SET T.DESCRIPTION    = PI_DESCRIPTION,
            T.DEFAULTMESSAGE = PI_DEFAULTMESSAGE
      WHERE T.ID = V_ID;
-  
+
     SELECT COUNT(*)
       INTO V_MCOUNT
       FROM T_CORE_I18N_MESSAGE
      WHERE I18NID = V_ID
        AND I18NCONFIGID = PI_LANG;
-  
+
     IF V_MCOUNT > 0 THEN
       UPDATE T_CORE_I18N_MESSAGE
          SET MESSAGE = PI_MESSAGE
        WHERE I18NID = V_ID
          AND I18NCONFIGID = PI_LANG;
     END IF;
-  
+
   ELSE
     SELECT SEQ_CORE.NEXTVAL INTO V_ID FROM DUAL;
     INSERT INTO T_CORE_I18N

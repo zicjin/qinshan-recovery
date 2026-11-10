@@ -13,6 +13,10 @@ from pathlib import Path
 import re
 import sys
 
+# The verifier runs inside immutable or writable relocated distributions; its
+# helper import must never add bytecode files to the shipped installation tree.
+sys.dont_write_bytecode = True
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / 'deployment/oracle/installation-manifest.json'
 _spec = importlib.util.spec_from_file_location('core_schema_package', ROOT / 'scripts/verify-core-schema-package.py')

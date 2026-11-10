@@ -72,6 +72,8 @@ class InstallationBundleTest(unittest.TestCase):
                                      for path in output.rglob('*') if path.is_file()})
             isolated = root / 'relocated-installation'
             shutil.copytree(installation, isolated)
+            isolated_before = {path.relative_to(isolated).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                               for path in isolated.rglob('*') if path.is_file()}
             script = isolated / 'scripts/verify-combined-oracle-installation.py'
             for arguments, expected_exit in ((['--check-plan'], 0), ([], 2)):
                 result = subprocess.run([sys.executable, str(script), *arguments], cwd=isolated,
@@ -80,6 +82,8 @@ class InstallationBundleTest(unittest.TestCase):
                 report = json.loads(result.stdout)
                 self.assertTrue(report['plan_valid'])
                 self.assertFalse(report['deployment_ready'])
+                self.assertEqual(isolated_before, {path.relative_to(isolated).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+                                                   for path in isolated.rglob('*') if path.is_file()})
             child = isolated / 'deployment/oracle/99-verify.sql'
             child.write_bytes(child.read_bytes() + b'-- changed\n')
             result = subprocess.run([sys.executable, str(script), '--check-plan'], cwd=isolated,

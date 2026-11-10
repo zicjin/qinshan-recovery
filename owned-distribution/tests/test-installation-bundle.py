@@ -86,6 +86,20 @@ class InstallationBundleTest(unittest.TestCase):
                                     capture_output=True, text=True)
             self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
             self.assertFalse(json.loads(result.stdout)['plan_valid'])
+            shutil.rmtree(installation)
+            outside = root / 'outside-installation'
+            outside.mkdir()
+            sentinel = outside / 'existing.txt'
+            sentinel.write_bytes(b'preserve outside bytes')
+            installation.symlink_to(outside, target_is_directory=True)
+            rejected = subprocess.run(
+                [sys.executable, str(ROOT / 'owned-distribution/package.py'), str(output), str(source)],
+                env=environment, capture_output=True, text=True)
+            self.assertNotEqual(rejected.returncode, 0, rejected.stdout + rejected.stderr)
+            self.assertIn('installation bundle integrity failed', rejected.stderr)
+            self.assertTrue(installation.is_symlink())
+            self.assertEqual(sentinel.read_bytes(), b'preserve outside bytes')
+            self.assertEqual([path.name for path in outside.iterdir()], ['existing.txt'])
 
 
 if __name__ == '__main__':

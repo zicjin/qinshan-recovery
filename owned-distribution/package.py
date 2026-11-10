@@ -105,13 +105,16 @@ def package_installation(output):
             inputs.update((manifest.parent / entry['path']).relative_to(REPO_ROOT).as_posix()
                           for entry in metadata['files'])
         installation = output / 'installation'
-        shutil.rmtree(installation, ignore_errors=True)
+        verifier.core.require(not installation.is_symlink(), 'installation output may not be a symbolic link')
+        readme = verifier.core.package_file(REPO_ROOT, 'owned-distribution/installation-README.md')
+        if installation.exists():
+            shutil.rmtree(installation)
         for relative in sorted(inputs):
             source = verifier.core.package_file(REPO_ROOT, relative)
             target = installation / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, target)
-        shutil.copyfile(REPO_ROOT / 'owned-distribution/installation-README.md', installation / 'README.md')
+        shutil.copyfile(readme, installation / 'README.md')
     except (OSError, ValueError, TypeError, KeyError) as exc:
         raise SystemExit('installation bundle integrity failed: ' + type(exc).__name__) from exc
     return {'path': 'installation', 'status': 'partial', 'deployment_ready': False,

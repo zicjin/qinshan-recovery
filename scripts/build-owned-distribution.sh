@@ -51,9 +51,10 @@ source_hash() {
         scripts/verify-reconstituted-framework-modules.py \
         scripts/reject-supplier-runtime.sh
       printf '%s\0' owned-distribution/package.py owned-distribution/start.sh \
-        owned-distribution/initialize-admin.sh
+        owned-distribution/initialize-admin.sh owned-distribution/initialize-workflows.sh
       printf '%s\0' owned-distribution/example/owned-application.properties
       find deployment/oracle -type f \( -name '*.sql' -o -name '*.json' -o -name '*.tsv' \) -print0
+      printf '%s\0' deployment/oracle/workflow/README.md
       printf '%s\0' scripts/verify-core-schema-package.py \
         scripts/verify-combined-oracle-installation.py owned-distribution/installation-README.md
       if [[ -n "${EXTERNAL_SCHEMA_PROFILE:-}" ]]; then
@@ -117,8 +118,10 @@ mkdir -p "$PACKAGE_OUTPUT/app" "$PACKAGE_OUTPUT/lib" \
   "$PACKAGE_OUTPUT/modules" "$PACKAGE_OUTPUT/example" "$PACKAGE_OUTPUT/provenance"
 cp "$ROOT/owned-distribution/start.sh" "$PACKAGE_OUTPUT/start.sh"
 cp "$ROOT/owned-distribution/initialize-admin.sh" "$PACKAGE_OUTPUT/initialize-admin.sh"
+cp "$ROOT/owned-distribution/initialize-workflows.sh" "$PACKAGE_OUTPUT/initialize-workflows.sh"
 chmod 0755 "$PACKAGE_OUTPUT/start.sh"
 chmod 0755 "$PACKAGE_OUTPUT/initialize-admin.sh"
+chmod 0755 "$PACKAGE_OUTPUT/initialize-workflows.sh"
 cp "$ROOT/owned-distribution/example/owned-application.properties" "$PACKAGE_OUTPUT/example/"
 cp "$APPLICATION_DIR/compile-report.json" "$PACKAGE_OUTPUT/provenance/source-only-application.json"
 cp "$ROOT/docs/reconstitution/framework-module-registry.json" "$PACKAGE_OUTPUT/provenance/framework-module-registry.json"

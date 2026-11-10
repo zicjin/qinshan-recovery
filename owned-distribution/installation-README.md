@@ -40,3 +40,30 @@ one-time command requiring the prepared schema and technical bootstrap. Private
 environment properties, passwords and installer identity JSON are operator inputs
 and are never included here. Startup uses the existing one Spring application,
 Oracle and Redis; carrying these files changes no runtime behavior.
+
+`deployment/oracle/workflow/` separately carries the symbolic workflow package:
+`definitions.json`, its source-bound manifest and its finite instructions. The
+workflow manifest remains partial and `deployment_ready=false`; its counts are
+source material counts, not successful target installation or API acceptance.
+The distribution manifest hashes all three files and records those exact counts.
+The combined structural SQL plan does not install these workflow definitions.
+
+The sibling `initialize-workflows.sh` launcher invokes the finite Java installer
+from the application JAR. It requires a separately prepared schema and private
+target identity mapping; candidate role/user IDs, display labels, organization
+scopes and technical installer authorship are target inputs. Missing mappings
+must reject before writes. Do not copy the private source-symbol map into the
+bundle, and do not substitute the initial administrator for all candidates.
+Seven latest source payloads remain explicitly blocked; older versions do not
+replace them. The public launcher accepts runtime properties as its only argument and reads
+private workflow inputs from stdin:
+
+```bash
+./initialize-workflows.sh /private/runtime.properties < /private/workflows.json
+```
+
+It resolves the bundled workflow manifest internally. Keep both private files
+outside the distribution and source control. Follow the workflow package's
+instructions and installer validation for the private JSON contract. Real HTTP
+organization/candidate/notification/lifecycle/audit/rollback/cleanup acceptance
+and complete workflow restoration remain outstanding.

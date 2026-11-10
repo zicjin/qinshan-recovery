@@ -1,0 +1,227 @@
+{
+  "counts": {
+    "blocked": 7,
+    "definitions": 20,
+    "organizations": 2,
+    "roles": 80,
+    "users": 9
+  },
+  "definitions": {
+    "bytes": 251137,
+    "path": "definitions.json",
+    "sha256": "4770f5f0de98df2c39ad323306401009af950ef0992bf72fa54c1c82f36f502e"
+  },
+  "deployment_ready": false,
+  "latest_scope_count": 27,
+  "remaining_requirements": [
+    "Private target identity mapping and scope/membership validation before installation.",
+    "Blocked latest definitions require authoritative matching payloads or explicit review.",
+    "Real HTTP candidate, organization, notification and process lifecycle acceptance."
+  ],
+  "schema": "owned-workflow-package-v1",
+  "source_artifacts": [
+    {
+      "path": "private/workflow-bootstrap-20261111/20261110T202950Z-diagram-private.json",
+      "sha256": "ab166f48d397c4d7cc02bcb1dd3c17163d6318e35281c514db29e439b7c7cccd"
+    },
+    {
+      "path": "private/workflow-bootstrap-20261111/20261110T202950Z-proc-private.json",
+      "sha256": "3ce1d4e9f2a901453f9794cd45aef0384f1f7b16e04d69d6a8b006e94308a40f"
+    },
+    {
+      "path": "private/workflow-bootstrap-20261111/20261110T202950Z-proc_org-private.json",
+      "sha256": "5f0169d9b7fe9d9b4036f0154df9fcc0bbb4e9126cd3681dc7e775e28f39906e"
+    },
+    {
+      "path": "private/workflow-bootstrap-20261111/20261110T202950Z-static-config-manifest-private.json",
+      "sha256": "ff3d967b5090a44a010825b822378ddb382584e0390870adfcdf3160158843fe"
+    },
+    {
+      "path": "private/workflow-bootstrap-20261111/20261110T203035Z-audit_definition-private.json",
+      "sha256": "7a39ecd8dfc6fd156420dacea8712526f36078982a2e728b9c57d032bd769878"
+    },
+    {
+      "path": "private/workflow-bootstrap-20261111/20261110T203035Z-static-config-manifest-private.json",
+      "sha256": "83b8da3b92ad058d3e8155b6d6a2fb0cb59b6217931fb8176238da59882294eb"
+    }
+  ],
+  "source_hashes": [
+    {
+      "diagram_sha256": "f152e160c2818787ee09a873eaab2c9fc38ef8cd6edcc23ccc400e85f5d5bafc",
+      "proc_code": "DA001",
+      "proc_version": 14,
+      "svg_sha256": "aa1091af542b47a9c8b285b581312e4e93438f49b2d8a447690884937d85c906"
+    },
+    {
+      "diagram_sha256": "80e53bbb3b5bdd05717a758f8834510e82e16b96554d4024f60bc24ad93378f2",
+      "proc_code": "DA002",
+      "proc_version": 9,
+      "svg_sha256": "cfb86bf1bb6dcbb99457b07588986bcf559ac20c845b792c40ee5269d45c8ea1"
+    },
+    {
+      "diagram_sha256": "7fabc51a937ec7e775ef073129b02abe354b3bab471a719dad401520c937e5b6",
+      "proc_code": "DA003",
+      "proc_version": 12,
+      "svg_sha256": "6f39eca12accb4c321e51a70dbd121c93d072d62460ff3f17db153866f979403"
+    },
+    {
+      "diagram_sha256": "aa009e8f3405de0101a2164a08c98ad4fa7f24b86b1e7b622a5cffc3940ebac6",
+      "proc_code": "DA004",
+      "proc_version": 10,
+      "svg_sha256": "0433cdfd2b4d91f60bdadab45be0311e2350cd55fd0257a15d449059fcadbd1f"
+    },
+    {
+      "diagram_sha256": "681ea29ba2f9f96ebdc80f2f0ab757c7ccd2882c9cff352c94178cc2a2ed18d1",
+      "proc_code": "DA005",
+      "proc_version": 16,
+      "svg_sha256": "6bbf40d9574e0492d5dec5a714ed5be94e5dc0dfa1ea411974ab715bae00e6cf"
+    },
+    {
+      "diagram_sha256": "723d69feb383bc474829b17e13495d82d0e821a24d2816c715826d3d1cfd060b",
+      "proc_code": "DA006",
+      "proc_version": 8,
+      "svg_sha256": "cec6ae2ec3d5b27b8fbc8e7312b7aabdef89789452f3d54d2718b48e51e9a4d4"
+    },
+    {
+      "diagram_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proc_code": "DA007",
+      "proc_version": 2,
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "diagram_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proc_code": "DA008",
+      "proc_version": 2,
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "diagram_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proc_code": "DA009",
+      "proc_version": 2,
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "diagram_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proc_code": "DA010",
+      "proc_version": 2,
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "diagram_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proc_code": "DA011",
+      "proc_version": 2,
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "diagram_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proc_code": "DA012",
+      "proc_version": 3,
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "diagram_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proc_code": "DA013",
+      "proc_version": 1,
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "diagram_sha256": "3521be2368d970a36c2260cdadb084a450370294e636750759cb481a548fbfe3",
+      "proc_code": "WP013",
+      "proc_version": 1,
+      "svg_sha256": "a57d34f7273c35ba788721cd08e97e563738b348adc4f06a51a91d33d8d5cc57"
+    },
+    {
+      "diagram_sha256": "cf0292c38016d6c55ff07a3dbba396e70bd1e1c8a6d71731331249071c49848a",
+      "proc_code": "ZLKZJH",
+      "proc_version": 2,
+      "svg_sha256": "375c4374709ec8570c27b1538b680de538bee5d3cc11d72a79db9dd5bcdc2957"
+    },
+    {
+      "diagram_sha256": "306f35b520bbd619d0d89db3a56c796b3864456cbdb62c6a1537355ee1491f8c",
+      "proc_code": "ZXBG",
+      "proc_version": 2,
+      "svg_sha256": "e3c85f6c3324efd4716ff2f6563c96c690cba304cd153a2f9c872b22e52fac01"
+    },
+    {
+      "diagram_sha256": "e6f8cb33fb47539abb9da6a523b032f3d488b37892c76ea809bec34bf61ca05d",
+      "proc_code": "bfhxdj",
+      "proc_version": 2,
+      "svg_sha256": "9f4ef32571684993fd10293ac59bba74a24f9fa17b0486c73ff6fd38c5610f98"
+    },
+    {
+      "diagram_sha256": "11b6764804844199434dbdd6811b34f5d3bf13bf5f7b6b20f86316d5a77314c5",
+      "proc_code": "clly",
+      "proc_version": 1,
+      "svg_sha256": "b71cdab15f40d0e31c40598371d348d42168097d00209c2f7954343df81b0ebe"
+    },
+    {
+      "diagram_sha256": "df112c39d1ed39262b82a726ca3457d8307f59b8b9976a1e8b1571732367c4d4",
+      "proc_code": "gjcsjh",
+      "proc_version": 2,
+      "svg_sha256": "23c2c2fd8eaab961b9bebdd5c7b8675d6535931cf57f1f6b42cb0fd6a4b5a322"
+    },
+    {
+      "diagram_sha256": "facb05fb2a039a7deb2a3f861d33ebc96d27c1dfd6e46975b4f272b3a8465bcb",
+      "proc_code": "glpsjh",
+      "proc_version": 5,
+      "svg_sha256": "37426d99f01de30c19c5d40453bfbe047ed21ef66cc3367527adae5763b0aabb"
+    },
+    {
+      "diagram_sha256": "d439077b48cc9f92cffcd5e75acb32ce502464b9b7af1126ae063204bc197623",
+      "proc_code": "jzvsjh",
+      "proc_version": 2,
+      "svg_sha256": "ccdedd777868ad4e64f16704a07de4374a0bbcba1ef952abb6ca66f2b72e80d7"
+    },
+    {
+      "diagram_sha256": "ad0a5a2021c84f05df0d827d2bbfb9ec137564c350bd272bfe6e6327422205bc",
+      "proc_code": "nsjh",
+      "proc_version": 2,
+      "svg_sha256": "9cfc7641a239ffe3ab874ca4f73ab7d88c26277e275f23ea0b85c6efcb3ba5bb"
+    },
+    {
+      "diagram_sha256": "f3bafb4d76bc263ddafb15f6a5c2f5af9c13ee7a6741df82b8f9f3bb82985d12",
+      "proc_code": "stsjh",
+      "proc_version": 2,
+      "svg_sha256": "140e27c8e3e627fa52f517b77c28f21dbcdea866b780836867570c8aafa4e7c5"
+    },
+    {
+      "diagram_sha256": "cd9a353df6061460c395d31ebb19eb4eefef32490978fe0bd45cbe44e0d964f1",
+      "proc_code": "tzgg",
+      "proc_version": 3,
+      "svg_sha256": "36f2a8c68072d16f94af207723e392346f991013a430e687ff3f780712174d3c"
+    },
+    {
+      "diagram_sha256": "5bca39266b52839148c938d60a96848b6906b24d459c2ea0e462ff4c856124bf",
+      "proc_code": "wjxgsq",
+      "proc_version": 2,
+      "svg_sha256": "199d7eeb70d8a40487a0b8736130570302986820faa34377f669276cfa4574d0"
+    },
+    {
+      "diagram_sha256": "fc381e95ac1e059690222f7d40a025004f052016ec8d0b9ec9ab478271da02eb",
+      "proc_code": "yfcsjh",
+      "proc_version": 1,
+      "svg_sha256": "78c57920c5b7aeb5655e7be901518a0ba609c441d372d1274b0e4efa26d17583"
+    },
+    {
+      "diagram_sha256": "ae67bdaca34d5e1f4c8ec336d8ebc63643f9a30d48097c138c8f21399cda1b55",
+      "proc_code": "zljdjh",
+      "proc_version": 3,
+      "svg_sha256": "839a37e2a4e0af721c3300ab666595f4018d2a287ee3fbf8d9fe3d1f95d066ae"
+    }
+  ],
+  "source_identity_values_included": false,
+  "status": "partial",
+  "transformation_counts": {
+    "removed_public_svg_doctypes": 20,
+    "retained_technical_label_collisions": 3,
+    "svg_identity_labels": 13,
+    "xml_property_slots": 360
+  },
+  "transformations": [
+    "Highest captured published version per process code; no older payload fallback.",
+    "Exact candidate/notified property value/name spans replaced by typed symbols.",
+    "Exact task-owned SVG identity label text replaced; numeric geometry preserved.",
+    "Exact BPMN node label collisions retained only through original node/_label reference.",
+    "Remove only the exact captured public SVG 1.1 DOCTYPE; retain original source hash and all other bytes."
+  ]
+}

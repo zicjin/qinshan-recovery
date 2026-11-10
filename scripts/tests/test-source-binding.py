@@ -185,7 +185,11 @@ class SourceBindingTest(unittest.TestCase):
                          'deployment/oracle/core-schema/manifest.json',
                          'scripts/verify-core-schema-package.py',
                          'scripts/verify-combined-oracle-installation.py',
-                         'owned-distribution/installation-README.md'):
+                         'owned-distribution/installation-README.md',
+                         'owned-distribution/initialize-workflows.sh',
+                         'deployment/oracle/workflow/manifest.json',
+                         'deployment/oracle/workflow/definitions.json',
+                         'deployment/oracle/workflow/README.md'):
             with self.subTest(relative=relative):
                 first = self.capture()
                 target = self.root / relative

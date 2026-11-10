@@ -55,6 +55,7 @@ printf 'built\n' >> "$root/build/framework-invocations.txt"
 """, executable=True)
         self.write("owned-distribution/start.sh", "#!/bin/sh\nexit 0\n", executable=True)
         self.write("owned-distribution/initialize-admin.sh", "#!/bin/sh\nexit 0\n", executable=True)
+        self.write("owned-distribution/initialize-workflows.sh", "#!/bin/sh\nexit 0\n", executable=True)
         self.write("jdk/bin/java", '#!/bin/sh\necho "java version fixture-8" >&2\n', executable=True)
         self.write("scripts/build-source-only-application.py", """from pathlib import Path
 import argparse
@@ -171,7 +172,11 @@ shutil.copyfile(sys.argv[2], output / 'app/lims-owned-application.jar')
         for relative in ('deployment/oracle/99-verify.sql',
                          'deployment/oracle/core-schema/manifest.json',
                          'scripts/verify-combined-oracle-installation.py',
-                         'owned-distribution/installation-README.md'):
+                         'owned-distribution/installation-README.md',
+                         'owned-distribution/initialize-workflows.sh',
+                         'deployment/oracle/workflow/manifest.json',
+                         'deployment/oracle/workflow/definitions.json',
+                         'deployment/oracle/workflow/README.md'):
             with self.subTest(relative=relative):
                 path = self.root / relative
                 path.write_bytes(path.read_bytes() + b'\n')

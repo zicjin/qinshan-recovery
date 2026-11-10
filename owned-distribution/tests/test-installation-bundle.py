@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Package the real public Oracle inputs with a tiny temporary application JAR."""
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -49,6 +50,16 @@ class InstallationBundleTest(unittest.TestCase):
             manifest = json.loads((output / 'manifest.json').read_text())
             self.assertFalse(manifest['installation']['deployment_ready'])
             self.assertEqual(manifest['installation']['status'], 'partial')
+            workflow_manifest = json.loads((installation / 'deployment/oracle/workflow/manifest.json').read_text())
+            workflow_definitions = json.loads((installation / 'deployment/oracle/workflow/definitions.json').read_text())
+            self.assertEqual(workflow_manifest['schema'], 'owned-workflow-package-v1')
+            self.assertEqual(workflow_definitions['schema'], 'owned-workflow-definitions-v1')
+            self.assertEqual(manifest['installation']['workflow']['counts'], workflow_manifest['counts'])
+            self.assertFalse(manifest['installation']['workflow']['deployment_ready'])
+            self.assertEqual(workflow_manifest['definitions']['sha256'],
+                             hashlib.sha256((installation / 'deployment/oracle/workflow/definitions.json').read_bytes()).hexdigest())
+            self.assertEqual(sorted(path.name for path in (installation / 'deployment/oracle/workflow').iterdir()),
+                             ['README.md', 'definitions.json', 'manifest.json'])
             for name in ('core-schema', 'external-schema'):
                 relative = 'installation/deployment/oracle/' + name + '/manifest.json'
                 self.assertEqual(manifest['files'][relative], hashlib.sha256((output / relative).read_bytes()).hexdigest())
@@ -104,6 +115,63 @@ class InstallationBundleTest(unittest.TestCase):
             self.assertTrue(installation.is_symlink())
             self.assertEqual(sentinel.read_bytes(), b'preserve outside bytes')
             self.assertEqual([path.name for path in outside.iterdir()], ['existing.txt'])
+
+    def test_workflow_layout_pin_and_counts_are_checked_without_private_sources(self):
+        spec = importlib.util.spec_from_file_location('installation_packager', ROOT / 'owned-distribution/package.py')
+        packager = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(packager)
+        with tempfile.TemporaryDirectory(prefix='workflow-bundle-boundary-') as temporary:
+            checkout = Path(temporary) / 'source'
+            shutil.copytree(ROOT / 'deployment/oracle', checkout / 'deployment/oracle')
+            (checkout / 'scripts').mkdir()
+            for name in ('verify-core-schema-package.py', 'verify-combined-oracle-installation.py'):
+                shutil.copy2(ROOT / 'scripts' / name, checkout / 'scripts' / name)
+            (checkout / 'owned-distribution').mkdir()
+            shutil.copy2(ROOT / 'owned-distribution/installation-README.md', checkout / 'owned-distribution/installation-README.md')
+            packager.REPO_ROOT = checkout
+            output = Path(temporary) / 'distribution'
+            result = packager.package_installation(output)
+            self.assertFalse(result['workflow']['deployment_ready'])
+            self.assertFalse((checkout / 'private').exists())
+            self.assertFalse((checkout / 'project').exists())
+            path = checkout / 'deployment/oracle/workflow/manifest.json'
+            original = path.read_bytes()
+            for change in ('schema', 'ready', 'path', 'hash', 'bytes', 'count', 'extra-count', 'reference-list', 'reference-extra'):
+                with self.subTest(change=change):
+                    manifest = json.loads(original)
+                    if change == 'schema':manifest['schema'] = 'unknown'
+                    elif change == 'ready':manifest['deployment_ready'] = True
+                    elif change == 'path':manifest['definitions']['path'] = '../private/definitions.json'
+                    elif change == 'hash':manifest['definitions']['sha256'] = '0' * 64
+                    elif change == 'bytes':manifest['definitions']['bytes'] += 1
+                    elif change == 'count':manifest['counts']['definitions'] += 1
+                    elif change == 'extra-count':manifest['counts']['extra'] = 0
+                    elif change == 'reference-list':manifest['definitions'] = []
+                    else:manifest['definitions']['unreviewed'] = None
+                    path.write_text(json.dumps(manifest))
+                    try:
+                        with self.assertRaisesRegex(SystemExit, 'installation bundle integrity failed'):
+                            packager.package_installation(output)
+                    finally:
+                        path.write_bytes(original)
+            definitions = checkout / 'deployment/oracle/workflow/definitions.json'
+            definitions_original = definitions.read_bytes()
+            for invalid in ([], dict(json.loads(definitions_original), unexpected=[])):
+                with self.subTest(definitions_shape=type(invalid).__name__):
+                    definitions.write_text(json.dumps(invalid))
+                    try:
+                        with self.assertRaisesRegex(SystemExit, 'installation bundle integrity failed'):
+                            packager.package_installation(output)
+                    finally:
+                        definitions.write_bytes(definitions_original)
+            saved = definitions.read_bytes()
+            target = Path(temporary) / 'outside-definitions.json'
+            target.write_bytes(saved)
+            definitions.unlink()
+            definitions.symlink_to(target)
+            with self.assertRaisesRegex(SystemExit, 'installation bundle integrity failed'):
+                packager.package_installation(output)
+            self.assertEqual(target.read_bytes(), saved)
 
 
 if __name__ == '__main__':

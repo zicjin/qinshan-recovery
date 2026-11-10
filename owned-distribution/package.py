@@ -104,6 +104,38 @@ def package_installation(output):
             metadata = json.loads(manifest.read_text(encoding='utf-8'))
             inputs.update((manifest.parent / entry['path']).relative_to(REPO_ROOT).as_posix()
                           for entry in metadata['files'])
+        workflow_paths = ('deployment/oracle/workflow/manifest.json',
+                          'deployment/oracle/workflow/definitions.json',
+                          'deployment/oracle/workflow/README.md')
+        workflow_files = {path: verifier.core.package_file(REPO_ROOT, path) for path in workflow_paths}
+        workflow_manifest = json.loads(workflow_files[workflow_paths[0]].read_text(encoding='utf-8'))
+        workflow_raw = workflow_files[workflow_paths[1]].read_bytes()
+        workflow_definitions = json.loads(workflow_raw)
+        verifier.core.require(isinstance(workflow_manifest, dict) and isinstance(workflow_definitions, dict)
+            and set(workflow_definitions) == {'schema', 'definitions', 'symbols', 'blocked'},
+            'workflow manifest or definitions shape differs')
+        verifier.core.require(workflow_manifest.get('schema') == 'owned-workflow-package-v1'
+            and workflow_manifest.get('status') == 'partial' and workflow_manifest.get('deployment_ready') is False
+            and workflow_definitions.get('schema') == 'owned-workflow-definitions-v1',
+            'workflow package must retain its partial schema and status')
+        reference = workflow_manifest.get('definitions', {})
+        verifier.core.require(isinstance(reference, dict) and set(reference) == {'path', 'sha256', 'bytes'}
+            and reference.get('path') == 'definitions.json'
+            and reference.get('sha256') == digest(workflow_raw)
+            and type(reference.get('bytes')) is int and reference['bytes'] == len(workflow_raw),
+            'workflow definitions hash, byte count or strict path differs')
+        definitions, blocked, symbols = (workflow_definitions.get('definitions'),
+            workflow_definitions.get('blocked'), workflow_definitions.get('symbols'))
+        verifier.core.require(isinstance(definitions, list) and isinstance(blocked, list)
+            and isinstance(symbols, dict) and set(symbols) == {'roles', 'users', 'organizations'}
+            and all(isinstance(value, list) for value in symbols.values()), 'workflow arrays differ')
+        counts = workflow_manifest.get('counts')
+        expected_counts = {'definitions': len(definitions), 'blocked': len(blocked),
+                           **{kind: len(value) for kind, value in symbols.items()}}
+        verifier.core.require(isinstance(counts, dict) and set(counts) == set(expected_counts)
+            and all(type(counts[key]) is int and counts[key] == value for key, value in expected_counts.items()),
+            'workflow counts do not match the exact arrays')
+        inputs.update(workflow_paths)
         installation = output / 'installation'
         verifier.core.require(not installation.is_symlink(), 'installation output may not be a symbolic link')
         readme = verifier.core.package_file(REPO_ROOT, 'owned-distribution/installation-README.md')
@@ -120,7 +152,9 @@ def package_installation(output):
     return {'path': 'installation', 'status': 'partial', 'deployment_ready': False,
             'complete_external_domains': False,
             'manifest': 'installation/deployment/oracle/installation-manifest.json',
-            'integrity_verifier': 'installation/scripts/verify-combined-oracle-installation.py --check-plan'}
+            'integrity_verifier': 'installation/scripts/verify-combined-oracle-installation.py --check-plan',
+            'workflow': {'manifest': 'installation/deployment/oracle/workflow/manifest.json',
+                         'status': 'partial', 'deployment_ready': False, 'counts': counts}}
 
 
 def normalized_jar(source):

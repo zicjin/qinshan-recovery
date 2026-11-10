@@ -133,6 +133,10 @@ def verify_distribution(ROOT, build_environment):
     manifest = json.loads((DIST / 'manifest.json').read_text())
     assert manifest['distribution_mode'] == 'source-only-reconstituted'
     assert (DIST / 'initialize-admin.sh').is_file(), 'one-time first-admin command must ship'
+    assert (DIST / 'initialize-workflows.sh').is_file(), 'finite workflow command must ship'
+    assert os.access(DIST / 'initialize-workflows.sh', os.X_OK), 'workflow launcher must be executable'
+    workflow_guard = subprocess.run([str(DIST / 'initialize-workflows.sh')], text=True, capture_output=True)
+    assert workflow_guard.returncode == 2, 'workflow launcher must reject missing private inputs before Java/DB'
     assert manifest['installation']['deployment_ready'] is False
     installation = DIST / 'installation'
     for arguments, expected_exit in ((['--check-plan'], 0), ([], 2)):
@@ -143,6 +147,14 @@ def verify_distribution(ROOT, build_environment):
         assert json.loads(checked.stdout)['deployment_ready'] is False
     for name in ('core-schema', 'external-schema'):
         assert 'installation/deployment/oracle/' + name + '/manifest.json' in manifest['files']
+    workflow_manifest = json.loads((installation / 'deployment/oracle/workflow/manifest.json').read_text())
+    workflow_definitions = json.loads((installation / 'deployment/oracle/workflow/definitions.json').read_text())
+    assert workflow_manifest['schema'] == 'owned-workflow-package-v1'
+    assert workflow_definitions['schema'] == 'owned-workflow-definitions-v1'
+    assert manifest['installation']['workflow']['counts'] == workflow_manifest['counts']
+    assert manifest['installation']['workflow']['deployment_ready'] is False
+    assert workflow_manifest['status'] == 'partial' and workflow_manifest['deployment_ready'] is False
+    assert 'installation/deployment/oracle/workflow/manifest.json' in manifest['files']
     schema_contract = manifest['external_schema']
     expected_schema_mode = 'original-db-link'
     if build_environment.get('EXTERNAL_SCHEMA_PROFILE'):
@@ -167,6 +179,7 @@ def verify_distribution(ROOT, build_environment):
         assert jar.namelist().count('com/sunwayworld/emc/projectfunction/GikamWpjcApplication.class') == 1
         assert 'com/sunwayworld/boot/ApplicationConfiguration.class' in jar.namelist()
         assert 'com/sunwayworld/owned/install/FirstAdministrator.class' in jar.namelist()
+        assert 'com/sunwayworld/owned/install/WorkflowInstaller.class' in jar.namelist()
         # Source-only distribution must carry owned seams in the application
         # archive. Building the transitional owned-framework JAR alone does
         # not affect the deployed app classpath.

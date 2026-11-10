@@ -103,13 +103,16 @@ evidence or close `API-ALIGNMENT-GATE`.
 
 `external-schema-clone-manifest.json` is a separate production dependency
 inventory for Oracle domains reached through `@LIMS_CZJKY_HT`,
-`@LIMS_CZJKY_SP` and `@LIMS_CZJKY_XFP`. It records only link topology,
-source-bound remote object names, dictionary metadata counts and blocked gates.
-It is not a DDL or link-bootstrap fixture: production connection definitions,
-credentials, endpoints and business rows remain private, and the existing
-`schema_fixture.py` local-owner allowlist is unchanged. Provisioning requires an
-approved isolated target package before any link or external-schema DDL is
-applied.
+`@LIMS_CZJKY_SP` and `@LIMS_CZJKY_XFP`. It records the production link
+topology as provenance, source-bound remote object names, dictionary metadata
+counts and blocked gates. The final owned runtime must reproduce the logical
+object/column/query contract, but does not have to recreate Oracle DB-link
+transport: an approved isolated direct schema or local-view clone may be used,
+with explicit qualifier rewrites only. It is not a DDL or bootstrap fixture:
+production connection definitions, credentials, endpoints and business rows
+remain private, and the existing `schema_fixture.py` local-owner allowlist is
+unchanged. Provisioning requires an approved isolated target package before
+any logical clone DDL is applied.
 
 `production-ddl-alignment-20261109.sql` and
 `production-ddl-field-alignment-20261109.sql` are reviewed, one-time incremental

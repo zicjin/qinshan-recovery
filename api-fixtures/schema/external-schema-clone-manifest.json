@@ -5,6 +5,20 @@
   "production_access": "read-only remote dictionary metadata",
   "business_rows_read": false,
   "writes": false,
+  "production_reference": {
+    "access_mechanism": "oracle-db-link",
+    "required_for_baseline": true,
+    "required_for_clone": false,
+    "note": "The production link owner/name is provenance. The owned runtime may use an isolated logical schema or view contract instead of recreating Oracle DB-link transport."
+  },
+  "clone_contract": {
+    "logical_semantics_required": true,
+    "db_link_transport_required": false,
+    "allowed_access_modes": ["direct-schema", "local-view"],
+    "qualifier_rewrite": "explicit-allowlist-only",
+    "same_object_names_required": true,
+    "business_rows_policy": "minimum-source-backed-closure"
+  },
   "source_commit": "b9be218878a8ff56fd672e26b934bd1f43dc14b3",
   "private_receipts": [
     {
@@ -32,6 +46,12 @@
         {"owner": "LIMS2_CZJKY_EMC_DEV", "name": "LIMS_CZJKY_HT2", "visibility": "private"}
       ],
       "remote_owner": "LIMS_CZJKY_HT",
+      "clone_access": {
+        "allowed_modes": ["direct-schema", "local-view"],
+        "selected_mode": null,
+        "runtime_schema": null,
+        "production_qualifiers": ["LIMS_CZJKY_HT", "LIMS_CZJKY_HT2"]
+      },
       "objects": [
         "T_CRM_CONTRACT",
         "T_CRM_INVOICE_PROJ",
@@ -67,6 +87,12 @@
         {"owner": "PUBLIC", "name": "LIMS_CZJKY_SP", "visibility": "public"}
       ],
       "remote_owner": "LIMS_CZJKY_SP",
+      "clone_access": {
+        "allowed_modes": ["direct-schema", "local-view"],
+        "selected_mode": null,
+        "runtime_schema": null,
+        "production_qualifiers": ["LIMS_CZJKY_SP"]
+      },
       "objects": ["T_LIMS_CLEARANCEFORM", "T_LIMS_FOLDERS"],
       "metadata_counts": {
         "objects": 2,
@@ -92,6 +118,12 @@
         {"owner": "PUBLIC", "name": "LIMS_CZJKY_XFP", "visibility": "public"}
       ],
       "remote_owner": "LIMS_CZJKY_XF",
+      "clone_access": {
+        "allowed_modes": ["direct-schema", "local-view"],
+        "selected_mode": null,
+        "runtime_schema": null,
+        "production_qualifiers": ["LIMS_CZJKY_XFP"]
+      },
       "objects": ["T_XFP_ORDER_TASK", "T_XFP_PROJECT", "T_XFP_REPORT"],
       "metadata_counts": {
         "objects": 3,
@@ -117,11 +149,11 @@
     }
   ],
   "required_before_provisioning": [
-    "approved isolated target contract and environment-private link secrets",
+    "approved isolated target contract and environment-private clone credentials",
     "complete remote grants and charset/collation contract",
     "versioned DDL/object dependency package for HT, SP and XFP",
     "minimum referential data closure and cleanup scope",
-    "link resolution and original SQL smoke receipt"
+    "logical-clone resolution, qualifier allowlist and original SQL smoke receipt"
   ],
   "forbidden_inputs": [
     "production link connection strings",
@@ -130,5 +162,5 @@
     "guessed database links",
     "empty-result or fixed-success fallbacks"
   ],
-  "replay_gate": "blocked-until-supplier-and-local-links-resolve"
+  "replay_gate": "blocked-until-supplier-and-local-logical-clones-resolve"
 }

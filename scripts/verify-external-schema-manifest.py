@@ -3,7 +3,7 @@
 
 This gate checks topology and provenance only. It deliberately cannot create a
 database link, read a link definition, import business rows, or claim that an
-isolated clone is ready.
+isolated logical clone is ready.
 """
 from __future__ import annotations
 
@@ -52,9 +52,31 @@ def main() -> int:
     if manifest.get("schema") != "external-schema-clone-manifest-v1":
         fail("unsupported schema")
     if manifest.get("status") != "environment-not-ready-external-schema":
-        fail("manifest must remain blocked until isolated links resolve")
+        fail("manifest must remain blocked until isolated logical clones resolve")
     if manifest.get("strict_evidence") is not False or manifest.get("business_rows_read") is not False or manifest.get("writes") is not False:
         fail("manifest claims unsafe or strict activity")
+    production_reference = manifest.get("production_reference")
+    if not isinstance(production_reference, Mapping):
+        fail("production_reference is required")
+    if production_reference.get("access_mechanism") != "oracle-db-link":
+        fail("production link transport must remain explicit provenance")
+    if production_reference.get("required_for_baseline") is not True:
+        fail("production link topology is required as baseline provenance")
+    if production_reference.get("required_for_clone") is not False:
+        fail("DB-link transport must remain optional for a logical clone")
+    clone_contract = manifest.get("clone_contract")
+    if not isinstance(clone_contract, Mapping):
+        fail("clone_contract is required")
+    if clone_contract.get("logical_semantics_required") is not True:
+        fail("logical clone semantics must remain required")
+    if clone_contract.get("db_link_transport_required") is not False:
+        fail("clone contract must not require DB-link transport")
+    if clone_contract.get("qualifier_rewrite") != "explicit-allowlist-only":
+        fail("SQL qualifier rewrites must use the explicit allowlist")
+    if clone_contract.get("same_object_names_required") is not True:
+        fail("clone must preserve source object names")
+    if set(clone_contract.get("allowed_access_modes", [])) != {"direct-schema", "local-view"}:
+        fail("clone access modes must be direct-schema/local-view")
     checked = {key: value for key, value in manifest.items()
                if key not in {"required_before_provisioning", "forbidden_inputs"}}
     text = json.dumps(checked, ensure_ascii=False)
@@ -71,6 +93,18 @@ def main() -> int:
             fail(f"{name} link topology mismatch")
         if objects != expected["objects"]:
             fail(f"{name} remote object closure mismatch")
+        clone_access = domain.get("clone_access")
+        if not isinstance(clone_access, Mapping):
+            fail(f"{name} clone_access missing")
+        if set(clone_access.get("allowed_modes", [])) != {"direct-schema", "local-view"}:
+            fail(f"{name} clone access modes mismatch")
+        if clone_access.get("selected_mode") not in (None, "direct-schema", "local-view"):
+            fail(f"{name} clone selected mode is invalid")
+        runtime_schema = clone_access.get("runtime_schema")
+        if runtime_schema is not None and not re.fullmatch(r"[A-Z][A-Z0-9_$#]{0,29}", str(runtime_schema)):
+            fail(f"{name} runtime schema is invalid")
+        if set(clone_access.get("production_qualifiers", [])) != expected["links"]:
+            fail(f"{name} production qualifier allowlist mismatch")
         counts = domain.get("metadata_counts", {})
         for key in ("objects", "columns", "constraints", "constraint_columns", "indexes", "index_columns", "triggers"):
             if not isinstance(counts.get(key), int) or counts[key] < 0:

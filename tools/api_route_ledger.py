@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import re
 import subprocess
@@ -187,12 +188,41 @@ def unique_routes(inventory: Dict[str, object]) -> tuple[List[Dict[str, object]]
         is_boundary, selected = declarations[0]
         route = dict(selected)
         route["method"], route["path"] = key
-        ids, sources, owned_sources = set(), [], set()
+        ids, sources, owned_sources, aliases = set(), [], set(), []
+        target_id = str(selected.get("id"))
         seen = set()
         for declared_boundary, item in declarations:
-            ids.add(str(item["id"]))
+            item_id = str(item["id"])
+            ids.add(item_id)
             ids.update(str(value) for value in item.get("source_route_ids", []))
             ids.update(str(value) for value in item.get("legacy_route_ids", []))
+            explicit_alias_ids = set()
+            for alias in item.get("source_route_aliases", []):
+                if not isinstance(alias, dict) or not alias.get("alias_id"):
+                    continue
+                alias_row = dict(alias)
+                alias_row["target_route_id"] = target_id
+                alias_row.setdefault("method", key[0])
+                alias_row.setdefault("path", key[1])
+                ids.add(str(alias_row["alias_id"]))
+                aliases.append(alias_row)
+                explicit_alias_ids.add(str(alias_row["alias_id"]))
+            # Every merged declaration ID is a resolvable source alias. Keep
+            # its declaration metadata so a fresh ledger remains independent
+            # of the discarded duplicate inventory row.
+            if item_id != target_id and item_id not in explicit_alias_ids:
+                aliases.append({
+                    "alias_id": item_id,
+                    "alias_kind": "source-declaration",
+                    "target_route_id": target_id,
+                    "method": key[0],
+                    "path": key[1],
+                    "source": str(item.get("source", "")),
+                    "class": str(item.get("class", "")),
+                    "source_sha256": item.get("source_sha256"),
+                    "provenance_status": "source-row-retained",
+                    "reason": "merged source declaration retained for provenance; target wire route is authoritative",
+                })
             owned_sources.update(str(value) for value in item.get("owned_sources", []))
             provenance = {name: item[name] for name in (
                 "id", "source", "class", "annotation", "route_origin",
@@ -205,12 +235,78 @@ def unique_routes(inventory: Dict[str, object]) -> tuple[List[Dict[str, object]]
                 seen.add(serialized)
                 sources.append(provenance)
         route["source_route_ids"] = sorted(ids)
+        route["source_route_aliases"] = aliases
         route["route_sources"] = sources
         route["owned_sources"] = sorted(owned_sources)
         route["source_declaration_count"] = len(declarations)
         route["handler_registration"] = "source-candidate; real Spring registration requires runtime observation"
         (boundary_rows if is_boundary else project).append(route)
     return project, boundary_rows
+
+
+def validate_source_route_aliases(routes: List[Dict[str, object]],
+                                  boundary_routes: List[Dict[str, object]],
+                                  aliases: List[Dict[str, object]]) -> None:
+    """Validate that retained source IDs resolve through explicit provenance.
+
+    A merged wire route may retain source declaration IDs that are absent from
+    the current inventory. Such IDs are valid only when an explicit alias record
+    binds them to an authoritative target route and carries source metadata.
+    """
+    direct = {str(route.get("id")) for route in routes + boundary_routes}
+    retained = {str(value) for route in routes + boundary_routes
+                for value in route.get("source_route_ids", [])}
+    alias_by_id = {}
+    for alias in aliases:
+        if not isinstance(alias, dict) or not alias.get("alias_id"):
+            raise ValueError("source route alias must be an object with alias_id")
+        aid = str(alias["alias_id"])
+        if aid in direct:
+            raise ValueError("source route alias collides with direct route id: " + aid)
+        if aid not in retained:
+            raise ValueError("unknown source route alias id: " + aid)
+        target = str(alias.get("target_route_id", ""))
+        if target not in direct:
+            raise ValueError("source route alias target is not a direct route: " + aid)
+        if not alias.get("method") or not alias.get("path") or not alias.get("source") or not alias.get("class"):
+            raise ValueError("source route alias lacks source/method/path/class metadata: " + aid)
+        if aid in alias_by_id and alias_by_id[aid] != target:
+            raise ValueError("source route alias maps to multiple targets: " + aid)
+        alias_by_id[aid] = target
+    unresolved = sorted(retained - direct - set(alias_by_id))
+    if unresolved:
+        raise ValueError("unresolved source route aliases: " + ",".join(unresolved[:10]))
+
+
+def _source_route_aliases(routes: List[Dict[str, object]], boundary_routes: List[Dict[str, object]]) -> List[Dict[str, object]]:
+    """Collect explicit and legacy source-route alias provenance records."""
+    result: List[Dict[str, object]] = []
+    for route in routes + boundary_routes:
+        target_id = str(route.get("id"))
+        explicit = {}
+        for alias in route.get("source_route_aliases", []):
+            if not isinstance(alias, dict) or not alias.get("alias_id"):
+                continue
+            row = dict(alias)
+            row["target_route_id"] = target_id
+            row.setdefault("method", str(route.get("method", "")))
+            row.setdefault("path", str(route.get("path", "")))
+            explicit[str(row["alias_id"])] = row
+        result.extend(explicit.values())
+        for alias_id in sorted({str(value) for value in route.get("source_route_ids", [])} - {target_id} - set(explicit)):
+            result.append({
+                "alias_id": alias_id,
+                "alias_kind": "legacy-source-declaration",
+                "target_route_id": target_id,
+                "method": str(route.get("method", "")),
+                "path": str(route.get("path", "")),
+                "source": str(route.get("source", "")),
+                "class": str(route.get("class", "")),
+                "source_sha256": route.get("source_sha256"),
+                "provenance_status": "target-route-derived",
+                "reason": "merged source declaration retained for provenance; target wire route is authoritative",
+            })
+    return sorted(result, key=lambda row: (str(row["alias_id"]), str(row["target_route_id"])))
 
 
 def build(inventory: Dict[str, object], native_registry: Dict[str, object] | None = None,
@@ -262,6 +358,8 @@ def build(inventory: Dict[str, object], native_registry: Dict[str, object] | Non
         family_id = family_assignment[str(route.get("id"))]
         route["behavior_family_id"] = family_id
         route["family_fingerprint"] = family_by_id[family_id]["family_fingerprint"]
+    source_route_aliases = _source_route_aliases(routes, boundary_routes)
+    validate_source_route_aliases(routes, boundary_routes, source_route_aliases)
     priority = collections.Counter(route["native_relevance"] for route in routes)
     waves = collections.Counter(route["wave"] for route in routes)
     return {
@@ -304,6 +402,7 @@ def build(inventory: Dict[str, object], native_registry: Dict[str, object] | Non
             "task-integration": "task, workflow, scheduler and external integration routes",
             "page-other": "routes without a higher-priority family marker",
         },
+        "source_route_aliases": source_route_aliases,
         "counts": {
             "source_route_count": len(inventory.get("routes", [])) + len(inventory.get("boundary_routes", [])),
             "deduplicated_source_rows": len(inventory.get("routes", [])) + len(inventory.get("boundary_routes", [])) - len(routes) - len(boundary_routes),

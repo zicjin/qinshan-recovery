@@ -139,6 +139,34 @@ def _source_reference(path: Path) -> str:
         return str(path)
 
 
+def _source_sha256(path: Path) -> Optional[str]:
+    """Return a source-file digest when the source is available locally."""
+    try:
+        if path.is_file():
+            return hashlib.sha256(path.read_bytes()).hexdigest()
+    except OSError:
+        pass
+    return None
+
+
+def _source_route_alias(alias_id: str, target: Mapping[str, object], source: Mapping[str, object],
+                        *, alias_kind: str, reason: str) -> Dict[str, object]:
+    """Build self-contained provenance for an identifier retained from an old scan."""
+    record: Dict[str, object] = {
+        "alias_id": str(alias_id),
+        "alias_kind": alias_kind,
+        "target_route_id": str(target["id"]),
+        "method": str(source.get("method", target.get("method", ""))),
+        "path": str(source.get("path", target.get("path", ""))),
+        "source": str(source.get("source", "")),
+        "class": str(source.get("class", "")),
+        "source_sha256": source.get("source_sha256"),
+        "provenance_status": "source-row-retained",
+        "reason": reason,
+    }
+    return record
+
+
 def _quoted_values(text: str, key: str = "", constants: Optional[Mapping[str, str]] = None) -> List[str]:
     if key:
         # Stop at the array's closing brace, allowing a quoted route itself
@@ -687,6 +715,7 @@ def build_inventory(source_root: Path, packaged_classes: Set[str],
             row = {
                 "id": hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16],
                 **route,
+                "source_sha256": _source_sha256(source_path),
                 "runtime_status": "owned-class-present" if class_entry in packaged_classes or owned_sources else "source-only",
                 "owned_sources": owned_sources,
                 "handler_candidates": _handler_candidates(info, infos),
@@ -811,7 +840,12 @@ def main() -> int:
             continue
         matches = current_by_key.get((old["method"], old["path"]), [])
         if matches:
-            matches[0].setdefault("source_route_ids", []).append(old["id"])
+            target = matches[0]
+            target.setdefault("source_route_ids", []).append(old["id"])
+            target.setdefault("source_route_aliases", []).append(_source_route_alias(
+                old["id"], target, old, alias_kind="legacy-source-declaration",
+                reason="former source-root declaration retained after same-method/path reconciliation",
+            ))
         else:
             removed_rows.append({name: old[name] for name in ("id", "method", "path", "source", "class")})
             removed_rows[-1]["reason"] = "old isolated source-root mapping has no matching authoritative method/path; not an evidence alias"
@@ -820,8 +854,14 @@ def main() -> int:
     for route in rows:
         key = str(route["method"]) + " " + str(route["path"])
         if key in owned_route_map:
-            route.setdefault("source_route_ids", []).append(hashlib.sha256(
-                ("owned-boundary " + key).encode("utf-8")).hexdigest()[:16])
+            alias_id = hashlib.sha256(("owned-boundary " + key).encode("utf-8")).hexdigest()[:16]
+            route.setdefault("source_route_ids", []).append(alias_id)
+            route.setdefault("source_route_aliases", []).append(_source_route_alias(
+                alias_id, route, {"method": route["method"], "path": route["path"],
+                                  "source": ";".join(owned_route_map[key]), "class": route.get("class", ""),
+                                  "source_sha256": None},
+                alias_kind="owned-boundary", reason="owned source-only declaration shares the project wire route",
+            ))
     # Audit old rootless owned interface rows without retaining them as HTTP
     # candidates. These were previously scanned without a concrete bean/base.
     for owned_root in owned_roots:
@@ -843,8 +883,12 @@ def main() -> int:
     # is an alias formula, not a route list: discovery comes from Java source.
     for route in boundary_routes:
         key = str(route["method"]) + " " + str(route["path"])
-        route["source_route_ids"] = sorted(set(route.get("source_route_ids", [])) | {str(route["id"]), hashlib.sha256(
-            ("framework-boundary " + key).encode("utf-8")).hexdigest()[:16]})
+        alias_id = hashlib.sha256(("framework-boundary " + key).encode("utf-8")).hexdigest()[:16]
+        route["source_route_ids"] = sorted(set(route.get("source_route_ids", [])) | {str(route["id"]), alias_id})
+        route.setdefault("source_route_aliases", []).append(_source_route_alias(
+            alias_id, route, route, alias_kind="framework-boundary",
+            reason="framework boundary alias retained for source-accounting compatibility",
+        ))
     binding = capture_binding(REPO_ROOT)
     payload = {
         "schema": 1,

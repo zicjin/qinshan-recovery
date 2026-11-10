@@ -51,11 +51,44 @@ class RouteIdentityTest(unittest.TestCase):
         first = route("z-id", "ZResource")
         second = route("a-id", "AResource")
         second["source_route_ids"] = ["earlier-interface-id"]
+        second["source_route_aliases"] = [{
+            "alias_id": "earlier-interface-id",
+            "method": "POST",
+            "path": "/secure/example/queries",
+            "source": "EarlierResource.java",
+            "class": "EarlierResource",
+            "source_sha256": "b" * 64,
+        }]
+        second["source_route_aliases"] = [{
+            "alias_id": "earlier-interface-id", "target_route_id": "a-id",
+            "method": "POST", "path": "/secure/example/queries",
+            "source": "EarlierResource.java", "class": "EarlierResource",
+        }]
         a = ledger.build({"routes": [first, second], "boundary_routes": []})
         b = ledger.build({"routes": [second, first], "boundary_routes": []})
         self.assertEqual(a["routes"], b["routes"])
         self.assertEqual(set(a["routes"][0]["source_route_ids"]),
                          {"z-id", "a-id", "earlier-interface-id"})
+
+    def test_explicit_alias_metadata_is_retained_and_resolves_to_authoritative_route(self):
+        row = route("current-id", "CurrentResource")
+        row["source_route_ids"] = ["legacy-id"]
+        row["source_route_aliases"] = [{
+            "alias_id": "legacy-id",
+            "target_route_id": "stale-target-id",
+            "method": "POST",
+            "path": "/old-path",
+            "source": "legacy/Resource.java",
+            "class": "legacy.Resource",
+            "source_sha256": "a" * 64,
+            "provenance_status": "source-row-retained",
+        }]
+        result = ledger.build({"routes": [row], "boundary_routes": []})
+        alias = next(item for item in result["source_route_aliases"] if item["alias_id"] == "legacy-id")
+        self.assertEqual(alias["target_route_id"], "current-id")
+        self.assertEqual(alias["source"], "legacy/Resource.java")
+        self.assertEqual(alias["class"], "legacy.Resource")
+        self.assertEqual(alias["source_sha256"], "a" * 64)
 
 
 if __name__ == "__main__":

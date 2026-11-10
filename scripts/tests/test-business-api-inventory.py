@@ -145,6 +145,11 @@ public interface ParentPage { String detail(); }
         self.assertEqual(hashlib.sha256(b"GET /project/one demo.ProjectResource").hexdigest()[:16], original["id"])
         self.assertIn(hashlib.sha256(b"owned-boundary GET /project/one").hexdigest()[:16],
                       original.get("source_route_ids", []))
+        owned_alias = next(alias for alias in original["source_route_aliases"]
+                           if alias["alias_kind"] == "owned-boundary")
+        self.assertEqual(owned_alias["target_route_id"], original["id"])
+        self.assertEqual((owned_alias["method"], owned_alias["path"]), ("GET", "/project/one"))
+        self.assertEqual(owned_alias["provenance_status"], "source-row-retained")
         page = next(row for row in project if row["path"] == "/page/detail")
         wrong_id = hashlib.sha256(b"GET /detail demo.PageImpl").hexdigest()[:16]
         self.assertNotIn(wrong_id, page.get("source_route_ids", []))

@@ -4,6 +4,8 @@
 Only JDK 8 and the current Java source are compiled into a
 temporary directory. No shared target, application, Oracle or Redis is used;
 reaching the rejecting driver proves validation, never an installation success.
+The pure rendering regression additionally uses the existing controlled public
+dependency classpath so JAXP service providers match the packaged application.
 """
 from __future__ import annotations
 
@@ -48,6 +50,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.TransformerFactory;
 import org.xml.sax.InputSource;
 import org.w3c.dom.*;
 public final class WorkflowRenderCheck {
@@ -59,6 +62,11 @@ public final class WorkflowRenderCheck {
   }
   static void require(boolean ok) { if (!ok) throw new AssertionError("materialized XML contract differs"); }
   public static void main(String[] args) throws Exception {
+    if (args.length == 3 && "--external-transformer-provider".equals(args[2])) {
+      String provider = TransformerFactory.newInstance().getClass().getName();
+      require("org.apache.xalan.processor.TransformerFactoryImpl".equals(provider));
+      System.out.println("WORKFLOW_DEFAULT_TRANSFORMER_EXTERNAL_XALAN_VERIFIED");
+    }
     WorkflowInstaller.Prepared p = WorkflowInstaller.prepare(Files.readAllBytes(Paths.get(args[0])), Paths.get(args[1]));
     String attack = "Literal & <script id=\"escape\">not executable</script> ' \" label";
     Map<String,String> names = new HashMap<>();
@@ -330,6 +338,27 @@ class WorkflowInstallerTest(unittest.TestCase):
                                  'WorkflowRenderCheck', str(private), str(self.manifest)],
                                 capture_output=True, text=True, timeout=20)
         output = result.stdout + result.stderr
+        self.assertEqual(result.returncode, 0, output)
+        self.assertIn('WORKFLOW_RENDER_LITERAL_DATA_VERIFIED', output)
+        self.assertNotIn('WF_TEST_DB_ATTEMPT', output)
+        self.assertNotIn(DB_SECRET, output)
+
+    def test_materialization_with_real_public_dependencies_handles_external_jaxp_provider(self):
+        self.symbolic_fixture()
+        private = self.directory / 'request.json'
+        private.write_text(json.dumps(self.request), encoding='utf-8')
+        dependencies = sorted((self.prerequisite_root / 'build/reconstituted-public-deps').glob('*.jar'))
+        self.assertTrue(dependencies, 'controlled public dependency classpath is required')
+        self.assertIn('xalan-2.7.2.jar', [path.name for path in dependencies])
+        self.assertFalse(any(path.name.startswith('gikam-') or path.name.endswith('-run.jar')
+                             for path in dependencies), 'supplier artifacts cannot enter the test classpath')
+        classpath = ':'.join(map(str, [self.temp, *dependencies]))
+        result = subprocess.run([str(self.jdk / 'java'), '-Dfile.encoding=UTF-8', '-cp', classpath,
+                                 'WorkflowRenderCheck', str(private), str(self.manifest),
+                                 '--external-transformer-provider'],
+                                capture_output=True, text=True, timeout=20)
+        output = result.stdout + result.stderr
+        self.assertIn('WORKFLOW_DEFAULT_TRANSFORMER_EXTERNAL_XALAN_VERIFIED', output)
         self.assertEqual(result.returncode, 0, output)
         self.assertIn('WORKFLOW_RENDER_LITERAL_DATA_VERIFIED', output)
         self.assertNotIn('WF_TEST_DB_ATTEMPT', output)

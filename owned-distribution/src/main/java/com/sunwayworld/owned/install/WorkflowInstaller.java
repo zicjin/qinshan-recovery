@@ -347,7 +347,12 @@ public final class WorkflowInstaller {
                 if ((child.getNodeType() == Node.TEXT_NODE || child.getNodeType() == Node.CDATA_SECTION_NODE) && child.getNodeValue().contains("__LIMS")) child.setNodeValue(replaceTokens(child.getNodeValue(), prepared, names));
             }
         }
-        TransformerFactory factory = TransformerFactory.newInstance(); factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        // The runtime is pinned to JDK 8. Public Xalan is also on the application
+        // classpath but cannot enforce the JAXP external-access properties below.
+        // Select the JDK provider explicitly and fail if its security setup fails.
+        TransformerFactory factory = TransformerFactory.newInstance(
+            "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
         javax.xml.transform.Transformer transformer = factory.newTransformer(); transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         StringWriter out = new StringWriter(); transformer.transform(new DOMSource(doc), new StreamResult(out));

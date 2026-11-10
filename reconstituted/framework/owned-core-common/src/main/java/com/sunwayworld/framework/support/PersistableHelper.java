@@ -126,7 +126,7 @@ public abstract class PersistableHelper {
    public static <T> void resetBasicProperties(T item) {
       for (BeanPropertyDescriptor propertyDescriptor : BeanPropertyHelper.getBeanPropertyDescriptorList(item.getClass())) {
          if (ArrayUtils.containsIgnoreCase(BEAN_BASIC_PROPERTIES, propertyDescriptor.getName())) {
-            ReflectionUtils.invokeMethod(propertyDescriptor.getWriteMethod(), item, null);
+            ReflectionUtils.invokeMethod(propertyDescriptor.getWriteMethod(), item, new Object[]{null});
          }
       }
    }
@@ -182,15 +182,15 @@ public abstract class PersistableHelper {
    public static void removeCreatedUserData(Object item) {
       BeanPropertyHelper.getBeanPropertyDescriptorList(item.getClass()).forEach(p -> {
          if (PersistableMetadataHelper.isCreatedByIdPropertyDescriptor(p)) {
-            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, null);
+            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, new Object[]{null});
          } else if (PersistableMetadataHelper.isCreatedByNamePropertyDescriptor(p)) {
-            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, null);
+            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, new Object[]{null});
          } else if (PersistableMetadataHelper.isCreatedByOrgIdPropertyDescriptor(p)) {
-            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, null);
+            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, new Object[]{null});
          } else if (PersistableMetadataHelper.isCreatedByOrgNamePropertyDescriptor(p)) {
-            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, null);
+            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, new Object[]{null});
          } else if (PersistableMetadataHelper.isCreatedTimePropertyDescriptor(p)) {
-            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, null);
+            ReflectionUtils.invokeMethod(p.getWriteMethod(), item, new Object[]{null});
          }
       });
    }

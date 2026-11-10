@@ -9049,6 +9049,6 @@
   "source_tree_sha256": "e8476568c4d0321a2182e3b12a26f3dfaf72371b3c8f7c3278b6a9178f90437e",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
-  "transformation_manifest_sha256": "30ab06626f3e4c863a2855790b0ec6211499394852f2a8598ea3bd444ce87fe8",
+  "transformation_manifest_sha256": "cc82d85926049feee8ed8b40c13c7e81a9ece832168e26f1dbf7aa7bd722703a",
   "transformed_source_count": 1
 }

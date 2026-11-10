@@ -119,6 +119,32 @@
       "reason": "Restore the generic ID cast erased around the raw Modified interface."
     },
     {
+      "id": "persistable-helper-reset-single-null-argument",
+      "file": "com/sunwayworld/framework/support/PersistableHelper.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "ReflectionUtils.invokeMethod(propertyDescriptor.getWriteMethod(), item, null);",
+          "replace": "ReflectionUtils.invokeMethod(propertyDescriptor.getWriteMethod(), item, new Object[]{null});",
+          "expected_count": 1
+        }
+      ],
+      "reason": "Restore the original one-element null argument array in resetBasicProperties, as proven by the production class bytecode; a bare null is a null varargs array and supplies no setter argument."
+    },
+    {
+      "id": "persistable-helper-remove-created-single-null-argument",
+      "file": "com/sunwayworld/framework/support/PersistableHelper.java",
+      "operations": [
+        {
+          "op": "replace",
+          "find": "ReflectionUtils.invokeMethod(p.getWriteMethod(), item, null);",
+          "replace": "ReflectionUtils.invokeMethod(p.getWriteMethod(), item, new Object[]{null});",
+          "expected_count": 5
+        }
+      ],
+      "reason": "Restore the original one-element null argument arrays in all five removeCreatedUserData branches, each proven by the production class bytecode."
+    },
+    {
       "id": "generic-auditable-dao-no-type-witness",
       "file": "com/sunwayworld/framework/support/auditable/service/GenericAuditableService.java",
       "operations": [

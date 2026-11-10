@@ -1,0 +1,51 @@
+{
+  "API_completion_claimed": false,
+  "classification": "production-proven-decompiler-null-varargs-reconstitution-error",
+  "database_change": false,
+  "production_evidence": {
+    "access": "read-only captured class; offline javap analysis only",
+    "captured_class_sha256": "e915673b8860f7dad10269c5bc9ea60ebad99ed9cc0d928db508baacc7fc1c45",
+    "javap_receipt_sha256": "275ae7bf15745aa9a7df293496b92c1e9d80b7c1f1d1b257ed99f0ab143428f5",
+    "matches_reconstituted_source_class": true,
+    "removeCreatedUserData": "Each of the five creation-metadata setter branches creates Object[1] containing null before the same invocation.",
+    "resetBasicProperties": "The production bytecode creates Object[1], stores null at index 0, then invokes ReflectionUtils.invokeMethod(Method,Object,Object[]).",
+    "semantic_source": "Production bytecode requires one null setter argument; bare null in the decompiled Java instead passes a null varargs array, causing IllegalArgumentException: wrong number of arguments."
+  },
+  "repairs": [
+    {
+      "call_count": 1,
+      "method": "resetBasicProperties",
+      "transformation_rule": "persistable-helper-reset-single-null-argument"
+    },
+    {
+      "call_count": 5,
+      "method": "removeCreatedUserData",
+      "transformation_rule": "persistable-helper-remove-created-single-null-argument"
+    }
+  ],
+  "runtime_change": false,
+  "schema": "persistable-metadata-reconstitution-repair-provenance-v1",
+  "source": {
+    "after_sha256": "ec3df52c35afee8f6e832b35b515cd21ebec520b7da9a1d707af1e2442077991",
+    "before_sha256": "d7f28e7b3a7db91ea3f85ddf225af164270fd483e56ca30c7e93759551c84414",
+    "class_sha256": "e915673b8860f7dad10269c5bc9ea60ebad99ed9cc0d928db508baacc7fc1c45",
+    "decompiler": "Vineflower",
+    "decompiler_version": "1.11.1",
+    "override_path": "reconstituted/overrides/framework/owned-core-common/src/main/java/com/sunwayworld/framework/support/PersistableHelper.java",
+    "path": "reconstituted/framework/owned-core-common/src/main/java/com/sunwayworld/framework/support/PersistableHelper.java",
+    "source_class_path": "com/sunwayworld/framework/support/PersistableHelper.class",
+    "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+    "source_sha256_before_transform": "25960d2f7b68fa862c760d58f7f44b4c264a15c907a6f2c2cb25b3fc2c34cdbf"
+  },
+  "source_checkpoint_before_repair": "3826e67781f855eaf7bf3f0d2f219538f2cd699a",
+  "strict_evidence": false,
+  "strict_passes_added": 0,
+  "transformation_manifest_sha256": "cc82d85926049feee8ed8b40c13c7e81a9ece832168e26f1dbf7aa7bd722703a",
+  "validation": {
+    "HTTP_replay": "pending root source-only build/package and same-request replay; no runtime or database change by this patch",
+    "after": "68 assertions pass through real public metadata helpers using current tracked Java compiled into a temporary directory with source-built framework dependencies.",
+    "before": "Real public resetBasicProperties(CoreRequestUrlBean) and removeCreatedUserData fail separately with IllegalArgumentException: wrong number of arguments; both original failed receipts remain private.",
+    "command": "python3 scripts/tests/test-persistable-metadata.py --jdk <jdk8> --public-deps <public-dependencies> --framework-classes <source-built-framework-classes> --case all",
+    "transform_replay": "The two exact-count rules applied to the pre-repair source reproduce the repaired tracked source byte-for-byte."
+  }
+}

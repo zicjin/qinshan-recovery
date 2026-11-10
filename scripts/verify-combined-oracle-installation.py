@@ -85,9 +85,9 @@ def union_verifier(identities: list[tuple[str, str]], indexes: set[str], constra
     def literal(value: str) -> str:
         return "'" + value.replace("'", "''") + "'"
 
-    expected = [('objects', kind + '|' + name) for kind, name in identities if kind != 'INDEX']
-    expected += [('indexes', name) for name in sorted(indexes)]
-    expected += [('constraints', name) for name in sorted(constraints)]
+    expected = [('expected_objects', kind + '|' + name) for kind, name in identities if kind != 'INDEX']
+    expected += [('expected_indexes', name) for name in sorted(indexes)]
+    expected += [('expected_constraints', name) for name in sorted(constraints)]
     assignments = ''.join('  ' + group + '(' + literal(name) + ') := 1;\n' for group, name in expected)
     return '''WHENEVER OSERROR EXIT FAILURE ROLLBACK
 WHENEVER SQLERROR EXIT FAILURE ROLLBACK
@@ -95,9 +95,9 @@ SET DEFINE OFF
 SET SQLBLANKLINES ON
 DECLARE
   TYPE names IS TABLE OF PLS_INTEGER INDEX BY VARCHAR2(300);
-  objects names;
-  indexes names;
-  constraints names;
+  expected_objects names;
+  expected_indexes names;
+  expected_constraints names;
   n NUMBER;
   key_name VARCHAR2(300);
 BEGIN
@@ -106,12 +106,12 @@ BEGIN
   FOR o IN (SELECT OBJECT_TYPE, OBJECT_NAME, STATUS FROM USER_OBJECTS
             WHERE OBJECT_TYPE NOT IN ('INDEX','LOB')) LOOP
     key_name := o.OBJECT_TYPE || '|' || o.OBJECT_NAME;
-    IF NOT objects.EXISTS(key_name) THEN
+    IF NOT expected_objects.EXISTS(key_name) THEN
       RAISE_APPLICATION_ERROR(-20301, 'Unexpected combined object'); END IF;
     IF o.STATUS <> 'VALID' THEN RAISE_APPLICATION_ERROR(-20301, 'Invalid combined object'); END IF;
-    objects.DELETE(key_name);
+    expected_objects.DELETE(key_name);
   END LOOP;
-  IF objects.COUNT <> 0 THEN RAISE_APPLICATION_ERROR(-20301, 'Missing combined object'); END IF;
+  IF expected_objects.COUNT <> 0 THEN RAISE_APPLICATION_ERROR(-20301, 'Missing combined object'); END IF;
   SELECT COUNT(*) INTO n FROM USER_INDEXES WHERE STATUS <> 'VALID';
   IF n <> 0 THEN RAISE_APPLICATION_ERROR(-20301, 'Invalid combined index'); END IF;
   FOR i IN (SELECT i.INDEX_NAME, i.STATUS FROM USER_INDEXES i
@@ -119,18 +119,18 @@ BEGIN
               SELECT 1 FROM USER_CONSTRAINTS c WHERE c.INDEX_NAME=i.INDEX_NAME
               AND c.INDEX_OWNER=USER AND c.CONSTRAINT_TYPE IN ('P','U')
               AND c.GENERATED='GENERATED NAME')) LOOP
-    IF NOT indexes.EXISTS(i.INDEX_NAME) THEN
+    IF NOT expected_indexes.EXISTS(i.INDEX_NAME) THEN
       RAISE_APPLICATION_ERROR(-20301, 'Unexpected combined named index'); END IF;
     IF i.STATUS <> 'VALID' THEN RAISE_APPLICATION_ERROR(-20301, 'Invalid combined index'); END IF;
-    indexes.DELETE(i.INDEX_NAME);
+    expected_indexes.DELETE(i.INDEX_NAME);
   END LOOP;
-  IF indexes.COUNT <> 0 THEN RAISE_APPLICATION_ERROR(-20301, 'Missing combined named index'); END IF;
+  IF expected_indexes.COUNT <> 0 THEN RAISE_APPLICATION_ERROR(-20301, 'Missing combined named index'); END IF;
   FOR c IN (SELECT CONSTRAINT_NAME FROM USER_CONSTRAINTS WHERE GENERATED='USER NAME') LOOP
-    IF NOT constraints.EXISTS(c.CONSTRAINT_NAME) THEN
+    IF NOT expected_constraints.EXISTS(c.CONSTRAINT_NAME) THEN
       RAISE_APPLICATION_ERROR(-20301, 'Unexpected combined named constraint'); END IF;
-    constraints.DELETE(c.CONSTRAINT_NAME);
+    expected_constraints.DELETE(c.CONSTRAINT_NAME);
   END LOOP;
-  IF constraints.COUNT <> 0 THEN RAISE_APPLICATION_ERROR(-20301, 'Missing combined named constraint'); END IF;
+  IF expected_constraints.COUNT <> 0 THEN RAISE_APPLICATION_ERROR(-20301, 'Missing combined named constraint'); END IF;
   SELECT COUNT(*) INTO n FROM USER_DB_LINKS;
   IF n <> 0 THEN RAISE_APPLICATION_ERROR(-20301, 'Database links are outside this installation'); END IF;
 END;

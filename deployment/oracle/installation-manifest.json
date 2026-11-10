@@ -35,8 +35,8 @@
     {
       "path": "99-verify.sql",
       "role": "verifier",
-      "sha256": "01cb40f3a1914d6448197adbb75d0cfc10c173f5dd46b8aec07560790afb4778",
-      "bytes": 69419
+      "sha256": "5b719aad04bd4e99d40b21072f5eec12fb9ea7f36e5dcaf3ff062ab479d55c68",
+      "bytes": 82937
     }
   ],
   "phases": [
@@ -147,8 +147,8 @@
     {
       "path": "99-verify.sql",
       "role": "verifier",
-      "sha256": "01cb40f3a1914d6448197adbb75d0cfc10c173f5dd46b8aec07560790afb4778",
-      "bytes": 69419
+      "sha256": "5b719aad04bd4e99d40b21072f5eec12fb9ea7f36e5dcaf3ff062ab479d55c68",
+      "bytes": 82937
     }
   ],
   "blockers": [

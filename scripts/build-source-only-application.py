@@ -227,6 +227,10 @@ def render_external_logical_mapper_overlay(
     except (json.JSONDecodeError, KeyError, TypeError) as exc:
         raise SystemExit(f"logical mapper renderer returned invalid output: {exc}")
     records: list[dict[str, object]] = []
+    try:
+        profile_ref = profile.resolve().relative_to(ROOT).as_posix()
+    except ValueError:
+        profile_ref = profile.name
     for relative in written:
         path = resources / str(relative)
         if not path.is_file():
@@ -236,7 +240,7 @@ def render_external_logical_mapper_overlay(
             "sha256": digest(path),
             "bytes": path.stat().st_size,
             "classification": "explicit-external-logical-clone-mapper-overlay",
-            "profile": str(profile),
+            "profile": profile_ref,
         })
     return records
 

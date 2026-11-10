@@ -194,13 +194,22 @@ private installer identities, password and policy. It initializes a verified
 empty identity set using the original Java password encoder; it is not a public
 bootstrap endpoint or a complete application configuration installer.
 
-The current distribution contains application/startup files, the administrator
-command and build provenance. It does not package `deployment/oracle/` or
-`docs/deployment/`. A new-server handoff therefore needs the matching standalone
-checkout as well, or a future versioned, hash-pinned installation bundle carrying
-those materials. Copying only `owned-distribution/target/distribution` cannot
-initialize a new database. Completing the missing installation materials is
-project work, not an instruction for an operator to reconstruct them manually.
+The source-only distribution includes `installation/`: the exact public Oracle
+SQL/metadata and two offline verifiers required by the combined plan, plus its
+own README. Every file, including the nested package manifests, is hashed in the
+distribution manifest. It carries no parent checkout, private captures or
+historical SQL. Verify the shipped materials from the resolved distribution:
+
+```bash
+python3 "$LIMS_DEPLOY_DIST/installation/scripts/verify-combined-oracle-installation.py" --check-plan
+```
+
+The application JAR and runtime classpath do not consume these files. The bundle
+closes the handoff gap for the existing selected SQL; its normal installer still
+rejects the incomplete package. It does not yet initialize a complete new
+database. Full deployment guidance remains in this standalone checkout under
+`docs/deployment/`; completing the missing installation content is project work,
+not an instruction for an operator to reconstruct it manually.
 
 Before deployment, an operator must provide one Oracle PDB, one Redis instance,
 an application schema/user with grants, a private runtime properties file, the

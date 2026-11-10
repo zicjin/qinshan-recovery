@@ -32,11 +32,16 @@ constant. A later exact bootstrap check may therefore report intentional runtime
 changes. Preserve its failure and compare against the relevant original startup
 behavior; do not overwrite runtime configuration just to restore seed hashes.
 
-The current application distribution does not include the schema directory or
-these deployment documents. Deliver the matching standalone checkout alongside
-the distribution, or a future versioned, hash-pinned installation bundle carrying
-the schema, verifier and instructions. A parent planning checkout and private
-acquisition directory must not be installation dependencies.
+The source-only application distribution includes an `installation/` directory
+with the exact public Oracle plan inputs, both offline verifiers and a dedicated
+README. From its root, run
+`python3 installation/scripts/verify-combined-oracle-installation.py --check-plan`.
+It works without the standalone or parent checkout and without private captures;
+the outer distribution manifest hashes every bundled file, including nested
+package manifests. The application does not load this directory at runtime.
+The bundle remains partial and guarded, so copying it does not yet initialize
+the complete system. Retain the matching standalone checkout for these full
+deployment instructions and the remaining project installation deliverables.
 
 `project/sql/` contains historical release and upgrade SQL. Its files are not a
 current production DDL snapshot and must not be executed as a directory-wide

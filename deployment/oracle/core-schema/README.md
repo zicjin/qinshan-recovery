@@ -134,6 +134,8 @@ local Oracle. That is separate from full application startup, real HTTP,
 write/audit/recovery acceptance and another-device restoration. Complete system
 readiness remains false; see the [clean-device deployment contract](../../../docs/deployment/clean-device-contract.md).
 
-The current application distribution does not include this SQL directory or its
-verifiers. Retain the matching standalone checkout as installation material;
-copying only the application distribution cannot initialize a new database.
+The source-only distribution carries the exact selected SQL/metadata and offline
+verifiers under `installation/`, with a dedicated README and outer file hashes.
+The bundle needs no parent or private source captures; it retains the partial
+guard and cannot yet initialize the complete application on a new database.
+Retain the matching standalone checkout for the full deployment instructions.

@@ -20,8 +20,17 @@ verifier agree. It reports `plan_valid: true`, `deployment_ready: false` and
 `complete_external_domains: false`. Without `--check-plan`, it exits 2 and must
 stop deployment. It never connects to Oracle, executes SQL, emits an unguarded
 installer or accepts an override flag. A matching standalone checkout carries all
-installation inputs; neither a parent planning checkout nor a private source
-receipt is required. The application distribution alone still lacks these files.
+selected installation inputs; neither a parent planning checkout nor a private
+source receipt is required. Source-only distributions also carry the exact
+plan dependencies under `installation/`, with both verifiers and a dedicated
+README. From the distribution root run:
+
+```bash
+python3 installation/scripts/verify-combined-oracle-installation.py --check-plan
+```
+
+Its outer manifest hashes all bundled files; the same partial-install guard and
+remaining blockers apply.
 
 The single shared preflight is byte-identical to both original preflights. It
 requires a dedicated connected user, unchanged `CURRENT_SCHEMA`, no existing

@@ -88,7 +88,9 @@ collection material is a source for that work, not an installation dependency.
 
 An operator supplies the target environment and private inputs:
 
-- a supported JDK 8 with `java` and `jar` (and `javac` on the build host);
+- a complete supported JDK 8 with `java`, `jar`, `javac` and the system Java
+  compiler on both build and runtime hosts; published LCDP Java is dynamically
+  compiled by the original application;
 - one Oracle instance/PDB and one Redis instance, with network reachability;
 - an application schema/user, password, grants, charset and connection pool
   configuration;
@@ -98,6 +100,8 @@ An operator supplies the target environment and private inputs:
   and initial administrator setup without production secrets or business rows;
 - a private runtime properties file containing datasource, Redis, session and
   required feature settings;
+- a persistent writable application working directory with its `files/` volume,
+  kept outside the immutable distribution and preserved across app rollback;
 - public dependency JARs and the Maven plugin seed listed in `README.md`.
 
 The runtime configuration must contain at least datasource URL/user/password,
@@ -155,9 +159,14 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    verifier, retaining its hash receipt. Apply and verify versioned configuration
    bootstrap separately from ordinary business data. The current partial package
    is guarded; do not bypass it or run all files under `project/sql/`.
-4. Apply the approved external logical-domain package matching the chosen mode.
-   The current `api-fixtures/schema/external-logical-clone.sql` supplies ten
-   structures for `local-view`, with no business rows. Its runtime verifier is
+4. Apply and verify the completed portable external logical-domain package
+   matching the chosen access mode. `deployment/oracle/external-schema/` is the
+   new-installation package under development; its own `90-verify.sql` checks
+   exact selected structures and live empty-table counts as the installation
+   user. Core integration, non-table dependencies and grants remain incomplete,
+   so its normal installer still rejects. Do not apply both that package and
+   the older `api-fixtures/schema/external-logical-clone.sql` to the same schema.
+   The older fixture is retained for existing test environments. Its verifier is
    specific to Docker SQLPlus, `FREEPDB1` and `LIMS_RUNTIME_LOCAL`; it checks
    aggregate metadata counts and schema-owned DB-link absence. Its row figure
    comes from `NUM_ROWS` statistics, not a live `COUNT(*)`. It is not a portable
@@ -175,11 +184,24 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    JSON and password policy. It requires empty identity tables and technical
    prerequisites; it does not complete remaining workflow/LCDP/configuration
    bootstrap.
-6. Start one Spring application:
+6. Start one Spring application from its stable writable working directory,
+   owned by the application account:
 
    ```bash
+   LIMS_APP_WORKDIR=/var/lib/lims-owned
+   install -d -m 0700 "$LIMS_APP_WORKDIR"
+   cd "$LIMS_APP_WORKDIR"
    "$LIMS_DEPLOY_DIST/start.sh" /private/path/runtime.properties
    ```
+
+   Use absolute distribution/configuration paths. The original application
+   resolves `files/`, `temp/` and `multipart/` from this working directory;
+   `start.sh` does not change it. Containers require an explicit working
+   directory and a writable persistent volume. Do not start in the immutable
+   distribution. File storage must be configured and accepted separately.
+   For the explicit local backend set `owned.files.storage=local` in private
+   properties and persist `files/`; see [file-storage.md](file-storage.md).
+   With no selection the original FTP manager remains in use.
 
    The launcher listens on `127.0.0.1` by default. To permit direct remote
    access, choose the intended interface explicitly, for example
@@ -197,7 +219,9 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    menus as described in the first-administrator guide.
 8. Retain the distribution and runtime configuration as the rollback pair.
    Rollback replaces only the application distribution; it does not recreate
-   Oracle or Redis.
+   Oracle or Redis. Reuse the same working directory and persistent file volume.
+   Data recovery requires matching database and file backups, separately from
+   app rollback.
 
 The contract verifier reports `status: blocked`, `contract_valid: true` and
 `deployment_ready: false` while the core schema/configuration installation package

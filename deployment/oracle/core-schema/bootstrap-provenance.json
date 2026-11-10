@@ -244,6 +244,49 @@
   "identities_or_permissions_copied": false,
   "lcdp": {
     "draft_history_included": false,
+    "file_bootstrap": {
+      "active_only_exception": {
+        "history_count": 0,
+        "parent_id": "0",
+        "path": "lcdp.file.server.FileScript",
+        "resource_id": "1"
+      },
+      "file_storage_verified": false,
+      "history_count": 1,
+      "import_export_templates_included": false,
+      "resource_count": 4,
+      "source_rows": [
+        {
+          "id": "1586194935797632",
+          "source_row_sha256": "d0434be98043cd7b9b81ddffe1218f494f435ef8c0bd8c19c1ee2a3c2fed48e2",
+          "table": "T_LCDP_RESOURCE"
+        },
+        {
+          "id": "1",
+          "source_row_sha256": "c3400fa502138d08fdff54e0683e275f9d671fd552126b66934c2dc6d1d6457f",
+          "table": "T_LCDP_RESOURCE"
+        },
+        {
+          "id": "1586194332628864",
+          "source_row_sha256": "81e75e0b0d03b9530f01ca38adda6f0f7849c6b0f00b75ee79f341d4f7ae0e2e",
+          "table": "T_LCDP_RESOURCE"
+        },
+        {
+          "id": "1586194490251136",
+          "source_row_sha256": "d517e7dcba6db355ff3bde974d164a1b798acfb79d9639688716107f9a876c3f",
+          "table": "T_LCDP_RESOURCE"
+        },
+        {
+          "id": "1586194936223616",
+          "source_row_sha256": "f75cdfcd4c166681098416f0d4104cccb17eae7d38da4661ce8945157841c6ba",
+          "table": "T_LCDP_RESOURCE_HISTORY"
+        }
+      ],
+      "upload_constant_ids": [
+        "FILE-EXTENSIONS",
+        "FILE-SPACELIMIT"
+      ]
+    },
     "menu_count": 10,
     "modules": [
       "equiptInOut",
@@ -255,6 +298,7 @@
       "reportSendExpressDelivery"
     ],
     "published_paths": [
+      "common.commonService.server.LcdpFileService",
       "emc.FloderInfoModify.mapper.LcdpEmcFolderMysqlMapper",
       "emc.FloderInfoModify.mapper.LcdpEmcFolderOracleMapper",
       "emc.FloderInfoModify.mapper.LcdpEmcFolderPostgresqlMapper",
@@ -283,7 +327,8 @@
       "emc.equiptInOut.server.LcdpEmcEquiptInoutService",
       "emc.reportSendExpressDelivery.mapper.LcdpEmcReportSendInfoOracleMapper",
       "emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage",
-      "emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService"
+      "emc.reportSendExpressDelivery.server.LcdpEmcReportSendInfoService",
+      "lcdp.file.server.FileScript"
     ],
     "source_class": "current-production",
     "source_receipts": [
@@ -341,6 +386,11 @@
         "label": "equipment_select_config",
         "path": "private/config-bootstrap-20261110/20261110T151038Z-admin-select-config-private.json",
         "sha256": "aa5f4355aca8f7e6b50d815f0c205520d793471fb002c98bb026235356c28ead"
+      },
+      {
+        "label": "file_constants",
+        "path": "private/file-storage-install-20261111/20261110T181920Z-file_constants-private.json",
+        "sha256": "d197cf7dad04a9dcefd88d9c40edb91b136c39d41eec3093f3b2ec4edbf417b8"
       }
     ]
   },
@@ -351,13 +401,14 @@
     "Technical table registry includes only the selected core schema closure; no missing tables or parent relationships invented.",
     "Finite dictionary categories follow shipped select configuration references, not sys/biz class labels; generic and non-dictionary selectors remain outside this closure.",
     "Source categories contain no code rows; preserved empty without invented options: dsCategory, dsType, fieldCategory, publishState",
-    "Published 7 reviewed LCDP modules and 10 reviewed menus only; remaining dynamic LCDP/workflow/permission bootstrap remains incomplete."
+    "Published 7 reviewed LCDP modules, 10 reviewed menus and 2 original file Java resources only; FileScript retains its original active-only parent0/no-history exception. Import/export templates and file storage acceptance remain incomplete; remaining dynamic LCDP/workflow/permission bootstrap remains incomplete."
   ],
   "row_counts": {
     "T_CORE_ADMIN_SELECT_CONFIG": 37,
     "T_CORE_CODE": 120,
     "T_CORE_CODE_CATEGORY": 28,
     "T_CORE_CODE_CLASS": 2,
+    "T_CORE_CONSTANT": 2,
     "T_CORE_I18N": 1350,
     "T_CORE_I18N_CONFIG": 2,
     "T_CORE_I18N_MESSAGE": 1375,
@@ -369,8 +420,8 @@
     "T_LCDP_MODULE_PAGE_COMP": 229,
     "T_LCDP_MODULE_PAGE_I18N": 123,
     "T_LCDP_PAGE_I18N_CODE": 242,
-    "T_LCDP_RESOURCE": 37,
-    "T_LCDP_RESOURCE_HISTORY": 29
+    "T_LCDP_RESOURCE": 41,
+    "T_LCDP_RESOURCE_HISTORY": 30
   },
   "rows": [
     {
@@ -24326,6 +24377,30 @@
       "table": "T_LCDP_RESOURCE"
     },
     {
+      "id": "1586194935797632",
+      "source_row_sha256": "d0434be98043cd7b9b81ddffe1218f494f435ef8c0bd8c19c1ee2a3c2fed48e2",
+      "statement_sha256": "c80f8fb90327ddfc82733c4dee933f78bb3693ae2ee81649ec87250b12390ffb",
+      "table": "T_LCDP_RESOURCE"
+    },
+    {
+      "id": "1",
+      "source_row_sha256": "c3400fa502138d08fdff54e0683e275f9d671fd552126b66934c2dc6d1d6457f",
+      "statement_sha256": "6d822c77f59da2e05700fd29dbea542e05f2a0529bfaa9ed0e820d30092f0b68",
+      "table": "T_LCDP_RESOURCE"
+    },
+    {
+      "id": "1586194332628864",
+      "source_row_sha256": "81e75e0b0d03b9530f01ca38adda6f0f7849c6b0f00b75ee79f341d4f7ae0e2e",
+      "statement_sha256": "73f48abbd0a3378131b3f38e9d642fc61384f1ddccf6257691bf201172de0ccf",
+      "table": "T_LCDP_RESOURCE"
+    },
+    {
+      "id": "1586194490251136",
+      "source_row_sha256": "d517e7dcba6db355ff3bde974d164a1b798acfb79d9639688716107f9a876c3f",
+      "statement_sha256": "419ca9cf2c75d9c9d511abd1624ff2ced03fa5bf28439175ba113817a4967842",
+      "table": "T_LCDP_RESOURCE"
+    },
+    {
       "id": "1794420245005760",
       "source_row_sha256": "9ada9b7d59d2c8e69621da09f545dcde4e83ff4cb6177400b021fc51f26b6f6b",
       "statement_sha256": "444b79919dd8febcf4172de8cdb0c27dccfc1a17599835481c791be7446542d2",
@@ -24497,6 +24572,12 @@
       "id": "1754804488180768",
       "source_row_sha256": "3b727e122883f47f578cb0fee161dbee87fec8d3ead429fded7a08c9e9fdf1e3",
       "statement_sha256": "cca36d84448bc800d7e9abf4e3c867a06aa8c01419654515aeff0b88bc13c9c1",
+      "table": "T_LCDP_RESOURCE_HISTORY"
+    },
+    {
+      "id": "1586194936223616",
+      "source_row_sha256": "f75cdfcd4c166681098416f0d4104cccb17eae7d38da4661ce8945157841c6ba",
+      "statement_sha256": "9fc7cf9113731962b39209cf3e9f9b526b97d0cb537060df61e31ef33b7aa7aa",
       "table": "T_LCDP_RESOURCE_HISTORY"
     },
     {
@@ -28062,6 +28143,18 @@
       "source_row_sha256": "7c9c18b1b7746b77979a21f8063ae311ee65febc636e03aa51bca68e3563d592",
       "statement_sha256": "664b8f02edc1885e7501b3461e3b863f9cef2eac4a089d5c70eea751871a9cfa",
       "table": "T_LCDP_PAGE_I18N_CODE"
+    },
+    {
+      "id": "FILE-EXTENSIONS",
+      "source_row_sha256": "5ba466e9a465d9403771bd31e3c755d9b43a0d00d77b58613ee5daa9f87b2d53",
+      "statement_sha256": "30d5663db13139de15d71d594a1238489c3e6d2cb7fdfea0ab765e3f6afefc99",
+      "table": "T_CORE_CONSTANT"
+    },
+    {
+      "id": "FILE-SPACELIMIT",
+      "source_row_sha256": "6ce106245223962ff4121ef9d2471014eb97103b67d7a59af16cd286f08bfde9",
+      "statement_sha256": "c7fc99737cca8556f07ee0f6499abfff8fd4f7748aaee0a14c8a8e9c11a72da7",
+      "table": "T_CORE_CONSTANT"
     }
   ],
   "schema": "core-technical-bootstrap-v1",
@@ -28099,8 +28192,8 @@
       "sha256": "7f74083c4d63463b265d619d6edc4f284ebcdab256766ba06a7badbeb38ea380"
     },
     {
-      "path": "private/lcdp-published-modules-20261111/reviewed-published-lcdp-private.json",
-      "sha256": "43bdcdcbf91a2d7e0098a0b839d38b64aed80e1eeb7f0fccde80d0395b95685d"
+      "path": "private/file-storage-install-20261111/reviewed-file-lcdp-private.json",
+      "sha256": "6048a997161f979555bce3d244a400458f7b455bb506b596eb9a0da09a6b9c4e"
     }
   ],
   "source_class": "current-production-at-capture"

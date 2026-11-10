@@ -345,6 +345,37 @@ COMMIT;
         self.write('manifest.json',json.dumps(self.manifest))
         self.assert_rejected()
 
+    def test_file_constants_require_the_reviewed_technical_projection(self):
+        text = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT (SELECT COUNT(*) FROM T_CORE_CONSTANT) INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+INSERT INTO T_CORE_CONSTANT (ID,CONSTANTVALUE,CONSTANTDESC,CLASSFICATION,SHOW)
+ VALUES ('FILE-EXTENSIONS','txt,pdf','Allowed file types','system','1');
+COMMIT;
+'''
+        self.write('70-bootstrap.sql',text)
+        initializer=(self.root/'install.sql').read_text()
+        self.write('install.sql',initializer.replace('@@90-verify.sql','@@70-bootstrap.sql\n@@90-verify.sql'))
+        self.pin()
+        self.manifest['files'].append({'path':'70-bootstrap.sql','role':'bootstrap',
+            'sha256':sha(text.encode()),'bytes':len(text.encode())})
+        self.write('manifest.json',json.dumps(self.manifest))
+        result=self.run_verifier()
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        bad=text.replace('CLASSFICATION,SHOW','CLASSFICATION,PASSWORD')
+        self.write('70-bootstrap.sql',bad)
+        entry=next(item for item in self.manifest['files'] if item['path']=='70-bootstrap.sql')
+        entry['sha256'],entry['bytes']=sha(bad.encode()),len(bad.encode())
+        self.write('manifest.json',json.dumps(self.manifest))
+        result=self.run_verifier()
+        self.assertNotEqual(result.returncode,0)
+        self.assertIn('reviewed technical projection',result.stdout+result.stderr)
+
     def test_lcdp_bootstrap_projection_excludes_identity_and_allows_only_public_dtd(self):
         bootstrap = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
 SET DEFINE OFF

@@ -36,7 +36,9 @@ build or deployment inputs and are not required by a clean standalone checkout.
 The final build does not read the supplier run JAR, CFR, Vineflower or native
 forensics tools. Provide these controlled inputs externally:
 
-- JDK 8 through `JAVA_HOME` (including `java`, `javac` and `jar`);
+- a complete JDK 8 through `JAVA_HOME` (including `java`, `javac` and `jar`)
+  on both build and runtime hosts; original LCDP Java resources compile during
+  application startup and execution;
 - Python 3.10+, Maven 3.9.12, Bash, `jq`, `flock` and GNU core utilities;
 - public dependency JARs through `LIMS_PUBLIC_DEPENDENCY_DIR`, matching
   `reconstituted/framework/public-dependency-allowlist.json`;
@@ -133,7 +135,12 @@ categories, 118 options and their translation dependencies. Captures are bound
 separately; empty production categories remain empty.
 It additionally carries seven reviewed published LCDP modules for equipment,
 folder/order/project/sample information, report lookup and delivery, with ten
-menus and the equipment dictionary/selector. Other dynamic modules,
+menus and the equipment dictionary/selector, plus the two original file-service
+Java resources. `lcdp.file.server.FileScript` retains its captured active-only
+resource and root sentinel; no published history is invented. The original
+upload validator's `FILE-EXTENSIONS` and `FILE-SPACELIMIT` constants are also
+source-bound in the bootstrap. Excel import/export template records and bytes
+remain outside this subset. Other dynamic modules,
 workflow and permission bootstrap remain incomplete; draft scripts containing
 embedded business data are excluded.
 Complete permissions, workflows and dynamic LCDP initialization remain
@@ -194,13 +201,13 @@ receipt. It is currently a provenance audit command for the recovery workspace,
 not a standalone clean-clone deployment verifier. That dependency must be
 removed from the eventual deployable schema package's verification path.
 
-Once the approved core schema exists, apply
-`api-fixtures/schema/external-logical-clone.sql` through the approved SQLPlus
-channel, retain its log, and verify it with
-`scripts/verify-external-logical-clone-runtime.py`. The matching restore script
-drops those ten tables **including any rows they contain**. It is a destructive
-fixture teardown, not a data-preserving rollback. The intended sequence and its
-current prerequisites are documented in
+For new installations, complete and use the portable
+`deployment/oracle/external-schema/` package with the core installer. The older
+`api-fixtures/schema/external-logical-clone.sql` is retained for existing test
+fixtures; do not apply both packages to the same schema. Its matching restore
+script drops those ten tables **including any rows they contain**. It is a
+destructive fixture teardown, not a data-preserving rollback or a new-server
+installation step. The intended sequence and its current prerequisites are in
 `docs/deployment/clean-device-contract.md`.
 
 `verify-clean-device-contract.py` intentionally rejects deployment while the
@@ -216,12 +223,29 @@ internal HTTP bridge or JNI daemon.
 
 ## Deploy and rollback
 
-For a prepared server, start the resolved distribution with the private
-configuration file:
+For a prepared server, create a persistent writable application working directory
+outside the immutable distribution. The original application resolves `files/`,
+`temp/` and `multipart/` from the process working directory, so use the same
+directory on every start and app rollback. Start with an absolute private
+configuration path:
 
 ```bash
+LIMS_APP_WORKDIR=/var/lib/lims-owned
+install -d -m 0700 "$LIMS_APP_WORKDIR"
+cd "$LIMS_APP_WORKDIR"
 "$LIMS_DEPLOY_DIST/start.sh" /private/path/runtime.properties
 ```
+
+The account running Java must own this directory. A container must use an explicit
+working directory and a writable persistent volume at that location. Preserve
+the file volume with the database backup; replacing only the application JAR
+does not restore uploaded bytes. Do not use the immutable distribution directory
+as the working directory. For installation without an FTP dependency, explicitly
+set `owned.files.storage=local`; the original upload service then stores bytes
+in that persistent `files/` tree. See [file storage](docs/deployment/file-storage.md)
+for permissions, original download security, upload constants and retention.
+Without this setting the original FTP manager remains selected and requires its
+configured backend.
 
 The launcher defaults to listening on `127.0.0.1`. For direct access from another
 host, explicitly choose the intended interface, for example

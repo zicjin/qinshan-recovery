@@ -37,13 +37,21 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 4,615 rows across seventeen explicitly selected
+The technical bootstrap contains 4,622 rows across eighteen explicitly selected
 configuration tables: 2 locales, 1,350 internationalization keys, 1,375 messages,
 392 static and 10 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
 relations, one system UI config, one login UI config and 37 source-referenced
 select configs, plus 2 dictionary classes, 28 categories and 120 options.
 Seven published LCDP modules contribute 37 resource/ancestor nodes, 29 published
 histories, 229 components, 123 page translations and 242 dependent translation keys.
+The two original file-service Java resources and their ancestors add four resource
+nodes and one genuine published history, for 41 resources and 30 histories overall.
+`lcdp.file.server.FileScript` is the captured active-only resource with parent `0`;
+the original runtime explicitly permits its absent history. The bootstrap preserves
+that exception without creating a history or changing another resource's contract.
+Two exact production technical constants, `FILE-EXTENSIONS` and `FILE-SPACELIMIT`,
+provide the original upload validator's allowed extensions and size limit. Their
+fields and source rows are pinned; no other system constants are copied.
 `bootstrap-provenance.json` pins every emitted statement and selected
 source row. Identity/audit-origin columns are not copied. No users, organizations,
 roles, passwords or permission grants are copied from production.
@@ -72,9 +80,11 @@ check depends on the original deterministic encoder. These are not changed by
 the installer or represented as fully accepted business/security behavior.
 Five additional title keys were confirmed absent by exact production metadata
 reads. Five detail page targets referenced by the source are also absent from
-the acquired resource inventory. File upload controls still require the separate
-file-service, template and storage closure; a page DTO does not prove those
-controls or missing detail paths work.
+the acquired resource inventory. File upload controls require storage acceptance
+in addition to the shipped file-service resources. Excel import/export also
+requires actual import template records, configuration and file bytes, which this
+subset does not include. A page DTO does not prove those controls or missing
+detail paths work.
 
 The bootstrap checks all selected target tables are empty before any INSERT,
 then commits the technical configuration together. It is an initial-install

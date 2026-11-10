@@ -16848,7 +16848,7 @@ BEGIN
       || CASE WHEN r.DATATYPE IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.DATATYPE)||':'||r.DATATYPE||';' END
       || CASE WHEN r.CLASSNAME IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.CLASSNAME)||':'||r.CLASSNAME||';' END;
   END LOOP;
-  IF actual.COUNT <> 37 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_RESOURCE'); END IF;
+  IF actual.COUNT <> 41 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_RESOURCE'); END IF;
   IF NOT actual.EXISTS('1605674001560352') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
   IF actual('1605674001560352') <>
     'V16:1605674001560352;V24:LcdpEmcFolderMysqlMapper;V6:mapper;V16:1605673968390944;V1:1;V1:1;V52:emc.FloderInfoModify.mapper.LcdpEmcFolderMysqlMapper;V1:0;N;N;'
@@ -20769,6 +20769,2957 @@ BEGIN
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
   SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1587156555744736 AND CLASSCONTENT IS NULL;
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1586194935797632') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1586194935797632') <>
+    'V16:1586194935797632;V15:LcdpFileService;V4:java;V16:1586194490251136;V1:1;V1:1;V43:common.commonService.server.LcdpFileService;V1:0;N;V30:CommonServiceLcdpFileServicev1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=31867;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,2000,1)=
+    'import java.time.LocalDate;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.MapperParameter;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.bean.CoreImportTmplBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.bean.CoreImportTmplConfigBean;'
+ || CHR(10)
+ || 'import com.alibaba.fastjson.JSONObject;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.FileUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.FileException;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.sys.code.bean.CoreCodeBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.ConvertUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.excel.ExcelHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.context.LocalContextHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.manager.CoreFileManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.service.CoreImportTmplService;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.service.CoreImportTmplConfigService;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.CoreImportTmplConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.sys.code.service.CoreCodeService;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.checked.CheckedException;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.MatchPattern;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.SearchFilter;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.EncryptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.SpirePdfUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.NumberUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.emc.framework.constant.EmcConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.utils.CoreFileUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathDTO;'
+ || CHR(10)
+ || 'import java.time.LocalDateTime;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.DateTimeUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.http.HttpClientManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.service.CoreFileService;'
+ || CHR(10)
+ || 'import org.springframework.beans.factory.annotation.Autowired;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.context.ApplicationContextHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.bean.CoreFileBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.U';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,2000,2001)=
+    'nsupportedException;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.BeanUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.ObjectUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.CollectionUtils;'
+ || CHR(10)
+ || 'import java.util.stream.Collectors;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.StringUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.database.context.TableContext;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Cell;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.CellType;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.CellValue;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.DateUtil;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.FormulaEvaluator;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Row;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Sheet;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Workbook;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.WorkbookFactory;'
+ || CHR(10)
+ || 'import org.springframework.context.annotation.Lazy;'
+ || CHR(10)
+ || 'import org.apache.poi.hssf.usermodel.HSSFDataFormatter;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.util.CellRangeAddress;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || 'import java.net.URLEncoder;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FileScope;'
+ || CHR(10)
+ || 'import java.io.*;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathManager;'
+ || CHR(10)
+ || 'import java.nio.file.Path;'
+ || CHR(10)
+ || 'impor';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1942,4001)=
+    't java.nio.file.Files;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpFileService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreFileService coreFileService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    @Lazy private CoreFileManager coreFileManager;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreImportTmplService coreImportTmplService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreImportTmplConfigService coreImportTmplConfigService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreCodeService codeService;'
+ || CHR(10)
+ || CHR(10)
+ || '    public static final String[] IGNORE_KEYS = new String[]{"id", "createdById", "createdByName", "createdTime", "createdByOrgId", "createdByOrgName"};'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 赋值附件到指定位置 */'
+ || CHR(10)
+ || '    public void copyFile(CoreFileBean copyToFileBean, List<CoreFileBean> copyFileFilterList) {'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(copyFileFilterList)) {'
+ || CHR(10)
+ || '            // 先删除已经存在的附件'
+ || CHR(10)
+ || '            coreFileService.getDao().deleteBy(Collections.singletonList(copyToFileBean), "TARGETID", "EXT");'
+ || CHR(10)
+ || '            // 再查询复制的附件集合'
+ || CHR(10)
+ || '            List<CoreFileBean> copyFileList = coreFileService.getDao().selectList(copyFileFilterList, Arrays.asList("TARGETID", "EXT"), Collections.emptyList());'
+ || CHR(10)
+ || '            copyFileList.forEach('
+ || CHR(10)
+ || '                    copyFile -> {'
+ || CHR(10)
+ || '                        CoreFileBean copyToFile = new CoreFileBean();'
+ || CHR(10)
+ || '                        BeanUtils.copyProperties(copyFile, copyToFile, EmcConstant.CREATED_COLUMNS);'
+ || CHR(10)
+ || '                        copyToFile.setId(ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        copyToFile.setExt(copyToFileBean.getExt());'
+ || CHR(10)
+ || '                        copyToFile.setTargetId(copyToFileBean.getTargetId());'
+ || CHR(10)
+ || '                        FilePathDTO fr = CoreFileUtils.toFilePath(copyFile);'
+ || CHR(10)
+ || '                        String filePath = FilePathManager.getLocalPath(fr).toFile().getAbsolutePath();'
+ || CHR(10)
+ || '                        if (new File(filePath).exists()) {'
+ || CHR(10)
+ || '                            coreFileService.upload(copyToFile, new File(filePath));'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1854,5943)=
+    '}'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 赋值包含附件类型的附件到指定位置 */'
+ || CHR(10)
+ || '    public void copyBizCategoryFile(CoreFileBean copyToFileBean, List<CoreFileBean> copyFileFilterList) {'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(copyFileFilterList)) {'
+ || CHR(10)
+ || '            // 先删除已经存在的附件'
+ || CHR(10)
+ || '            coreFileService.getDao().deleteBy(Collections.singletonList(copyToFileBean), "TARGETID", "EXT", "BIZCATEGORY");'
+ || CHR(10)
+ || '            // 再查询复制的附件集合'
+ || CHR(10)
+ || '            List<CoreFileBean> copyFileList = coreFileService.getDao().selectList(copyFileFilterList, Arrays.asList("TARGETID", "EXT","BIZCATEGORY"), Collections.emptyList());'
+ || CHR(10)
+ || '            copyFileList.forEach('
+ || CHR(10)
+ || '                    copyFile -> {'
+ || CHR(10)
+ || '                        CoreFileBean copyToFile = new CoreFileBean();'
+ || CHR(10)
+ || '                        BeanUtils.copyProperties(copyFile, copyToFile, EmcConstant.CREATED_COLUMNS);'
+ || CHR(10)
+ || '                        copyToFile.setId(ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        copyToFile.setExt(copyToFileBean.getExt());'
+ || CHR(10)
+ || '                        copyToFile.setTargetId(copyToFileBean.getTargetId());'
+ || CHR(10)
+ || '                        copyToFile.setBizCategory(copyToFileBean.getBizCategory());'
+ || CHR(10)
+ || '                        FilePathDTO fr = CoreFileUtils.toFilePath(copyFile);'
+ || CHR(10)
+ || '                        String filePath = FilePathManager.getLocalPath(fr).toFile().getAbsolutePath();'
+ || CHR(10)
+ || '                        if (new File(filePath).exists()) {'
+ || CHR(10)
+ || '                            coreFileService.upload(copyToFile, new File(filePath));'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * lcdp根据模板编码，向模板文件中填充数据，并导出文件'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wrapper 请求参数'
+ || CHR(10)
+ || '     * @return excel文件下载地址'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp导出数据", type = MappingType.SELECT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public String exportData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        String exportFileName = wrapper.g';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1928,7797)=
+    'etParamValue("exportFileName");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || CHR(10)
+ || '        Long tmplId = importTmpl.getId();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || CHR(10)
+ || '        String targetId = "T_CORE_IMPORT_TMPL$" + tmplId;'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectFirstByFilter(SearchFilter.instance().match("TARGETID", targetId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        String fileName = importTmpl.getTmplName() + "." + coreFile.getFileExt();'
+ || CHR(10)
+ || '        if (!StringUtils.isBlank(exportFileName)){'
+ || CHR(10)
+ || '            fileName = exportFileName + "." + coreFile.getFileExt();'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), fileName);'
+ || CHR(10)
+ || '        Path path = FilePathManager.getLocalPath(filePath);'
+ || CHR(10)
+ || '        FileUtils.makeDirs(path);'
+ || CHR(10)
+ || '        // 下载模板文件到本地'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, path);'
+ || CHR(10)
+ || CHR(10)
+ || '        try (InputStream is = Files.newInputStream(path);'
+ || CHR(10)
+ || '                Workbook wb = WorkbookFactory.create(is)) {'
+ || CHR(10)
+ || '            // 向模板文件填充数据'
+ || CHR(10)
+ || '            paddingTemplate(wb, wrapper, importTmpl, tmplConfigList);'
+ || CHR(10)
+ || '            try (OutputStream fis = Files.newOutputStream(path)) {'
+ || CHR(10)
+ || '                wb.write(fis);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        } catch (IOException e) {'
+ || CHR(10)
+ || '            throw new FileException(e);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        coreFileManager.upload(filePath, path);'
+ || CHR(10)
+ || '        return coreFileManager.getDownloadUrl(filePath);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 解析mapper参数 */'
+ || CHR(10)
+ || '    private MapperParameter parseWrapperParam(Map<String, Object> paramMap) {'
+ || CHR(10)
+ || '        RestJsonWrapperBean wrapper = new RestJsonWrapperBean();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(paramMap)) {'
+ || CHR(10)
+ || '            ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1860,9725)=
+    'paramMap.forEach('
+ || CHR(10)
+ || '                    (key, value) -> {'
+ || CHR(10)
+ || '                        wrapper.setFilterValue(key, value);'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return wrapper.extractMapFilter();'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 根据模板文件，向excel中填充数据'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wb excel对象'
+ || CHR(10)
+ || '     * @param wrapper 请求参数'
+ || CHR(10)
+ || '     * @param tmplConfigList 模板文件配置'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    protected void paddingTemplate(Workbook wb, RestJsonWrapperBean wrapper, CoreImportTmplBean importTmpl, List<CoreImportTmplConfigBean> tmplConfigList) {'
+ || CHR(10)
+ || '        // 查询mapperUrl'
+ || CHR(10)
+ || '        String querySqlMapperUrl = wrapper.getParamValue("QuerySqlMapperUrl");'
+ || CHR(10)
+ || '        // mapper的参数'
+ || CHR(10)
+ || '        Map<String, Object> paramMap = LcdpWrapperParseUtils.parseMap(wrapper, 0);'
+ || CHR(10)
+ || '        Map<String, Object> orderMap = LcdpWrapperParseUtils.parseMap(wrapper, 1);'
+ || CHR(10)
+ || '        MapperParameter parameter = this.parseWrapperParam(paramMap);'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(orderMap)){'
+ || CHR(10)
+ || '            orderMap.forEach((k,v) -> {'
+ || CHR(10)
+ || '                parameter.setOrderParam(k, v.toString());'
+ || CHR(10)
+ || '            });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        // TODO 查询待导出数据，根据业务需求自行实行查询的数据内容'
+ || CHR(10)
+ || '        List<Map<String, Object>> dataList = selectListByMapperId(querySqlMapperUrl, parameter);'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnValues(codeCategoryIdList, "CODECATEGORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || '        for (int i = 0; i < dataList.size(); i++) {'
+ || CHR(10)
+ || '            Map<String, Object> data = dataList.get(i);'
+ || CHR(10)
+ || '            int rowIndex = i + startRow';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1968,11585)=
+    'Index;'
+ || CHR(10)
+ || '            Row row = null == sheet.getRow(rowIndex) ? sheet.createRow(rowIndex) : sheet.getRow(rowIndex);'
+ || CHR(10)
+ || CHR(10)
+ || '            for (CoreImportTmplConfigBean importTmplConfig : tmplConfigList) {'
+ || CHR(10)
+ || '                if (null == importTmplConfig.getExcelColumnNo() || StringUtils.isEmpty(importTmplConfig.getDbField())) {'
+ || CHR(10)
+ || '                    continue;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                int cellIndex = importTmplConfig.getExcelColumnNo() - 1;'
+ || CHR(10)
+ || '                Cell cell = null == row.getCell(cellIndex) ? row.createCell(cellIndex) : row.getCell(cellIndex);'
+ || CHR(10)
+ || '                Object cellValue = MapUtils.getObject(data, importTmplConfig.getDbField());'
+ || CHR(10)
+ || '                // select类型将code转为name'
+ || CHR(10)
+ || '                if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(importTmplConfig.getFieldType()) && !StringUtils.isEmpty(importTmplConfig.getDataSource())) {'
+ || CHR(10)
+ || '                    String cellValueStr = String.valueOf(cellValue);'
+ || CHR(10)
+ || '                    // 根据codeCategoryId和code查询codeName，作为值导出'
+ || CHR(10)
+ || '                    CoreCodeBean code = codeList.stream().filter(e -> importTmplConfig.getDataSource().equals(e.getCodeCategoryId()) && cellValueStr.equals(e.getCode())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                    if (code != null) {'
+ || CHR(10)
+ || '                        cellValue = code.getCodeName();'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_DATE.equals(importTmplConfig.getFieldType())) {'
+ || CHR(10)
+ || '                    LocalDateTime dateTime = ConvertUtils.convert(cellValue, LocalDateTime.class);'
+ || CHR(10)
+ || '                    cell.setCellValue(DateTimeUtils.formatLocalDateTime(dateTime));'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    cell.setCellValue(ObjectUtils.toString(cellValue));'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        String mergeColumn = wrapper.getParamValue("mergeColumns");'
+ || CHR(10)
+ || '        if (!StringUtils.isBlank(mergeColumn)){'
+ || CHR(10)
+ || '            String[] columns = mergeColumn.split(",");'
+ || CHR(10)
+ || '            for(String colum';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1928,13553)=
+    'n : columns){'
+ || CHR(10)
+ || '                mergeSameCellContentColumn(sheet, 1, Integer.parseInt(column));'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    public static void mergeSameCellContentColumn(Sheet sheet, int startRow, int column) {'
+ || CHR(10)
+ || '        int totalRows = sheet.getLastRowNum();'
+ || CHR(10)
+ || '        int firstRow = 0;'
+ || CHR(10)
+ || '        int lastRow = 0;'
+ || CHR(10)
+ || '        // 上一次比较是否相同'
+ || CHR(10)
+ || '        boolean isPrevCompareSame = false;'
+ || CHR(10)
+ || '        String prevMergeAddress = null;'
+ || CHR(10)
+ || '        String currentMergeAddress;'
+ || CHR(10)
+ || '        // 从第几开始判断是否相同'
+ || CHR(10)
+ || '        if (totalRows >= startRow) {'
+ || CHR(10)
+ || '            for (int i = startRow; i <= totalRows; i++) {'
+ || CHR(10)
+ || '                String lastRowCellContent = sheet.getRow(i - 1).getCell(column).getStringCellValue();'
+ || CHR(10)
+ || '                String curRowCellContent = sheet.getRow(i).getCell(column).getStringCellValue();'
+ || CHR(10)
+ || '                if (curRowCellContent.equals(lastRowCellContent)) {'
+ || CHR(10)
+ || '                    if (!isPrevCompareSame) {'
+ || CHR(10)
+ || '                        firstRow = i - 1;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    lastRow = i;'
+ || CHR(10)
+ || '                    isPrevCompareSame = true;'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    isPrevCompareSame = false;'
+ || CHR(10)
+ || '                    currentMergeAddress = firstRow + lastRow + column + column + "";'
+ || CHR(10)
+ || '                    if (lastRow > firstRow && !Objects.equals(currentMergeAddress, prevMergeAddress)) {'
+ || CHR(10)
+ || '                        sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, column, column));'
+ || CHR(10)
+ || '                        prevMergeAddress = currentMergeAddress;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                // 最后一行时判断是否有需要合并的行'
+ || CHR(10)
+ || '                if ((i == totalRows) && (lastRow > firstRow)) {'
+ || CHR(10)
+ || '                    currentMergeAddress = firstRow + lastRow + column + column + "";'
+ || CHR(10)
+ || '                    if (!Objects.equals(currentMergeAddress, prevMergeAddress)) {'
+ || CHR(10)
+ || '                        sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, column, column));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '      ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1876,15481)=
+    '  }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** lcdp导入数据，按照业务需求，解析excel字段内容并匹配数据库表字段，插入数据 */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp导入数据", type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public JSONObject importData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String idStr = wrapper.getParamValue("id");'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectDetail(Long.parseLong(idStr));'
+ || CHR(10)
+ || '        File tempFile = FileUtils.createTempFile();'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, tempFile.toPath());'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        JSONObject result = new JSONObject();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(importTmpl)) {'
+ || CHR(10)
+ || '            String tablename = importTmpl.getTableName();'
+ || CHR(10)
+ || '            try (Workbook wb = WorkbookFactory.create(new File(tempFile.getAbsolutePath()))) {'
+ || CHR(10)
+ || CHR(10)
+ || '                extractDataAndInsert(wb, tablename, importTmpl.getId(),startRowIndex, wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '            } catch (IOException ioe) {'
+ || CHR(10)
+ || '                throw new FileException(ioe);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            FileUtils.deleteQuietly(tempFile);'
+ || CHR(10)
+ || CHR(10)
+ || '            result.put("success", true);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return result;'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Mapping(value = "获取导入的数据", type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public List<Map<String, Object>> getImportData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String idStr = wrapper.getParamValue("id");'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectDetail(Long.parseLong(idStr));'
+ || CHR(10)
+ || '        File tempFile = FileUtils.createTempFile();'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, tempFile.toPath());'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1846,17357)=
+    ' importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        List<Map<String, Object>> resultList = new ArrayList<>();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(importTmpl)) {'
+ || CHR(10)
+ || '            String tablename = importTmpl.getTableName();'
+ || CHR(10)
+ || '            try (Workbook wb = WorkbookFactory.create(new File(tempFile.getAbsolutePath()))) {'
+ || CHR(10)
+ || CHR(10)
+ || '                resultList = extractData(wb, tablename, importTmpl.getId(),startRowIndex, wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '            } catch (IOException ioe) {'
+ || CHR(10)
+ || '                throw new FileException(ioe);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            FileUtils.deleteQuietly(tempFile);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return resultList;'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 按照业务需求，解析excel字段内容，并插入数据库'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wb excel对象'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    protected void extractDataAndInsert(Workbook wb, String tablename, Long tmplId,Integer startRowIndex, RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        String primaryKey = wrapper.getParamValue("primaryKey"); // 唯一键，如果该字段不为空，则需要通过这个字段判断是否需要更新操作'
+ || CHR(10)
+ || CHR(10)
+ || '        List<Map<String, Object>> insertResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> updateResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> allResultList = new ArrayList<>();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnV';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1962,19203)=
+    'alues(codeCategoryIdList, "CODECATEGORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || CHR(10)
+ || '        Row headRow = sheet.getRow(0);'
+ || CHR(10)
+ || '        int columnQty = headRow.getPhysicalNumberOfCells();'
+ || CHR(10)
+ || '        String[] columnNames = new String[columnQty];'
+ || CHR(10)
+ || '        for (int i = 0; i < columnNames.length; i++) {'
+ || CHR(10)
+ || '            String columnName = getCellValue(headRow.getCell(i), String.class);'
+ || CHR(10)
+ || '            if (columnName != null) {'
+ || CHR(10)
+ || CHR(10)
+ || '                // 根据配置的列名获取数据库字段名'
+ || CHR(10)
+ || '                List<CoreImportTmplConfigBean> tmplConfigColumn = tmplConfigList.stream().filter(e -> columnName.equals(e.getExcelColumn())).collect(Collectors.toList());'
+ || CHR(10)
+ || '                String tableColumn;'
+ || CHR(10)
+ || '                if (tmplConfigColumn.size() > 0) {'
+ || CHR(10)
+ || '                    tableColumn = tmplConfigColumn.get(0).getDbField();'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    tableColumn = columnName;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || CHR(10)
+ || '                columnNames[i] = tableColumn;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        // 解析excel数据'
+ || CHR(10)
+ || '        int endRowNum = sheet.getPhysicalNumberOfRows();'
+ || CHR(10)
+ || '        for (int rowNum = startRowIndex; rowNum < endRowNum; rowNum++) {'
+ || CHR(10)
+ || '            Row dataRow = sheet.getRow(rowNum);'
+ || CHR(10)
+ || '            if (dataRow == null) {'
+ || CHR(10)
+ || '                continue;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '            Map<String, Object> map = new HashMap<>();'
+ || CHR(10)
+ || '            for (int cellIndex = 0; cellIndex < columnNames.length; cellIndex++) {'
+ || CHR(10)
+ || '                Cell cell = dataRow.getCell(cellIndex);'
+ || CHR(10)
+ || '                CoreImportTmplConfigBean config = tmplConfigList.get(cellIndex);'
+ || CHR(10)
+ || '                if (columnNames[cellIndex] != null && !columnNames[cellIndex].trim().isEmpty()) {'
+ || CHR(10)
+ || '                    if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(config.getFieldType()) && !StringUtils.isEmpty(config.getDataSource())) {'
+ || CHR(10)
+ || '                        String cellValueStr = ExcelHelper.getCellValue(cell, String.class);'
+ || CHR(10)
+ || '                        CoreCodeBean code = codeList.stream().fil';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1942,21165)=
+    'ter(e -> config.getDataSource().equals(e.getCodeCategoryId()) && cellValueStr.equals(e.getCodeName())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                        if (code != null) {'
+ || CHR(10)
+ || '                            map.put(columnNames[cellIndex].trim(), code.getCode());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        map.put(columnNames[cellIndex].trim(), ExcelHelper.getCellValue(cell, Object.class));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            allResultList.add(map);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        MapUtils.lowerCaseKey(allResultList);'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(allResultList)) {'
+ || CHR(10)
+ || '            insertResultList = ObjectUtils.clone(allResultList);'
+ || CHR(10)
+ || '            // primaryKey为空则直接新增'
+ || CHR(10)
+ || '            if (!ObjectUtils.isEmpty(primaryKey)) {'
+ || CHR(10)
+ || '                // 不为空，则更新'
+ || CHR(10)
+ || '                List<String> primaryKeyValueList = allResultList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                List<Map<String, Object>> existList = this.getMapDao().selectListByColumnValueList(tablename, primaryKeyValueList, primaryKey);'
+ || CHR(10)
+ || '                MapUtils.lowerCaseKey(existList);'
+ || CHR(10)
+ || '                List<String> existKeyValueList = existList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                // 清除为更新的数据'
+ || CHR(10)
+ || '                insertResultList.removeIf(e -> existKeyValueList.contains(MapUtils.getString(e, primaryKey)));'
+ || CHR(10)
+ || '                // 赋值更新的数据'
+ || CHR(10)
+ || '                existList.forEach('
+ || CHR(10)
+ || '                        existBean -> {'
+ || CHR(10)
+ || '                            Map<String, Object> importBean = allResultList.stream().filter(e -> ObjectUtils.equals(MapUtils.getString(e, primaryKey), MapUtils.getString(existBean, primaryKey))).findFirst().orElse(null);'
+ || CHR(10)
+ || '                            if (!ObjectUtils.isEmpty(importBean)) {'
+ || CHR(10)
+ || '                                MapUtils.copy(impo';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1836,23107)=
+    'rtBean, existBean, IGNORE_KEYS);'
+ || CHR(10)
+ || '                                updateResultList.add(existBean);'
+ || CHR(10)
+ || '                            }'
+ || CHR(10)
+ || '                        });'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!updateResultList.isEmpty()) {'
+ || CHR(10)
+ || '            this.getMapDao().updateIfChanged(tablename,updateResultList);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!insertResultList.isEmpty()) {'
+ || CHR(10)
+ || '            insertResultList.forEach('
+ || CHR(10)
+ || '                    map -> {'
+ || CHR(10)
+ || '                        // 若无主键ID，则自动给ID赋值'
+ || CHR(10)
+ || '                        if (!CollectionUtils.containsIgnoreCase(map, "id")) {'
+ || CHR(10)
+ || '                            map.put("ID", ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || CHR(10)
+ || '            // TODO 向数据库表中插入数据，根据业务需求，可自行调整'
+ || CHR(10)
+ || '            insert(tablename, insertResultList);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    protected List<Map<String, Object>> extractData(Workbook wb, String tablename, Long tmplId,Integer startRowIndex, RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        String primaryKey = wrapper.getParamValue("primaryKey"); // 唯一键，如果该字段不为空，则需要通过这个字段判断是否需要更新操作'
+ || CHR(10)
+ || CHR(10)
+ || '        List<Map<String, Object>> insertResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> updateResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> allResultList = new ArrayList<>();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnValues(codeCategoryIdList, "CODECATEGORYID", Arrays';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1962,24943)=
+    '.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || CHR(10)
+ || '        Row headRow = sheet.getRow(0);'
+ || CHR(10)
+ || '        int columnQty = headRow.getPhysicalNumberOfCells();'
+ || CHR(10)
+ || '        String[] columnNames = new String[columnQty];'
+ || CHR(10)
+ || '        for (int i = 0; i < columnNames.length; i++) {'
+ || CHR(10)
+ || '            String columnName = getCellValue(headRow.getCell(i), String.class);'
+ || CHR(10)
+ || '            if (columnName != null) {'
+ || CHR(10)
+ || CHR(10)
+ || '                // 根据配置的列名获取数据库字段名'
+ || CHR(10)
+ || '                List<CoreImportTmplConfigBean> tmplConfigColumn = tmplConfigList.stream().filter(e -> columnName.equals(e.getExcelColumn())).collect(Collectors.toList());'
+ || CHR(10)
+ || '                String tableColumn;'
+ || CHR(10)
+ || '                if (tmplConfigColumn.size() > 0) {'
+ || CHR(10)
+ || '                    tableColumn = tmplConfigColumn.get(0).getDbField();'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    tableColumn = columnName;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || CHR(10)
+ || '                columnNames[i] = tableColumn;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        // 解析excel数据'
+ || CHR(10)
+ || '        int endRowNum = sheet.getPhysicalNumberOfRows();'
+ || CHR(10)
+ || '        for (int rowNum = startRowIndex; rowNum < endRowNum; rowNum++) {'
+ || CHR(10)
+ || '            Row dataRow = sheet.getRow(rowNum);'
+ || CHR(10)
+ || '            if (dataRow == null) {'
+ || CHR(10)
+ || '                continue;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '            Map<String, Object> map = new HashMap<>();'
+ || CHR(10)
+ || '            for (int cellIndex = 0; cellIndex < columnNames.length; cellIndex++) {'
+ || CHR(10)
+ || '                Cell cell = dataRow.getCell(cellIndex);'
+ || CHR(10)
+ || '                CoreImportTmplConfigBean config = tmplConfigList.get(cellIndex);'
+ || CHR(10)
+ || '                if (columnNames[cellIndex] != null && !columnNames[cellIndex].trim().isEmpty()) {'
+ || CHR(10)
+ || '                    if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(config.getFieldType()) && !StringUtils.isEmpty(config.getDataSource())) {'
+ || CHR(10)
+ || '                        String cellValueStr = ExcelHelper.getCellValue(cell, String.class);'
+ || CHR(10)
+ || '                        CoreCodeBean code = codeList.stream().filter(e -> config.getDataSource().equals(e.getCodeCa';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1942,26905)=
+    'tegoryId()) && cellValueStr.equals(e.getCodeName())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                        if (code != null) {'
+ || CHR(10)
+ || '                            map.put(columnNames[cellIndex].trim(), code.getCode());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        map.put(columnNames[cellIndex].trim(), ExcelHelper.getCellValue(cell, Object.class));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            allResultList.add(map);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        MapUtils.lowerCaseKey(allResultList);'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(allResultList)) {'
+ || CHR(10)
+ || '            insertResultList = ObjectUtils.clone(allResultList);'
+ || CHR(10)
+ || '            // primaryKey为空则直接新增'
+ || CHR(10)
+ || '            if (!ObjectUtils.isEmpty(primaryKey)) {'
+ || CHR(10)
+ || '                // 不为空，则更新'
+ || CHR(10)
+ || '                List<String> primaryKeyValueList = allResultList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                List<Map<String, Object>> existList = this.getMapDao().selectListByColumnValueList(tablename, primaryKeyValueList, primaryKey);'
+ || CHR(10)
+ || '                MapUtils.lowerCaseKey(existList);'
+ || CHR(10)
+ || '                List<String> existKeyValueList = existList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                // 清除为更新的数据'
+ || CHR(10)
+ || '                insertResultList.removeIf(e -> existKeyValueList.contains(MapUtils.getString(e, primaryKey)));'
+ || CHR(10)
+ || '                // 赋值更新的数据'
+ || CHR(10)
+ || '                existList.forEach('
+ || CHR(10)
+ || '                        existBean -> {'
+ || CHR(10)
+ || '                            Map<String, Object> importBean = allResultList.stream().filter(e -> ObjectUtils.equals(MapUtils.getString(e, primaryKey), MapUtils.getString(existBean, primaryKey))).findFirst().orElse(null);'
+ || CHR(10)
+ || '                            if (!ObjectUtils.isEmpty(importBean)) {'
+ || CHR(10)
+ || '                                MapUtils.copy(importBean, existBean, IGNORE_KEYS);'
+ || CHR(10)
+ || '                 ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1950,28847)=
+    '               updateResultList.add(existBean);'
+ || CHR(10)
+ || '                            }'
+ || CHR(10)
+ || '                        });'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!updateResultList.isEmpty()) {'
+ || CHR(10)
+ || '            return updateResultList;'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!insertResultList.isEmpty()) {'
+ || CHR(10)
+ || '            insertResultList.forEach('
+ || CHR(10)
+ || '                    map -> {'
+ || CHR(10)
+ || '                        // 若无主键ID，则自动给ID赋值'
+ || CHR(10)
+ || '                        if (!CollectionUtils.containsIgnoreCase(map, "id")) {'
+ || CHR(10)
+ || '                            map.put("ID", ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '            return insertResultList;'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return CollectionUtils.emptyList();'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    public static final <T> T getCellValue(final Cell cell, final Class<T> clazz) {'
+ || CHR(10)
+ || '        Object cellValue = "";'
+ || CHR(10)
+ || '        if (cell != null) { // cell can be null.'
+ || CHR(10)
+ || '            switch (cell.getCellType()) {'
+ || CHR(10)
+ || '                case STRING:'
+ || CHR(10)
+ || '                    cellValue = StringUtils.trim(cell.getRichStringCellValue().getString());'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case NUMERIC:'
+ || CHR(10)
+ || '                    short format = cell.getCellStyle().getDataFormat();'
+ || CHR(10)
+ || CHR(10)
+ || '                    if (format == 14 // yyyy-MM-dd'
+ || CHR(10)
+ || '                            || format == 22 // yyyy-MM-dd hh:mm:ss'
+ || CHR(10)
+ || '                            || format == 31 // yyyy年m月d日'
+ || CHR(10)
+ || '                            || format == 57 // yyyy年m月'
+ || CHR(10)
+ || '                            || format == 58 // m月d日'
+ || CHR(10)
+ || '                            || format == 20 // HH:mm'
+ || CHR(10)
+ || '                            || format == 32) { // h时mm分'
+ || CHR(10)
+ || '                        cellValue = DateUtil.getJavaDate(cell.getNumericCellValue()); // 获取成DATE类型'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        HSSFDataFormatter dataFormatter = new HSSFDataFormatter();'
+ || CHR(10)
+ || '                        cellValue = dataFormatter.formatCellValue(cell);'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case BOOLEAN:'
+ || CHR(10)
+ || '                    cellValue = ObjectUtils.toString';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CONTENT,1071,30797)=
+    '(cell.getBooleanCellValue());'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case FORMULA: // Cell公式要特殊处理'
+ || CHR(10)
+ || '                    final FormulaEvaluator evaluator = cell.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();'
+ || CHR(10)
+ || '                    final CellValue cv = evaluator.evaluate(cell);'
+ || CHR(10)
+ || '                    switch (cv.getCellType()) {'
+ || CHR(10)
+ || '                        case STRING:'
+ || CHR(10)
+ || '                            cellValue = StringUtils.trim(cv.getStringValue());'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        case NUMERIC:'
+ || CHR(10)
+ || '                            cellValue = cv.getNumberValue();'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        case BOOLEAN:'
+ || CHR(10)
+ || '                            cellValue = ObjectUtils.toString(cv.getBooleanValue());'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        default:'
+ || CHR(10)
+ || '                            cellValue = null;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                default:'
+ || CHR(10)
+ || '                    cellValue = "";'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        return (T) ConvertUtils.convert(cellValue, clazz);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=31882;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,2000,1)=
+    'import java.time.LocalDate;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.MapperParameter;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.bean.CoreImportTmplBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.bean.CoreImportTmplConfigBean;'
+ || CHR(10)
+ || 'import com.alibaba.fastjson.JSONObject;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.FileUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.FileException;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.sys.code.bean.CoreCodeBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.ConvertUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.excel.ExcelHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.context.LocalContextHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.manager.CoreFileManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.service.CoreImportTmplService;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.service.CoreImportTmplConfigService;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.CoreImportTmplConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.sys.code.service.CoreCodeService;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.checked.CheckedException;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.MatchPattern;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.SearchFilter;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.EncryptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.SpirePdfUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.NumberUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.emc.framework.constant.EmcConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.utils.CoreFileUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathDTO;'
+ || CHR(10)
+ || 'import java.time.LocalDateTime;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.DateTimeUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.http.HttpClientManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.service.CoreFileService;'
+ || CHR(10)
+ || 'import org.springframework.beans.factory.annotation.Autowired;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.context.ApplicationContextHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.bean.CoreFileBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.U';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,2000,2001)=
+    'nsupportedException;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.BeanUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.ObjectUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.CollectionUtils;'
+ || CHR(10)
+ || 'import java.util.stream.Collectors;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.StringUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.database.context.TableContext;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Cell;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.CellType;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.CellValue;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.DateUtil;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.FormulaEvaluator;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Row;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Sheet;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Workbook;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.WorkbookFactory;'
+ || CHR(10)
+ || 'import org.springframework.context.annotation.Lazy;'
+ || CHR(10)
+ || 'import org.apache.poi.hssf.usermodel.HSSFDataFormatter;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.util.CellRangeAddress;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || 'import java.net.URLEncoder;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FileScope;'
+ || CHR(10)
+ || 'import java.io.*;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathManager;'
+ || CHR(10)
+ || 'import java.nio.file.Path;'
+ || CHR(10)
+ || 'impor';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1942,4001)=
+    't java.nio.file.Files;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class CommonServiceLcdpFileServicev1 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreFileService coreFileService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    @Lazy private CoreFileManager coreFileManager;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreImportTmplService coreImportTmplService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreImportTmplConfigService coreImportTmplConfigService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreCodeService codeService;'
+ || CHR(10)
+ || CHR(10)
+ || '    public static final String[] IGNORE_KEYS = new String[]{"id", "createdById", "createdByName", "createdTime", "createdByOrgId", "createdByOrgName"};'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 赋值附件到指定位置 */'
+ || CHR(10)
+ || '    public void copyFile(CoreFileBean copyToFileBean, List<CoreFileBean> copyFileFilterList) {'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(copyFileFilterList)) {'
+ || CHR(10)
+ || '            // 先删除已经存在的附件'
+ || CHR(10)
+ || '            coreFileService.getDao().deleteBy(Collections.singletonList(copyToFileBean), "TARGETID", "EXT");'
+ || CHR(10)
+ || '            // 再查询复制的附件集合'
+ || CHR(10)
+ || '            List<CoreFileBean> copyFileList = coreFileService.getDao().selectList(copyFileFilterList, Arrays.asList("TARGETID", "EXT"), Collections.emptyList());'
+ || CHR(10)
+ || '            copyFileList.forEach('
+ || CHR(10)
+ || '                    copyFile -> {'
+ || CHR(10)
+ || '                        CoreFileBean copyToFile = new CoreFileBean();'
+ || CHR(10)
+ || '                        BeanUtils.copyProperties(copyFile, copyToFile, EmcConstant.CREATED_COLUMNS);'
+ || CHR(10)
+ || '                        copyToFile.setId(ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        copyToFile.setExt(copyToFileBean.getExt());'
+ || CHR(10)
+ || '                        copyToFile.setTargetId(copyToFileBean.getTargetId());'
+ || CHR(10)
+ || '                        FilePathDTO fr = CoreFileUtils.toFilePath(copyFile);'
+ || CHR(10)
+ || '                        String filePath = FilePathManager.getLocalPath(fr).toFile().getAbsolutePath();'
+ || CHR(10)
+ || '                        if (new File(filePath).exists()) {'
+ || CHR(10)
+ || '                            coreFileService.upload(copyToFile, new File(filePath));'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                 ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1854,5943)=
+    '   });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 赋值包含附件类型的附件到指定位置 */'
+ || CHR(10)
+ || '    public void copyBizCategoryFile(CoreFileBean copyToFileBean, List<CoreFileBean> copyFileFilterList) {'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(copyFileFilterList)) {'
+ || CHR(10)
+ || '            // 先删除已经存在的附件'
+ || CHR(10)
+ || '            coreFileService.getDao().deleteBy(Collections.singletonList(copyToFileBean), "TARGETID", "EXT", "BIZCATEGORY");'
+ || CHR(10)
+ || '            // 再查询复制的附件集合'
+ || CHR(10)
+ || '            List<CoreFileBean> copyFileList = coreFileService.getDao().selectList(copyFileFilterList, Arrays.asList("TARGETID", "EXT","BIZCATEGORY"), Collections.emptyList());'
+ || CHR(10)
+ || '            copyFileList.forEach('
+ || CHR(10)
+ || '                    copyFile -> {'
+ || CHR(10)
+ || '                        CoreFileBean copyToFile = new CoreFileBean();'
+ || CHR(10)
+ || '                        BeanUtils.copyProperties(copyFile, copyToFile, EmcConstant.CREATED_COLUMNS);'
+ || CHR(10)
+ || '                        copyToFile.setId(ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        copyToFile.setExt(copyToFileBean.getExt());'
+ || CHR(10)
+ || '                        copyToFile.setTargetId(copyToFileBean.getTargetId());'
+ || CHR(10)
+ || '                        copyToFile.setBizCategory(copyToFileBean.getBizCategory());'
+ || CHR(10)
+ || '                        FilePathDTO fr = CoreFileUtils.toFilePath(copyFile);'
+ || CHR(10)
+ || '                        String filePath = FilePathManager.getLocalPath(fr).toFile().getAbsolutePath();'
+ || CHR(10)
+ || '                        if (new File(filePath).exists()) {'
+ || CHR(10)
+ || '                            coreFileService.upload(copyToFile, new File(filePath));'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * lcdp根据模板编码，向模板文件中填充数据，并导出文件'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wrapper 请求参数'
+ || CHR(10)
+ || '     * @return excel文件下载地址'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp导出数据", type = MappingType.SELECT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public String exportData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        String exportFileN';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1928,7797)=
+    'ame = wrapper.getParamValue("exportFileName");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || CHR(10)
+ || '        Long tmplId = importTmpl.getId();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || CHR(10)
+ || '        String targetId = "T_CORE_IMPORT_TMPL$" + tmplId;'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectFirstByFilter(SearchFilter.instance().match("TARGETID", targetId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        String fileName = importTmpl.getTmplName() + "." + coreFile.getFileExt();'
+ || CHR(10)
+ || '        if (!StringUtils.isBlank(exportFileName)){'
+ || CHR(10)
+ || '            fileName = exportFileName + "." + coreFile.getFileExt();'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), fileName);'
+ || CHR(10)
+ || '        Path path = FilePathManager.getLocalPath(filePath);'
+ || CHR(10)
+ || '        FileUtils.makeDirs(path);'
+ || CHR(10)
+ || '        // 下载模板文件到本地'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, path);'
+ || CHR(10)
+ || CHR(10)
+ || '        try (InputStream is = Files.newInputStream(path);'
+ || CHR(10)
+ || '                Workbook wb = WorkbookFactory.create(is)) {'
+ || CHR(10)
+ || '            // 向模板文件填充数据'
+ || CHR(10)
+ || '            paddingTemplate(wb, wrapper, importTmpl, tmplConfigList);'
+ || CHR(10)
+ || '            try (OutputStream fis = Files.newOutputStream(path)) {'
+ || CHR(10)
+ || '                wb.write(fis);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        } catch (IOException e) {'
+ || CHR(10)
+ || '            throw new FileException(e);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        coreFileManager.upload(filePath, path);'
+ || CHR(10)
+ || '        return coreFileManager.getDownloadUrl(filePath);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 解析mapper参数 */'
+ || CHR(10)
+ || '    private MapperParameter parseWrapperParam(Map<String, Object> paramMap) {'
+ || CHR(10)
+ || '        RestJsonWrapperBean wrapper = new RestJsonWrapperBean();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(paramMap))';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1860,9725)=
+    ' {'
+ || CHR(10)
+ || '            paramMap.forEach('
+ || CHR(10)
+ || '                    (key, value) -> {'
+ || CHR(10)
+ || '                        wrapper.setFilterValue(key, value);'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return wrapper.extractMapFilter();'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 根据模板文件，向excel中填充数据'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wb excel对象'
+ || CHR(10)
+ || '     * @param wrapper 请求参数'
+ || CHR(10)
+ || '     * @param tmplConfigList 模板文件配置'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    protected void paddingTemplate(Workbook wb, RestJsonWrapperBean wrapper, CoreImportTmplBean importTmpl, List<CoreImportTmplConfigBean> tmplConfigList) {'
+ || CHR(10)
+ || '        // 查询mapperUrl'
+ || CHR(10)
+ || '        String querySqlMapperUrl = wrapper.getParamValue("QuerySqlMapperUrl");'
+ || CHR(10)
+ || '        // mapper的参数'
+ || CHR(10)
+ || '        Map<String, Object> paramMap = LcdpWrapperParseUtils.parseMap(wrapper, 0);'
+ || CHR(10)
+ || '        Map<String, Object> orderMap = LcdpWrapperParseUtils.parseMap(wrapper, 1);'
+ || CHR(10)
+ || '        MapperParameter parameter = this.parseWrapperParam(paramMap);'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(orderMap)){'
+ || CHR(10)
+ || '            orderMap.forEach((k,v) -> {'
+ || CHR(10)
+ || '                parameter.setOrderParam(k, v.toString());'
+ || CHR(10)
+ || '            });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        // TODO 查询待导出数据，根据业务需求自行实行查询的数据内容'
+ || CHR(10)
+ || '        List<Map<String, Object>> dataList = selectListByMapperId(querySqlMapperUrl, parameter);'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnValues(codeCategoryIdList, "CODECATEGORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || '        for (int i = 0; i < dataList.size(); i++) {'
+ || CHR(10)
+ || '            Map<String, Object> data = dataList.get(i);'
+ || CHR(10)
+ || '            int rowIndex';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1968,11585)=
+    ' = i + startRowIndex;'
+ || CHR(10)
+ || '            Row row = null == sheet.getRow(rowIndex) ? sheet.createRow(rowIndex) : sheet.getRow(rowIndex);'
+ || CHR(10)
+ || CHR(10)
+ || '            for (CoreImportTmplConfigBean importTmplConfig : tmplConfigList) {'
+ || CHR(10)
+ || '                if (null == importTmplConfig.getExcelColumnNo() || StringUtils.isEmpty(importTmplConfig.getDbField())) {'
+ || CHR(10)
+ || '                    continue;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                int cellIndex = importTmplConfig.getExcelColumnNo() - 1;'
+ || CHR(10)
+ || '                Cell cell = null == row.getCell(cellIndex) ? row.createCell(cellIndex) : row.getCell(cellIndex);'
+ || CHR(10)
+ || '                Object cellValue = MapUtils.getObject(data, importTmplConfig.getDbField());'
+ || CHR(10)
+ || '                // select类型将code转为name'
+ || CHR(10)
+ || '                if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(importTmplConfig.getFieldType()) && !StringUtils.isEmpty(importTmplConfig.getDataSource())) {'
+ || CHR(10)
+ || '                    String cellValueStr = String.valueOf(cellValue);'
+ || CHR(10)
+ || '                    // 根据codeCategoryId和code查询codeName，作为值导出'
+ || CHR(10)
+ || '                    CoreCodeBean code = codeList.stream().filter(e -> importTmplConfig.getDataSource().equals(e.getCodeCategoryId()) && cellValueStr.equals(e.getCode())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                    if (code != null) {'
+ || CHR(10)
+ || '                        cellValue = code.getCodeName();'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_DATE.equals(importTmplConfig.getFieldType())) {'
+ || CHR(10)
+ || '                    LocalDateTime dateTime = ConvertUtils.convert(cellValue, LocalDateTime.class);'
+ || CHR(10)
+ || '                    cell.setCellValue(DateTimeUtils.formatLocalDateTime(dateTime));'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    cell.setCellValue(ObjectUtils.toString(cellValue));'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        String mergeColumn = wrapper.getParamValue("mergeColumns");'
+ || CHR(10)
+ || '        if (!StringUtils.isBlank(mergeColumn)){'
+ || CHR(10)
+ || '            String[] columns = mergeColumn.split(",");'
+ || CHR(10)
+ || '            f';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1928,13553)=
+    'or(String column : columns){'
+ || CHR(10)
+ || '                mergeSameCellContentColumn(sheet, 1, Integer.parseInt(column));'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    public static void mergeSameCellContentColumn(Sheet sheet, int startRow, int column) {'
+ || CHR(10)
+ || '        int totalRows = sheet.getLastRowNum();'
+ || CHR(10)
+ || '        int firstRow = 0;'
+ || CHR(10)
+ || '        int lastRow = 0;'
+ || CHR(10)
+ || '        // 上一次比较是否相同'
+ || CHR(10)
+ || '        boolean isPrevCompareSame = false;'
+ || CHR(10)
+ || '        String prevMergeAddress = null;'
+ || CHR(10)
+ || '        String currentMergeAddress;'
+ || CHR(10)
+ || '        // 从第几开始判断是否相同'
+ || CHR(10)
+ || '        if (totalRows >= startRow) {'
+ || CHR(10)
+ || '            for (int i = startRow; i <= totalRows; i++) {'
+ || CHR(10)
+ || '                String lastRowCellContent = sheet.getRow(i - 1).getCell(column).getStringCellValue();'
+ || CHR(10)
+ || '                String curRowCellContent = sheet.getRow(i).getCell(column).getStringCellValue();'
+ || CHR(10)
+ || '                if (curRowCellContent.equals(lastRowCellContent)) {'
+ || CHR(10)
+ || '                    if (!isPrevCompareSame) {'
+ || CHR(10)
+ || '                        firstRow = i - 1;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    lastRow = i;'
+ || CHR(10)
+ || '                    isPrevCompareSame = true;'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    isPrevCompareSame = false;'
+ || CHR(10)
+ || '                    currentMergeAddress = firstRow + lastRow + column + column + "";'
+ || CHR(10)
+ || '                    if (lastRow > firstRow && !Objects.equals(currentMergeAddress, prevMergeAddress)) {'
+ || CHR(10)
+ || '                        sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, column, column));'
+ || CHR(10)
+ || '                        prevMergeAddress = currentMergeAddress;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                // 最后一行时判断是否有需要合并的行'
+ || CHR(10)
+ || '                if ((i == totalRows) && (lastRow > firstRow)) {'
+ || CHR(10)
+ || '                    currentMergeAddress = firstRow + lastRow + column + column + "";'
+ || CHR(10)
+ || '                    if (!Objects.equals(currentMergeAddress, prevMergeAddress)) {'
+ || CHR(10)
+ || '                        sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, column, column));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '     ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1876,15481)=
+    '       }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** lcdp导入数据，按照业务需求，解析excel字段内容并匹配数据库表字段，插入数据 */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp导入数据", type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public JSONObject importData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String idStr = wrapper.getParamValue("id");'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectDetail(Long.parseLong(idStr));'
+ || CHR(10)
+ || '        File tempFile = FileUtils.createTempFile();'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, tempFile.toPath());'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        JSONObject result = new JSONObject();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(importTmpl)) {'
+ || CHR(10)
+ || '            String tablename = importTmpl.getTableName();'
+ || CHR(10)
+ || '            try (Workbook wb = WorkbookFactory.create(new File(tempFile.getAbsolutePath()))) {'
+ || CHR(10)
+ || CHR(10)
+ || '                extractDataAndInsert(wb, tablename, importTmpl.getId(),startRowIndex, wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '            } catch (IOException ioe) {'
+ || CHR(10)
+ || '                throw new FileException(ioe);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            FileUtils.deleteQuietly(tempFile);'
+ || CHR(10)
+ || CHR(10)
+ || '            result.put("success", true);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return result;'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Mapping(value = "获取导入的数据", type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public List<Map<String, Object>> getImportData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String idStr = wrapper.getParamValue("id");'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectDetail(Long.parseLong(idStr));'
+ || CHR(10)
+ || '        File tempFile = FileUtils.createTempFile();'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, tempFile.toPath());'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        Cor';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1846,17357)=
+    'eImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        List<Map<String, Object>> resultList = new ArrayList<>();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(importTmpl)) {'
+ || CHR(10)
+ || '            String tablename = importTmpl.getTableName();'
+ || CHR(10)
+ || '            try (Workbook wb = WorkbookFactory.create(new File(tempFile.getAbsolutePath()))) {'
+ || CHR(10)
+ || CHR(10)
+ || '                resultList = extractData(wb, tablename, importTmpl.getId(),startRowIndex, wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '            } catch (IOException ioe) {'
+ || CHR(10)
+ || '                throw new FileException(ioe);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            FileUtils.deleteQuietly(tempFile);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return resultList;'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 按照业务需求，解析excel字段内容，并插入数据库'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wb excel对象'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    protected void extractDataAndInsert(Workbook wb, String tablename, Long tmplId,Integer startRowIndex, RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        String primaryKey = wrapper.getParamValue("primaryKey"); // 唯一键，如果该字段不为空，则需要通过这个字段判断是否需要更新操作'
+ || CHR(10)
+ || CHR(10)
+ || '        List<Map<String, Object>> insertResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> updateResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> allResultList = new ArrayList<>();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectL';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1962,19203)=
+    'istByOneColumnValues(codeCategoryIdList, "CODECATEGORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || CHR(10)
+ || '        Row headRow = sheet.getRow(0);'
+ || CHR(10)
+ || '        int columnQty = headRow.getPhysicalNumberOfCells();'
+ || CHR(10)
+ || '        String[] columnNames = new String[columnQty];'
+ || CHR(10)
+ || '        for (int i = 0; i < columnNames.length; i++) {'
+ || CHR(10)
+ || '            String columnName = getCellValue(headRow.getCell(i), String.class);'
+ || CHR(10)
+ || '            if (columnName != null) {'
+ || CHR(10)
+ || CHR(10)
+ || '                // 根据配置的列名获取数据库字段名'
+ || CHR(10)
+ || '                List<CoreImportTmplConfigBean> tmplConfigColumn = tmplConfigList.stream().filter(e -> columnName.equals(e.getExcelColumn())).collect(Collectors.toList());'
+ || CHR(10)
+ || '                String tableColumn;'
+ || CHR(10)
+ || '                if (tmplConfigColumn.size() > 0) {'
+ || CHR(10)
+ || '                    tableColumn = tmplConfigColumn.get(0).getDbField();'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    tableColumn = columnName;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || CHR(10)
+ || '                columnNames[i] = tableColumn;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        // 解析excel数据'
+ || CHR(10)
+ || '        int endRowNum = sheet.getPhysicalNumberOfRows();'
+ || CHR(10)
+ || '        for (int rowNum = startRowIndex; rowNum < endRowNum; rowNum++) {'
+ || CHR(10)
+ || '            Row dataRow = sheet.getRow(rowNum);'
+ || CHR(10)
+ || '            if (dataRow == null) {'
+ || CHR(10)
+ || '                continue;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '            Map<String, Object> map = new HashMap<>();'
+ || CHR(10)
+ || '            for (int cellIndex = 0; cellIndex < columnNames.length; cellIndex++) {'
+ || CHR(10)
+ || '                Cell cell = dataRow.getCell(cellIndex);'
+ || CHR(10)
+ || '                CoreImportTmplConfigBean config = tmplConfigList.get(cellIndex);'
+ || CHR(10)
+ || '                if (columnNames[cellIndex] != null && !columnNames[cellIndex].trim().isEmpty()) {'
+ || CHR(10)
+ || '                    if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(config.getFieldType()) && !StringUtils.isEmpty(config.getDataSource())) {'
+ || CHR(10)
+ || '                        String cellValueStr = ExcelHelper.getCellValue(cell, String.class);'
+ || CHR(10)
+ || '                        CoreCodeBean code = codeLi';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1942,21165)=
+    'st.stream().filter(e -> config.getDataSource().equals(e.getCodeCategoryId()) && cellValueStr.equals(e.getCodeName())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                        if (code != null) {'
+ || CHR(10)
+ || '                            map.put(columnNames[cellIndex].trim(), code.getCode());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        map.put(columnNames[cellIndex].trim(), ExcelHelper.getCellValue(cell, Object.class));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            allResultList.add(map);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        MapUtils.lowerCaseKey(allResultList);'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(allResultList)) {'
+ || CHR(10)
+ || '            insertResultList = ObjectUtils.clone(allResultList);'
+ || CHR(10)
+ || '            // primaryKey为空则直接新增'
+ || CHR(10)
+ || '            if (!ObjectUtils.isEmpty(primaryKey)) {'
+ || CHR(10)
+ || '                // 不为空，则更新'
+ || CHR(10)
+ || '                List<String> primaryKeyValueList = allResultList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                List<Map<String, Object>> existList = this.getMapDao().selectListByColumnValueList(tablename, primaryKeyValueList, primaryKey);'
+ || CHR(10)
+ || '                MapUtils.lowerCaseKey(existList);'
+ || CHR(10)
+ || '                List<String> existKeyValueList = existList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                // 清除为更新的数据'
+ || CHR(10)
+ || '                insertResultList.removeIf(e -> existKeyValueList.contains(MapUtils.getString(e, primaryKey)));'
+ || CHR(10)
+ || '                // 赋值更新的数据'
+ || CHR(10)
+ || '                existList.forEach('
+ || CHR(10)
+ || '                        existBean -> {'
+ || CHR(10)
+ || '                            Map<String, Object> importBean = allResultList.stream().filter(e -> ObjectUtils.equals(MapUtils.getString(e, primaryKey), MapUtils.getString(existBean, primaryKey))).findFirst().orElse(null);'
+ || CHR(10)
+ || '                            if (!ObjectUtils.isEmpty(importBean)) {'
+ || CHR(10)
+ || '                                Map';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1836,23107)=
+    'Utils.copy(importBean, existBean, IGNORE_KEYS);'
+ || CHR(10)
+ || '                                updateResultList.add(existBean);'
+ || CHR(10)
+ || '                            }'
+ || CHR(10)
+ || '                        });'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!updateResultList.isEmpty()) {'
+ || CHR(10)
+ || '            this.getMapDao().updateIfChanged(tablename,updateResultList);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!insertResultList.isEmpty()) {'
+ || CHR(10)
+ || '            insertResultList.forEach('
+ || CHR(10)
+ || '                    map -> {'
+ || CHR(10)
+ || '                        // 若无主键ID，则自动给ID赋值'
+ || CHR(10)
+ || '                        if (!CollectionUtils.containsIgnoreCase(map, "id")) {'
+ || CHR(10)
+ || '                            map.put("ID", ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || CHR(10)
+ || '            // TODO 向数据库表中插入数据，根据业务需求，可自行调整'
+ || CHR(10)
+ || '            insert(tablename, insertResultList);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    protected List<Map<String, Object>> extractData(Workbook wb, String tablename, Long tmplId,Integer startRowIndex, RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        String primaryKey = wrapper.getParamValue("primaryKey"); // 唯一键，如果该字段不为空，则需要通过这个字段判断是否需要更新操作'
+ || CHR(10)
+ || CHR(10)
+ || '        List<Map<String, Object>> insertResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> updateResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> allResultList = new ArrayList<>();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnValues(codeCategoryIdList, "CODECATE';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1962,24943)=
+    'GORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || CHR(10)
+ || '        Row headRow = sheet.getRow(0);'
+ || CHR(10)
+ || '        int columnQty = headRow.getPhysicalNumberOfCells();'
+ || CHR(10)
+ || '        String[] columnNames = new String[columnQty];'
+ || CHR(10)
+ || '        for (int i = 0; i < columnNames.length; i++) {'
+ || CHR(10)
+ || '            String columnName = getCellValue(headRow.getCell(i), String.class);'
+ || CHR(10)
+ || '            if (columnName != null) {'
+ || CHR(10)
+ || CHR(10)
+ || '                // 根据配置的列名获取数据库字段名'
+ || CHR(10)
+ || '                List<CoreImportTmplConfigBean> tmplConfigColumn = tmplConfigList.stream().filter(e -> columnName.equals(e.getExcelColumn())).collect(Collectors.toList());'
+ || CHR(10)
+ || '                String tableColumn;'
+ || CHR(10)
+ || '                if (tmplConfigColumn.size() > 0) {'
+ || CHR(10)
+ || '                    tableColumn = tmplConfigColumn.get(0).getDbField();'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    tableColumn = columnName;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || CHR(10)
+ || '                columnNames[i] = tableColumn;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        // 解析excel数据'
+ || CHR(10)
+ || '        int endRowNum = sheet.getPhysicalNumberOfRows();'
+ || CHR(10)
+ || '        for (int rowNum = startRowIndex; rowNum < endRowNum; rowNum++) {'
+ || CHR(10)
+ || '            Row dataRow = sheet.getRow(rowNum);'
+ || CHR(10)
+ || '            if (dataRow == null) {'
+ || CHR(10)
+ || '                continue;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '            Map<String, Object> map = new HashMap<>();'
+ || CHR(10)
+ || '            for (int cellIndex = 0; cellIndex < columnNames.length; cellIndex++) {'
+ || CHR(10)
+ || '                Cell cell = dataRow.getCell(cellIndex);'
+ || CHR(10)
+ || '                CoreImportTmplConfigBean config = tmplConfigList.get(cellIndex);'
+ || CHR(10)
+ || '                if (columnNames[cellIndex] != null && !columnNames[cellIndex].trim().isEmpty()) {'
+ || CHR(10)
+ || '                    if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(config.getFieldType()) && !StringUtils.isEmpty(config.getDataSource())) {'
+ || CHR(10)
+ || '                        String cellValueStr = ExcelHelper.getCellValue(cell, String.class);'
+ || CHR(10)
+ || '                        CoreCodeBean code = codeList.stream().filter(e -> config.getDataSource().equ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1942,26905)=
+    'als(e.getCodeCategoryId()) && cellValueStr.equals(e.getCodeName())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                        if (code != null) {'
+ || CHR(10)
+ || '                            map.put(columnNames[cellIndex].trim(), code.getCode());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        map.put(columnNames[cellIndex].trim(), ExcelHelper.getCellValue(cell, Object.class));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            allResultList.add(map);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        MapUtils.lowerCaseKey(allResultList);'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(allResultList)) {'
+ || CHR(10)
+ || '            insertResultList = ObjectUtils.clone(allResultList);'
+ || CHR(10)
+ || '            // primaryKey为空则直接新增'
+ || CHR(10)
+ || '            if (!ObjectUtils.isEmpty(primaryKey)) {'
+ || CHR(10)
+ || '                // 不为空，则更新'
+ || CHR(10)
+ || '                List<String> primaryKeyValueList = allResultList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                List<Map<String, Object>> existList = this.getMapDao().selectListByColumnValueList(tablename, primaryKeyValueList, primaryKey);'
+ || CHR(10)
+ || '                MapUtils.lowerCaseKey(existList);'
+ || CHR(10)
+ || '                List<String> existKeyValueList = existList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                // 清除为更新的数据'
+ || CHR(10)
+ || '                insertResultList.removeIf(e -> existKeyValueList.contains(MapUtils.getString(e, primaryKey)));'
+ || CHR(10)
+ || '                // 赋值更新的数据'
+ || CHR(10)
+ || '                existList.forEach('
+ || CHR(10)
+ || '                        existBean -> {'
+ || CHR(10)
+ || '                            Map<String, Object> importBean = allResultList.stream().filter(e -> ObjectUtils.equals(MapUtils.getString(e, primaryKey), MapUtils.getString(existBean, primaryKey))).findFirst().orElse(null);'
+ || CHR(10)
+ || '                            if (!ObjectUtils.isEmpty(importBean)) {'
+ || CHR(10)
+ || '                                MapUtils.copy(importBean, existBean, IGNORE_KEYS);'
+ || CHR(10)
+ || '  ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1950,28847)=
+    '                              updateResultList.add(existBean);'
+ || CHR(10)
+ || '                            }'
+ || CHR(10)
+ || '                        });'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!updateResultList.isEmpty()) {'
+ || CHR(10)
+ || '            return updateResultList;'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!insertResultList.isEmpty()) {'
+ || CHR(10)
+ || '            insertResultList.forEach('
+ || CHR(10)
+ || '                    map -> {'
+ || CHR(10)
+ || '                        // 若无主键ID，则自动给ID赋值'
+ || CHR(10)
+ || '                        if (!CollectionUtils.containsIgnoreCase(map, "id")) {'
+ || CHR(10)
+ || '                            map.put("ID", ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '            return insertResultList;'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return CollectionUtils.emptyList();'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    public static final <T> T getCellValue(final Cell cell, final Class<T> clazz) {'
+ || CHR(10)
+ || '        Object cellValue = "";'
+ || CHR(10)
+ || '        if (cell != null) { // cell can be null.'
+ || CHR(10)
+ || '            switch (cell.getCellType()) {'
+ || CHR(10)
+ || '                case STRING:'
+ || CHR(10)
+ || '                    cellValue = StringUtils.trim(cell.getRichStringCellValue().getString());'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case NUMERIC:'
+ || CHR(10)
+ || '                    short format = cell.getCellStyle().getDataFormat();'
+ || CHR(10)
+ || CHR(10)
+ || '                    if (format == 14 // yyyy-MM-dd'
+ || CHR(10)
+ || '                            || format == 22 // yyyy-MM-dd hh:mm:ss'
+ || CHR(10)
+ || '                            || format == 31 // yyyy年m月d日'
+ || CHR(10)
+ || '                            || format == 57 // yyyy年m月'
+ || CHR(10)
+ || '                            || format == 58 // m月d日'
+ || CHR(10)
+ || '                            || format == 20 // HH:mm'
+ || CHR(10)
+ || '                            || format == 32) { // h时mm分'
+ || CHR(10)
+ || '                        cellValue = DateUtil.getJavaDate(cell.getNumericCellValue()); // 获取成DATE类型'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        HSSFDataFormatter dataFormatter = new HSSFDataFormatter();'
+ || CHR(10)
+ || '                        cellValue = dataFormatter.formatCellValue(cell);'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case BOOLEAN:'
+ || CHR(10)
+ || '                    cellValue = Objec';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194935797632 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1086,30797)=
+    'tUtils.toString(cell.getBooleanCellValue());'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case FORMULA: // Cell公式要特殊处理'
+ || CHR(10)
+ || '                    final FormulaEvaluator evaluator = cell.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();'
+ || CHR(10)
+ || '                    final CellValue cv = evaluator.evaluate(cell);'
+ || CHR(10)
+ || '                    switch (cv.getCellType()) {'
+ || CHR(10)
+ || '                        case STRING:'
+ || CHR(10)
+ || '                            cellValue = StringUtils.trim(cv.getStringValue());'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        case NUMERIC:'
+ || CHR(10)
+ || '                            cellValue = cv.getNumberValue();'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        case BOOLEAN:'
+ || CHR(10)
+ || '                            cellValue = ObjectUtils.toString(cv.getBooleanValue());'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        default:'
+ || CHR(10)
+ || '                            cellValue = null;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                default:'
+ || CHR(10)
+ || '                    cellValue = "";'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        return (T) ConvertUtils.convert(cellValue, clazz);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1') <>
+    'V1:1;V10:FileScript;V4:java;V1:0;V1:1;V1:1;V27:lcdp.file.server.FileScript;V1:0;N;V10:FileScript;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=2860;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1 AND DBMS_LOB.SUBSTR(CONTENT,1948,1)=
+    'import com.sunwayworld.framework.context.ApplicationContextHelper;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.framework.data.page.Page;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.framework.data.page.Pagination;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.bean.CoreFileBean;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.service.CoreFileService;'
+ || CHR(13)
+ || CHR(10)
+ || 'import org.springframework.web.multipart.MultipartFile;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.support.constant.LcdpConstant;'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'import org.springframework.beans.factory.annotation.Autowired;'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.*;'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'public class FileScript {'
+ || CHR(13)
+ || CHR(10)
+ || '     /**'
+ || CHR(13)
+ || CHR(10)
+ || '     *'
+ || CHR(13)
+ || CHR(10)
+ || '     * @param wrapper'
+ || CHR(13)
+ || CHR(10)
+ || '     */'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '    public Page<Map<String, Object>> selectPagination(RestJsonWrapperBean wrapper) {'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '        Page<CoreFileBean> filePage = ApplicationContextHelper.getBean(CoreFileService.class).selectSearchablePagination(wrapper);'
+ || CHR(13)
+ || CHR(10)
+ || '		List<CoreFileBean> rows = filePage.getRows();'
+ || CHR(13)
+ || CHR(10)
+ || '		List<Map<String,Object>> mapList = new ArrayList<>();'
+ || CHR(13)
+ || CHR(10)
+ || '		for (Object row : rows) {'
+ || CHR(13)
+ || CHR(10)
+ || '			  Map<String, Object> map = BeanUtils.toMap(row);'
+ || CHR(13)
+ || CHR(10)
+ || '                map.forEach((column, value) -> {'
+ || CHR(13)
+ || CHR(10)
+ || '                    if (column != null) {'
+ || CHR(13)
+ || CHR(10)
+ || '                        // 对于日期和时间，date结尾的只保留年月日，time结尾的保留时分秒'
+ || CHR(13)
+ || CHR(10)
+ || '                        if (StringUtils.endsWithIgnoreCase(column, "date")) {'
+ || CHR(13)
+ || CHR(10)
+ || '                            try {'
+ || CHR(13)
+ || CHR(10)
+ || '                                value = DateTimeUtils.formatLocalDate(DateTimeUtils.parseLocalDate(value.toString()));'
+ || CHR(13)
+ || CHR(10)
+ || '                                map.put(column,value);'
+ || CHR(13)
+ || CHR(10)
+ || '                            } catch (Exception ex) {'
+ || CHR(13)
+ || CHR(10)
+ || '                            };'
+ || CHR(13)
+ || CHR(10)
+ || '                        } else if (StringUtils.endsWithIgnoreCase(column, "time")) {'
+ || CHR(13)
+ || CHR(10)
+ || '                            try {'
+ || CHR(13)
+ || CHR(10)
+ || '                                value = DateTimeUtils.formatLocalDateTime(DateTimeUtils.parseLocalDateTime(value.';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1 AND DBMS_LOB.SUBSTR(CONTENT,912,1949)=
+    'toString()));'
+ || CHR(13)
+ || CHR(10)
+ || '                                map.put(column,value);'
+ || CHR(13)
+ || CHR(10)
+ || '                            } catch (Exception ex) {'
+ || CHR(13)
+ || CHR(10)
+ || '                            };'
+ || CHR(13)
+ || CHR(10)
+ || '                        }'
+ || CHR(13)
+ || CHR(10)
+ || '                    }'
+ || CHR(13)
+ || CHR(10)
+ || '                });'
+ || CHR(13)
+ || CHR(10)
+ || '			mapList.add(map);'
+ || CHR(13)
+ || CHR(10)
+ || '		}'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '         return new Pagination<>(filePage.getTotal(), filePage.getPageSize(), filePage.getPageNumber(), mapList);'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '    /**'
+ || CHR(13)
+ || CHR(10)
+ || '     * 上传附件'
+ || CHR(13)
+ || CHR(10)
+ || '     */'
+ || CHR(13)
+ || CHR(10)
+ || '    public Long upload(CoreFileBean coreFile, MultipartFile file) {'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '        Long fileId = ApplicationContextHelper.getBean(CoreFileService.class).upload(coreFile, file);'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '        return fileId;'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '    /**'
+ || CHR(13)
+ || CHR(10)
+ || '     * 删除附件'
+ || CHR(13)
+ || CHR(10)
+ || '     */'
+ || CHR(13)
+ || CHR(10)
+ || '    public LcdpResultDTO delete(RestJsonWrapperBean wrapper) {'
+ || CHR(13)
+ || CHR(10)
+ || '        ApplicationContextHelper.getBean(CoreFileService.class).delete(wrapper);'
+ || CHR(13)
+ || CHR(10)
+ || '        return new LcdpResultDTO(LcdpConstant.RESULT_CODE_SUCCESS, LcdpConstant.RESULT_MESSAGE_SUCCESS);'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=3128;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1948,1)=
+    'import com.sunwayworld.framework.context.ApplicationContextHelper;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.framework.data.page.Page;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.framework.data.page.Pagination;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.bean.CoreFileBean;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.service.CoreFileService;'
+ || CHR(13)
+ || CHR(10)
+ || 'import org.springframework.web.multipart.MultipartFile;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.support.constant.LcdpConstant;'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'import org.springframework.beans.factory.annotation.Autowired;'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(13)
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.*;'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || 'public class FileScript {'
+ || CHR(13)
+ || CHR(10)
+ || '    /**'
+ || CHR(13)
+ || CHR(10)
+ || '    *'
+ || CHR(13)
+ || CHR(10)
+ || '    * @param wrapper'
+ || CHR(13)
+ || CHR(10)
+ || '    */'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '   public Page<Map<String, Object>> selectPagination(RestJsonWrapperBean wrapper) {'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '       Page<CoreFileBean> filePage = ApplicationContextHelper.getBean(CoreFileService.class).selectSearchablePagination(wrapper);'
+ || CHR(13)
+ || CHR(10)
+ || '    List<CoreFileBean> rows = filePage.getRows();'
+ || CHR(13)
+ || CHR(10)
+ || '    List<Map<String,Object>> mapList = new ArrayList<>();'
+ || CHR(13)
+ || CHR(10)
+ || '    for (Object row : rows) {'
+ || CHR(13)
+ || CHR(10)
+ || '          Map<String, Object> map = BeanUtils.toMap(row);'
+ || CHR(13)
+ || CHR(10)
+ || '               map.forEach((column, value) -> {'
+ || CHR(13)
+ || CHR(10)
+ || '                   if (column != null) {'
+ || CHR(13)
+ || CHR(10)
+ || '                       // 对于日期和时间，date结尾的只保留年月日，time结尾的保留时分秒'
+ || CHR(13)
+ || CHR(10)
+ || '                       if (StringUtils.endsWithIgnoreCase(column, "date")) {'
+ || CHR(13)
+ || CHR(10)
+ || '                           try {'
+ || CHR(13)
+ || CHR(10)
+ || '                               value = DateTimeUtils.formatLocalDate(DateTimeUtils.parseLocalDate(value.toString()));'
+ || CHR(13)
+ || CHR(10)
+ || '                               map.put(column,value);'
+ || CHR(13)
+ || CHR(10)
+ || '                           } catch (Exception ex) {'
+ || CHR(13)
+ || CHR(10)
+ || '                           };'
+ || CHR(13)
+ || CHR(10)
+ || '                       } else if (StringUtils.endsWithIgnoreCase(column, "time")) {'
+ || CHR(13)
+ || CHR(10)
+ || '                           try {'
+ || CHR(13)
+ || CHR(10)
+ || '                               value = DateTimeUtils.formatLocalDateTime(DateTimeUtils.parseLocalDateTime(value.toStrin';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1180,1949)=
+    'g()));'
+ || CHR(13)
+ || CHR(10)
+ || '                               map.put(column,value);'
+ || CHR(13)
+ || CHR(10)
+ || '                           } catch (Exception ex) {'
+ || CHR(13)
+ || CHR(10)
+ || '                           };'
+ || CHR(13)
+ || CHR(10)
+ || '                       }'
+ || CHR(13)
+ || CHR(10)
+ || '                   }'
+ || CHR(13)
+ || CHR(10)
+ || '               });'
+ || CHR(13)
+ || CHR(10)
+ || '        mapList.add(map);'
+ || CHR(13)
+ || CHR(10)
+ || '    }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '        return new Pagination<>(filePage.getTotal(), filePage.getPageSize(), filePage.getPageNumber(), mapList);'
+ || CHR(13)
+ || CHR(10)
+ || '   }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '   /**'
+ || CHR(13)
+ || CHR(10)
+ || '    * 上传附件'
+ || CHR(13)
+ || CHR(10)
+ || '    */'
+ || CHR(13)
+ || CHR(10)
+ || '   public Long upload(CoreFileBean coreFile, MultipartFile file) {'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '       Long fileId = ApplicationContextHelper.getBean(CoreFileService.class).upload(coreFile, file);'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '       return fileId;'
+ || CHR(13)
+ || CHR(10)
+ || '   }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '   /**'
+ || CHR(13)
+ || CHR(10)
+ || '    * 删除附件'
+ || CHR(13)
+ || CHR(10)
+ || '    */'
+ || CHR(13)
+ || CHR(10)
+ || '   public LcdpResultDTO delete(RestJsonWrapperBean wrapper) {'
+ || CHR(13)
+ || CHR(10)
+ || '       ApplicationContextHelper.getBean(CoreFileService.class).delete(wrapper);'
+ || CHR(13)
+ || CHR(10)
+ || '       return new LcdpResultDTO(LcdpConstant.RESULT_CODE_SUCCESS, LcdpConstant.RESULT_MESSAGE_SUCCESS);'
+ || CHR(13)
+ || CHR(10)
+ || '   }'
+ || CHR(13)
+ || CHR(10)
+ || CHR(13)
+ || CHR(10)
+ || '   /**'
+ || CHR(13)
+ || CHR(10)
+ || '    *    修改附件'
+ || CHR(13)
+ || CHR(10)
+ || '    */'
+ || CHR(13)
+ || CHR(10)
+ || '   public LcdpResultDTO updateData(RestJsonWrapperBean wrapper) {'
+ || CHR(13)
+ || CHR(10)
+ || '       ApplicationContextHelper.getBean(CoreFileService.class).save(wrapper);'
+ || CHR(13)
+ || CHR(10)
+ || '       return new LcdpResultDTO(LcdpConstant.RESULT_CODE_SUCCESS, LcdpConstant.RESULT_MESSAGE_SUCCESS);'
+ || CHR(13)
+ || CHR(10)
+ || '   }'
+ || CHR(13)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1586194332628864') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1586194332628864') <>
+    'V16:1586194332628864;V6:common;V8:category;N;V1:1;N;N;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194332628864 AND CONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194332628864 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1586194490251136') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE'); END IF;
+  IF actual('1586194490251136') <>
+    'V16:1586194490251136;V13:commonService;V6:module;V16:1586194332628864;V1:1;N;N;V1:0;N;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194490251136 AND CONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE WHERE ID=1586194490251136 AND CLASSCONTENT IS NULL;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE.CLASSCONTENT'); END IF;
 END;
 /
 DECLARE
@@ -20788,7 +23739,7 @@ BEGIN
       || CASE WHEN r.MODIFYVERSION IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(r.MODIFYVERSION,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(r.MODIFYVERSION,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
       || CASE WHEN r.DELETEFLAG IS NULL THEN 'N;' ELSE 'V'||LENGTH(r.DELETEFLAG)||':'||r.DELETEFLAG||';' END;
   END LOOP;
-  IF actual.COUNT <> 29 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual.COUNT <> 30 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_LCDP_RESOURCE_HISTORY'); END IF;
   IF NOT actual.EXISTS('1794420245005760') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
   IF actual('1794420245005760') <>
     'V16:1794420245005760;V16:1587156564485600;V33:reportSendExpressDeliveryEditPage;V4:view;V2:10;V3:yes;V3:yes;V68:emc.reportSendExpressDelivery.page.reportSendExpressDeliveryEditPage;V1:2;V1:0;'
@@ -24645,6 +27596,2503 @@ BEGIN
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
   SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1754804488180768 AND CLASSCONTENT IS NULL;
   IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  IF NOT actual.EXISTS('1586194936223616') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_LCDP_RESOURCE_HISTORY'); END IF;
+  IF actual('1586194936223616') <>
+    'V16:1586194936223616;V16:1586194935797632;V15:LcdpFileService;V4:java;V1:1;V3:yes;V3:yes;V43:common.commonService.server.LcdpFileService;V1:2;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_RESOURCE_HISTORY'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND CONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CONTENT)=31867;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,2000,1)=
+    'import java.time.LocalDate;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.MapperParameter;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.bean.CoreImportTmplBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.bean.CoreImportTmplConfigBean;'
+ || CHR(10)
+ || 'import com.alibaba.fastjson.JSONObject;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.FileUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.FileException;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.sys.code.bean.CoreCodeBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.ConvertUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.excel.ExcelHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.context.LocalContextHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.manager.CoreFileManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.service.CoreImportTmplService;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.service.CoreImportTmplConfigService;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.CoreImportTmplConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.sys.code.service.CoreCodeService;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.checked.CheckedException;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.MatchPattern;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.SearchFilter;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.EncryptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.SpirePdfUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.NumberUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.emc.framework.constant.EmcConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.utils.CoreFileUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathDTO;'
+ || CHR(10)
+ || 'import java.time.LocalDateTime;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.DateTimeUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.http.HttpClientManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.service.CoreFileService;'
+ || CHR(10)
+ || 'import org.springframework.beans.factory.annotation.Autowired;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.context.ApplicationContextHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.bean.CoreFileBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.U';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,2000,2001)=
+    'nsupportedException;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.BeanUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.ObjectUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.CollectionUtils;'
+ || CHR(10)
+ || 'import java.util.stream.Collectors;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.StringUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.database.context.TableContext;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Cell;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.CellType;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.CellValue;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.DateUtil;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.FormulaEvaluator;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Row;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Sheet;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Workbook;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.WorkbookFactory;'
+ || CHR(10)
+ || 'import org.springframework.context.annotation.Lazy;'
+ || CHR(10)
+ || 'import org.apache.poi.hssf.usermodel.HSSFDataFormatter;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.util.CellRangeAddress;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || 'import java.net.URLEncoder;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FileScope;'
+ || CHR(10)
+ || 'import java.io.*;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathManager;'
+ || CHR(10)
+ || 'import java.nio.file.Path;'
+ || CHR(10)
+ || 'impor';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1942,4001)=
+    't java.nio.file.Files;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class LcdpFileService implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreFileService coreFileService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    @Lazy private CoreFileManager coreFileManager;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreImportTmplService coreImportTmplService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreImportTmplConfigService coreImportTmplConfigService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreCodeService codeService;'
+ || CHR(10)
+ || CHR(10)
+ || '    public static final String[] IGNORE_KEYS = new String[]{"id", "createdById", "createdByName", "createdTime", "createdByOrgId", "createdByOrgName"};'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 赋值附件到指定位置 */'
+ || CHR(10)
+ || '    public void copyFile(CoreFileBean copyToFileBean, List<CoreFileBean> copyFileFilterList) {'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(copyFileFilterList)) {'
+ || CHR(10)
+ || '            // 先删除已经存在的附件'
+ || CHR(10)
+ || '            coreFileService.getDao().deleteBy(Collections.singletonList(copyToFileBean), "TARGETID", "EXT");'
+ || CHR(10)
+ || '            // 再查询复制的附件集合'
+ || CHR(10)
+ || '            List<CoreFileBean> copyFileList = coreFileService.getDao().selectList(copyFileFilterList, Arrays.asList("TARGETID", "EXT"), Collections.emptyList());'
+ || CHR(10)
+ || '            copyFileList.forEach('
+ || CHR(10)
+ || '                    copyFile -> {'
+ || CHR(10)
+ || '                        CoreFileBean copyToFile = new CoreFileBean();'
+ || CHR(10)
+ || '                        BeanUtils.copyProperties(copyFile, copyToFile, EmcConstant.CREATED_COLUMNS);'
+ || CHR(10)
+ || '                        copyToFile.setId(ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        copyToFile.setExt(copyToFileBean.getExt());'
+ || CHR(10)
+ || '                        copyToFile.setTargetId(copyToFileBean.getTargetId());'
+ || CHR(10)
+ || '                        FilePathDTO fr = CoreFileUtils.toFilePath(copyFile);'
+ || CHR(10)
+ || '                        String filePath = FilePathManager.getLocalPath(fr).toFile().getAbsolutePath();'
+ || CHR(10)
+ || '                        if (new File(filePath).exists()) {'
+ || CHR(10)
+ || '                            coreFileService.upload(copyToFile, new File(filePath));'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1854,5943)=
+    '}'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 赋值包含附件类型的附件到指定位置 */'
+ || CHR(10)
+ || '    public void copyBizCategoryFile(CoreFileBean copyToFileBean, List<CoreFileBean> copyFileFilterList) {'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(copyFileFilterList)) {'
+ || CHR(10)
+ || '            // 先删除已经存在的附件'
+ || CHR(10)
+ || '            coreFileService.getDao().deleteBy(Collections.singletonList(copyToFileBean), "TARGETID", "EXT", "BIZCATEGORY");'
+ || CHR(10)
+ || '            // 再查询复制的附件集合'
+ || CHR(10)
+ || '            List<CoreFileBean> copyFileList = coreFileService.getDao().selectList(copyFileFilterList, Arrays.asList("TARGETID", "EXT","BIZCATEGORY"), Collections.emptyList());'
+ || CHR(10)
+ || '            copyFileList.forEach('
+ || CHR(10)
+ || '                    copyFile -> {'
+ || CHR(10)
+ || '                        CoreFileBean copyToFile = new CoreFileBean();'
+ || CHR(10)
+ || '                        BeanUtils.copyProperties(copyFile, copyToFile, EmcConstant.CREATED_COLUMNS);'
+ || CHR(10)
+ || '                        copyToFile.setId(ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        copyToFile.setExt(copyToFileBean.getExt());'
+ || CHR(10)
+ || '                        copyToFile.setTargetId(copyToFileBean.getTargetId());'
+ || CHR(10)
+ || '                        copyToFile.setBizCategory(copyToFileBean.getBizCategory());'
+ || CHR(10)
+ || '                        FilePathDTO fr = CoreFileUtils.toFilePath(copyFile);'
+ || CHR(10)
+ || '                        String filePath = FilePathManager.getLocalPath(fr).toFile().getAbsolutePath();'
+ || CHR(10)
+ || '                        if (new File(filePath).exists()) {'
+ || CHR(10)
+ || '                            coreFileService.upload(copyToFile, new File(filePath));'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * lcdp根据模板编码，向模板文件中填充数据，并导出文件'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wrapper 请求参数'
+ || CHR(10)
+ || '     * @return excel文件下载地址'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp导出数据", type = MappingType.SELECT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public String exportData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        String exportFileName = wrapper.g';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1928,7797)=
+    'etParamValue("exportFileName");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || CHR(10)
+ || '        Long tmplId = importTmpl.getId();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || CHR(10)
+ || '        String targetId = "T_CORE_IMPORT_TMPL$" + tmplId;'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectFirstByFilter(SearchFilter.instance().match("TARGETID", targetId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        String fileName = importTmpl.getTmplName() + "." + coreFile.getFileExt();'
+ || CHR(10)
+ || '        if (!StringUtils.isBlank(exportFileName)){'
+ || CHR(10)
+ || '            fileName = exportFileName + "." + coreFile.getFileExt();'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), fileName);'
+ || CHR(10)
+ || '        Path path = FilePathManager.getLocalPath(filePath);'
+ || CHR(10)
+ || '        FileUtils.makeDirs(path);'
+ || CHR(10)
+ || '        // 下载模板文件到本地'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, path);'
+ || CHR(10)
+ || CHR(10)
+ || '        try (InputStream is = Files.newInputStream(path);'
+ || CHR(10)
+ || '                Workbook wb = WorkbookFactory.create(is)) {'
+ || CHR(10)
+ || '            // 向模板文件填充数据'
+ || CHR(10)
+ || '            paddingTemplate(wb, wrapper, importTmpl, tmplConfigList);'
+ || CHR(10)
+ || '            try (OutputStream fis = Files.newOutputStream(path)) {'
+ || CHR(10)
+ || '                wb.write(fis);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        } catch (IOException e) {'
+ || CHR(10)
+ || '            throw new FileException(e);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        coreFileManager.upload(filePath, path);'
+ || CHR(10)
+ || '        return coreFileManager.getDownloadUrl(filePath);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 解析mapper参数 */'
+ || CHR(10)
+ || '    private MapperParameter parseWrapperParam(Map<String, Object> paramMap) {'
+ || CHR(10)
+ || '        RestJsonWrapperBean wrapper = new RestJsonWrapperBean();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(paramMap)) {'
+ || CHR(10)
+ || '            ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1860,9725)=
+    'paramMap.forEach('
+ || CHR(10)
+ || '                    (key, value) -> {'
+ || CHR(10)
+ || '                        wrapper.setFilterValue(key, value);'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return wrapper.extractMapFilter();'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 根据模板文件，向excel中填充数据'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wb excel对象'
+ || CHR(10)
+ || '     * @param wrapper 请求参数'
+ || CHR(10)
+ || '     * @param tmplConfigList 模板文件配置'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    protected void paddingTemplate(Workbook wb, RestJsonWrapperBean wrapper, CoreImportTmplBean importTmpl, List<CoreImportTmplConfigBean> tmplConfigList) {'
+ || CHR(10)
+ || '        // 查询mapperUrl'
+ || CHR(10)
+ || '        String querySqlMapperUrl = wrapper.getParamValue("QuerySqlMapperUrl");'
+ || CHR(10)
+ || '        // mapper的参数'
+ || CHR(10)
+ || '        Map<String, Object> paramMap = LcdpWrapperParseUtils.parseMap(wrapper, 0);'
+ || CHR(10)
+ || '        Map<String, Object> orderMap = LcdpWrapperParseUtils.parseMap(wrapper, 1);'
+ || CHR(10)
+ || '        MapperParameter parameter = this.parseWrapperParam(paramMap);'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(orderMap)){'
+ || CHR(10)
+ || '            orderMap.forEach((k,v) -> {'
+ || CHR(10)
+ || '                parameter.setOrderParam(k, v.toString());'
+ || CHR(10)
+ || '            });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        // TODO 查询待导出数据，根据业务需求自行实行查询的数据内容'
+ || CHR(10)
+ || '        List<Map<String, Object>> dataList = selectListByMapperId(querySqlMapperUrl, parameter);'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnValues(codeCategoryIdList, "CODECATEGORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || '        for (int i = 0; i < dataList.size(); i++) {'
+ || CHR(10)
+ || '            Map<String, Object> data = dataList.get(i);'
+ || CHR(10)
+ || '            int rowIndex = i + startRow';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1968,11585)=
+    'Index;'
+ || CHR(10)
+ || '            Row row = null == sheet.getRow(rowIndex) ? sheet.createRow(rowIndex) : sheet.getRow(rowIndex);'
+ || CHR(10)
+ || CHR(10)
+ || '            for (CoreImportTmplConfigBean importTmplConfig : tmplConfigList) {'
+ || CHR(10)
+ || '                if (null == importTmplConfig.getExcelColumnNo() || StringUtils.isEmpty(importTmplConfig.getDbField())) {'
+ || CHR(10)
+ || '                    continue;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                int cellIndex = importTmplConfig.getExcelColumnNo() - 1;'
+ || CHR(10)
+ || '                Cell cell = null == row.getCell(cellIndex) ? row.createCell(cellIndex) : row.getCell(cellIndex);'
+ || CHR(10)
+ || '                Object cellValue = MapUtils.getObject(data, importTmplConfig.getDbField());'
+ || CHR(10)
+ || '                // select类型将code转为name'
+ || CHR(10)
+ || '                if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(importTmplConfig.getFieldType()) && !StringUtils.isEmpty(importTmplConfig.getDataSource())) {'
+ || CHR(10)
+ || '                    String cellValueStr = String.valueOf(cellValue);'
+ || CHR(10)
+ || '                    // 根据codeCategoryId和code查询codeName，作为值导出'
+ || CHR(10)
+ || '                    CoreCodeBean code = codeList.stream().filter(e -> importTmplConfig.getDataSource().equals(e.getCodeCategoryId()) && cellValueStr.equals(e.getCode())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                    if (code != null) {'
+ || CHR(10)
+ || '                        cellValue = code.getCodeName();'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_DATE.equals(importTmplConfig.getFieldType())) {'
+ || CHR(10)
+ || '                    LocalDateTime dateTime = ConvertUtils.convert(cellValue, LocalDateTime.class);'
+ || CHR(10)
+ || '                    cell.setCellValue(DateTimeUtils.formatLocalDateTime(dateTime));'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    cell.setCellValue(ObjectUtils.toString(cellValue));'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        String mergeColumn = wrapper.getParamValue("mergeColumns");'
+ || CHR(10)
+ || '        if (!StringUtils.isBlank(mergeColumn)){'
+ || CHR(10)
+ || '            String[] columns = mergeColumn.split(",");'
+ || CHR(10)
+ || '            for(String colum';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1928,13553)=
+    'n : columns){'
+ || CHR(10)
+ || '                mergeSameCellContentColumn(sheet, 1, Integer.parseInt(column));'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    public static void mergeSameCellContentColumn(Sheet sheet, int startRow, int column) {'
+ || CHR(10)
+ || '        int totalRows = sheet.getLastRowNum();'
+ || CHR(10)
+ || '        int firstRow = 0;'
+ || CHR(10)
+ || '        int lastRow = 0;'
+ || CHR(10)
+ || '        // 上一次比较是否相同'
+ || CHR(10)
+ || '        boolean isPrevCompareSame = false;'
+ || CHR(10)
+ || '        String prevMergeAddress = null;'
+ || CHR(10)
+ || '        String currentMergeAddress;'
+ || CHR(10)
+ || '        // 从第几开始判断是否相同'
+ || CHR(10)
+ || '        if (totalRows >= startRow) {'
+ || CHR(10)
+ || '            for (int i = startRow; i <= totalRows; i++) {'
+ || CHR(10)
+ || '                String lastRowCellContent = sheet.getRow(i - 1).getCell(column).getStringCellValue();'
+ || CHR(10)
+ || '                String curRowCellContent = sheet.getRow(i).getCell(column).getStringCellValue();'
+ || CHR(10)
+ || '                if (curRowCellContent.equals(lastRowCellContent)) {'
+ || CHR(10)
+ || '                    if (!isPrevCompareSame) {'
+ || CHR(10)
+ || '                        firstRow = i - 1;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    lastRow = i;'
+ || CHR(10)
+ || '                    isPrevCompareSame = true;'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    isPrevCompareSame = false;'
+ || CHR(10)
+ || '                    currentMergeAddress = firstRow + lastRow + column + column + "";'
+ || CHR(10)
+ || '                    if (lastRow > firstRow && !Objects.equals(currentMergeAddress, prevMergeAddress)) {'
+ || CHR(10)
+ || '                        sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, column, column));'
+ || CHR(10)
+ || '                        prevMergeAddress = currentMergeAddress;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                // 最后一行时判断是否有需要合并的行'
+ || CHR(10)
+ || '                if ((i == totalRows) && (lastRow > firstRow)) {'
+ || CHR(10)
+ || '                    currentMergeAddress = firstRow + lastRow + column + column + "";'
+ || CHR(10)
+ || '                    if (!Objects.equals(currentMergeAddress, prevMergeAddress)) {'
+ || CHR(10)
+ || '                        sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, column, column));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '      ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1876,15481)=
+    '  }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** lcdp导入数据，按照业务需求，解析excel字段内容并匹配数据库表字段，插入数据 */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp导入数据", type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public JSONObject importData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String idStr = wrapper.getParamValue("id");'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectDetail(Long.parseLong(idStr));'
+ || CHR(10)
+ || '        File tempFile = FileUtils.createTempFile();'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, tempFile.toPath());'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        JSONObject result = new JSONObject();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(importTmpl)) {'
+ || CHR(10)
+ || '            String tablename = importTmpl.getTableName();'
+ || CHR(10)
+ || '            try (Workbook wb = WorkbookFactory.create(new File(tempFile.getAbsolutePath()))) {'
+ || CHR(10)
+ || CHR(10)
+ || '                extractDataAndInsert(wb, tablename, importTmpl.getId(),startRowIndex, wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '            } catch (IOException ioe) {'
+ || CHR(10)
+ || '                throw new FileException(ioe);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            FileUtils.deleteQuietly(tempFile);'
+ || CHR(10)
+ || CHR(10)
+ || '            result.put("success", true);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return result;'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Mapping(value = "获取导入的数据", type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public List<Map<String, Object>> getImportData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String idStr = wrapper.getParamValue("id");'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectDetail(Long.parseLong(idStr));'
+ || CHR(10)
+ || '        File tempFile = FileUtils.createTempFile();'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, tempFile.toPath());'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1846,17357)=
+    ' importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        List<Map<String, Object>> resultList = new ArrayList<>();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(importTmpl)) {'
+ || CHR(10)
+ || '            String tablename = importTmpl.getTableName();'
+ || CHR(10)
+ || '            try (Workbook wb = WorkbookFactory.create(new File(tempFile.getAbsolutePath()))) {'
+ || CHR(10)
+ || CHR(10)
+ || '                resultList = extractData(wb, tablename, importTmpl.getId(),startRowIndex, wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '            } catch (IOException ioe) {'
+ || CHR(10)
+ || '                throw new FileException(ioe);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            FileUtils.deleteQuietly(tempFile);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return resultList;'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 按照业务需求，解析excel字段内容，并插入数据库'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wb excel对象'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    protected void extractDataAndInsert(Workbook wb, String tablename, Long tmplId,Integer startRowIndex, RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        String primaryKey = wrapper.getParamValue("primaryKey"); // 唯一键，如果该字段不为空，则需要通过这个字段判断是否需要更新操作'
+ || CHR(10)
+ || CHR(10)
+ || '        List<Map<String, Object>> insertResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> updateResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> allResultList = new ArrayList<>();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnV';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1962,19203)=
+    'alues(codeCategoryIdList, "CODECATEGORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || CHR(10)
+ || '        Row headRow = sheet.getRow(0);'
+ || CHR(10)
+ || '        int columnQty = headRow.getPhysicalNumberOfCells();'
+ || CHR(10)
+ || '        String[] columnNames = new String[columnQty];'
+ || CHR(10)
+ || '        for (int i = 0; i < columnNames.length; i++) {'
+ || CHR(10)
+ || '            String columnName = getCellValue(headRow.getCell(i), String.class);'
+ || CHR(10)
+ || '            if (columnName != null) {'
+ || CHR(10)
+ || CHR(10)
+ || '                // 根据配置的列名获取数据库字段名'
+ || CHR(10)
+ || '                List<CoreImportTmplConfigBean> tmplConfigColumn = tmplConfigList.stream().filter(e -> columnName.equals(e.getExcelColumn())).collect(Collectors.toList());'
+ || CHR(10)
+ || '                String tableColumn;'
+ || CHR(10)
+ || '                if (tmplConfigColumn.size() > 0) {'
+ || CHR(10)
+ || '                    tableColumn = tmplConfigColumn.get(0).getDbField();'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    tableColumn = columnName;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || CHR(10)
+ || '                columnNames[i] = tableColumn;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        // 解析excel数据'
+ || CHR(10)
+ || '        int endRowNum = sheet.getPhysicalNumberOfRows();'
+ || CHR(10)
+ || '        for (int rowNum = startRowIndex; rowNum < endRowNum; rowNum++) {'
+ || CHR(10)
+ || '            Row dataRow = sheet.getRow(rowNum);'
+ || CHR(10)
+ || '            if (dataRow == null) {'
+ || CHR(10)
+ || '                continue;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '            Map<String, Object> map = new HashMap<>();'
+ || CHR(10)
+ || '            for (int cellIndex = 0; cellIndex < columnNames.length; cellIndex++) {'
+ || CHR(10)
+ || '                Cell cell = dataRow.getCell(cellIndex);'
+ || CHR(10)
+ || '                CoreImportTmplConfigBean config = tmplConfigList.get(cellIndex);'
+ || CHR(10)
+ || '                if (columnNames[cellIndex] != null && !columnNames[cellIndex].trim().isEmpty()) {'
+ || CHR(10)
+ || '                    if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(config.getFieldType()) && !StringUtils.isEmpty(config.getDataSource())) {'
+ || CHR(10)
+ || '                        String cellValueStr = ExcelHelper.getCellValue(cell, String.class);'
+ || CHR(10)
+ || '                        CoreCodeBean code = codeList.stream().fil';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1942,21165)=
+    'ter(e -> config.getDataSource().equals(e.getCodeCategoryId()) && cellValueStr.equals(e.getCodeName())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                        if (code != null) {'
+ || CHR(10)
+ || '                            map.put(columnNames[cellIndex].trim(), code.getCode());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        map.put(columnNames[cellIndex].trim(), ExcelHelper.getCellValue(cell, Object.class));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            allResultList.add(map);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        MapUtils.lowerCaseKey(allResultList);'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(allResultList)) {'
+ || CHR(10)
+ || '            insertResultList = ObjectUtils.clone(allResultList);'
+ || CHR(10)
+ || '            // primaryKey为空则直接新增'
+ || CHR(10)
+ || '            if (!ObjectUtils.isEmpty(primaryKey)) {'
+ || CHR(10)
+ || '                // 不为空，则更新'
+ || CHR(10)
+ || '                List<String> primaryKeyValueList = allResultList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                List<Map<String, Object>> existList = this.getMapDao().selectListByColumnValueList(tablename, primaryKeyValueList, primaryKey);'
+ || CHR(10)
+ || '                MapUtils.lowerCaseKey(existList);'
+ || CHR(10)
+ || '                List<String> existKeyValueList = existList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                // 清除为更新的数据'
+ || CHR(10)
+ || '                insertResultList.removeIf(e -> existKeyValueList.contains(MapUtils.getString(e, primaryKey)));'
+ || CHR(10)
+ || '                // 赋值更新的数据'
+ || CHR(10)
+ || '                existList.forEach('
+ || CHR(10)
+ || '                        existBean -> {'
+ || CHR(10)
+ || '                            Map<String, Object> importBean = allResultList.stream().filter(e -> ObjectUtils.equals(MapUtils.getString(e, primaryKey), MapUtils.getString(existBean, primaryKey))).findFirst().orElse(null);'
+ || CHR(10)
+ || '                            if (!ObjectUtils.isEmpty(importBean)) {'
+ || CHR(10)
+ || '                                MapUtils.copy(impo';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1836,23107)=
+    'rtBean, existBean, IGNORE_KEYS);'
+ || CHR(10)
+ || '                                updateResultList.add(existBean);'
+ || CHR(10)
+ || '                            }'
+ || CHR(10)
+ || '                        });'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!updateResultList.isEmpty()) {'
+ || CHR(10)
+ || '            this.getMapDao().updateIfChanged(tablename,updateResultList);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!insertResultList.isEmpty()) {'
+ || CHR(10)
+ || '            insertResultList.forEach('
+ || CHR(10)
+ || '                    map -> {'
+ || CHR(10)
+ || '                        // 若无主键ID，则自动给ID赋值'
+ || CHR(10)
+ || '                        if (!CollectionUtils.containsIgnoreCase(map, "id")) {'
+ || CHR(10)
+ || '                            map.put("ID", ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || CHR(10)
+ || '            // TODO 向数据库表中插入数据，根据业务需求，可自行调整'
+ || CHR(10)
+ || '            insert(tablename, insertResultList);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    protected List<Map<String, Object>> extractData(Workbook wb, String tablename, Long tmplId,Integer startRowIndex, RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        String primaryKey = wrapper.getParamValue("primaryKey"); // 唯一键，如果该字段不为空，则需要通过这个字段判断是否需要更新操作'
+ || CHR(10)
+ || CHR(10)
+ || '        List<Map<String, Object>> insertResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> updateResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> allResultList = new ArrayList<>();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnValues(codeCategoryIdList, "CODECATEGORYID", Arrays';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1962,24943)=
+    '.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || CHR(10)
+ || '        Row headRow = sheet.getRow(0);'
+ || CHR(10)
+ || '        int columnQty = headRow.getPhysicalNumberOfCells();'
+ || CHR(10)
+ || '        String[] columnNames = new String[columnQty];'
+ || CHR(10)
+ || '        for (int i = 0; i < columnNames.length; i++) {'
+ || CHR(10)
+ || '            String columnName = getCellValue(headRow.getCell(i), String.class);'
+ || CHR(10)
+ || '            if (columnName != null) {'
+ || CHR(10)
+ || CHR(10)
+ || '                // 根据配置的列名获取数据库字段名'
+ || CHR(10)
+ || '                List<CoreImportTmplConfigBean> tmplConfigColumn = tmplConfigList.stream().filter(e -> columnName.equals(e.getExcelColumn())).collect(Collectors.toList());'
+ || CHR(10)
+ || '                String tableColumn;'
+ || CHR(10)
+ || '                if (tmplConfigColumn.size() > 0) {'
+ || CHR(10)
+ || '                    tableColumn = tmplConfigColumn.get(0).getDbField();'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    tableColumn = columnName;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || CHR(10)
+ || '                columnNames[i] = tableColumn;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        // 解析excel数据'
+ || CHR(10)
+ || '        int endRowNum = sheet.getPhysicalNumberOfRows();'
+ || CHR(10)
+ || '        for (int rowNum = startRowIndex; rowNum < endRowNum; rowNum++) {'
+ || CHR(10)
+ || '            Row dataRow = sheet.getRow(rowNum);'
+ || CHR(10)
+ || '            if (dataRow == null) {'
+ || CHR(10)
+ || '                continue;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '            Map<String, Object> map = new HashMap<>();'
+ || CHR(10)
+ || '            for (int cellIndex = 0; cellIndex < columnNames.length; cellIndex++) {'
+ || CHR(10)
+ || '                Cell cell = dataRow.getCell(cellIndex);'
+ || CHR(10)
+ || '                CoreImportTmplConfigBean config = tmplConfigList.get(cellIndex);'
+ || CHR(10)
+ || '                if (columnNames[cellIndex] != null && !columnNames[cellIndex].trim().isEmpty()) {'
+ || CHR(10)
+ || '                    if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(config.getFieldType()) && !StringUtils.isEmpty(config.getDataSource())) {'
+ || CHR(10)
+ || '                        String cellValueStr = ExcelHelper.getCellValue(cell, String.class);'
+ || CHR(10)
+ || '                        CoreCodeBean code = codeList.stream().filter(e -> config.getDataSource().equals(e.getCodeCa';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1942,26905)=
+    'tegoryId()) && cellValueStr.equals(e.getCodeName())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                        if (code != null) {'
+ || CHR(10)
+ || '                            map.put(columnNames[cellIndex].trim(), code.getCode());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        map.put(columnNames[cellIndex].trim(), ExcelHelper.getCellValue(cell, Object.class));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            allResultList.add(map);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        MapUtils.lowerCaseKey(allResultList);'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(allResultList)) {'
+ || CHR(10)
+ || '            insertResultList = ObjectUtils.clone(allResultList);'
+ || CHR(10)
+ || '            // primaryKey为空则直接新增'
+ || CHR(10)
+ || '            if (!ObjectUtils.isEmpty(primaryKey)) {'
+ || CHR(10)
+ || '                // 不为空，则更新'
+ || CHR(10)
+ || '                List<String> primaryKeyValueList = allResultList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                List<Map<String, Object>> existList = this.getMapDao().selectListByColumnValueList(tablename, primaryKeyValueList, primaryKey);'
+ || CHR(10)
+ || '                MapUtils.lowerCaseKey(existList);'
+ || CHR(10)
+ || '                List<String> existKeyValueList = existList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                // 清除为更新的数据'
+ || CHR(10)
+ || '                insertResultList.removeIf(e -> existKeyValueList.contains(MapUtils.getString(e, primaryKey)));'
+ || CHR(10)
+ || '                // 赋值更新的数据'
+ || CHR(10)
+ || '                existList.forEach('
+ || CHR(10)
+ || '                        existBean -> {'
+ || CHR(10)
+ || '                            Map<String, Object> importBean = allResultList.stream().filter(e -> ObjectUtils.equals(MapUtils.getString(e, primaryKey), MapUtils.getString(existBean, primaryKey))).findFirst().orElse(null);'
+ || CHR(10)
+ || '                            if (!ObjectUtils.isEmpty(importBean)) {'
+ || CHR(10)
+ || '                                MapUtils.copy(importBean, existBean, IGNORE_KEYS);'
+ || CHR(10)
+ || '                 ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1950,28847)=
+    '               updateResultList.add(existBean);'
+ || CHR(10)
+ || '                            }'
+ || CHR(10)
+ || '                        });'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!updateResultList.isEmpty()) {'
+ || CHR(10)
+ || '            return updateResultList;'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!insertResultList.isEmpty()) {'
+ || CHR(10)
+ || '            insertResultList.forEach('
+ || CHR(10)
+ || '                    map -> {'
+ || CHR(10)
+ || '                        // 若无主键ID，则自动给ID赋值'
+ || CHR(10)
+ || '                        if (!CollectionUtils.containsIgnoreCase(map, "id")) {'
+ || CHR(10)
+ || '                            map.put("ID", ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '            return insertResultList;'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return CollectionUtils.emptyList();'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    public static final <T> T getCellValue(final Cell cell, final Class<T> clazz) {'
+ || CHR(10)
+ || '        Object cellValue = "";'
+ || CHR(10)
+ || '        if (cell != null) { // cell can be null.'
+ || CHR(10)
+ || '            switch (cell.getCellType()) {'
+ || CHR(10)
+ || '                case STRING:'
+ || CHR(10)
+ || '                    cellValue = StringUtils.trim(cell.getRichStringCellValue().getString());'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case NUMERIC:'
+ || CHR(10)
+ || '                    short format = cell.getCellStyle().getDataFormat();'
+ || CHR(10)
+ || CHR(10)
+ || '                    if (format == 14 // yyyy-MM-dd'
+ || CHR(10)
+ || '                            || format == 22 // yyyy-MM-dd hh:mm:ss'
+ || CHR(10)
+ || '                            || format == 31 // yyyy年m月d日'
+ || CHR(10)
+ || '                            || format == 57 // yyyy年m月'
+ || CHR(10)
+ || '                            || format == 58 // m月d日'
+ || CHR(10)
+ || '                            || format == 20 // HH:mm'
+ || CHR(10)
+ || '                            || format == 32) { // h时mm分'
+ || CHR(10)
+ || '                        cellValue = DateUtil.getJavaDate(cell.getNumericCellValue()); // 获取成DATE类型'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        HSSFDataFormatter dataFormatter = new HSSFDataFormatter();'
+ || CHR(10)
+ || '                        cellValue = dataFormatter.formatCellValue(cell);'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case BOOLEAN:'
+ || CHR(10)
+ || '                    cellValue = ObjectUtils.toString';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CONTENT,1071,30797)=
+    '(cell.getBooleanCellValue());'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case FORMULA: // Cell公式要特殊处理'
+ || CHR(10)
+ || '                    final FormulaEvaluator evaluator = cell.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();'
+ || CHR(10)
+ || '                    final CellValue cv = evaluator.evaluate(cell);'
+ || CHR(10)
+ || '                    switch (cv.getCellType()) {'
+ || CHR(10)
+ || '                        case STRING:'
+ || CHR(10)
+ || '                            cellValue = StringUtils.trim(cv.getStringValue());'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        case NUMERIC:'
+ || CHR(10)
+ || '                            cellValue = cv.getNumberValue();'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        case BOOLEAN:'
+ || CHR(10)
+ || '                            cellValue = ObjectUtils.toString(cv.getBooleanValue());'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        default:'
+ || CHR(10)
+ || '                            cellValue = null;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                default:'
+ || CHR(10)
+ || '                    cellValue = "";'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        return (T) ConvertUtils.convert(cellValue, clazz);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND CLASSCONTENT IS NOT NULL AND DBMS_LOB.GETLENGTH(CLASSCONTENT)=31884;
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB length differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,2000,1)=
+    'import java.time.LocalDate;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.MapperParameter;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.bean.CoreImportTmplBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.bean.CoreImportTmplConfigBean;'
+ || CHR(10)
+ || 'import com.alibaba.fastjson.JSONObject;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.FileUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.FileException;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.sys.code.bean.CoreCodeBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.ConvertUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.excel.ExcelHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.context.LocalContextHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.manager.CoreFileManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.service.CoreImportTmplService;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.service.CoreImportTmplConfigService;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.importtmpl.CoreImportTmplConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.sys.code.service.CoreCodeService;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.checked.CheckedException;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.MatchPattern;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.mybatis.mapper.SearchFilter;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.EncryptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.SpirePdfUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.NumberUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.emc.framework.constant.EmcConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.utils.CoreFileUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathDTO;'
+ || CHR(10)
+ || 'import java.time.LocalDateTime;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.DateTimeUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.http.HttpClientManager;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.service.CoreFileService;'
+ || CHR(10)
+ || 'import org.springframework.beans.factory.annotation.Autowired;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.context.ApplicationContextHelper;'
+ || CHR(10)
+ || 'import com.sunwayworld.module.item.file.bean.CoreFileBean;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.exception.U';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,2000,2001)=
+    'nsupportedException;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.BeanUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.ObjectUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.CollectionUtils;'
+ || CHR(10)
+ || 'import java.util.stream.Collectors;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.StringUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.database.context.TableContext;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.utils.MapUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.spring.SpringCaller;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;'
+ || CHR(10)
+ || 'import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.constant.AuditConstant;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.audit.aunnotation.Audit;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.springframework.transaction.annotation.Transactional;'
+ || CHR(10)
+ || 'import org.springframework.stereotype.Repository;'
+ || CHR(10)
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Cell;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.CellType;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.CellValue;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.DateUtil;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.FormulaEvaluator;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Row;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Sheet;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.Workbook;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.usermodel.WorkbookFactory;'
+ || CHR(10)
+ || 'import org.springframework.context.annotation.Lazy;'
+ || CHR(10)
+ || 'import org.apache.poi.hssf.usermodel.HSSFDataFormatter;'
+ || CHR(10)
+ || 'import org.apache.poi.ss.util.CellRangeAddress;'
+ || CHR(10)
+ || CHR(10)
+ || 'import java.util.*;'
+ || CHR(10)
+ || 'import java.net.URLEncoder;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FileScope;'
+ || CHR(10)
+ || 'import java.io.*;'
+ || CHR(10)
+ || 'import com.sunwayworld.framework.io.file.FilePathManager;'
+ || CHR(10)
+ || 'import java.nio.file.Path;'
+ || CHR(10)
+ || 'impor';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1942,4001)=
+    't java.nio.file.Files;'
+ || CHR(10)
+ || CHR(10)
+ || '@Repository'
+ || CHR(10)
+ || 'public class CommonServiceLcdpFileServicev1m2 implements LcdpBaseService {'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreFileService coreFileService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    @Lazy private CoreFileManager coreFileManager;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreImportTmplService coreImportTmplService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreImportTmplConfigService coreImportTmplConfigService;'
+ || CHR(10)
+ || CHR(10)
+ || '    @Autowired'
+ || CHR(10)
+ || '    private CoreCodeService codeService;'
+ || CHR(10)
+ || CHR(10)
+ || '    public static final String[] IGNORE_KEYS = new String[]{"id", "createdById", "createdByName", "createdTime", "createdByOrgId", "createdByOrgName"};'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 赋值附件到指定位置 */'
+ || CHR(10)
+ || '    public void copyFile(CoreFileBean copyToFileBean, List<CoreFileBean> copyFileFilterList) {'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(copyFileFilterList)) {'
+ || CHR(10)
+ || '            // 先删除已经存在的附件'
+ || CHR(10)
+ || '            coreFileService.getDao().deleteBy(Collections.singletonList(copyToFileBean), "TARGETID", "EXT");'
+ || CHR(10)
+ || '            // 再查询复制的附件集合'
+ || CHR(10)
+ || '            List<CoreFileBean> copyFileList = coreFileService.getDao().selectList(copyFileFilterList, Arrays.asList("TARGETID", "EXT"), Collections.emptyList());'
+ || CHR(10)
+ || '            copyFileList.forEach('
+ || CHR(10)
+ || '                    copyFile -> {'
+ || CHR(10)
+ || '                        CoreFileBean copyToFile = new CoreFileBean();'
+ || CHR(10)
+ || '                        BeanUtils.copyProperties(copyFile, copyToFile, EmcConstant.CREATED_COLUMNS);'
+ || CHR(10)
+ || '                        copyToFile.setId(ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        copyToFile.setExt(copyToFileBean.getExt());'
+ || CHR(10)
+ || '                        copyToFile.setTargetId(copyToFileBean.getTargetId());'
+ || CHR(10)
+ || '                        FilePathDTO fr = CoreFileUtils.toFilePath(copyFile);'
+ || CHR(10)
+ || '                        String filePath = FilePathManager.getLocalPath(fr).toFile().getAbsolutePath();'
+ || CHR(10)
+ || '                        if (new File(filePath).exists()) {'
+ || CHR(10)
+ || '                            coreFileService.upload(copyToFile, new File(filePath));'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '               ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1854,5943)=
+    '     });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 赋值包含附件类型的附件到指定位置 */'
+ || CHR(10)
+ || '    public void copyBizCategoryFile(CoreFileBean copyToFileBean, List<CoreFileBean> copyFileFilterList) {'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(copyFileFilterList)) {'
+ || CHR(10)
+ || '            // 先删除已经存在的附件'
+ || CHR(10)
+ || '            coreFileService.getDao().deleteBy(Collections.singletonList(copyToFileBean), "TARGETID", "EXT", "BIZCATEGORY");'
+ || CHR(10)
+ || '            // 再查询复制的附件集合'
+ || CHR(10)
+ || '            List<CoreFileBean> copyFileList = coreFileService.getDao().selectList(copyFileFilterList, Arrays.asList("TARGETID", "EXT","BIZCATEGORY"), Collections.emptyList());'
+ || CHR(10)
+ || '            copyFileList.forEach('
+ || CHR(10)
+ || '                    copyFile -> {'
+ || CHR(10)
+ || '                        CoreFileBean copyToFile = new CoreFileBean();'
+ || CHR(10)
+ || '                        BeanUtils.copyProperties(copyFile, copyToFile, EmcConstant.CREATED_COLUMNS);'
+ || CHR(10)
+ || '                        copyToFile.setId(ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        copyToFile.setExt(copyToFileBean.getExt());'
+ || CHR(10)
+ || '                        copyToFile.setTargetId(copyToFileBean.getTargetId());'
+ || CHR(10)
+ || '                        copyToFile.setBizCategory(copyToFileBean.getBizCategory());'
+ || CHR(10)
+ || '                        FilePathDTO fr = CoreFileUtils.toFilePath(copyFile);'
+ || CHR(10)
+ || '                        String filePath = FilePathManager.getLocalPath(fr).toFile().getAbsolutePath();'
+ || CHR(10)
+ || '                        if (new File(filePath).exists()) {'
+ || CHR(10)
+ || '                            coreFileService.upload(copyToFile, new File(filePath));'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * lcdp根据模板编码，向模板文件中填充数据，并导出文件'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wrapper 请求参数'
+ || CHR(10)
+ || '     * @return excel文件下载地址'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp导出数据", type = MappingType.SELECT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public String exportData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        String exportFil';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1928,7797)=
+    'eName = wrapper.getParamValue("exportFileName");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || CHR(10)
+ || '        Long tmplId = importTmpl.getId();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || CHR(10)
+ || '        String targetId = "T_CORE_IMPORT_TMPL$" + tmplId;'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectFirstByFilter(SearchFilter.instance().match("TARGETID", targetId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        String fileName = importTmpl.getTmplName() + "." + coreFile.getFileExt();'
+ || CHR(10)
+ || '        if (!StringUtils.isBlank(exportFileName)){'
+ || CHR(10)
+ || '            fileName = exportFileName + "." + coreFile.getFileExt();'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        FilePathDTO filePath = FilePathDTO.of(FileScope.temp.name(), "" + System.currentTimeMillis(), UUID.randomUUID().toString(), fileName);'
+ || CHR(10)
+ || '        Path path = FilePathManager.getLocalPath(filePath);'
+ || CHR(10)
+ || '        FileUtils.makeDirs(path);'
+ || CHR(10)
+ || '        // 下载模板文件到本地'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, path);'
+ || CHR(10)
+ || CHR(10)
+ || '        try (InputStream is = Files.newInputStream(path);'
+ || CHR(10)
+ || '                Workbook wb = WorkbookFactory.create(is)) {'
+ || CHR(10)
+ || '            // 向模板文件填充数据'
+ || CHR(10)
+ || '            paddingTemplate(wb, wrapper, importTmpl, tmplConfigList);'
+ || CHR(10)
+ || '            try (OutputStream fis = Files.newOutputStream(path)) {'
+ || CHR(10)
+ || '                wb.write(fis);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        } catch (IOException e) {'
+ || CHR(10)
+ || '            throw new FileException(e);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        coreFileManager.upload(filePath, path);'
+ || CHR(10)
+ || '        return coreFileManager.getDownloadUrl(filePath);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** 解析mapper参数 */'
+ || CHR(10)
+ || '    private MapperParameter parseWrapperParam(Map<String, Object> paramMap) {'
+ || CHR(10)
+ || '        RestJsonWrapperBean wrapper = new RestJsonWrapperBean();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(paramMap';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1860,9725)=
+    ')) {'
+ || CHR(10)
+ || '            paramMap.forEach('
+ || CHR(10)
+ || '                    (key, value) -> {'
+ || CHR(10)
+ || '                        wrapper.setFilterValue(key, value);'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return wrapper.extractMapFilter();'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 根据模板文件，向excel中填充数据'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wb excel对象'
+ || CHR(10)
+ || '     * @param wrapper 请求参数'
+ || CHR(10)
+ || '     * @param tmplConfigList 模板文件配置'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    protected void paddingTemplate(Workbook wb, RestJsonWrapperBean wrapper, CoreImportTmplBean importTmpl, List<CoreImportTmplConfigBean> tmplConfigList) {'
+ || CHR(10)
+ || '        // 查询mapperUrl'
+ || CHR(10)
+ || '        String querySqlMapperUrl = wrapper.getParamValue("QuerySqlMapperUrl");'
+ || CHR(10)
+ || '        // mapper的参数'
+ || CHR(10)
+ || '        Map<String, Object> paramMap = LcdpWrapperParseUtils.parseMap(wrapper, 0);'
+ || CHR(10)
+ || '        Map<String, Object> orderMap = LcdpWrapperParseUtils.parseMap(wrapper, 1);'
+ || CHR(10)
+ || '        MapperParameter parameter = this.parseWrapperParam(paramMap);'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(orderMap)){'
+ || CHR(10)
+ || '            orderMap.forEach((k,v) -> {'
+ || CHR(10)
+ || '                parameter.setOrderParam(k, v.toString());'
+ || CHR(10)
+ || '            });'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        // TODO 查询待导出数据，根据业务需求自行实行查询的数据内容'
+ || CHR(10)
+ || '        List<Map<String, Object>> dataList = selectListByMapperId(querySqlMapperUrl, parameter);'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnValues(codeCategoryIdList, "CODECATEGORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || '        for (int i = 0; i < dataList.size(); i++) {'
+ || CHR(10)
+ || '            Map<String, Object> data = dataList.get(i);'
+ || CHR(10)
+ || '            int rowInd';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1968,11585)=
+    'ex = i + startRowIndex;'
+ || CHR(10)
+ || '            Row row = null == sheet.getRow(rowIndex) ? sheet.createRow(rowIndex) : sheet.getRow(rowIndex);'
+ || CHR(10)
+ || CHR(10)
+ || '            for (CoreImportTmplConfigBean importTmplConfig : tmplConfigList) {'
+ || CHR(10)
+ || '                if (null == importTmplConfig.getExcelColumnNo() || StringUtils.isEmpty(importTmplConfig.getDbField())) {'
+ || CHR(10)
+ || '                    continue;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                int cellIndex = importTmplConfig.getExcelColumnNo() - 1;'
+ || CHR(10)
+ || '                Cell cell = null == row.getCell(cellIndex) ? row.createCell(cellIndex) : row.getCell(cellIndex);'
+ || CHR(10)
+ || '                Object cellValue = MapUtils.getObject(data, importTmplConfig.getDbField());'
+ || CHR(10)
+ || '                // select类型将code转为name'
+ || CHR(10)
+ || '                if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(importTmplConfig.getFieldType()) && !StringUtils.isEmpty(importTmplConfig.getDataSource())) {'
+ || CHR(10)
+ || '                    String cellValueStr = String.valueOf(cellValue);'
+ || CHR(10)
+ || '                    // 根据codeCategoryId和code查询codeName，作为值导出'
+ || CHR(10)
+ || '                    CoreCodeBean code = codeList.stream().filter(e -> importTmplConfig.getDataSource().equals(e.getCodeCategoryId()) && cellValueStr.equals(e.getCode())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                    if (code != null) {'
+ || CHR(10)
+ || '                        cellValue = code.getCodeName();'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_DATE.equals(importTmplConfig.getFieldType())) {'
+ || CHR(10)
+ || '                    LocalDateTime dateTime = ConvertUtils.convert(cellValue, LocalDateTime.class);'
+ || CHR(10)
+ || '                    cell.setCellValue(DateTimeUtils.formatLocalDateTime(dateTime));'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    cell.setCellValue(ObjectUtils.toString(cellValue));'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        String mergeColumn = wrapper.getParamValue("mergeColumns");'
+ || CHR(10)
+ || '        if (!StringUtils.isBlank(mergeColumn)){'
+ || CHR(10)
+ || '            String[] columns = mergeColumn.split(",");'
+ || CHR(10)
+ || '           ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1928,13553)=
+    ' for(String column : columns){'
+ || CHR(10)
+ || '                mergeSameCellContentColumn(sheet, 1, Integer.parseInt(column));'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    public static void mergeSameCellContentColumn(Sheet sheet, int startRow, int column) {'
+ || CHR(10)
+ || '        int totalRows = sheet.getLastRowNum();'
+ || CHR(10)
+ || '        int firstRow = 0;'
+ || CHR(10)
+ || '        int lastRow = 0;'
+ || CHR(10)
+ || '        // 上一次比较是否相同'
+ || CHR(10)
+ || '        boolean isPrevCompareSame = false;'
+ || CHR(10)
+ || '        String prevMergeAddress = null;'
+ || CHR(10)
+ || '        String currentMergeAddress;'
+ || CHR(10)
+ || '        // 从第几开始判断是否相同'
+ || CHR(10)
+ || '        if (totalRows >= startRow) {'
+ || CHR(10)
+ || '            for (int i = startRow; i <= totalRows; i++) {'
+ || CHR(10)
+ || '                String lastRowCellContent = sheet.getRow(i - 1).getCell(column).getStringCellValue();'
+ || CHR(10)
+ || '                String curRowCellContent = sheet.getRow(i).getCell(column).getStringCellValue();'
+ || CHR(10)
+ || '                if (curRowCellContent.equals(lastRowCellContent)) {'
+ || CHR(10)
+ || '                    if (!isPrevCompareSame) {'
+ || CHR(10)
+ || '                        firstRow = i - 1;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    lastRow = i;'
+ || CHR(10)
+ || '                    isPrevCompareSame = true;'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    isPrevCompareSame = false;'
+ || CHR(10)
+ || '                    currentMergeAddress = firstRow + lastRow + column + column + "";'
+ || CHR(10)
+ || '                    if (lastRow > firstRow && !Objects.equals(currentMergeAddress, prevMergeAddress)) {'
+ || CHR(10)
+ || '                        sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, column, column));'
+ || CHR(10)
+ || '                        prevMergeAddress = currentMergeAddress;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '                // 最后一行时判断是否有需要合并的行'
+ || CHR(10)
+ || '                if ((i == totalRows) && (lastRow > firstRow)) {'
+ || CHR(10)
+ || '                    currentMergeAddress = firstRow + lastRow + column + column + "";'
+ || CHR(10)
+ || '                    if (!Objects.equals(currentMergeAddress, prevMergeAddress)) {'
+ || CHR(10)
+ || '                        sheet.addMergedRegion(new CellRangeAddress(firstRow, lastRow, column, column));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '   ';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1876,15481)=
+    '         }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /** lcdp导入数据，按照业务需求，解析excel字段内容并匹配数据库表字段，插入数据 */'
+ || CHR(10)
+ || '    @Mapping(value = "Lcdp导入数据", type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public JSONObject importData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String idStr = wrapper.getParamValue("id");'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectDetail(Long.parseLong(idStr));'
+ || CHR(10)
+ || '        File tempFile = FileUtils.createTempFile();'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, tempFile.toPath());'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        CoreImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        JSONObject result = new JSONObject();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(importTmpl)) {'
+ || CHR(10)
+ || '            String tablename = importTmpl.getTableName();'
+ || CHR(10)
+ || '            try (Workbook wb = WorkbookFactory.create(new File(tempFile.getAbsolutePath()))) {'
+ || CHR(10)
+ || CHR(10)
+ || '                extractDataAndInsert(wb, tablename, importTmpl.getId(),startRowIndex, wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '            } catch (IOException ioe) {'
+ || CHR(10)
+ || '                throw new FileException(ioe);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            FileUtils.deleteQuietly(tempFile);'
+ || CHR(10)
+ || CHR(10)
+ || '            result.put("success", true);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return result;'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    @Mapping(value = "获取导入的数据", type = MappingType.INSERT)'
+ || CHR(10)
+ || '    @Transactional'
+ || CHR(10)
+ || '    public List<Map<String, Object>> getImportData(RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || CHR(10)
+ || '        String idStr = wrapper.getParamValue("id");'
+ || CHR(10)
+ || '        CoreFileBean coreFile = coreFileService.selectDetail(Long.parseLong(idStr));'
+ || CHR(10)
+ || '        File tempFile = FileUtils.createTempFile();'
+ || CHR(10)
+ || '        coreFileManager.download(coreFile, tempFile.toPath());'
+ || CHR(10)
+ || CHR(10)
+ || '        String tmplCode = wrapper.getParamValue("tmplCode");'
+ || CHR(10)
+ || '        // 查询模板文件'
+ || CHR(10)
+ || '        C';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1846,17357)=
+    'oreImportTmplBean importTmpl = coreImportTmplService.selectFirstByFilter(SearchFilter.instance().match("TMPLCODE", tmplCode).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 开始导入行序号'
+ || CHR(10)
+ || '        Integer startRowIndex = importTmpl.getStartRowIndex();'
+ || CHR(10)
+ || '        List<Map<String, Object>> resultList = new ArrayList<>();'
+ || CHR(10)
+ || '        if (!ObjectUtils.isEmpty(importTmpl)) {'
+ || CHR(10)
+ || '            String tablename = importTmpl.getTableName();'
+ || CHR(10)
+ || '            try (Workbook wb = WorkbookFactory.create(new File(tempFile.getAbsolutePath()))) {'
+ || CHR(10)
+ || CHR(10)
+ || '                resultList = extractData(wb, tablename, importTmpl.getId(),startRowIndex, wrapper);'
+ || CHR(10)
+ || CHR(10)
+ || '            } catch (IOException ioe) {'
+ || CHR(10)
+ || '                throw new FileException(ioe);'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            FileUtils.deleteQuietly(tempFile);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return resultList;'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    /**'
+ || CHR(10)
+ || '     * 按照业务需求，解析excel字段内容，并插入数据库'
+ || CHR(10)
+ || '     *'
+ || CHR(10)
+ || '     * @param wb excel对象'
+ || CHR(10)
+ || '     */'
+ || CHR(10)
+ || '    protected void extractDataAndInsert(Workbook wb, String tablename, Long tmplId,Integer startRowIndex, RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        String primaryKey = wrapper.getParamValue("primaryKey"); // 唯一键，如果该字段不为空，则需要通过这个字段判断是否需要更新操作'
+ || CHR(10)
+ || CHR(10)
+ || '        List<Map<String, Object>> insertResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> updateResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> allResultList = new ArrayList<>();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selec';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1962,19203)=
+    'tListByOneColumnValues(codeCategoryIdList, "CODECATEGORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || CHR(10)
+ || '        Row headRow = sheet.getRow(0);'
+ || CHR(10)
+ || '        int columnQty = headRow.getPhysicalNumberOfCells();'
+ || CHR(10)
+ || '        String[] columnNames = new String[columnQty];'
+ || CHR(10)
+ || '        for (int i = 0; i < columnNames.length; i++) {'
+ || CHR(10)
+ || '            String columnName = getCellValue(headRow.getCell(i), String.class);'
+ || CHR(10)
+ || '            if (columnName != null) {'
+ || CHR(10)
+ || CHR(10)
+ || '                // 根据配置的列名获取数据库字段名'
+ || CHR(10)
+ || '                List<CoreImportTmplConfigBean> tmplConfigColumn = tmplConfigList.stream().filter(e -> columnName.equals(e.getExcelColumn())).collect(Collectors.toList());'
+ || CHR(10)
+ || '                String tableColumn;'
+ || CHR(10)
+ || '                if (tmplConfigColumn.size() > 0) {'
+ || CHR(10)
+ || '                    tableColumn = tmplConfigColumn.get(0).getDbField();'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    tableColumn = columnName;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || CHR(10)
+ || '                columnNames[i] = tableColumn;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        // 解析excel数据'
+ || CHR(10)
+ || '        int endRowNum = sheet.getPhysicalNumberOfRows();'
+ || CHR(10)
+ || '        for (int rowNum = startRowIndex; rowNum < endRowNum; rowNum++) {'
+ || CHR(10)
+ || '            Row dataRow = sheet.getRow(rowNum);'
+ || CHR(10)
+ || '            if (dataRow == null) {'
+ || CHR(10)
+ || '                continue;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '            Map<String, Object> map = new HashMap<>();'
+ || CHR(10)
+ || '            for (int cellIndex = 0; cellIndex < columnNames.length; cellIndex++) {'
+ || CHR(10)
+ || '                Cell cell = dataRow.getCell(cellIndex);'
+ || CHR(10)
+ || '                CoreImportTmplConfigBean config = tmplConfigList.get(cellIndex);'
+ || CHR(10)
+ || '                if (columnNames[cellIndex] != null && !columnNames[cellIndex].trim().isEmpty()) {'
+ || CHR(10)
+ || '                    if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(config.getFieldType()) && !StringUtils.isEmpty(config.getDataSource())) {'
+ || CHR(10)
+ || '                        String cellValueStr = ExcelHelper.getCellValue(cell, String.class);'
+ || CHR(10)
+ || '                        CoreCodeBean code = code';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1942,21165)=
+    'List.stream().filter(e -> config.getDataSource().equals(e.getCodeCategoryId()) && cellValueStr.equals(e.getCodeName())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                        if (code != null) {'
+ || CHR(10)
+ || '                            map.put(columnNames[cellIndex].trim(), code.getCode());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        map.put(columnNames[cellIndex].trim(), ExcelHelper.getCellValue(cell, Object.class));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            allResultList.add(map);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        MapUtils.lowerCaseKey(allResultList);'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(allResultList)) {'
+ || CHR(10)
+ || '            insertResultList = ObjectUtils.clone(allResultList);'
+ || CHR(10)
+ || '            // primaryKey为空则直接新增'
+ || CHR(10)
+ || '            if (!ObjectUtils.isEmpty(primaryKey)) {'
+ || CHR(10)
+ || '                // 不为空，则更新'
+ || CHR(10)
+ || '                List<String> primaryKeyValueList = allResultList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                List<Map<String, Object>> existList = this.getMapDao().selectListByColumnValueList(tablename, primaryKeyValueList, primaryKey);'
+ || CHR(10)
+ || '                MapUtils.lowerCaseKey(existList);'
+ || CHR(10)
+ || '                List<String> existKeyValueList = existList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                // 清除为更新的数据'
+ || CHR(10)
+ || '                insertResultList.removeIf(e -> existKeyValueList.contains(MapUtils.getString(e, primaryKey)));'
+ || CHR(10)
+ || '                // 赋值更新的数据'
+ || CHR(10)
+ || '                existList.forEach('
+ || CHR(10)
+ || '                        existBean -> {'
+ || CHR(10)
+ || '                            Map<String, Object> importBean = allResultList.stream().filter(e -> ObjectUtils.equals(MapUtils.getString(e, primaryKey), MapUtils.getString(existBean, primaryKey))).findFirst().orElse(null);'
+ || CHR(10)
+ || '                            if (!ObjectUtils.isEmpty(importBean)) {'
+ || CHR(10)
+ || '                                M';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1836,23107)=
+    'apUtils.copy(importBean, existBean, IGNORE_KEYS);'
+ || CHR(10)
+ || '                                updateResultList.add(existBean);'
+ || CHR(10)
+ || '                            }'
+ || CHR(10)
+ || '                        });'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!updateResultList.isEmpty()) {'
+ || CHR(10)
+ || '            this.getMapDao().updateIfChanged(tablename,updateResultList);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!insertResultList.isEmpty()) {'
+ || CHR(10)
+ || '            insertResultList.forEach('
+ || CHR(10)
+ || '                    map -> {'
+ || CHR(10)
+ || '                        // 若无主键ID，则自动给ID赋值'
+ || CHR(10)
+ || '                        if (!CollectionUtils.containsIgnoreCase(map, "id")) {'
+ || CHR(10)
+ || '                            map.put("ID", ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || CHR(10)
+ || '            // TODO 向数据库表中插入数据，根据业务需求，可自行调整'
+ || CHR(10)
+ || '            insert(tablename, insertResultList);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    protected List<Map<String, Object>> extractData(Workbook wb, String tablename, Long tmplId,Integer startRowIndex, RestJsonWrapperBean wrapper) {'
+ || CHR(10)
+ || '        String primaryKey = wrapper.getParamValue("primaryKey"); // 唯一键，如果该字段不为空，则需要通过这个字段判断是否需要更新操作'
+ || CHR(10)
+ || CHR(10)
+ || '        List<Map<String, Object>> insertResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> updateResultList = new ArrayList<>();'
+ || CHR(10)
+ || '        List<Map<String, Object>> allResultList = new ArrayList<>();'
+ || CHR(10)
+ || CHR(10)
+ || '        // 查询模板文件配置'
+ || CHR(10)
+ || '        List<CoreImportTmplConfigBean> tmplConfigList = coreImportTmplConfigService.selectListByFilter(SearchFilter.instance().match("IMPORTTMPLID", tmplId).filter(MatchPattern.EQ));'
+ || CHR(10)
+ || '        // 查询下拉选的数据'
+ || CHR(10)
+ || '        List<String> codeCategoryIdList = tmplConfigList.stream().filter(e -> "select".equals(e.getFieldType()) && !StringUtils.isEmpty(e.getDataSource())).map(CoreImportTmplConfigBean::getDataSource).collect(Collectors.toList());'
+ || CHR(10)
+ || '        List<CoreCodeBean> codeList = codeService.getDao().selectListByOneColumnValues(codeCategoryIdList, "CODECA';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1962,24943)=
+    'TEGORYID", Arrays.asList("CODE", "CODENAME", "CODECATEGORYID"));'
+ || CHR(10)
+ || '        Sheet sheet = wb.getSheetAt(0);'
+ || CHR(10)
+ || CHR(10)
+ || '        Row headRow = sheet.getRow(0);'
+ || CHR(10)
+ || '        int columnQty = headRow.getPhysicalNumberOfCells();'
+ || CHR(10)
+ || '        String[] columnNames = new String[columnQty];'
+ || CHR(10)
+ || '        for (int i = 0; i < columnNames.length; i++) {'
+ || CHR(10)
+ || '            String columnName = getCellValue(headRow.getCell(i), String.class);'
+ || CHR(10)
+ || '            if (columnName != null) {'
+ || CHR(10)
+ || CHR(10)
+ || '                // 根据配置的列名获取数据库字段名'
+ || CHR(10)
+ || '                List<CoreImportTmplConfigBean> tmplConfigColumn = tmplConfigList.stream().filter(e -> columnName.equals(e.getExcelColumn())).collect(Collectors.toList());'
+ || CHR(10)
+ || '                String tableColumn;'
+ || CHR(10)
+ || '                if (tmplConfigColumn.size() > 0) {'
+ || CHR(10)
+ || '                    tableColumn = tmplConfigColumn.get(0).getDbField();'
+ || CHR(10)
+ || '                } else {'
+ || CHR(10)
+ || '                    tableColumn = columnName;'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || CHR(10)
+ || '                columnNames[i] = tableColumn;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        // 解析excel数据'
+ || CHR(10)
+ || '        int endRowNum = sheet.getPhysicalNumberOfRows();'
+ || CHR(10)
+ || '        for (int rowNum = startRowIndex; rowNum < endRowNum; rowNum++) {'
+ || CHR(10)
+ || '            Row dataRow = sheet.getRow(rowNum);'
+ || CHR(10)
+ || '            if (dataRow == null) {'
+ || CHR(10)
+ || '                continue;'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '            Map<String, Object> map = new HashMap<>();'
+ || CHR(10)
+ || '            for (int cellIndex = 0; cellIndex < columnNames.length; cellIndex++) {'
+ || CHR(10)
+ || '                Cell cell = dataRow.getCell(cellIndex);'
+ || CHR(10)
+ || '                CoreImportTmplConfigBean config = tmplConfigList.get(cellIndex);'
+ || CHR(10)
+ || '                if (columnNames[cellIndex] != null && !columnNames[cellIndex].trim().isEmpty()) {'
+ || CHR(10)
+ || '                    if (CoreImportTmplConstant.IMPORT_TMPL_CONFIG_COLUMN_TYPE_SELECT.equals(config.getFieldType()) && !StringUtils.isEmpty(config.getDataSource())) {'
+ || CHR(10)
+ || '                        String cellValueStr = ExcelHelper.getCellValue(cell, String.class);'
+ || CHR(10)
+ || '                        CoreCodeBean code = codeList.stream().filter(e -> config.getDataSource().e';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1942,26905)=
+    'quals(e.getCodeCategoryId()) && cellValueStr.equals(e.getCodeName())).findFirst().orElse(null);'
+ || CHR(10)
+ || '                        if (code != null) {'
+ || CHR(10)
+ || '                            map.put(columnNames[cellIndex].trim(), code.getCode());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        map.put(columnNames[cellIndex].trim(), ExcelHelper.getCellValue(cell, Object.class));'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                }'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || CHR(10)
+ || '            allResultList.add(map);'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        MapUtils.lowerCaseKey(allResultList);'
+ || CHR(10)
+ || '        if (!CollectionUtils.isEmpty(allResultList)) {'
+ || CHR(10)
+ || '            insertResultList = ObjectUtils.clone(allResultList);'
+ || CHR(10)
+ || '            // primaryKey为空则直接新增'
+ || CHR(10)
+ || '            if (!ObjectUtils.isEmpty(primaryKey)) {'
+ || CHR(10)
+ || '                // 不为空，则更新'
+ || CHR(10)
+ || '                List<String> primaryKeyValueList = allResultList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                List<Map<String, Object>> existList = this.getMapDao().selectListByColumnValueList(tablename, primaryKeyValueList, primaryKey);'
+ || CHR(10)
+ || '                MapUtils.lowerCaseKey(existList);'
+ || CHR(10)
+ || '                List<String> existKeyValueList = existList.stream().filter(e -> e.containsKey(primaryKey)).map(e -> MapUtils.getString(e, primaryKey)).collect(Collectors.toList());'
+ || CHR(10)
+ || '                // 清除为更新的数据'
+ || CHR(10)
+ || '                insertResultList.removeIf(e -> existKeyValueList.contains(MapUtils.getString(e, primaryKey)));'
+ || CHR(10)
+ || '                // 赋值更新的数据'
+ || CHR(10)
+ || '                existList.forEach('
+ || CHR(10)
+ || '                        existBean -> {'
+ || CHR(10)
+ || '                            Map<String, Object> importBean = allResultList.stream().filter(e -> ObjectUtils.equals(MapUtils.getString(e, primaryKey), MapUtils.getString(existBean, primaryKey))).findFirst().orElse(null);'
+ || CHR(10)
+ || '                            if (!ObjectUtils.isEmpty(importBean)) {'
+ || CHR(10)
+ || '                                MapUtils.copy(importBean, existBean, IGNORE_KEYS);'
+ || CHR(10);
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1950,28847)=
+    '                                updateResultList.add(existBean);'
+ || CHR(10)
+ || '                            }'
+ || CHR(10)
+ || '                        });'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!updateResultList.isEmpty()) {'
+ || CHR(10)
+ || '            return updateResultList;'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        if (!insertResultList.isEmpty()) {'
+ || CHR(10)
+ || '            insertResultList.forEach('
+ || CHR(10)
+ || '                    map -> {'
+ || CHR(10)
+ || '                        // 若无主键ID，则自动给ID赋值'
+ || CHR(10)
+ || '                        if (!CollectionUtils.containsIgnoreCase(map, "id")) {'
+ || CHR(10)
+ || '                            map.put("ID", ApplicationContextHelper.getNextIdentity());'
+ || CHR(10)
+ || '                        }'
+ || CHR(10)
+ || '                    });'
+ || CHR(10)
+ || '            return insertResultList;'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || '        return CollectionUtils.emptyList();'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '    public static final <T> T getCellValue(final Cell cell, final Class<T> clazz) {'
+ || CHR(10)
+ || '        Object cellValue = "";'
+ || CHR(10)
+ || '        if (cell != null) { // cell can be null.'
+ || CHR(10)
+ || '            switch (cell.getCellType()) {'
+ || CHR(10)
+ || '                case STRING:'
+ || CHR(10)
+ || '                    cellValue = StringUtils.trim(cell.getRichStringCellValue().getString());'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case NUMERIC:'
+ || CHR(10)
+ || '                    short format = cell.getCellStyle().getDataFormat();'
+ || CHR(10)
+ || CHR(10)
+ || '                    if (format == 14 // yyyy-MM-dd'
+ || CHR(10)
+ || '                            || format == 22 // yyyy-MM-dd hh:mm:ss'
+ || CHR(10)
+ || '                            || format == 31 // yyyy年m月d日'
+ || CHR(10)
+ || '                            || format == 57 // yyyy年m月'
+ || CHR(10)
+ || '                            || format == 58 // m月d日'
+ || CHR(10)
+ || '                            || format == 20 // HH:mm'
+ || CHR(10)
+ || '                            || format == 32) { // h时mm分'
+ || CHR(10)
+ || '                        cellValue = DateUtil.getJavaDate(cell.getNumericCellValue()); // 获取成DATE类型'
+ || CHR(10)
+ || '                    } else {'
+ || CHR(10)
+ || '                        HSSFDataFormatter dataFormatter = new HSSFDataFormatter();'
+ || CHR(10)
+ || '                        cellValue = dataFormatter.formatCellValue(cell);'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case BOOLEAN:'
+ || CHR(10)
+ || '                    cellValue = Obj';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
+  SELECT COUNT(*) INTO n FROM T_LCDP_RESOURCE_HISTORY WHERE ID=1586194936223616 AND DBMS_LOB.SUBSTR(CLASSCONTENT,1088,30797)=
+    'ectUtils.toString(cell.getBooleanCellValue());'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                case FORMULA: // Cell公式要特殊处理'
+ || CHR(10)
+ || '                    final FormulaEvaluator evaluator = cell.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();'
+ || CHR(10)
+ || '                    final CellValue cv = evaluator.evaluate(cell);'
+ || CHR(10)
+ || '                    switch (cv.getCellType()) {'
+ || CHR(10)
+ || '                        case STRING:'
+ || CHR(10)
+ || '                            cellValue = StringUtils.trim(cv.getStringValue());'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        case NUMERIC:'
+ || CHR(10)
+ || '                            cellValue = cv.getNumberValue();'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        case BOOLEAN:'
+ || CHR(10)
+ || '                            cellValue = ObjectUtils.toString(cv.getBooleanValue());'
+ || CHR(10)
+ || '                            break;'
+ || CHR(10)
+ || '                        default:'
+ || CHR(10)
+ || '                            cellValue = null;'
+ || CHR(10)
+ || '                    }'
+ || CHR(10)
+ || '                    break;'
+ || CHR(10)
+ || '                default:'
+ || CHR(10)
+ || '                    cellValue = "";'
+ || CHR(10)
+ || '            }'
+ || CHR(10)
+ || '        }'
+ || CHR(10)
+ || CHR(10)
+ || '        return (T) ConvertUtils.convert(cellValue, clazz);'
+ || CHR(10)
+ || '    }'
+ || CHR(10)
+ || CHR(10)
+ || '}';
+  IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20124, 'Technical bootstrap CLOB content differs: T_LCDP_RESOURCE_HISTORY.CLASSCONTENT'); END IF;
 END;
 /
 DECLARE
@@ -27084,6 +32532,31 @@ BEGIN
   IF actual('1654966508241728') <>
     'V16:1654966508241728;V26:T_EMC_SAMPLE.USEDCONTAINER;V16:1654892685304660;V16:1654966506939200;'
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_LCDP_PAGE_I18N_CODE'); END IF;
+END;
+/
+DECLARE
+  TYPE row_map IS TABLE OF VARCHAR2(32767) INDEX BY VARCHAR2(128);
+  actual row_map;
+  oversized NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO oversized FROM T_CORE_CONSTANT WHERE DBMS_LOB.GETLENGTH(CONSTANTDESC)>1000;
+  IF oversized <> 0 THEN RAISE_APPLICATION_ERROR(-20123, 'Technical bootstrap text exceeds reviewed capacity.'); END IF;
+  FOR r IN (SELECT TO_CHAR(ID) AS ROW_ID, CASE WHEN ID IS NULL THEN 'N;' ELSE 'V'||LENGTH(ID)||':'||ID||';' END
+      || CASE WHEN CONSTANTVALUE IS NULL THEN 'N;' ELSE 'V'||LENGTH(CONSTANTVALUE)||':'||CONSTANTVALUE||';' END
+      || CASE WHEN CONSTANTDESC IS NULL THEN 'N;' ELSE 'V'||DBMS_LOB.GETLENGTH(CONSTANTDESC)||':'||DBMS_LOB.SUBSTR(CONSTANTDESC,1000,1)||';' END
+      || CASE WHEN CLASSFICATION IS NULL THEN 'N;' ELSE 'V'||LENGTH(CLASSFICATION)||':'||CLASSFICATION||';' END
+      || CASE WHEN SHOW IS NULL THEN 'N;' ELSE 'V'||LENGTH(SHOW)||':'||SHOW||';' END AS SIGNATURE FROM T_CORE_CONSTANT) LOOP
+    actual(r.ROW_ID) := r.SIGNATURE;
+  END LOOP;
+  IF actual.COUNT <> 2 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_CONSTANT'); END IF;
+  IF NOT actual.EXISTS('FILE-EXTENSIONS') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CONSTANT'); END IF;
+  IF actual('FILE-EXTENSIONS') <>
+    'V15:FILE-EXTENSIONS;V114:txt,doc,jpg,jpeg,gif,tif,tiff,png,bmp,zip,rar,xls,ppt,ini,pdf,docx,xlsx,swf,dwg,wps,pptx,ppt,cpt,json,swdp,csv,lyd;V11:附件上传允许的文件类型;V2:系统;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CONSTANT'); END IF;
+  IF NOT actual.EXISTS('FILE-SPACELIMIT') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CONSTANT'); END IF;
+  IF actual('FILE-SPACELIMIT') <>
+    'V15:FILE-SPACELIMIT;V3:100;V11:附件大小限制，单位为M;V2:系统;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CONSTANT'); END IF;
 END;
 /
 PROMPT Selected technical bootstrap content verified; full installation remains partial.

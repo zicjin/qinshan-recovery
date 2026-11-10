@@ -657,22 +657,22 @@
       "sha256": "34c43de299eb20a45435b6d343badb43ebc16cefece4df9d9415f865a8093638"
     },
     {
-      "bytes": 1211783,
+      "bytes": 1446544,
       "path": "70-bootstrap.sql",
       "role": "bootstrap",
-      "sha256": "c2c26c6cc9afae946675cf0f1649d95e8bad1f2376c87c3ff4e9f597fb05882a"
+      "sha256": "5574fcd86b4129c7aab1e75173b26ac64924012816329b213aa453949fb831b1"
     },
     {
-      "bytes": 2120205,
+      "bytes": 2331361,
       "path": "80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "d0008028cc85c4abfa284b10fbb1e2bf0c10d8324925e457583fcd8ed12d46c5"
+      "sha256": "bd22320585d9e6ea8bc7c5c2db0e489980fa7caecba92a674dbd97349bbe4e3b"
     },
     {
-      "bytes": 1214835,
+      "bytes": 1218642,
       "path": "bootstrap-provenance.json",
       "role": "source-metadata",
-      "sha256": "c763b9632a0c8b30b0b147124fc777c472bcf951a672958c5167252de72848e3"
+      "sha256": "aeb10c343a38ae02c610d14eb05bcb7f2cc0befd7cd64fdaea4942da2391caa6"
     }
   ],
   "limitations": [
@@ -13527,6 +13527,7 @@
       "T_CORE_CODE": 120,
       "T_CORE_CODE_CATEGORY": 28,
       "T_CORE_CODE_CLASS": 2,
+      "T_CORE_CONSTANT": 2,
       "T_CORE_I18N": 1350,
       "T_CORE_I18N_CONFIG": 2,
       "T_CORE_I18N_MESSAGE": 1375,
@@ -13538,8 +13539,8 @@
       "T_LCDP_MODULE_PAGE_COMP": 229,
       "T_LCDP_MODULE_PAGE_I18N": 123,
       "T_LCDP_PAGE_I18N_CODE": 242,
-      "T_LCDP_RESOURCE": 37,
-      "T_LCDP_RESOURCE_HISTORY": 29
+      "T_LCDP_RESOURCE": 41,
+      "T_LCDP_RESOURCE_HISTORY": 30
     }
   }
 }

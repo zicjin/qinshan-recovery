@@ -216,6 +216,10 @@ def render_table(
         position = int(row[5]) if row[5] not in (None, "") else 10**9
         by_index[str(row[1]).upper()].append((position, str(row[4]).upper(), str(row[6]).upper()))
     index_count = 0
+    constraint_column_sets = {
+        tuple(column for _, column in sorted(by_constraint.get(name, [])))
+        for name in constraint_names
+    }
     for row in sorted(indexes, key=lambda r: str(r[1]).upper()):
         name = str(row[1]).upper()
         if name in constraint_names:
@@ -230,6 +234,15 @@ def render_table(
             continue
         if str(row[2]).upper() != "NORMAL":
             blocked.append({"kind": "index", "table": table, "name": name, "reason": f"index type {row[2]} is not rendered"})
+            continue
+        logical_columns = tuple(column for _, column, _ in cols)
+        if logical_columns in constraint_column_sets:
+            blocked.append({
+                "kind": "index",
+                "table": table,
+                "name": name,
+                "reason": "duplicate column set is already represented by a table constraint; Oracle rejects ORA-01408",
+            })
             continue
         uniqueness = "UNIQUE " if str(row[3]).upper() == "UNIQUE" else ""
         rendered_cols = []

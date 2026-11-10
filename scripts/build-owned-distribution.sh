@@ -39,6 +39,12 @@ source_hash() {
         scripts/reject-supplier-runtime.sh
       printf '%s\0' owned-distribution/package.py owned-distribution/start.sh
       printf '%s\0' owned-distribution/example/owned-application.properties
+      if [[ -n "${EXTERNAL_SCHEMA_PROFILE:-}" ]]; then
+        printf '%s\0' "$EXTERNAL_SCHEMA_PROFILE"
+      fi
+      if [[ -n "${EXTERNAL_SCHEMA_MANIFEST:-}" ]]; then
+        printf '%s\0' "$EXTERNAL_SCHEMA_MANIFEST"
+      fi
     } | sort -z | xargs -0 sha256sum
   )
 }
@@ -69,8 +75,16 @@ fi
 
 bash "$ROOT/scripts/verify-external-artifacts.sh" --source-only
 bash "$ROOT/scripts/build-reconstituted-framework.sh"
-python3 "$ROOT/scripts/build-source-only-application.py" \
-  --public-deps "$PUBLIC_DEPS" \
+BUILD_APPLICATION_ARGS=(
+  --public-deps "$PUBLIC_DEPS"
+)
+if [[ -n "${EXTERNAL_SCHEMA_PROFILE:-}" ]]; then
+  BUILD_APPLICATION_ARGS+=(--external-schema-profile "$EXTERNAL_SCHEMA_PROFILE")
+fi
+if [[ -n "${EXTERNAL_SCHEMA_MANIFEST:-}" ]]; then
+  BUILD_APPLICATION_ARGS+=(--external-schema-manifest "$EXTERNAL_SCHEMA_MANIFEST")
+fi
+python3 "$ROOT/scripts/build-source-only-application.py" "${BUILD_APPLICATION_ARGS[@]}" \
   > "$APPLICATION_DIR/build-output.json"
 
 if [ "${OWNED_DISTRIBUTION_REUSE:-0}" = "1" ]; then

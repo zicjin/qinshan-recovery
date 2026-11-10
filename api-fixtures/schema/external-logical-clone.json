@@ -1,0 +1,41 @@
+{
+  "schema": "external-logical-clone-fixture-v1",
+  "status": "not-applied",
+  "target_owner": "LIMS_RUNTIME_LOCAL",
+  "container": "FREEPDB1",
+  "access_mode": "local-view",
+  "source_receipt": {
+    "path": "private/production-baseline-20261110/external-schema-remote-full-metadata-private.json",
+    "sha256": "652ff5f9e04ca15eb0896aceeac5493be97d8c92083dd5736c5282cf684a2d97"
+  },
+  "setup": {
+    "path": "api-fixtures/schema/external-logical-clone.sql",
+    "sha256": "10206e58678ae1bc206b0feaa853433e0a37f6cdad5cca1d7844248df594708b"
+  },
+  "restore": {
+    "path": "api-fixtures/schema/external-logical-clone-restore.sql",
+    "sha256": "9f9be0f253a1b73f82be822c580b3c228ac76638557d6ef9c4a1e09ee03f2024"
+  },
+  "production_business_rows_read": false,
+  "fixture_business_rows": false,
+  "db_link_created": false,
+  "tables": [
+    "T_CRM_CONTRACT",
+    "T_CRM_INVOICE_PROJ",
+    "T_CRM_INVOICE",
+    "T_CRM_PAY_PROJECT",
+    "T_CRM_PAYMENT",
+    "T_LIMS_CLEARANCEFORM",
+    "T_LIMS_FOLDERS",
+    "T_XFP_ORDER_TASK",
+    "T_XFP_PROJECT",
+    "T_XFP_REPORT"
+  ],
+  "restore_contract": "drop only the ten fixture tables with CASCADE CONSTRAINTS; no business rows are inserted",
+  "source_domains": {
+    "HT": "LIMS_CZJKY_HT",
+    "SP": "LIMS_CZJKY_SP",
+    "XFP": "LIMS_CZJKY_XF"
+  },
+  "qualifier_profile": "api-fixtures/schema/external-schema-runtime-profile.example.json"
+}

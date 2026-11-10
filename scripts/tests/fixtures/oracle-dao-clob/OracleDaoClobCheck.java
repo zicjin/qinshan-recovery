@@ -43,11 +43,15 @@ public class OracleDaoClobCheck {
     public Object intercept(Invocation call) throws Throwable {
       BoundSql bound=((StatementHandler)call.getTarget()).getBoundSql();
       lastSql=bound.getSql().replaceAll("\\s+"," ").trim();
+      // H2 accepts CLOB IN by implicit conversion; Oracle rejects it with
+      // ORA-22848. Enforce that dialect restriction at the JDBC boundary.
+      if(lastSql.matches("(?is).*\"PROJNAME\"\\s+IN\\s*\\(.*"))
+        throw new AssertionError("Oracle ORA-22848: CLOB membership cannot use IN: "+lastSql);
       if(lastSql.contains("DBMS_LOB.COMPARE")) {
         comparisons++;
-        boolean clob=false;
-        for(ParameterMapping p:bound.getParameterMappings()) if(p.getJdbcType()==JdbcType.CLOB) clob=true;
-        expect(true,clob);
+        int clobBindings=0;
+        for(ParameterMapping p:bound.getParameterMappings()) if(p.getJdbcType()==JdbcType.CLOB) clobBindings++;
+        expect(lastSql.split("DBMS_LOB\\.COMPARE",-1).length-1,clobBindings);
       }
       if(oracle!=null) emit(bound);
       return call.proceed();
@@ -75,6 +79,13 @@ public class OracleDaoClobCheck {
     return EntityContextInstance.instance(entity,p,v.keySet().toArray(new String[0]));
   }
   static TableContextInstance map(Map<String,Object> v) { return TableContextInstance.of(table,v); }
+  static List<EntityContextInstance> members(String column,String... candidates) {
+    List<EntityContextInstance> items=new ArrayList<>();
+    for(String candidate:candidates) {
+      Map<String,Object> v=new LinkedHashMap<>();v.put(column,candidate);items.add(item(v));
+    }
+    return items;
+  }
   static void fixture() throws Exception {
     try(Connection c=DriverManager.getConnection(URL); Statement s=c.createStatement()) {
       s.execute("CREATE SCHEMA DBMS_LOB");
@@ -112,6 +123,9 @@ public class OracleDaoClobCheck {
     if(!lastSql.contains("DBMS_LOB.COMPARE")) throw new AssertionError("Oracle CLOB read equality must compare full bound CLOB, actual: "+lastSql);
     if(lastSql.toUpperCase(Locale.ROOT).contains("SUBSTR")||lastSql.contains("TO_CHAR")) throw new AssertionError("Truncated LOB: "+lastSql);
   }
+  static void scalarMembershipSql() {
+    if(!lastSql.contains(" IN ")||lastSql.contains("DBMS_LOB")) throw new AssertionError("Scalar membership must retain IN: "+lastSql);
+  }
   static String literal(Object v,boolean clob) {
     if(v==null)return "NULL";
     if(v instanceof Number)return v.toString();
@@ -148,6 +162,7 @@ public class OracleDaoClobCheck {
     ApplicationContextHelper.setApplicationContext(app);DialectRepository.setDialect(DIALECT);
     fixture();
     Configuration config=new Configuration(new Environment("fixture",new JdbcTransactionFactory(),new UnpooledDataSource("org.h2.Driver",URL,"", "")));
+    config.setLocalCacheScope(LocalCacheScope.STATEMENT);
     config.addInterceptor(new Capture());
     if(args.length>2) {
       oracle=new PrintWriter(new OutputStreamWriter(new FileOutputStream(args[2]),"UTF-8"));
@@ -157,6 +172,49 @@ public class OracleDaoClobCheck {
     try(SqlSession session=new SqlSessionFactoryBuilder().build(config).openSession()) {
       DaoMapper dao=session.getMapper(DaoMapper.class); MapDaoMapper maps=session.getMapper(MapDaoMapper.class);
       List<String> projection=Arrays.asList("ID"); List<Order> asc=Arrays.asList(Order.asc("ID")),desc=Arrays.asList(Order.desc("ID"));
+      label="Dao CLOB membership full text";expected="1,2";
+      ids("1,2",dao.selectByOneColumnValues(entity,"PROJNAME",members("PROJNAME",LONG+"A"),projection,asc));lobSql();
+      label="Dao CLOB membership distinct tail";expected="3";
+      ids("3",dao.selectByOneColumnValues(entity,"PROJNAME",members("PROJNAME",LONG+"B"),projection,asc));lobSql();
+      label="Dao CLOB membership absent tail";expected="";
+      ids("",dao.selectByOneColumnValues(entity,"PROJNAME",members("PROJNAME",LONG+"C"),projection,asc));lobSql();
+      label="Dao CLOB membership multiple values";expected="1,2,5";
+      ids("1,2,5",dao.selectByOneColumnValues(entity,"PROJNAME",members("PROJNAME",LONG+"A","short"),projection,asc));lobSql();
+      label="Dao CLOB membership quotes exact";expected="6";
+      ids("6",dao.selectByOneColumnValues(entity,"PROJNAME",members("PROJNAME","项目' OR '1'='1"),projection,asc));lobSql();
+      label="Dao CLOB membership quotes absent";expected="";
+      ids("",dao.selectByOneColumnValues(entity,"PROJNAME",members("PROJNAME","project' OR '1'='1"),projection,asc));lobSql();
+      label="Dao CLOB membership null empty and actual";expected="1,2,6";
+      ids("1,2,6",dao.selectByOneColumnValues(entity,"PROJNAME",members("PROJNAME",null,"",LONG+"A","项目' OR '1'='1"),projection,asc));lobSql();
+      label="Dao CLOB membership case insensitive column and sort";expected="1,2";
+      ids("2,1",dao.selectByOneColumnValues(entity,"projname",members("PROJNAME",LONG+"A"),projection,desc));lobSql();
+      for(String candidate:new String[]{null,""}) {
+        label="Dao CLOB membership "+(candidate==null?"null":"empty")+" does not match null row";expected="";
+        ids("",dao.selectByOneColumnValues(entity,"PROJNAME",members("PROJNAME",candidate),projection,asc));
+      }
+      label="Dao CLOB membership complete projection";expected="1,2";
+      List<Map<String,Object>> complete=dao.selectByOneColumnValues(entity,"PROJNAME",members("PROJNAME",LONG+"A"),null,asc);
+      ids("1,2",complete);lobSql();
+      Clob membershipValue=(Clob)complete.get(0).get("PROJNAME");
+      expect(LONG+"A",membershipValue.getSubString(1,(int)membershipValue.length()));
+      expect(new HashSet<>(Arrays.asList("ID","PROJNAME","PROJNO")),complete.get(0).keySet());
+      label="Dao scalar membership in table with CLOB";expected="2";
+      ids("2",dao.selectByOneColumnValues(entity,"PROJNO",members("PROJNO","n2"),projection,asc));scalarMembershipSql();
+      label="Dao scalar membership multiple values";expected="1,2,3,4,5,6";
+      ids("1,2,3,4,5,6",dao.selectByOneColumnValues(entity,"projno",members("PROJNO","n1","n2"),projection,asc));scalarMembershipSql();
+      label="Dao scalar membership null empty and actual";expected="2";
+      ids("2",dao.selectByOneColumnValues(entity,"PROJNO",members("PROJNO",null,"","n2"),projection,asc));scalarMembershipSql();
+      label="Dao scalar membership null and empty only";expected="";
+      ids("",dao.selectByOneColumnValues(entity,"PROJNO",members("PROJNO",null,""),projection,asc));scalarMembershipSql();
+      label="Dao number membership in table with CLOB";expected="2";
+      Project numbered=new Project();numbered.setId(2L);
+      ids("2",dao.selectByOneColumnValues(entity,"ID",Arrays.asList(EntityContextInstance.instance(entity,numbered,"ID")),projection,asc));scalarMembershipSql();
+      for(String column:Arrays.asList("PROJNAME","PROJNO")) {
+        label="Dao membership empty list fails closed "+column;expected="";
+        ids("",dao.selectByOneColumnValues(entity,column,Collections.<EntityContextInstance>emptyList(),projection,asc));
+        label="Dao membership null list fails closed "+column;expected="";
+        ids("",dao.selectByOneColumnValues(entity,column,null,projection,asc));
+      }
       // Exercise both existing Mapper contracts, using real framework context factories.
       for(boolean isMap:new boolean[]{false,true}) {
         String who=isMap?"MapDao":"Dao";

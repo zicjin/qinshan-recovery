@@ -892,12 +892,14 @@
     {
       "bytes": 24051,
       "compile_status": "not-applicable-resource",
-      "destination_sha256": "a6137c3a5ec6530b6d91201fc1a4ccd154f56a9fa6eeaecdb2adb7e7ea0e17ce",
+      "destination_sha256": "86009a94c18cc9c96475ca2e1cdafbbcf68658d798d1a41bdd93a257f816352d",
       "path": "com/sunwayworld/framework/mybatis/mapper/conf/dao-oracle-mapper.xml",
       "sha256": "beecfaca1f03da179c67eb4f502155bbb4cea69926576959cd7e84824a7b3abc",
       "source_jar": "gikam-core-common-14.1.5.jar",
       "transformations": [
-        "read-side equality uses full DBMS_LOB.COMPARE with jdbcType=CLOB only when existing columnContext.clob is true; preserve null/empty IS NULL, scalar and original AND/OR/order/projection/count structure"
+        "read-side equality uses full DBMS_LOB.COMPARE with jdbcType=CLOB only when existing columnContext.clob is true; preserve null/empty IS NULL, scalar and original AND/OR/order/projection/count structure",
+        "selectByOneColumnValues repairs original Oracle CLOB IN defect: select metadata by requested column, use full DBMS_LOB.COMPARE with jdbcType=CLOB and OR membership; preserve scalar IN and null/empty candidate non-match; empty or null Mapper list fails closed; production default check-access failure is not claimed",
+        "overlay:src/main/resources/com/sunwayworld/framework/mybatis/mapper/conf/dao-oracle-mapper.xml"
       ]
     },
     {

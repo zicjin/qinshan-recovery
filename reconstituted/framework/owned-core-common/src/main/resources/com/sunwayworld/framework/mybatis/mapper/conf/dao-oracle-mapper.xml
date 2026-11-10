@@ -315,22 +315,51 @@
             </otherwise>
         </choose>
         FROM ${context.tableName}
+        <bind name="clobColumn" value="false"/>
+        <foreach collection="context.columnContextList" item="columnContext">
+            <if test="columnContext.clob and columnContext.columnName.equalsIgnoreCase(columnName)">
+                <bind name="clobColumn" value="true"/>
+            </if>
+        </foreach>
         <where>
-            "${columnName.toUpperCase}" IN
-            <foreach collection="contextInstanceList" item="contextInstance" open="(" close=")" separator=",">
-                <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
-                    <if test="columnInstance.active">
-                        <choose>
-                            <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
-                                NULL
-                            </when>
-                            <otherwise>
-                                #{columnInstance.value}
-                            </otherwise>
-                        </choose>
-                    </if>
-                </foreach>
-            </foreach>
+            <choose>
+                <when test="contextInstanceList == null or contextInstanceList.size() == 0">
+                    1 = 0
+                </when>
+                <when test="clobColumn">
+                    <foreach collection="contextInstanceList" item="contextInstance" open="(" close=")" separator="OR">
+                        <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator="OR">
+                            <if test="columnInstance.active">
+                                <choose>
+                                    <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                                        1 = 0
+                                    </when>
+                                    <otherwise>
+                                        DBMS_LOB.COMPARE("${columnName.toUpperCase}", #{columnInstance.value,jdbcType=CLOB}) = 0
+                                    </otherwise>
+                                </choose>
+                            </if>
+                        </foreach>
+                    </foreach>
+                </when>
+                <otherwise>
+                    "${columnName.toUpperCase}" IN
+                    <foreach collection="contextInstanceList" item="contextInstance" open="(" close=")" separator=",">
+                        <foreach collection="contextInstance.columnContextInstanceList" item="columnInstance" separator=",">
+                            <if test="columnInstance.active">
+                                <choose>
+                                    <when test='columnInstance.value == null or columnInstance.value.toString() == ""'>
+                                        NULL
+                                    </when>
+                                    <otherwise>
+                                        #{columnInstance.value}
+                                    </otherwise>
+                                </choose>
+                            </if>
+                        </foreach>
+                    </foreach>
+                </otherwise>
+            </choose>
         </where>
         <if test="orderList != null and orderList.size() > 0">
             ORDER BY

@@ -53,6 +53,12 @@ APPROVED_OWNERS: Mapping[str, str] = {
 # latter limit; the target runtime still decides whether a name is legal.
 IDENTIFIER = re.compile(r"^[A-Z][A-Z0-9_$#]{0,127}$")
 SAFE_TYPE = re.compile(r"^[A-Z][A-Z0-9]*(?:\([0-9]+\))?(?:\s+[A-Z]+)?$")
+DEFAULT_COLUMNS = ["OWNER", "TABLE_NAME", "COLUMN_NAME", "DEFAULT_LENGTH", "DATA_DEFAULT"]
+CONSTRAINT_INDEX_COLUMNS = ["OWNER", "TABLE_NAME", "CONSTRAINT_NAME", "CONSTRAINT_TYPE", "STATUS", "VALIDATED", "DEFERRABLE", "DEFERRED", "INDEX_OWNER", "INDEX_NAME"]
+SAFE_DEFAULT = re.compile(
+    r"(?:N?'(?:[^'\r\n\x00]|'')*'|[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:E[+-]?[0-9]+)?|NULL|SYSDATE)",
+    re.IGNORECASE,
+)
 
 
 class DdlError(ValueError):
@@ -88,6 +94,44 @@ def section_status(metadata: Mapping[str, Any], name: str) -> str:
     return str(section.get("status")) if isinstance(section, Mapping) else "missing"
 
 
+def captured_defaults(metadata: Mapping[str, Any]) -> dict[tuple[str, str, str], str]:
+    """Validate optional AL32UTF8 DATA_DEFAULT captures without guessing expressions.
+
+    column_defaults uses the ordinary status/columns/rows receipt format with
+    DEFAULT_COLUMNS in that exact order. DEFAULT_LENGTH describes untrimmed
+    UTF-8 bytes; only surrounding expression whitespace is removed for DDL.
+    """
+    section = metadata.get("column_defaults")
+    if section is None:
+        return {}
+    if not isinstance(section, Mapping) or section.get("status") != "ok" or section.get("columns") != DEFAULT_COLUMNS:
+        raise DdlError("invalid column_defaults metadata section")
+    rows = section.get("rows")
+    if not isinstance(rows, list):
+        raise DdlError("column_defaults rows must be a list")
+    columns = {tuple(str(value).upper() for value in row[:2]) + (str(row[3]).upper(),): row
+               for row in rows_for(metadata.get("columns")) if len(row) >= 12}
+    defaults: dict[tuple[str, str, str], str] = {}
+    for row in rows:
+        if not isinstance(row, list) or len(row) != 5 or not all(isinstance(value, str) for value in row[:3]):
+            raise DdlError("invalid column_defaults metadata row")
+        key = tuple(value.upper() for value in row[:3])
+        if key in defaults or key not in columns:
+            raise DdlError("duplicate or unmatched column_defaults metadata row")
+        raw = row[4]
+        length = str(row[3])
+        source_length = str(columns[key][11])
+        if not isinstance(raw, str) or not re.fullmatch(r"[0-9]+", length) or not re.fullmatch(r"[0-9]+", source_length):
+            raise DdlError("invalid column default length or expression metadata")
+        if int(length) != int(source_length) or len(raw.encode("utf-8")) != int(length):
+            raise DdlError("column default length mismatch")
+        expression = raw.strip()
+        if not SAFE_DEFAULT.fullmatch(expression):
+            raise DdlError("unsafe or unsupported column default expression")
+        defaults[key] = expression
+    return defaults
+
+
 def data_type(row: Sequence[Any]) -> str:
     # ALL_TAB_COLUMNS fields in the receipt:
     # owner, table, column_id, column, data_type, data_length,
@@ -100,7 +144,15 @@ def data_type(row: Sequence[Any]) -> str:
     scale = row[7]
     char_used = str(row[9] or "").upper()
     char_length = row[10]
-    if kind in {"VARCHAR2", "NVARCHAR2", "CHAR", "NCHAR", "RAW"}:
+    if kind in {"NVARCHAR2", "NCHAR"}:
+        if char_length in (None, ""):
+            raise DdlError(f"character length missing for {kind} column {row[3]}")
+        return f"{kind}({int(char_length)})"
+    if kind == "RAW":
+        if length in (None, ""):
+            raise DdlError(f"length missing for {kind} column {row[3]}")
+        return f"RAW({int(length)})"
+    if kind in {"VARCHAR2", "CHAR"}:
         amount = char_length if char_used == "C" and char_length not in (None, "") else length
         if amount in (None, ""):
             raise DdlError(f"length missing for {kind} column {row[3]}")
@@ -108,7 +160,7 @@ def data_type(row: Sequence[Any]) -> str:
         return f"{kind}({int(amount)}{suffix})"
     if kind == "NUMBER":
         if precision in (None, ""):
-            return "NUMBER"
+            return "NUMBER" if scale in (None, "") else f"NUMBER(*,{int(scale)})"
         return f"NUMBER({int(precision)},{int(scale or 0)})"
     if kind.startswith("TIMESTAMP"):
         # DATA_TYPE is already e.g. TIMESTAMP(6) in Oracle dictionary views.
@@ -130,6 +182,31 @@ def index_rows(metadata: Mapping[str, Any], owner: str, table: str) -> tuple[lis
     return indexes, columns
 
 
+def captured_index_links(metadata: Mapping[str, Any]) -> dict[tuple[str, str, str], list[Any]] | None:
+    """Optional source constraint/index association, never inferred from names."""
+    section = metadata.get("constraint_index_links")
+    if section is None:
+        return None
+    if not isinstance(section, Mapping) or section.get("status") != "ok" or section.get("columns") != CONSTRAINT_INDEX_COLUMNS:
+        raise DdlError("invalid constraint_index_links metadata section")
+    rows = section.get("rows")
+    if not isinstance(rows, list):
+        raise DdlError("constraint_index_links rows must be a list")
+    source = {tuple(str(value).upper() for value in row[:3]): row
+              for row in rows_for(metadata.get("constraints")) if len(row) >= 12}
+    links = {}
+    for row in rows:
+        if not isinstance(row, list) or len(row) != 10 or not all(isinstance(value, str) for value in row[:8]):
+            raise DdlError("invalid constraint_index_links metadata row")
+        key = tuple(value.upper() for value in row[:3])
+        if key in links or key not in source or row[3] not in {"P", "U"}:
+            raise DdlError("duplicate or unmatched constraint_index_links metadata row")
+        if row[:8] != source[key][:8]:
+            raise DdlError("constraint_index_links state differs from source constraint")
+        links[key] = row
+    return links
+
+
 def render_table(
     schema: str,
     owner: str,
@@ -146,13 +223,17 @@ def render_table(
         raise DdlError(f"approved table has no columns in owner {owner}: {table}")
 
     lines = [f"CREATE TABLE {qident(schema)}.{qident(table)} ("]
+    defaults = captured_defaults(metadata)
     definitions: list[str] = []
     for row in column_rows:
         definition = f"    {qident(str(row[3]))} {data_type(row)}"
+        default = defaults.get((owner, table, str(row[3]).upper()))
+        if default is not None:
+            definition += " DEFAULT " + default
         if str(row[8]).upper() == "N":
             definition += " NOT NULL"
         definitions.append(definition)
-        if row[11] not in (None, "", 0, "0"):
+        if row[11] not in (None, "", 0, "0") and default is None:
             blocked.append({
                 "kind": "column-default",
                 "domain_owner": owner,
@@ -168,7 +249,13 @@ def render_table(
         by_constraint[str(row[2]).upper()].append((position, str(row[3]).upper()))
 
     emitted_constraints: list[str] = []
+    linked_constraints: list[str] = []
     constraint_names: set[str] = set()
+    key_constraint_names: set[str] = set()
+    links = captured_index_links(metadata)
+    indexes, index_columns = index_rows(metadata, owner, table)
+    column_positions = {str(row[3]).upper(): index for index, row in enumerate(column_rows)}
+    named_not_null: set[str] = set()
     for row in sorted(constraints, key=lambda r: str(r[2]).upper()):
         name = str(row[2]).upper()
         kind = str(row[3]).upper()
@@ -177,17 +264,38 @@ def render_table(
         if kind not in {"P", "U", "C"}:
             blocked.append({"kind": "constraint", "table": table, "name": name, "reason": f"constraint type {kind} is not rendered"})
             continue
-        if status != "ENABLED" or validated != "VALIDATED":
+        if status != "ENABLED" or validated not in {"VALIDATED", "NOT VALIDATED"}:
             blocked.append({"kind": "constraint", "table": table, "name": name, "reason": f"constraint status/validation {status}/{validated} is not rendered"})
             continue
+        state = " ENABLE NOVALIDATE" if validated == "NOT VALIDATED" else ""
         cols = [column for _, column in sorted(by_constraint.get(name, []))]
         if kind in {"P", "U"}:
             if not cols:
+                if links is not None:
+                    raise DdlError("linked constraint columns missing")
                 blocked.append({"kind": "constraint", "table": table, "name": name, "reason": "constraint columns missing"})
                 continue
             keyword = "PRIMARY KEY" if kind == "P" else "UNIQUE"
-            emitted_constraints.append(f"    CONSTRAINT {qident(name)} {keyword} ({', '.join(qident(c) for c in cols)})")
+            declaration = f"CONSTRAINT {qident(name)} {keyword} ({', '.join(qident(c) for c in cols)})"
+            if links is None:
+                emitted_constraints.append(f"    {declaration}{state}")
+            else:
+                link = links.get((owner, table, name))
+                if link is None or link[8] != owner or not isinstance(link[9], str):
+                    raise DdlError("missing or unsupported backing index link")
+                backing = [index for index in indexes if index[1] == link[9]]
+                backing_columns = sorted((int(column[5]), str(column[4]).upper())
+                                         for column in index_columns if column[1] == link[9])
+                if len(backing) != 1 or backing[0][2] != "NORMAL" or backing[0][3] not in {"UNIQUE", "NONUNIQUE"} or backing[0][4] != "VALID" or [column for _, column in backing_columns] != cols:
+                    raise DdlError("backing index missing or differs from constraint columns")
+                if any(column[6] not in {"ASC", "DESC"} for column in index_columns if column[1] == link[9]):
+                    raise DdlError("unsupported backing index column direction")
+                if row[6] != "NOT DEFERRABLE" or row[7] != "IMMEDIATE":
+                    raise DdlError("unsupported linked constraint deferrability")
+                validation = "NOVALIDATE" if validated == "NOT VALIDATED" else "VALIDATE"
+                linked_constraints.append(f"ALTER TABLE {qident(schema)}.{qident(table)} ADD {declaration} USING INDEX {qident(schema)}.{qident(link[9])} ENABLE {validation};")
             constraint_names.add(name)
+            key_constraint_names.add(name)
         else:
             condition = row[11]
             if not condition:
@@ -199,7 +307,17 @@ def render_table(
             condition_text = str(condition).strip()
             if ";" in condition_text or "--" in condition_text or "/*" in condition_text:
                 raise DdlError(f"unsafe check expression for {table}.{name}")
-            emitted_constraints.append(f"    CONSTRAINT {qident(name)} CHECK ({condition_text})")
+            not_null = re.fullmatch(r'("[A-Z][A-Z0-9_$#]*"|[A-Z][A-Z0-9_$#]*)\s+IS\s+NOT\s+NULL', condition_text, re.I)
+            column = not_null.group(1).strip('"').upper() if not_null else None
+            if column in column_positions and str(column_rows[column_positions[column]][8]).upper() == "N" and cols == [column] and column not in named_not_null:
+                position = column_positions[column]
+                definition = definitions[position]
+                if definition.endswith(" NOT NULL"):
+                    definition = definition[:-len(" NOT NULL")]
+                definitions[position] = definition + f" CONSTRAINT {qident(name)} NOT NULL{state}"
+                named_not_null.add(column)
+            else:
+                emitted_constraints.append(f"    CONSTRAINT {qident(name)} CHECK ({condition_text}){state}")
             constraint_names.add(name)
 
     # Commas are inserted after every column definition except the final
@@ -210,7 +328,6 @@ def render_table(
                  for index, item in enumerate(all_definitions))
     lines.append(");")
 
-    indexes, index_columns = index_rows(metadata, owner, table)
     by_index: defaultdict[str, list[tuple[int, str, str]]] = defaultdict(list)
     for row in index_columns:
         position = int(row[5]) if row[5] not in (None, "") else 10**9
@@ -218,11 +335,11 @@ def render_table(
     index_count = 0
     constraint_column_sets = {
         tuple(column for _, column in sorted(by_constraint.get(name, [])))
-        for name in constraint_names
+        for name in key_constraint_names
     }
     for row in sorted(indexes, key=lambda r: str(r[1]).upper()):
         name = str(row[1]).upper()
-        if name in constraint_names:
+        if links is None and name in key_constraint_names:
             blocked.append({"kind": "index", "table": table, "name": name, "reason": "constraint-backed index is represented by the table constraint"})
             continue
         if str(row[4]).upper() != "VALID":
@@ -236,7 +353,7 @@ def render_table(
             blocked.append({"kind": "index", "table": table, "name": name, "reason": f"index type {row[2]} is not rendered"})
             continue
         logical_columns = tuple(column for _, column, _ in cols)
-        if logical_columns in constraint_column_sets:
+        if links is None and logical_columns in constraint_column_sets:
             blocked.append({
                 "kind": "index",
                 "table": table,
@@ -248,8 +365,10 @@ def render_table(
         rendered_cols = []
         for _, column, descend in cols:
             rendered_cols.append(qident(column) + (" DESC" if descend == "DESC" else ""))
-        lines.append(f"CREATE {uniqueness}INDEX {qident(name)} ON {qident(schema)}.{qident(table)} ({', '.join(rendered_cols)});")
+        lines.append(f"CREATE {uniqueness}INDEX {qident(schema)}.{qident(name)} ON {qident(schema)}.{qident(table)} ({', '.join(rendered_cols)});")
         index_count += 1
+
+    lines.extend(linked_constraints)
 
     return lines, {"columns": len(column_rows), "constraints": len(constraint_names), "indexes": index_count}
 
@@ -274,6 +393,9 @@ def generate(receipt: Mapping[str, Any], schema_prefix: str) -> tuple[str, dict[
         "-- GENERATED METADATA-ONLY DRY RUN; DO NOT EXECUTE WITHOUT REVIEW",
         "-- No Oracle connection, DB link, business row, credential, or endpoint was used.",
         "-- Table owners/columns/constraints/indexes come only from the approved private metadata receipt.",
+        "WHENEVER SQLERROR EXIT FAILURE ROLLBACK",
+        "SET DEFINE OFF",
+        "SET SQLBLANKLINES ON",
         "",
     ]
     rendered: list[dict[str, Any]] = []

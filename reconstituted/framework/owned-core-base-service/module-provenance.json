@@ -3721,12 +3721,14 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/cloud/module/item/customds/service/impl/CoreCustomDsSqlServiceImpl.java",
-      "sha256": "ff94a1d165f20720c137e7739003ee34e6f07fc9d53146bb693e2f48d34df4e6",
+      "sha256": "ff88c48a08aa82ecf227508204a2e5df296526903f207a505db00b6f4d2fe300",
       "source_class_path": "com/sunwayworld/cloud/module/item/customds/service/impl/CoreCustomDsSqlServiceImpl.class",
       "source_jar": "BOOT-INF/lib/gikam-core-base-service-14.1.5.jar",
+      "source_sha256_before_overlay": "ff94a1d165f20720c137e7739003ee34e6f07fc9d53146bb693e2f48d34df4e6",
       "source_sha256_before_transform": "ff94a1d165f20720c137e7739003ee34e6f07fc9d53146bb693e2f48d34df4e6",
       "transformations": [
-        "cfr-to-vineflower-fallback"
+        "cfr-to-vineflower-fallback",
+        "overlay:src/main/java/com/sunwayworld/cloud/module/item/customds/service/impl/CoreCustomDsSqlServiceImpl.java"
       ]
     },
     {
@@ -11250,7 +11252,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "6fdb0afffe70f0464e70e9d568dac27ef779ebc6ee417d68c8f082074980f123",
+  "source_tree_sha256": "34019e2ee571fad155925f6ac907b41115d2a2918c8c07c0e8df8b73f61170f9",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "cc82d85926049feee8ed8b40c13c7e81a9ece832168e26f1dbf7aa7bd722703a",

@@ -51,6 +51,11 @@ AUDIT_CONFIGURATION_COLUMNS = {
     "T_CORE_AUDIT_CONFIG_COLUMN": {"ID", "CONFIGID", "COLUMN", "SELECTVALUESQL", "AUDITABLE"},
 }
 BOOTSTRAP_TABLES.update(AUDIT_CONFIGURATION_COLUMNS)
+SEQUENCE_COLUMNS = {
+    "T_CORE_SEQUENCE": {"ID", "NAME", "PATTERN", "JSONPARAM"},
+    "T_CORE_SEQUENCE_LINE": {"ID", "SEQUENCEID", "SEQUENCECODECATEGORY", "SEQUENCECODE", "ORDERNO"},
+}
+BOOTSTRAP_TABLES.update(SEQUENCE_COLUMNS)
 IMPORT_COLUMNS = {
     "T_CORE_IMPORT_TMPL": {"ID", "TMPLCODE", "TMPLNAME", "TABLENAME", "STARTROWINDEX"},
     "T_CORE_IMPORT_TMPL_CONFIG": {"ID", "IMPORTTMPLID", "EXCELCOLUMNNO", "EXCELCOLUMN", "DBFIELD",
@@ -143,11 +148,12 @@ def package_file(root: Path, value: object) -> Path:
     return path
 
 
-def masked_sql(text: str) -> str:
+def masked_sql(text: str, string_marker: bool = False) -> str:
     """Blank comments/string literals, preserving offsets and quoted identifiers.
 
     This is a lexer for integrity checks, not an Oracle SQL rewriter. In
     particular, a CREATE TABLE inside a COMMENT value is not a DDL statement.
+    The optional marker preserves scalar string presence for bootstrap checks.
     """
     out = list(text)
     pos = 0
@@ -176,6 +182,8 @@ def masked_sql(text: str) -> str:
             require(end >= 0, "unterminated Oracle alternative string literal")
             pos = end + 2
             blank(start, pos)
+            if string_marker:
+                out[start] = "?"
         elif text[pos] == "'":
             pos += 1
             while pos < length:
@@ -189,6 +197,8 @@ def masked_sql(text: str) -> str:
             else:
                 raise InvalidPackage("unterminated SQL string literal")
             blank(start, pos)
+            if string_marker:
+                out[start] = "?"
         elif text[pos] == '"':
             pos += 1
             while pos < length:
@@ -251,13 +261,15 @@ def object_blocks(text: str) -> dict[tuple[str, str], str]:
 def check_bootstrap(text: str) -> None:
     """Only the reviewed technical configuration tables may receive seed rows."""
     sql = masked_sql(text)
+    scalar_sql = masked_sql(text, string_marker=True)
     require(re.search(r"^\s*WHENEVER\s+SQLERROR\s+EXIT\s+FAILURE\s+ROLLBACK\s*$", sql, re.I | re.M) is not None,
             "bootstrap must stop and roll back on SQL errors")
     require(re.search(r"^\s*SET\s+DEFINE\s+OFF\s*$", sql, re.I | re.M) is not None,
             "bootstrap must disable SQLPlus substitution")
-    sql = re.sub(r"^\s*(?:WHENEVER\s+(?:SQLERROR|OSERROR)\s+EXIT\s+FAILURE\s+ROLLBACK|"
-                 r"SET\s+(?:DEFINE\s+OFF|SQLBLANKLINES\s+ON))\s*$", "", sql, flags=re.I | re.M)
-    sql = sql.strip()
+    directives = (r"^\s*(?:WHENEVER\s+(?:SQLERROR|OSERROR)\s+EXIT\s+FAILURE\s+ROLLBACK|"
+                  r"SET\s+(?:DEFINE\s+OFF|SQLBLANKLINES\s+ON))\s*$")
+    sql = re.sub(directives, "", sql, flags=re.I | re.M).strip()
+    scalar_sql = re.sub(directives, "", scalar_sql, flags=re.I | re.M).strip()
     if re.match(r"DECLARE\b", sql, re.I):
         guard = re.match(r"DECLARE\s+n\s+NUMBER\s*;\s*BEGIN\s*SELECT\s+"
                          r"(?P<counts>[\s\S]+?)\s+INTO\s+n\s+FROM\s+DUAL\s*;\s*"
@@ -275,13 +287,15 @@ def check_bootstrap(text: str) -> None:
         targets = [identifier(value) for value in re.findall(r"\bINSERT\s+INTO\s+(" + IDENTIFIER + r")", remainder, re.I)]
         require(set(targets).issubset(set(tables)), "bootstrap empty-target guard omits a written table")
         sql = remainder
+        scalar_sql = scalar_sql[guard.end():]
     else:
         raise InvalidPackage("bootstrap must reject nonempty target configuration before INSERT")
     statements = [statement.strip() for statement in sql.split(";") if statement.strip()]
+    scalar_statements = [statement.strip() for statement in scalar_sql.split(";") if statement.strip()]
     require(bool(statements) and statements[-1].upper() == "COMMIT"
             and all(statement.upper() != "COMMIT" for statement in statements[:-1]),
             "bootstrap must commit exactly once after all INSERT statements")
-    for statement in statements[:-1]:
+    for statement, scalar_statement in zip(statements[:-1], scalar_statements[:-1]):
         statement = statement.strip()
         insert = re.fullmatch(r"INSERT\s+INTO\s+(" + IDENTIFIER + r")\s*"
                               r"\(\s*(?P<columns>(?:" + IDENTIFIER + r"\s*,\s*)*" + IDENTIFIER
@@ -291,24 +305,33 @@ def check_bootstrap(text: str) -> None:
         require(table in BOOTSTRAP_TABLES,
                 "bootstrap inserts into a table outside the technical configuration allowlist")
         projections = {**DICTIONARY_COLUMNS, **LCDP_COLUMNS, **ACCESS_COLUMNS,
-                       **AUDIT_DEFINITION_COLUMNS, **AUDIT_CONFIGURATION_COLUMNS, **IMPORT_COLUMNS}
+                       **AUDIT_DEFINITION_COLUMNS, **AUDIT_CONFIGURATION_COLUMNS, **SEQUENCE_COLUMNS, **IMPORT_COLUMNS}
         if table in projections:
             columns = [identifier(name.strip()) for name in insert.group("columns").split(",")]
             require(len(columns) == len(set(columns)) and set(columns) == projections[table],
                     "bootstrap columns differ from the reviewed technical projection")
         expression = insert.group("values")
-        if table in AUDIT_CONFIGURATION_COLUMNS:
+        if table in AUDIT_CONFIGURATION_COLUMNS or table in SEQUENCE_COLUMNS:
             # These captured rows contain scalar literals only. String contents
             # are already blanked, so commas inside NAME cannot split a value.
-            # Keep the three source SQL fields NULL rather than admitting new
-            # executable configuration through the general literal allowlist.
-            require(re.search(r"[()+|]", expression) is None,
-                    "audit bootstrap requires scalar literals only")
-            values = [value.strip() for value in expression.split(",")]
-            require(len(values) == len(columns), "audit bootstrap value count differs from its projection")
+            # Source SQL fields and fresh sequence state must remain NULL.
+            label = "sequence bootstrap" if table in SEQUENCE_COLUMNS else "audit bootstrap"
+            scalar_expression = (scalar_statement[insert.start("values"):insert.end("values")]
+                                 if table in SEQUENCE_COLUMNS else expression)
+            require(re.search(r"[()+|]", scalar_expression) is None,
+                    label + " requires scalar literals only")
+            values = [value.strip() for value in scalar_expression.split(",")]
+            require(len(values) == len(columns), label + " value count differs from its projection")
+            if table in SEQUENCE_COLUMNS:
+                # Literal strings are represented by ?; missing values and
+                # arithmetic must not pass as fresh numbering configuration.
+                require(all(re.fullmatch(r"(?:\?|NULL|[+-]?\d+(?:\.\d+)?)", value, re.I)
+                            for value in values), label + " requires finite scalar literals only")
             for column, value in zip(columns, values):
                 if column in {"SELECTDESCSQL", "SELECTPARENTSQL", "SELECTVALUESQL"}:
                     require(value.upper() == "NULL", "audit bootstrap SQL fields must be literal NULL")
+                if table == "T_CORE_SEQUENCE" and column == "JSONPARAM":
+                    require(value.upper() == "NULL", "sequence bootstrap counter state must be literal NULL")
         words = re.findall(r"[A-Za-z_$#][A-Za-z0-9_$#]*", expression)
         require(all(word.upper() in {"NULL", "TO_CLOB", "CHR", "TO_DATE", "TO_TIMESTAMP"}
                     for word in words), "bootstrap VALUES contains an unapproved SQL expression")

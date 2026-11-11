@@ -540,6 +540,93 @@ END;
                                 self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
                                 self.assertIn('audit bootstrap', json.loads(result.stdout)['reason'])
 
+    def pin_sequence_bootstrap(self, table, columns, values, quoted=True):
+        text = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT (SELECT COUNT(*) FROM T_CORE_SEQUENCE) + (SELECT COUNT(*) FROM T_CORE_SEQUENCE_LINE) INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+'''
+        names = ['"' + column + '"' if quoted else column for column in columns]
+        text += ('INSERT INTO ' + table + ' (' + ','.join(names) + ') VALUES ('
+                 + ','.join(values) + ');\nCOMMIT;\n')
+        initializer = (self.root / 'install.sql').read_text()
+        if '@@70-bootstrap.sql' not in initializer:
+            self.write('install.sql', initializer.replace('@@90-verify.sql', '@@70-bootstrap.sql\n@@90-verify.sql'))
+        self.write('70-bootstrap.sql', text)
+        self.pin()
+        raw = (self.root / '70-bootstrap.sql').read_bytes()
+        self.manifest['files'].append({'path': '70-bootstrap.sql', 'role': 'bootstrap',
+                                      'sha256': sha(raw), 'bytes': len(raw)})
+        self.write('manifest.json', json.dumps(self.manifest))
+
+    def test_numbering_bootstrap_requires_exact_technical_projections(self):
+        projections = {
+            'T_CORE_SEQUENCE': (('ID', 'NAME', 'PATTERN', 'JSONPARAM'),
+                                ("'fixture-number'", "'Example, numbering'", "'{yyyy}{NO:000}'", 'NULL')),
+            'T_CORE_SEQUENCE_LINE': (
+                ('ID', 'SEQUENCEID', 'SEQUENCECODECATEGORY', 'SEQUENCECODE', 'ORDERNO'),
+                ('101', "'fixture-number'", "'category'", "'code'", '1')),
+        }
+        for table, (columns, values) in projections.items():
+            for quoted in (True, False):
+                with self.subTest(table=table, quoted=quoted):
+                    self.pin_sequence_bootstrap(table, columns, values, quoted=quoted)
+                    result = self.run_verifier()
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    self.assertFalse(json.loads(result.stdout)['deployment_ready'])
+                    self.assertEqual(self.run_verifier(check=False).returncode, 2)
+            for index, column in enumerate(columns):
+                with self.subTest(table=table, missing_column=column):
+                    self.pin_sequence_bootstrap(table, columns[:index] + columns[index + 1:],
+                                                values[:index] + values[index + 1:])
+                    self.assert_rejected()
+            for extra in ('CREATEDBYID', 'CREATEDBYNAME', 'CREATEDBYORGID', 'CREATEDBYORGNAME',
+                          'CREATEDTIME', 'LASTMODIFIEDBYID', 'VERSION', 'UNREVIEWED'):
+                with self.subTest(table=table, extra_column=extra):
+                    self.pin_sequence_bootstrap(table, (*columns, extra), (*values, 'NULL'))
+                    self.assert_rejected()
+            with self.subTest(table=table, duplicate_column=True):
+                self.pin_sequence_bootstrap(table, (*columns, columns[0]), (*values, values[0]))
+                self.assert_rejected()
+
+    def test_numbering_bootstrap_seeds_only_literal_null_counter_state(self):
+        columns = ('ID', 'NAME', 'PATTERN', 'JSONPARAM')
+        values = ("'fixture-number'", "'Example, numbering'", "'{yyyy}{NO:000}'", 'NULL')
+        for ordered_columns, ordered_values in ((columns, values), (columns[::-1], values[::-1])):
+            with self.subTest(column_order=ordered_columns):
+                self.pin_sequence_bootstrap('T_CORE_SEQUENCE', ordered_columns, ordered_values)
+                result = self.run_verifier()
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                counter_index = ordered_columns.index('JSONPARAM')
+                for expression in ("'{\"lastNum\":37}'", "'NULL'", "''", "TO_CLOB('')", '0',
+                                   "NULL || ''", '(NULL)', 'NULL,NULL'):
+                    with self.subTest(counter_state=expression):
+                        bad = (*ordered_values[:counter_index], expression, *ordered_values[counter_index + 1:])
+                        self.pin_sequence_bootstrap('T_CORE_SEQUENCE', ordered_columns, bad)
+                        self.assert_rejected()
+                for bad in (ordered_values[:-1], (*ordered_values, 'NULL')):
+                    with self.subTest(value_count=len(bad)):
+                        self.pin_sequence_bootstrap('T_CORE_SEQUENCE', ordered_columns, bad)
+                        self.assert_rejected()
+                name_index = ordered_columns.index('NAME')
+                bad = (*ordered_values[:name_index], "TO_CLOB('number')", *ordered_values[name_index + 1:])
+                with self.subTest(nonscalar_name=True):
+                    self.pin_sequence_bootstrap('T_CORE_SEQUENCE', ordered_columns, bad)
+                    self.assert_rejected()
+        line_columns = ('ID', 'SEQUENCEID', 'SEQUENCECODECATEGORY', 'SEQUENCECODE', 'ORDERNO')
+        line_values = ('101', "'fixture-number'", "'category'", "'code'", '1')
+        for bad in (line_values[:-1], (*line_values, 'NULL'),
+                    (*line_values[:-1], "TO_DATE('2026-11-11','YYYY-MM-DD')"),
+                    (*line_values[:-1], '1-1'), (*line_values[:-1], "1''"),
+                    ('', *line_values[1:])):
+            with self.subTest(line_values=bad):
+                self.pin_sequence_bootstrap('T_CORE_SEQUENCE_LINE', line_columns, bad)
+                self.assert_rejected()
+
     def test_import_templates_and_file_metadata_require_exact_technical_projections(self):
         projections = {
             'T_CORE_IMPORT_TMPL': (

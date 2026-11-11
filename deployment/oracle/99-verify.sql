@@ -22,6 +22,7 @@ BEGIN
   expected_objects('PROCEDURE|UPDATEI18N') := 1;
   expected_objects('SEQUENCE|SEQ_CORE') := 1;
   expected_objects('TABLE|BKITEM') := 1;
+  expected_objects('TABLE|CSFF') := 1;
   expected_objects('TABLE|ECLIENTDR') := 1;
   expected_objects('TABLE|EQUIPMENTDR') := 1;
   expected_objects('TABLE|FINE_AUTHORITY') := 1;
@@ -111,6 +112,7 @@ BEGIN
   expected_objects('TABLE|QRTZ_SIMPLE_TRIGGERS') := 1;
   expected_objects('TABLE|QRTZ_SIMPROP_TRIGGERS') := 1;
   expected_objects('TABLE|QRTZ_TRIGGERS') := 1;
+  expected_objects('TABLE|QYJWDDR') := 1;
   expected_objects('TABLE|QYREMARK') := 1;
   expected_objects('TABLE|SYS_IMPORT_FULL_01') := 1;
   expected_objects('TABLE|SYS_IMPORT_FULL_02') := 1;
@@ -1501,7 +1503,7 @@ BEGIN
   expected_constraints('T_XFP_REPORT_UNIQUE') := 1;
   expected_constraints('UKT_LIMS_FOLDERS_FOLDERNO') := 1;
   SELECT COUNT(*) INTO n FROM USER_TABLES;
-  IF n <> 747 THEN RAISE_APPLICATION_ERROR(-20301, 'Combined table count differs'); END IF;
+  IF n <> 749 THEN RAISE_APPLICATION_ERROR(-20301, 'Combined table count differs'); END IF;
   FOR o IN (SELECT OBJECT_TYPE, OBJECT_NAME, STATUS FROM USER_OBJECTS
             WHERE OBJECT_TYPE NOT IN ('INDEX','LOB')) LOOP
     key_name := o.OBJECT_TYPE || '|' || o.OBJECT_NAME;

@@ -22,7 +22,7 @@ in a dedicated disposable validation schema.
 | --- | --- |
 | `00-preflight.sql` | Dedicated empty session user and captured character sets |
 | `10-types.sql` | One source TYPE and its TYPE BODY, emitted once |
-| `20-tables.sql` | 737 tables with original types/defaults and explicit VARCHAR2/CHAR length semantics |
+| `20-tables.sql` | 737 tables with original types/defaults plus two explicitly transformed portable tables; explicit VARCHAR2/CHAR length semantics |
 | `30-indexes.sql` | 344 index definitions; no duplicate PK/UQ backing indexes |
 | `35-constraints.sql` | Two constraints separated from composite Oracle metadata |
 | `60-sequences.sql` | One sequence with explicit empty-install MIN_VALUE seed |
@@ -157,12 +157,22 @@ phases; it copies no production accounts. The configuration blocker recorded
 when this partial package was generated is not a claim that this command is
 still missing. Complete application configuration remains outstanding.
 
-Remaining blockers include two tables with invalid original identifier bytes,
-two originally INVALID functions, one endpoint-bearing function requiring an
+`CSFF` and `QYJWDDR` are now included through an explicit identifier conversion.
+Production stores nine column names as GBK bytes in an AL32UTF8 dictionary;
+`DBMS_METADATA` replaces those bytes and cannot provide usable source names.
+The source RAW bytes, Oracle GBK-to-UTF8 result and reverse conversion all agree.
+The package transforms those nine names to quoted UTF8 identifiers and preserves
+six ASCII names. All fifteen VARCHAR2 BYTE widths, ordinals and nullable/default
+contracts are retained. `portable-identifier-provenance.json` records source and
+target hashes; this is not unchanged replay of the invalid source bytes. Existing
+737-table CREATE bodies and unrelated configuration remain unchanged.
+
+Remaining blockers include dynamic SQL/configuration consumer acceptance of
+those mapped names, two originally INVALID functions, one endpoint-bearing function requiring an
 isolated configuration decision, complete target grants and external logical
 domains, and application configuration bootstrap (remaining menus, permissions,
 dictionaries and workflows, plus dynamic LCDP dependencies). The original
-invalid identifiers are not guessed or silently renamed. Excluded routines are
+identifier conversion is explicit and reversible from its source metadata. Excluded routines are
 not replaced with successful stubs. See `manifest.json` for exact dispositions.
 
 The package was tested as structural DDL in a disposable user within the existing

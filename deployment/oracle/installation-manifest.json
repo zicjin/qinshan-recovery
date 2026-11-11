@@ -29,10 +29,10 @@
       "sha256": "4be68aff017c73098859f7b97eb1c777822e97035a8d27d44f33ae6057b5dd99"
     },
     {
-      "bytes": 82937,
+      "bytes": 83018,
       "path": "99-verify.sql",
       "role": "verifier",
-      "sha256": "5b719aad04bd4e99d40b21072f5eec12fb9ea7f36e5dcaf3ff062ab479d55c68"
+      "sha256": "37d732a5d2768cf927f3ec6b0f50218e88626b72e477868f6074ba834bea8b2f"
     }
   ],
   "packages": [
@@ -44,7 +44,7 @@
     {
       "id": "core",
       "path": "core-schema/manifest.json",
-      "sha256": "547d9a5bd40edea9f470c86acf696712930a38b73958984ed4838ae17cf2772f"
+      "sha256": "88e570daa523fe2ce7bea46e89307f20543292dd7ef57472a1ae639f4e3b0c4c"
     }
   ],
   "phases": [
@@ -90,11 +90,11 @@
       "sha256": "ebb61ba39c975d2ea18ab7077fae426230a47dbbf0e7c17d417362f80fb32ad7"
     },
     {
-      "bytes": 510908,
+      "bytes": 511572,
       "package": "core",
       "path": "core-schema/20-tables.sql",
       "role": "tables",
-      "sha256": "f8d8d309fe29dfc82ef0907599a502f5aa759a1aa677fbb8976f35ba3a238b25"
+      "sha256": "e470fcdb184206b9dc27cdcf41ac2e8c4f538a934f523d838e50047903c3d94c"
     },
     {
       "bytes": 62723,
@@ -139,24 +139,24 @@
       "sha256": "7670396a7edfcf63a1987748bbf484f1c2d175940f94d272a17037b21e02ebf7"
     },
     {
-      "bytes": 6320775,
+      "bytes": 6321030,
       "package": "core",
       "path": "core-schema/80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "d8f36a61fe08bab938dfb1e3912398ee0b62f1f46d0f4970bfd545527bd15cdb"
+      "sha256": "05d248e890367b2c922c2c0e65e63a81e2d492206402736275236ccf46a5a524"
     },
     {
-      "bytes": 4505980,
+      "bytes": 4514633,
       "package": "core",
       "path": "core-schema/90-verify.sql",
       "role": "verifier",
-      "sha256": "9bba82a064a6656b0d5ebeebc69365076d9f1da4780b3cea8f569da506959d49"
+      "sha256": "14c53a5543ccb9f9edacae67156a17f1beb647af26e654573522564c01bb7e36"
     },
     {
-      "bytes": 82937,
+      "bytes": 83018,
       "path": "99-verify.sql",
       "role": "verifier",
-      "sha256": "5b719aad04bd4e99d40b21072f5eec12fb9ea7f36e5dcaf3ff062ab479d55c68"
+      "sha256": "37d732a5d2768cf927f3ec6b0f50218e88626b72e477868f6074ba834bea8b2f"
     }
   ],
   "schema": "combined-oracle-installation-v1",

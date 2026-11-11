@@ -8,7 +8,7 @@ from-scratch LIMS restoration until an approved, source-bound core schema
 and configuration package is completed and accepted.
 
 `deployment/oracle/core-schema/` now contains the first source-bound structural
-package: 737 tables, ordered indexes/constraints, types, selected routines and
+package: 739 tables, ordered indexes/constraints, types, selected routines and
 per-table verification. It also ships a finite technical bootstrap for locale,
 translations, static menus, entity metadata and safe UI/select configuration,
 plus exact verification of that subset. The distribution provides the separate
@@ -22,8 +22,8 @@ files without private inputs; this does not establish complete deployment readin
 
 The selected core and external DDL now have one integrated plan:
 `deployment/oracle/installation-manifest.json` pins both child packages and
-`deployment/oracle/install.sql` is its normal SQL entry. The plan covers 737
-core plus ten external tables, with a final exact 747-table union verifier.
+`deployment/oracle/install.sql` is its normal SQL entry. The plan covers 739
+core plus ten external tables, with a final exact 749-table union verifier.
 These selected DDL materials are available; complete current-production schema,
 configuration and new-server restoration remain unproven.
 
@@ -88,13 +88,13 @@ or DDL. Its declared phase order is:
 | 2 | External `20-tables.sql`, `30-indexes.sql`, `35-constraints.sql`, `90-verify.sql` | External verifier requires exactly its ten tables and no core objects yet |
 | 3 | Core `10-types.sql`, `20-tables.sql`, `30-indexes.sql`, `35-constraints.sql`, `60-sequences.sql`, `40-routines.sql`, `50-comments.sql` | Preserve original dependency order, including sequences before routines |
 | 4 | Core `70-bootstrap.sql`, `80-bootstrap-verify.sql`, `90-verify.sql` | Verify the finite technical bootstrap before identities or runtime changes |
-| 5 | Combined `99-verify.sql` | Exact 747-table/logical object union, named indexes and constraints, valid objects/indexes and no DB links |
+| 5 | Combined `99-verify.sql` | Exact 749-table/logical object union, named indexes and constraints, valid objects/indexes and no DB links |
 
 Run external verification before core; reversing them violates the exact
 ten-table precondition. Do not chain the two independent `install.sql` files:
 their second empty-user preflight would reject existing objects. The combined
 plan uses one shared preflight and preserves the child phase order. The final
-union verifier checks object identities as well as counts; a 747-table count
+union verifier checks object identities as well as counts; a 749-table count
 alone is insufficient. Oracle-generated physical names are handled by the
 child logical structure checks, as described in the
 [combined plan](../../deployment/oracle/README.md).
@@ -355,7 +355,7 @@ default exits 2 to stop deployment; only explicit `--check-contract` exits 0 for
 offline validation of the blocked contract. The current state is therefore:
 source-only build/package is available; targeted schema fixtures and the
 external logical clone are available; complete clean-device Oracle restoration
-remains blocked. The combined selected 747-table installation plan is available
+remains blocked. The combined selected 749-table installation plan is available
 for offline integrity checking, with a guarded normal entry. Outstanding source
 identifier/routine dispositions, full configuration bootstrap, target grants,
 complete external logical domains and real full-system installation acceptance

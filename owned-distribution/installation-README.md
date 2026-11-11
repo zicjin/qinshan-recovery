@@ -20,7 +20,7 @@ before any child SQL or DDL. Do not edit or bypass its guard.
 
 The finite plan checks one dedicated empty connected user and captured database
 character sets, then orders the external ten-table package and its verifier
-before the core 737-table package. Core phases include the technical bootstrap
+before the core 739-table package. Core phases include the technical bootstrap
 and its exact verifier before administrator initialization or application startup.
 The final read-only verifier checks the exact combined logical object sets,
 valid objects/indexes and no database links. The child package manifests and

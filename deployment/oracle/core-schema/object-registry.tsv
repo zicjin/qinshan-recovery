@@ -355,6 +355,7 @@ PROCEDURE	INSERTI18N	40-routines.sql	current-production-at-capture
 PROCEDURE	UPDATEI18N	40-routines.sql	current-production-at-capture
 SEQUENCE	SEQ_CORE	60-sequences.sql	current-production-at-capture
 TABLE	BKITEM	20-tables.sql	current-production-at-capture
+TABLE	CSFF	20-tables.sql	current-production-at-capture
 TABLE	ECLIENTDR	20-tables.sql	current-production-at-capture
 TABLE	EQUIPMENTDR	20-tables.sql	current-production-at-capture
 TABLE	FINE_AUTHORITY	20-tables.sql	current-production-at-capture
@@ -444,6 +445,7 @@ TABLE	QRTZ_SCHEDULER_STATE	20-tables.sql	current-production-at-capture
 TABLE	QRTZ_SIMPLE_TRIGGERS	20-tables.sql	current-production-at-capture
 TABLE	QRTZ_SIMPROP_TRIGGERS	20-tables.sql	current-production-at-capture
 TABLE	QRTZ_TRIGGERS	20-tables.sql	current-production-at-capture
+TABLE	QYJWDDR	20-tables.sql	current-production-at-capture
 TABLE	QYREMARK	20-tables.sql	current-production-at-capture
 TABLE	SYS_IMPORT_FULL_01	20-tables.sql	current-production-at-capture
 TABLE	SYS_IMPORT_FULL_02	20-tables.sql	current-production-at-capture

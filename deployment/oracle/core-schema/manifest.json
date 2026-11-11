@@ -1,8 +1,8 @@
 {
   "blockers": [
     {
-      "id": "invalid-source-identifiers",
-      "reason": "CSFF and QYJWDDR contain invalid AL32UTF8 identifier bytes. Exact portable replay and dynamic references need explicit disposition; no guessed identifiers emitted."
+      "id": "portable-identifier-consumer-validation",
+      "reason": "CSFF/QYJWDDR are explicit RAW GBK-to-UTF8 identifier transformations, not unchanged source bytes. Production generic table list/preview exposes corrupt names; target mapped UTF8 metadata, dynamic SQL/config references and new-device behavior require acceptance."
     },
     {
       "id": "production-routine-disposition",
@@ -28,20 +28,10 @@
     "oracle_generated_hidden_columns_not_emitted": 5,
     "source_backing_indexes_not_emitted_twice": 672,
     "standalone_indexes": 344,
-    "tables": 737
+    "tables": 739
   },
   "deployment_ready": false,
   "excluded_objects": [
-    {
-      "name": "CSFF",
-      "object_type": "TABLE",
-      "reason": "invalid-source-identifier-bytes"
-    },
-    {
-      "name": "QYJWDDR",
-      "object_type": "TABLE",
-      "reason": "get-ddl-read-failure-invalid-identifier-bytes"
-    },
     {
       "name": "SYS_EXPORT_SCHEMA_01",
       "object_type": "TABLE",
@@ -603,10 +593,10 @@
       "sha256": "ebb61ba39c975d2ea18ab7077fae426230a47dbbf0e7c17d417362f80fb32ad7"
     },
     {
-      "bytes": 510908,
+      "bytes": 511572,
       "path": "20-tables.sql",
       "role": "tables",
-      "sha256": "f8d8d309fe29dfc82ef0907599a502f5aa759a1aa677fbb8976f35ba3a238b25"
+      "sha256": "e470fcdb184206b9dc27cdcf41ac2e8c4f538a934f523d838e50047903c3d94c"
     },
     {
       "bytes": 62723,
@@ -639,22 +629,22 @@
       "sha256": "58e89dff655d02aad818301043fc7b41d9bba8ec84b43799c5d0d90651a66812"
     },
     {
-      "bytes": 4505980,
+      "bytes": 4514633,
       "path": "90-verify.sql",
       "role": "verifier",
-      "sha256": "9bba82a064a6656b0d5ebeebc69365076d9f1da4780b3cea8f569da506959d49"
+      "sha256": "14c53a5543ccb9f9edacae67156a17f1beb647af26e654573522564c01bb7e36"
     },
     {
-      "bytes": 79623,
+      "bytes": 79736,
       "path": "object-registry.tsv",
       "role": "registry",
-      "sha256": "71b040f398655000fc0a493c285a45a8a31be9f92f2ccec9c80039b8f066d587"
+      "sha256": "01b40125c17b42056cfc064bb0aa6d7507f63374b7eea66947a21fa8e1a96c82"
     },
     {
-      "bytes": 7321,
+      "bytes": 7218,
       "path": "blocked-objects.tsv",
       "role": "blockers",
-      "sha256": "34c43de299eb20a45435b6d343badb43ebc16cefece4df9d9415f865a8093638"
+      "sha256": "f450db0da66fb93327af4ca45ad1096241ed5701ffcd7802f04e09f93c27448d"
     },
     {
       "bytes": 3160821,
@@ -663,10 +653,10 @@
       "sha256": "7670396a7edfcf63a1987748bbf484f1c2d175940f94d272a17037b21e02ebf7"
     },
     {
-      "bytes": 6320775,
+      "bytes": 6321030,
       "path": "80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "d8f36a61fe08bab938dfb1e3912398ee0b62f1f46d0f4970bfd545527bd15cdb"
+      "sha256": "05d248e890367b2c922c2c0e65e63a81e2d492206402736275236ccf46a5a524"
     },
     {
       "bytes": 4323926,
@@ -679,6 +669,12 @@
       "path": "i18n-runtime-source.json",
       "role": "source-metadata",
       "sha256": "b9d69d69d4feb2e62963fc637b2dce82796e80e0cce13fb0f272d96f0fe504cb"
+    },
+    {
+      "bytes": 9239,
+      "path": "portable-identifier-provenance.json",
+      "role": "source-metadata",
+      "sha256": "bf3e2a95f7b585d1411f9641f582c22916fbce6c17e62d0cef9e7e293e766b48"
     }
   ],
   "limitations": [
@@ -4602,6 +4598,18 @@
       ]
     },
     {
+      "name": "CSFF",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "8e20c107d8d5b44433044412350e3319c648f78821b53ad7756b2b1f8c9f649e",
+      "source_sha256": "62feaed1151d01b9b764eb6b88f160ba455195950f75163067d5599dcebd112a",
+      "transformations": [
+        "source-RAW-identifier-dictionary-reconstruction",
+        "explicit-ZHS16GBK-bytes-to-AL32UTF8-identifiers",
+        "preserve-source-column-order-type-BYTE-length-nullability"
+      ]
+    },
+    {
       "name": "ECLIENTDR",
       "object_type": "TABLE",
       "path": "20-tables.sql",
@@ -5667,6 +5675,18 @@
         "source-owner-qualifier-to-current-user",
         "explicit-dictionary-character-semantics",
         "trim-nonliteral-line-end-formatting"
+      ]
+    },
+    {
+      "name": "QYJWDDR",
+      "object_type": "TABLE",
+      "path": "20-tables.sql",
+      "rendered_sha256": "4f0b305d45d78bfd3f678b45543f9ef944da67ab575fddf44287ee2618a0f1a0",
+      "source_sha256": "8ad56ec7429c0d96097772dd6d4e965945ab9ed170cd7a672c55decbb8df166b",
+      "transformations": [
+        "source-RAW-identifier-dictionary-reconstruction",
+        "explicit-ZHS16GBK-bytes-to-AL32UTF8-identifiers",
+        "preserve-source-column-order-type-BYTE-length-nullability"
       ]
     },
     {
@@ -13455,9 +13475,16 @@
       ]
     }
   ],
+  "portable_identifiers": {
+    "dynamic_consumers_validated": false,
+    "mapped_invalid_identifiers": 9,
+    "path": "portable-identifier-provenance.json",
+    "strict_evidence": false,
+    "unchanged_ascii_identifiers": 6
+  },
   "registry": {
     "path": "object-registry.tsv",
-    "sha256": "71b040f398655000fc0a493c285a45a8a31be9f92f2ccec9c80039b8f066d587"
+    "sha256": "01b40125c17b42056cfc064bb0aa6d7507f63374b7eea66947a21fa8e1a96c82"
   },
   "schema": "core-schema-package-v1",
   "source_artifacts": [

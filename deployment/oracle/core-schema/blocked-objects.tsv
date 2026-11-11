@@ -1,6 +1,4 @@
 object_type	name	reason
-TABLE	CSFF	invalid-source-identifier-bytes
-TABLE	QYJWDDR	get-ddl-read-failure-invalid-identifier-bytes
 TABLE	SYS_EXPORT_SCHEMA_01	data-pump-master-not-application-schema
 TABLE	SYS_EXPORT_SCHEMA_02	data-pump-master-not-application-schema
 TABLE	SYS_EXPORT_SCHEMA_03	data-pump-master-not-application-schema

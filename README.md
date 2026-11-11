@@ -123,11 +123,11 @@ not execute that directory as a bootstrap.
 | `api-fixtures/schema/production-ddl-*-20261109.sql` | Reviewed incremental alignment of an existing test schema | No |
 | Other `api-fixtures/schema/*.sql` | Targeted test restoration and metadata fixtures with explicit preconditions | No |
 | `api-fixtures/schema/external-logical-clone.sql` | Ten HT/SP/XFP table structures in an existing local runtime schema | No |
-| `deployment/oracle/core-schema/` | Production-derived partial structural package: 737 tables, ordered indexes/types/routines and an object verifier | Partial; normal installer rejects while blockers remain |
+| `deployment/oracle/core-schema/` | Production-derived partial structural package: 739 tables, ordered indexes/types/routines and an object verifier | Partial; normal installer rejects while blockers remain |
 | `deployment/oracle/external-schema/` | Portable partial HT/SP/XFP ten-table package with captured defaults, original index links and exact subset verification | Partial; requires empty diagnostic user and rejects full installation |
-| `deployment/oracle/installation-manifest.json` and `install.sql` | Combined external/core phase order, namespace checks and exact 747-table union verifier | Partial; normal entry rejects before any child SQL or DDL |
+| `deployment/oracle/installation-manifest.json` and `install.sql` | Combined external/core phase order, namespace checks and exact 749-table union verifier | Partial; normal entry rejects before any child SQL or DDL |
 
-The source-bound DDL for these selected 737 core and ten external tables is
+The source-bound DDL for these selected 739 core and ten external tables is
 available, together with an integrated installation plan. This is a defined
 structural subset; it does not establish complete current-production DDL,
 configuration or independent new-server readiness.
@@ -149,7 +149,7 @@ DDL while these blockers remain. There is no override mode.
 The integrated order is one empty-user/charset preflight, external tables /
 indexes / constraints / `90-verify.sql`, then the original core DDL order,
 technical bootstrap and its verification, core `90-verify.sql`, and finally
-`99-verify.sql` for the exact 747-table logical object union. External
+`99-verify.sql` for the exact 749-table logical object union. External
 `90-verify.sql` requires exactly ten tables, so it must run before core objects
 exist. Chaining the two child `install.sql` files also fails their repeated
 empty-user preflight. See [the combined plan](deployment/oracle/README.md) for
@@ -179,7 +179,7 @@ python3 scripts/verify-core-schema-package.py --check-package
 
 This does not grant deployment readiness. The normal package gate and SQL
 installer still reject the incomplete package before applying DDL.
-Its finite `70-bootstrap.sql` supplies 8,254 reviewed technical rows across 31
+Its finite `70-bootstrap.sql` supplies 16,265 reviewed technical rows across 31
 tables, including locale, menu, entity and UI configuration, 28 dictionary
 categories, 120 options and their translation dependencies. Captures are bound
 separately; empty production categories remain empty.

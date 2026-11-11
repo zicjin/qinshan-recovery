@@ -36,6 +36,11 @@ public final class ReportEngineAccessFilter implements Filter {
         menus.put(TEMPLATE,"20250800005"); menus.put(CONTRACT_TEMPLATE,"20250800006");
         MENUS=Collections.unmodifiableMap(menus);
     }
+    // These two original summary templates have no effective userid SQL predicate.
+    // USERNO is optional in the original user model; do not invent a user ID value
+    // or let its absence open any other template's identity-dependent queries.
+    private static final Set<String> OPTIONAL_USER_NO_TEMPLATES = Collections.unmodifiableSet(
+        new HashSet<>(Arrays.asList(TEMPLATE, CONTRACT_TEMPLATE)));
     private static final Map<String,String> REPORT_LINES;
     static {
         Map<String,String> lines = new HashMap<>();
@@ -70,6 +75,15 @@ public final class ReportEngineAccessFilter implements Filter {
         final Set<String> templates;
         Identity(String name, String owner) { this(name,owner,REPORT_LINES.keySet()); }
         Identity(String name,String owner,Set<String> templates) { this.name=name;this.owner=owner;this.templates=templates;this.userNo=name; }
+    }
+    private static Identity reportIdentity(Identity identity) {
+        if (identity == null || (identity.userNo != null && !identity.userNo.isEmpty())) return identity;
+        Set<String> templates = new HashSet<>(identity.templates);
+        templates.retainAll(OPTIONAL_USER_NO_TEMPLATES);
+        if (templates.isEmpty()) throw new SecurityException();
+        Identity limited = new Identity(identity.name, identity.owner, Collections.unmodifiableSet(templates));
+        limited.userNo = "";
+        return limited;
     }
     // CREATE runs on Fine's executor. Correlate its raw request-parameter map
     // with a one-use server nonce; merged execution parameters omit this value.
@@ -208,7 +222,7 @@ public final class ReportEngineAccessFilter implements Filter {
         ClassLoader previous=Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-            identity=identities.authenticate(request,response);
+            identity=reportIdentity(identities.authenticate(request,response));
         } catch (AuthenticationException rejected) { response.sendError(401); return;
         } catch (SecurityException rejected) { response.sendError(403); return;
         } catch (RuntimeException unavailable) { response.sendError(503); return;
@@ -306,7 +320,6 @@ public final class ReportEngineAccessFilter implements Filter {
             String owner=hash(token+"\n"+user.getUsername()+"\n"+user.getOrgId()+"\n"+user.getRoleId());
             Identity identity = new Identity(user.getUsername(),owner,Collections.unmodifiableSet(templates));
             identity.userNo = LocalContextHelper.getLoginUser().getUserNo();
-            if (identity.userNo == null || identity.userNo.isEmpty()) throw new SecurityException();
             return identity;
         } finally {
             SecurityContextHolder.setContext(oldContext);

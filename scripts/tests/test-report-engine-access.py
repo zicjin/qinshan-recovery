@@ -6,12 +6,30 @@ evidence. It opens no sockets and uses no database, Redis or licensed engine.
 """
 import argparse
 import os
+import re
 from pathlib import Path
 import subprocess
 import tempfile
 import shutil
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def assert_optional_user_number_contract():
+    # The filter's narrow optional-USERNO policy is justified only by these
+    # original templates. An effective userid predicate needs a new review.
+    for name in ('commission-summary.cpt', 'contract-summary.cpt'):
+        root = ET.parse(ROOT / 'deployment/report-engine/assets' / name).getroot()
+        queries = root.findall('.//Query')
+        if not queries:
+            raise AssertionError('summary template has no SQL contract: ' + name)
+        for query in queries:
+            sql = ''.join(query.itertext())
+            sql = re.sub(r'/\*.*?\*/', '', sql, flags=re.DOTALL)
+            sql = re.sub(r'--[^\r\n]*', '', sql)
+            if re.search(r'\buserid\b', sql, flags=re.IGNORECASE):
+                raise AssertionError('optional USERNO summary gained a userid SQL dependency: ' + name)
 
 
 def main():
@@ -20,6 +38,7 @@ def main():
     parser.add_argument('--distribution', type=Path,
                         default=ROOT / 'owned-distribution/target/distribution')
     args = parser.parse_args()
+    assert_optional_user_number_contract()
     app = args.distribution / 'app/lims-owned-application.jar'
     public = args.distribution / 'lib'
     source = ROOT / 'owned-distribution/src/main/java/com/sunwayworld/owned/report/engine/ReportEngineAccessFilter.java'

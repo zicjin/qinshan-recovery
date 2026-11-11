@@ -486,6 +486,59 @@ public final class ReportEngineAccessCheck {
         } finally { portal.identity = original; }
     }
 
+    private static void optionalUserNo(PortalIdentity portal, ReportEngineAccessFilter filter)
+            throws IOException, ServletException {
+        ReportEngineAccessFilter.Identity original = portal.identity;
+        String dependent = ReportEngineAccessFilter.installedTemplates().stream()
+            .filter(template -> !TEMPLATE.equals(template) && !CONTRACT_TEMPLATE.equals(template)).findFirst().get();
+        try {
+            for (String absent : new String[] {null, ""}) {
+                portal.identity = new ReportEngineAccessFilter.Identity(original.name, original.owner);
+                portal.identity.userNo = absent;
+                for (String template : new String[] {TEMPLATE, CONTRACT_TEMPLATE}) {
+                    ReportSession report = new ReportSession(template);
+                    SessionPoolManager.put(SID, report);
+                    Result accepted = invoke(filter,
+                        new Request("GET", "/decision/view/report").parameter("viewlet", template),
+                        (raw, output) -> {
+                            HttpServletRequest request = (HttpServletRequest) raw;
+                            require(original.name.equals(request.getRemoteUser()), "nullable userNo must retain the real portal principal");
+                            require("".equals(request.getParameter("userid")), "optional report userNo must remain empty, not fall back to login ID");
+                            require(Arrays.equals(new String[] {""}, request.getParameterValues("userid")), "optional userid values must not contain null");
+                            require(Arrays.equals(new String[] {""}, request.getParameterMap().get("userid")), "optional userid map must agree with scalar");
+                            createFromWrappedRequest(filter, raw, SID);
+                        });
+                    require(accepted.entered == 1, "the two original summaries must accept authorized portal users with no userNo");
+                    require(invoke(filter, continuation(SID), null).entered == 1, "optional userNo must preserve authenticated session continuation");
+                    denied(filter, new Request("GET", "/decision/view/report").parameter("viewlet", template).parameter("userid", original.name), 403);
+                    denied(filter, dialog(SID, "{\"userid\":\"another-user\"}"), 403);
+                }
+                for (String template : ReportEngineAccessFilter.installedTemplates()) {
+                    if (!TEMPLATE.equals(template) && !CONTRACT_TEMPLATE.equals(template))
+                        denied(filter, new Request("GET", "/decision/view/report").parameter("viewlet", template), 403);
+                }
+                ReportSession dependentSession = new ReportSession(dependent);
+                dependentSession.attributes.put("owned.portal.report.owner.v1", original.owner);
+                SessionPoolManager.put(OTHER_SID, dependentSession);
+                denied(filter, continuation(OTHER_SID), 403);
+                portal.identity = new ReportEngineAccessFilter.Identity(original.name, original.owner, Collections.singleton(TEMPLATE));
+                portal.identity.userNo = absent;
+                denied(filter, new Request("GET", "/decision/view/report").parameter("viewlet", CONTRACT_TEMPLATE), 403);
+                portal.identity = new ReportEngineAccessFilter.Identity(original.name, original.owner, Collections.singleton(dependent));
+                portal.identity.userNo = absent;
+                denied(filter, new Request("GET", "/decision/view/report").parameter("viewlet", dependent), 403);
+                denied(filter, new Request("GET", "/decision/view/report").parameter("op", "emb").parameter("resource", "finereport.main.js"), 403);
+                portal.identity = new ReportEngineAccessFilter.Identity(original.name, original.owner, Collections.emptySet());
+                portal.identity.userNo = absent;
+                denied(filter, initial(), 403);
+                denied(filter, continuation(SID), 403);
+                denied(filter, new Request("GET", "/decision/view/report").parameter("op", "emb").parameter("resource", "finereport.main.js"), 403);
+                portal.identity = null;
+                denied(filter, initial(), 401);
+            }
+        } finally { portal.identity = original; }
+    }
+
     private static void originalAnonymousContext() throws IOException, ServletException, ReflectiveOperationException {
         HttpServletRequest previousRequest = new Request("GET", "/previous").servlet();
         HttpServletResponse previousResponse = new Response().servlet();
@@ -534,6 +587,7 @@ public final class ReportEngineAccessCheck {
             nestedDispatch(portal, filter);
             nonceReplayAndRace(filter);
             templateGrants(portal, filter);
+            optionalUserNo(portal, filter);
             originalAnonymousContext();
             System.out.println("Report engine access regression passed: " + assertions + " assertions; no HTTP, database or report engine started.");
         } finally {

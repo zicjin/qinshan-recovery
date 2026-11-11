@@ -90,7 +90,8 @@ DECLARE
     IF compact=base||'MODIFY("'||p_column||'"'||named_clause||'NOTNULLENABLE)'
         OR compact=base||'MODIFY("'||p_column||'"NOTNULLENABLE)' THEN
       RETURN 'INLINE';
-    ELSIF compact=base||'ADD'||named_clause||'CHECK("'||p_column||'"ISNOTNULL)ENABLE' THEN
+    ELSIF compact=base||'ADD'||named_clause||'CHECK("'||p_column||'"ISNOTNULL)ENABLE'
+        OR compact=base||'ADDCHECK("'||p_column||'"ISNOTNULL)ENABLE' THEN
       RETURN 'CHECK';
     END IF;
     reject('Unsupported exact constraint DDL: '||p_name);

@@ -62,6 +62,23 @@ class NotNullAlignmentTest(unittest.TestCase):
                                   'sha256': hashlib.sha256(modified.encode()).hexdigest()}
                 self.assertNotEqual(self.run_manifest(changed).returncode, 0)
 
+    def test_exact_unnamed_add_check_from_generated_dictionary_name_is_supported(self):
+        # Oracle GET_DDL omits the name of a GENERATED NAME ordinary CHECK.
+        # Exercise the public verifier against the finite SQL shape correction.
+        original = json.loads(MANIFEST.read_text())
+        sql = (ROOT / original['sql']['path']).read_text()
+        named = "    ELSIF compact=base||'ADD'||named_clause||'CHECK(\"'||p_column||'\"ISNOTNULL)ENABLE'"
+        unnamed = "        OR compact=base||'ADDCHECK(\"'||p_column||'\"ISNOTNULL)ENABLE'"
+        corrected = sql.replace(named + ' THEN', named + '\n' + unnamed + ' THEN')
+        with tempfile.NamedTemporaryFile(dir=ROOT / 'api-fixtures/schema', suffix='.sql', mode='w', encoding='utf-8') as temp:
+            temp.write(corrected)
+            temp.flush()
+            changed = copy.deepcopy(original)
+            changed['sql'] = {'path': str(Path(temp.name).relative_to(ROOT)),
+                              'sha256': hashlib.sha256(corrected.encode()).hexdigest()}
+            result = self.run_manifest(changed)
+            self.assertEqual(result.returncode, 0, result.stderr)
+
 
 if __name__ == '__main__':
     unittest.main()

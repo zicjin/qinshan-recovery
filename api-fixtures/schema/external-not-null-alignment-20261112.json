@@ -115,7 +115,7 @@
   ],
   "sql": {
     "path": "api-fixtures/schema/external-not-null-alignment-20261112.sql",
-    "sha256": "52e9c5e93a2f559eb64946ee3c25c8f13d1b5d6a6f30e57135bf723b7005f267"
+    "sha256": "a02997ce5591f8637e7a71858933660a8f6b9e237c1903c95356cedb100f2781"
   },
   "counts": {
     "tables_checked": 10,

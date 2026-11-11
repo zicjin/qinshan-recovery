@@ -17,9 +17,11 @@ import com.sunwayworld.module.item.file.manager.CoreFileManager;
 import com.sunwayworld.module.item.file.service.CoreFileService;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.nio.file.NoSuchFileException;
 import java.time.LocalDateTime;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -27,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -55,7 +58,7 @@ implements Filter {
             }
             Path fileLocalPath = FilePathManager.getLocalPath(filePath);
             if (!Files.exists(fileLocalPath, new LinkOption[0])) {
-                this.fileManager.download(filePath);
+                if (!download(filePath, response)) return;
             } else {
                 CoreFileBean file;
                 String[] values = StringUtils.split(StringUtils.decodeURL(requestUri), "/");
@@ -67,16 +70,27 @@ implements Filter {
                     fileMd5Name = values[3];
                 }
                 if (null == (file = (CoreFileBean)this.fileService.selectFirstByFilter(SearchFilter.instance().match("MD5NAME", fileMd5Name).filter(MatchPattern.SEQ), com.sunwayworld.framework.database.sql.Order.desc("ID")))) {
-                    this.fileManager.download(filePath);
+                    if (!download(filePath, response)) return;
                 } else {
                     File localFile = fileLocalPath.toFile();
                     LocalDateTime localFileTime = ConvertUtils.convert(localFile.lastModified(), LocalDateTime.class);
                     if (DateTimeUtils.isBefore(localFileTime, file.getCreatedTime())) {
-                        this.fileManager.download(filePath);
+                        if (!download(filePath, response)) return;
                     }
                 }
             }
         }
         chain.doFilter(request, response);
+    }
+
+    private boolean download(FilePathDTO filePath, ServletResponse response) throws IOException {
+        try {
+            this.fileManager.download(filePath);
+            return true;
+        } catch (UncheckedIOException failure) {
+            if (!(failure.getCause() instanceof NoSuchFileException)) throw failure;
+            ((HttpServletResponse)response).sendError(HttpServletResponse.SC_NOT_FOUND);
+            return false;
+        }
     }
 }

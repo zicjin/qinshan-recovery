@@ -5,9 +5,16 @@ import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.io.filter.FileSecureFilter;
 import com.sunwayworld.module.item.file.manager.CoreFileManager;
 import com.sunwayworld.module.item.file.manager.impl.CoreFileFtpManagerImpl;
+import com.sunwayworld.module.item.file.filter.CoreFileFtpFilter;
+import com.sunwayworld.module.item.file.service.CoreFileService;
+import com.sunwayworld.framework.io.file.FilePathManager;
+import com.sunwayworld.framework.exception.FtpException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.nio.file.NoSuchFileException;
+import java.lang.reflect.Proxy;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -240,6 +247,93 @@ public final class LocalCoreFileManagerCheck {
         }
     }
 
+    static void missing(Path temporary) throws Exception {
+        Path work = temporary.resolve("request-files");
+        ReflectionTestUtils.setField(FilePathManager.class, "applicationFileRootPath", work);
+        LocalCoreFileManager manager = new LocalCoreFileManager(work.resolve("files"));
+        StaticApplicationContext context = new StaticApplicationContext();
+        ApplicationContextHelper.setApplicationContext(context);
+        CoreFileFtpFilter cache = new CoreFileFtpFilter();
+        ReflectionTestUtils.setField(cache, "fileManager", manager);
+        CoreFileBean metadata = new CoreFileBean();
+        metadata.setCreatedTime(LocalDateTime.of(2026, 1, 1, 0, 0));
+        CoreFileService service = (CoreFileService)Proxy.newProxyInstance(
+                CoreFileService.class.getClassLoader(), new Class<?>[]{CoreFileService.class},
+                (proxy, method, args) -> "selectFirstByFilter".equals(method.getName()) ? metadata : null);
+        ReflectionTestUtils.setField(cache, "fileService", service);
+        String url = "/files/secure/20261111/fixture-hash/absent.txt";
+        try {
+            MockHttpServletResponse absent = new MockHttpServletResponse();
+            final boolean[] reached = {false};
+            cache.doFilter(new MockHttpServletRequest("GET", url), absent, (req, res) -> reached[0] = true);
+            check(absent.getStatus() == 404, "missing local GET is truthful 404");
+            check(!reached[0] && absent.getContentAsByteArray().length == 0,
+                    "missing local GET never creates or serves placeholder bytes");
+            check(!Files.exists(work.resolve("files/secure/20261111/fixture-hash/absent.txt")),
+                    "missing GET creates no file");
+
+            manager.upload(file("present.txt"), new ByteArrayInputStream(CONTENT));
+            String present = "/files/secure/20261111/fixture-hash/present.txt";
+            FileSecureFilter security = new FileSecureFilter();
+            ReflectionTestUtils.setField(security, "fileManager", manager);
+            ReflectionTestUtils.setField(security, "accessPermissionEnabled", true);
+            MockHttpServletRequest valid = new MockHttpServletRequest("GET", present);
+            valid.addParameter("security", manager.getSecurity(file("present.txt")));
+            MockHttpServletResponse good = new MockHttpServletResponse();
+            cache.doFilter(valid, good, (req, res) -> security.doFilter(req, res, (r, out) ->
+                    out.getOutputStream().write(Files.readAllBytes(work.resolve("files/secure/20261111/fixture-hash/present.txt")))));
+            check(good.getStatus() == 200 && Arrays.equals(CONTENT, good.getContentAsByteArray()),
+                    "existing signed local GET preserves actual bytes through original security filter");
+            MockHttpServletResponse unsigned = new MockHttpServletResponse();
+            rejects(() -> cache.doFilter(new MockHttpServletRequest("GET", present), unsigned,
+                    (req, res) -> security.doFilter(req, res, (r, out) -> out.getOutputStream().write(CONTENT))),
+                    "existing unsigned file remains denied");
+            check(unsigned.getContentAsByteArray().length == 0 && unsigned.getStatus() != 404,
+                    "security rejection is not masked as missing file");
+            MockHttpServletResponse downstream = new MockHttpServletResponse();
+            rejects(() -> cache.doFilter(valid, downstream, (req, res) -> {
+                throw new UncheckedIOException(new NoSuchFileException("downstream fixture"));
+            }), "downstream missing exceptions are not swallowed by storage filter");
+            check(downstream.getStatus() != 404, "storage catch does not wrap downstream chain");
+
+            Path directory = work.resolve("files/secure/20261111/fixture-hash/directory.txt");
+            Files.createDirectory(directory);
+            ReflectionTestUtils.setField(cache, "fileService", Proxy.newProxyInstance(
+                    CoreFileService.class.getClassLoader(), new Class<?>[]{CoreFileService.class},
+                    (proxy, method, args) -> null));
+            MockHttpServletResponse invalid = new MockHttpServletResponse();
+            rejects(() -> cache.doFilter(new MockHttpServletRequest("GET", "/files/secure/20261111/fixture-hash/directory.txt"),
+                    invalid, (req, res) -> {}), "directory source remains invalid");
+            check(invalid.getStatus() != 404, "nonregular source is not classified as absent");
+            MockHttpServletResponse traversal = new MockHttpServletResponse();
+            rejects(() -> cache.doFilter(new MockHttpServletRequest("GET", "/files/secure/20261111/../escape.txt"),
+                    traversal, (req, res) -> {}), "unsafe path remains rejected");
+            check(traversal.getStatus() != 404, "unsafe path is not classified as absent");
+            ReflectionTestUtils.setField(cache, "fileManager", new CoreFileFtpManagerImpl() {
+                @Override public void download(FilePathDTO file, Path target) {
+                    throw new FtpException("GIKAM.EXCEPTION.FTP.CONNECTION");
+                }
+            });
+            MockHttpServletResponse ftp = new MockHttpServletResponse();
+            rejects(() -> cache.doFilter(new MockHttpServletRequest("GET", url), ftp, (req, res) -> {}),
+                    "FTP failure propagates unchanged");
+            check(ftp.getStatus() != 404, "FTP unavailable is not declared missing local file");
+            ReflectionTestUtils.setField(cache, "fileManager", new CoreFileFtpManagerImpl() {
+                @Override public void download(FilePathDTO file, Path target) {
+                    throw new UncheckedIOException(new IOException("storage unavailable fixture"));
+                }
+            });
+            MockHttpServletResponse io = new MockHttpServletResponse();
+            rejects(() -> cache.doFilter(new MockHttpServletRequest("GET", url), io, (req, res) -> {}),
+                    "other storage I/O failure propagates unchanged");
+            check(io.getStatus() != 404, "other I/O failure is not classified as absent");
+        } finally {
+            ReflectionTestUtils.setField(FilePathManager.class, "applicationFileRootPath", null);
+            ApplicationContextHelper.setApplicationContext(null);
+            context.close();
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         Path temporary = Paths.get(args[0]);
         String selected = args[1];
@@ -248,6 +342,7 @@ public final class LocalCoreFileManagerCheck {
         if ("all".equals(selected) || "paths".equals(selected)) paths(temporary);
         if ("all".equals(selected) || "urls".equals(selected)) urls(temporary);
         if ("all".equals(selected) || "selection".equals(selected)) selection(temporary);
+        if ("all".equals(selected) || "missing".equals(selected)) missing(temporary);
         System.out.println("PASS local CoreFileManager (" + checks + " checks; " + selected + ")");
     }
 }

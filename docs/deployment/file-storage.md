@@ -52,7 +52,12 @@ Uploads and copies stage complete bytes in the destination directory and require
 an atomic replacement. A failed input read leaves the previous file intact and
 removes its temporary file. Missing or non-regular sources fail explicitly,
 including requests whose source and destination are equal. Existing regular
-same-file operations preserve the bytes. The caller retains ownership of an
+same-file operations preserve the bytes. A confirmed missing local source raises
+an explicit missing-file signal; the original file download filter maps only that
+signal to HTTP 404. FTP connection failures, inaccessible/invalid paths and
+nonregular files keep their original failure behavior. The filter does not catch
+exceptions from subsequent security or resource handlers. No placeholder file is
+created, and file-access signatures and permissions remain unchanged. The caller retains ownership of an
 `InputStream` supplied directly to the manager.
 
 The original upload service, metadata writes, file logs, events and API responses

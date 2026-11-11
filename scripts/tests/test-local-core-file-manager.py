@@ -15,7 +15,7 @@ def main():
     parser.add_argument('--prerequisite-root', type=Path, default=ROOT)
     parser.add_argument('--spring-test', type=Path, required=True,
                         help='controlled public spring-test 5.2.9.RELEASE JAR; SHA-256 is pinned')
-    parser.add_argument('--case', choices=['bytes', 'paths', 'atomic', 'urls', 'selection', 'all'], default='all')
+    parser.add_argument('--case', choices=['bytes', 'paths', 'atomic', 'urls', 'selection', 'missing', 'all'], default='all')
     args = parser.parse_args()
     prerequisites = args.prerequisite_root.resolve()
     jdk = prerequisites / 'build/jdk1.8.0_391/bin'
@@ -31,6 +31,7 @@ def main():
     if hashlib.sha256(spring_test.read_bytes()).hexdigest() != SPRING_TEST_SHA256:
         parser.error('spring-test JAR does not match pinned public artifact')
     source = ROOT / 'owned-distribution/src/main/java/com/sunwayworld/emc/framework/file/LocalCoreFileManager.java'
+    filter_source = ROOT / 'reconstituted/framework/owned-core-ext/src/main/java/com/sunwayworld/module/item/file/filter/CoreFileFtpFilter.java'
     fixture = ROOT / 'scripts/tests/fixtures/local-core-file-manager/LocalCoreFileManagerCheck.java'
     with tempfile.TemporaryDirectory(prefix='local-core-file-manager-') as directory:
         temporary = Path(directory)
@@ -39,7 +40,7 @@ def main():
         logging.write_text('<Configuration status="OFF"><Loggers><Root level="OFF"/></Loggers></Configuration>')
         compiled = subprocess.run([str(jdk / 'javac'), '-source', '8', '-target', '8', '-encoding', 'UTF-8',
                         '-sourcepath', str(temporary), '-cp', classpath, '-d', str(temporary),
-                        str(source), str(fixture)])
+                        str(source), str(filter_source), str(fixture)])
         if compiled.returncode:
             return compiled.returncode
         return subprocess.run([str(jdk / 'java'), '-Dlog4j.configurationFile=' + str(logging), '-cp', classpath,

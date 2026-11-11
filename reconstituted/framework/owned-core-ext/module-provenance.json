@@ -14,7 +14,20 @@
   "forbidden_content_report": "forbidden-content-report.json",
   "module": "owned-core-ext",
   "module_reason": "Extension interfaces, extension services and FTP support.",
-  "override_source_files": [],
+  "overridden_files": [
+    {
+      "generated_sha256": "56d8fea09d680e36a564de67b4bebf5c348bff57e13e4f080360f7c89bed7f72",
+      "override_sha256": "f98c710b9713e395d3de1789cbc808121e0ba8174f665f32186966570d8f6824",
+      "path": "src/main/java/com/sunwayworld/module/item/file/filter/CoreFileFtpFilter.java"
+    }
+  ],
+  "override_source_files": [
+    {
+      "generated_sha256": "56d8fea09d680e36a564de67b4bebf5c348bff57e13e4f080360f7c89bed7f72",
+      "override_sha256": "f98c710b9713e395d3de1789cbc808121e0ba8174f665f32186966570d8f6824",
+      "path": "src/main/java/com/sunwayworld/module/item/file/filter/CoreFileFtpFilter.java"
+    }
+  ],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
   "removed_source_files": [],
   "resource_file_count": 611,
@@ -9023,12 +9036,15 @@
       "decompiler": "CFR",
       "decompiler_version": "0.152",
       "path": "src/main/java/com/sunwayworld/module/item/file/filter/CoreFileFtpFilter.java",
-      "sha256": "56d8fea09d680e36a564de67b4bebf5c348bff57e13e4f080360f7c89bed7f72",
+      "sha256": "f98c710b9713e395d3de1789cbc808121e0ba8174f665f32186966570d8f6824",
       "source_class_path": "com/sunwayworld/module/item/file/filter/CoreFileFtpFilter.class",
       "source_jar": "BOOT-INF/lib/gikam-core-file-ftp-14.1.5.jar",
+      "source_sha256_before_overlay": "89dfe7d573247853a486b63bac5b1406e54fda889a3a5dd08706f491e2308870",
       "source_sha256_before_transform": "89dfe7d573247853a486b63bac5b1406e54fda889a3a5dd08706f491e2308870",
       "transformations": [
-        "normalization:generated-source"
+        "normalization:generated-source",
+        "behavior-repair:report-only-confirmed-local-NoSuchFileException-as-http404",
+        "overlay:src/main/java/com/sunwayworld/module/item/file/filter/CoreFileFtpFilter.java"
       ]
     },
     {
@@ -9046,9 +9062,9 @@
       ]
     }
   ],
-  "source_tree_sha256": "e8476568c4d0321a2182e3b12a26f3dfaf72371b3c8f7c3278b6a9178f90437e",
+  "source_tree_sha256": "b86a6cbed4d685c78d580b415467566cce43797e8a4a3fb3023a39222818652b",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "cc82d85926049feee8ed8b40c13c7e81a9ece832168e26f1dbf7aa7bd722703a",
-  "transformed_source_count": 1
+  "transformed_source_count": 2
 }

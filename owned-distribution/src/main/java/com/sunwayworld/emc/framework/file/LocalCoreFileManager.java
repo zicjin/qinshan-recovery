@@ -10,9 +10,11 @@ import com.sunwayworld.module.item.file.utils.CoreFileUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
@@ -123,7 +125,13 @@ public class LocalCoreFileManager implements CoreFileManager {
     }
 
     @Override public void download(FilePathDTO file, Path target) {
-        copy(path(file), target);
+        Path source = path(file);
+        // A confirmed absent local object is distinct from an invalid path,
+        // a nonregular object, permissions or a failed storage operation.
+        if (Files.notExists(source, LinkOption.NOFOLLOW_LINKS)) {
+            throw new UncheckedIOException("Local file is missing", new NoSuchFileException("Local file"));
+        }
+        copy(source, target);
     }
 
     @Override public void copyFile(FilePathDTO from, FilePathDTO to) {

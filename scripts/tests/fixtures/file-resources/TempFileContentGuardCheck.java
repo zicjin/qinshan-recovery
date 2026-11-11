@@ -48,7 +48,9 @@ public final class TempFileContentGuardCheck {
                 "/files/temp/20261112/"+HEX32+"/code.png", // QRCodeGenerator
                 "/files/temp/1794414561974/01234567/composed.pdf", // PfArchiveFileService
                 "/files/temp/01234567/archive.pdf", // EmcArchiveFileService
-                "/files/secure/20261112/"+HEX32+"/"+NAME
+                "/files/secure/20261112/"+HEX32+"/"+NAME,
+                "/files/finereport/kf_htrwtjb/LIMS-%E5%AE%A2%E6%9C%8D-%E5%A7%94%E6%89%98%E6%B1%87%E6%80%BB%E8%A1%A8.cpt",
+                "/files/finereport/kf_htxxb/LIMS-%E5%AE%A2%E6%9C%8D-%E5%90%88%E5%90%8C%E6%B1%87%E6%80%BB%E8%A1%A8.cpt"
             };
             for (String path : allowed) {
                 perform(path, false, false, true, false, null, true, false);
@@ -76,7 +78,18 @@ public final class TempFileContentGuardCheck {
                 "/files/temp/1794414561974/"+UUID36+"/%2e%2e%2fsecret",
                 "/files/temp/1794414561974/"+UUID36+"/../secret",
                 "/files/temp/1794414561974/"+UUID36+"/sub/file.xlsx",
-                "/files/temp/1794414561974/"+UUID36+"/%5csecret"
+                "/files/temp/1794414561974/"+UUID36+"/%5csecret",
+                "/files/finereport//report.cpt",
+                "/files/finereport/../report.cpt",
+                "/files/finereport/code%2fother/report.cpt",
+                "/files/fine%72eport/code/report.cpt",
+                "/files/finereport/code/report.cpt/extra",
+                "/files/finereport/code/report.txt",
+                "/files/finereport/code/%2e%2e%2fsecret.cpt",
+                "/files/finereport/code/%252e%252e%252fsecret.cpt",
+                "/files/finereport/code/report%3bignored.cpt",
+                "/files/finereport/code/report%5csecret.cpt",
+                "/files/finereport/code/report%00.cpt"
             };
             for (String path : denied) perform(path, false, false, true, false, null, false, false);
             perform("/files/temp/1794414561974/"+UUID36+"/%252e%252e%252fsecret", false, false, true, false, null, false, false);
@@ -86,6 +99,10 @@ public final class TempFileContentGuardCheck {
                     true, "approved-signature", true, true, "HEAD", "/lims");
             perform("/files/temp/01234567/report.xlsx", true, false, true,
                     true, "approved-signature", false, true, "HEAD", "/lims");
+            perform("/files/finereport/kf_htxxb/report(checked).cpt", true, false, true,
+                    true, "approved-signature", false, true, "HEAD", "/lims");
+            perform("/files/finereport/kf_htxxb/report(checked).cpt", true, true, true,
+                    true, "approved-signature", true, true, "HEAD", "/lims");
             System.out.println("TempFileContentGuardCheck PASS ("+checks+" servlet-chain checks)");
         } finally {
             SecurityContextHolder.clearContext();
@@ -111,7 +128,16 @@ public final class TempFileContentGuardCheck {
                         String[] parts = org.springframework.web.util.UriUtils.decode(path, StandardCharsets.UTF_8).split("/", -1);
                         String expected = parts[parts.length - 2];
                         SearchFilter query = (SearchFilter) arguments[0];
-                        if (query.getStdFilterList().size() != 1
+                        if (path.startsWith("/files/finereport/")) {
+                            java.util.Map<String, Object> values = new java.util.HashMap<>();
+                            query.getStdFilterList().forEach(item -> values.putAll(item.getMap()));
+                            if (query.getStdFilterList().size() != 3
+                                    || !"finereport".equals(values.get("SCOPE"))
+                                    || !expected.equals(values.get("EXT"))
+                                    || !parts[parts.length - 1].equals(values.get("NAME"))) {
+                                throw new AssertionError("report metadata lookup must bind original SCOPE/EXT/NAME");
+                            }
+                        } else if (query.getStdFilterList().size() != 1
                                 || query.getStdFilterList().get(0).getMap().values().stream().noneMatch(expected::equals)) {
                             throw new AssertionError("file metadata lookup does not use original irregularName");
                         }

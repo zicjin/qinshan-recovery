@@ -229,6 +229,14 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
         }
         String relativePath = path.substring(FILE_CONTENT_PREFIX.length());
         String[] segments = relativePath.split("/", 4);
+        if ("finereport".equals(segments[0]) && segments.length == 3) {
+            // Original CoreFileUtils uses EXT/NAME, never MD5NAME or a date,
+            // for report attachments. Keep the same personnel association check.
+            return coreFileService.selectFirstByFilter(SearchFilter.instance()
+                    .match("SCOPE", "finereport").filter(MatchPattern.SEQ)
+                    .match("EXT", segments[1]).filter(MatchPattern.SEQ)
+                    .match("NAME", segments[2]).filter(MatchPattern.SEQ));
+        }
         int irregularNameIndex = "temp".equals(segments[0]) && segments.length == 3 ? 1 : 2;
         if ((segments.length != 4 && !("temp".equals(segments[0]) && segments.length == 3))
                 || segments[irregularNameIndex].isEmpty()) {
@@ -481,6 +489,11 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
             return true;
         }
         String[] segments = rawPath.substring(FILE_CONTENT_PREFIX.length()).split("/", 4);
+        if ("finereport".equals(segments[0])) {
+            // FilePathManager omits timestamps for this one original scope.
+            return segments.length != 3 || !segments[1].matches("[A-Za-z0-9_-]+")
+                    || !isCanonicalContentFileName(segments[2]) || !segments[2].endsWith(".cpt");
+        }
         if ("temp".equals(segments[0])) {
             segments = rawPath.substring(FILE_CONTENT_PREFIX.length()).split("/", -1);
             if (!isCanonicalContentFileName(segments[segments.length - 1])) {

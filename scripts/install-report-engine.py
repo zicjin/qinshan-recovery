@@ -222,6 +222,99 @@ def verify_configuration(manifest):
     return files
 
 
+def attachment_path(asset):
+    # CoreFileUtils uses EXT/NAME for finereport; FilePathManager omits its date.
+    install = PurePosixPath(asset["install_path"])
+    if (len(install.parts) != 4 or install.parts[:2] != ("WEB-INF", "reportlets")
+            or install.parts[2] != asset["report_code"]
+            or re.fullmatch(r"[a-z0-9_]+", install.parts[2]) is None
+            or not install.name.endswith(".cpt")
+            or any(c in install.name for c in "\\:\x00")
+            or any(ord(c) < 32 for c in install.name)):
+        raise StageError("invalid report attachment path")
+    return PurePosixPath("finereport", *install.parts[2:])
+
+
+def inspect_local_path(path):
+    if not path.is_absolute() or ".." in path.parts:
+        raise StageError("attachment paths must be absolute without parent components")
+    current = Path(path.anchor)
+    for part in path.parts[1:]:
+        current = current / part
+        if current.is_symlink():
+            raise StageError("symbolic link in attachment path")
+        if current != path and current.exists() and not current.is_dir():
+            raise StageError("invalid attachment directory")
+
+
+def install_attachments(staged, files_root, application_config):
+    """Install only this release's finite attachment set; never replace a conflict."""
+    inspect_local_path(staged)
+    inspect_local_path(files_root)
+    if not staged.is_dir() or not files_root.is_dir():
+        raise StageError("staged report and application files directories must exist")
+    manifest_path = MATERIALS / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    receipt = json.loads((staged / "staging-manifest.json").read_text(encoding="utf-8"))
+    if receipt.get("input_manifest_sha256") != sha256(manifest_path):
+        raise StageError("report staging input manifest differs")
+    expected = manifest["assets"]
+    attachments, assets = receipt.get("attachment_files"), receipt.get("assets")
+    if (not isinstance(attachments, list) or not isinstance(assets, list)
+            or len(attachments) != len(expected) or len(assets) != len(expected)):
+        raise StageError("report attachment manifest scope differs")
+    schema = local_schema(application_config)
+    prepared = []
+    already_present = 0
+    for asset, record, engine in zip(expected, attachments, assets):
+        original = checked_file(MATERIALS / asset["path"], asset, "owned report asset").read_bytes()
+        projected = original.replace(asset["datasource_placeholder"].encode(), b"OWNED_LOCAL_REPORT")
+        projected = projected.replace(asset["schema_placeholder"].encode(), schema.encode("ascii"))
+        digest = hashlib.sha256(projected).hexdigest()
+        relative = attachment_path(asset)
+        source_relative = PurePosixPath("attachment-files", *relative.parts)
+        if (record.get("relative_path") != str(relative) or record.get("path") != str(source_relative)
+                or engine.get("path") != asset["install_path"]
+                or record.get("sha256") != engine.get("sha256") or record.get("sha256") != digest
+                or record.get("bytes") != engine.get("bytes") or record.get("bytes") != len(projected)):
+            raise StageError("report attachment manifest path or asset binding differs")
+        source = staged.joinpath(*source_relative.parts)
+        engine_source = staged.joinpath(*PurePosixPath(engine["path"]).parts)
+        target = files_root.joinpath(*relative.parts)
+        for path in (source, engine_source, target):
+            inspect_local_path(path)
+        checked_file(source, record, "staged report attachment")
+        checked_file(engine_source, record, "staged report template")
+        if target.exists():
+            if not target.is_file() or target.stat().st_size != record["bytes"] or sha256(target) != record["sha256"]:
+                raise StageError("existing attachment differs; restore or migrate it explicitly")
+            already_present += 1
+        else:
+            prepared.append((source, target))
+    # Preflight the whole set before publishing anything; an existing conflict
+    # must not leave earlier templates installed. Exclusive links also prevent
+    # overwriting a file created after preflight.
+    created = []
+    try:
+        for source, target in prepared:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            inspect_local_path(target)
+            with tempfile.NamedTemporaryFile(prefix=".report-attachment-", dir=target.parent) as temporary:
+                with source.open("rb") as stream:
+                    shutil.copyfileobj(stream, temporary)
+                temporary.flush()
+                os.fsync(temporary.fileno())
+                os.chmod(temporary.name, 0o644)
+                os.link(temporary.name, target)
+            created.append(target)
+    except (OSError, StageError):
+        for path in created:
+            path.unlink()
+        raise StageError("report attachment installation failed; existing files were not replaced") from None
+    return {"status": "attachments-installed", "installed": len(created),
+            "already_present": already_present, "database_connected": False}
+
+
 def stage(args):
     validate_output(args.output)
     manifest = json.loads((MATERIALS / "manifest.json").read_text(encoding="utf-8"))
@@ -266,6 +359,7 @@ def stage(args):
                 or str(install) in seen_install):
             raise StageError("invalid or duplicate asset installation path")
         seen_install.add(str(install))
+        attachment_path(asset_entry)
         metadata_path = asset_entry.get("metadata_source", "install-metadata.sql")
         metadata_relative = PurePosixPath(metadata_path)
         if metadata_path not in ("install-metadata.sql", "install-contract-metadata.sql") and not (
@@ -296,11 +390,19 @@ def stage(args):
                 raise StageError("copied library hash mismatch")
         compile_listener(args.javac, sorted((webinf / "lib").glob("*.jar")), webinf / "classes")
         asset_records = []
+        attachment_records = []
         metadata_records = []
-        for install, asset, metadata_path, metadata_source, metadata in staged_assets:
+        for entry, (install, asset, metadata_path, metadata_source, metadata) in zip(asset_entries, staged_assets):
             destination = webroot.joinpath(*install.parts)
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(asset)
+            relative = attachment_path(entry)
+            attachment = webroot.joinpath("attachment-files", *relative.parts)
+            attachment.parent.mkdir(parents=True, exist_ok=True)
+            attachment.write_bytes(asset)
+            attachment_records.append({"path": "attachment-files/" + str(relative),
+                                       "relative_path": str(relative), "bytes": len(asset),
+                                       "sha256": hashlib.sha256(asset).hexdigest()})
             (webroot / metadata_path).parent.mkdir(parents=True, exist_ok=True)
             (webroot / metadata_path).write_bytes(metadata)
             asset_records.append({"path": str(install), "bytes": len(asset),
@@ -332,6 +434,7 @@ def stage(args):
             "input_manifest_sha256": sha256(MATERIALS / "manifest.json"),
             "asset": asset_records[0],
             "assets": asset_records,
+            "attachment_files": attachment_records,
             "metadata_sql": metadata_records[0],
             "metadata_sql_files": metadata_records,
             "dependencies": dependency_records,
@@ -360,22 +463,33 @@ def stage(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--engine-lib", type=Path, required=True,
+    parser.add_argument("--install-attachments-from", type=Path,
+                        help="install the staged attachment set instead of staging an engine")
+    parser.add_argument("--files-root", type=Path,
+                        help="existing absolute application work files directory; conflicts are rejected")
+    parser.add_argument("--engine-lib", type=Path,
                         help="operator-authorized FineReport 11 JAR directory (offline)")
     parser.add_argument("--public-lib", type=Path, action="append",
                         help="offline public JAR directory; repeat to combine directories")
-    parser.add_argument("--output", type=Path, required=True,
+    parser.add_argument("--output", type=Path,
                         help="absolute existing empty destination directory; never overwritten")
-    parser.add_argument("--application-config", type=Path, required=True,
+    parser.add_argument("--application-config", type=Path,
                         help="private Java application properties; schema is read, never copied")
     parser.add_argument("--javac", type=Path,
                         default=Path(shutil.which("javac") or "javac"),
                         help="Java compiler 8+; generated listener targets Java 8")
     args = parser.parse_args()
+    if args.install_attachments_from is not None:
+        if args.files_root is None or args.application_config is None or any((args.engine_lib, args.public_lib, args.output)):
+            parser.error("attachment installation requires --files-root, --application-config and no engine/output options")
+    elif args.files_root is not None or any(value is None for value in (args.engine_lib, args.output, args.application_config)):
+        parser.error("staging requires --engine-lib, --output and --application-config")
     if args.public_lib is None:
         args.public_lib = [ROOT / "build/reconstituted-public-deps"]
     try:
-        print(json.dumps(stage(args), sort_keys=True))
+        result = (install_attachments(args.install_attachments_from, args.files_root, args.application_config)
+                  if args.install_attachments_from is not None else stage(args))
+        print(json.dumps(result, sort_keys=True))
     except (StageError, OSError, ValueError, KeyError, ET.ParseError) as failure:
         message = str(failure) if isinstance(failure, StageError) else "invalid or unavailable staging input"
         print("report engine staging failed: " + message, file=sys.stderr)

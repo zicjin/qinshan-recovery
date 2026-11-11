@@ -38,8 +38,37 @@ homePageReport/kf_htxxb 行的文件关联。脚本只接受原配置行和精�
 再执行两个 metadata SQL。依赖迁移只创建已核对的空结构并拒绝冲突；Oracle DDL 隐式提交，
 不是业务数据迁移或事务 rollback。结构未准备时不能用空结果代替报表查询。新设备使用上面的固定配置补充恢复对应原配置，不创建替代页面。
 
+metadata SQL 只登记附件，不复制文件内容。stager 同时生成
+`attachment-files/finereport/<报表代码>/<原文件名>.cpt`，其内容与同批
+`WEB-INF/reportlets/` 模板完全一致；`staging-manifest.json` 的 `attachment_files`
+记录有限路径、大小及 SHA-256。原 `CoreFileUtils` 对 finereport 使用 `EXT/NAME`
+构造下载路径，因此附件目录不使用 `MD5NAME`，也不使用日期目录。
+
+执行全部 metadata SQL 后、启动应用前，使用应用文件卷的操作系统账号安装附件。
+`REPORT_STAGE` 是本次 stager 输出目录，`APP_FILES` 是应用实际 working directory 下的
+`files` 目录（例如 `/var/lib/lims-owned/files`），必须已经存在且为绝对路径：
+
+```bash
+REPORT_STAGE=/var/lib/lims-owned/report-engine
+APP_FILES=/var/lib/lims-owned/files
+python3 installation/scripts/install-report-engine.py \
+  --install-attachments-from "$REPORT_STAGE" \
+  --files-root "$APP_FILES" \
+  --application-config /run/config/local-application.properties
+```
+
+该模式用同一私密 application properties 读取目标 schema，重新核对原模板的有限变换，
+不复制或记录配置、不连接数据库，只接受当前发行 manifest 声明的全部 27 份附件。它先校验整套模板/附件 hash 和全部已有目标，再复制缺失文件；内容相同
+时可重复执行，任一已有文件不同或路径含符号链接即失败，不覆盖旧文件。冲突须先核对版本、
+备份并明确迁移，不用覆盖参数跳过。安装后通过原文件 API 查询并下载对应 CPT，不能用
+metadata 存在或引擎模板可读代替附件恢复验收。
+
 `/report-engine` 的所有请求先验证真实门户登录和目标菜单。原有两份汇总表保持对应菜单授权；其他模板按当前门户身份、选中角色、报表权限和配置启用状态授权，仅开放已安装且获授权的模板与所需资源；
-请求的 userid 绑定当前门户用户编号，拒绝其他用户参数。报表会话通过服务器生成的一次性关联参数绑定门户 token 摘要、用户、组织、角色和模板；
+请求的 userid 绑定当前门户用户编号，拒绝其他用户参数。原用户契约允许用户编号为空；
+仅委托汇总表和合同汇总表的有效 SQL 不依赖 userid，因此这两份原模板允许已授权门户用户的
+用户编号为空，不回退使用用户 ID，也不补造编号。其他 25 份模板仍要求非空用户编号；
+真实登录、配置启用状态、菜单/报表授权及会话归属校验保持生效。
+报表会话通过服务器生成的一次性关联参数绑定门户 token 摘要、用户、组织、角色和模板；
 关联在原引擎的异步创建事件中消费，后续不能认领
 未知或他人的会话。管理、配置、登录、其它模板和未验证导出动作不开放。
 

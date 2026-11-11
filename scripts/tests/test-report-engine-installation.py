@@ -74,6 +74,10 @@ class ReportInstallationTest(unittest.TestCase):
                 mock.patch.object(STAGER, 'compile_listener', self.compile_fixture):
             return STAGER.stage(args)
 
+    def install(self, files):
+        with mock.patch.object(STAGER, 'MATERIALS', self.materials):
+            return STAGER.install_attachments(self.output, files, self.config)
+
     def rejected(self, pattern):
         with self.assertRaisesRegex(STAGER.StageError, pattern):
             self.stage()
@@ -126,6 +130,101 @@ class ReportInstallationTest(unittest.TestCase):
         receipt = json.loads((self.output / 'staging-manifest.json').read_text())
         self.assertEqual(27, len(receipt['metadata_sql_files']))
         self.assertTrue(any('fxryjxtj/' in entry['path'] for entry in receipt['assets']))
+
+    def test_original_attachment_download_paths_are_staged_and_installable(self):
+        self.stage()
+        receipt = json.loads((self.output / 'staging-manifest.json').read_text())
+        self.assertEqual(27, len(receipt['attachment_files']))
+        for entry in self.assets():
+            metadata = (self.materials / entry['metadata_source']).read_text()
+            self.assertIn("'" + entry['report_code'] + "'", metadata)
+            self.assertIn("'" + Path(entry['install_path']).name + "'", metadata)
+        files = self.root / 'application-work' / 'files'
+        files.mkdir(parents=True)
+        result = self.install(files)
+        self.assertEqual(27, result['installed'])
+        for source, attachment in zip(receipt['assets'], receipt['attachment_files']):
+            expected = Path('finereport').joinpath(*Path(source['path']).parts[2:])
+            self.assertEqual(str(expected), attachment['relative_path'])
+            self.assertEqual('attachment-files/' + str(expected), attachment['path'])
+            self.assertEqual((self.output / source['path']).read_bytes(),
+                             (files / expected).read_bytes())
+            self.assertEqual({'bytes': attachment['bytes'], 'sha256': attachment['sha256']},
+                             fingerprint(files / expected))
+        self.assertTrue((files / 'finereport/kf_htrwtjb/LIMS-客服-委托汇总表.cpt').is_file())
+        self.assertTrue((files / 'finereport/kf_htxxb/LIMS-客服-合同汇总表.cpt').is_file())
+        result = self.install(files)
+        self.assertEqual(0, result['installed'])
+        self.assertEqual(27, result['already_present'])
+
+    def test_attachment_conflict_is_rejected_before_any_files_are_installed(self):
+        self.stage()
+        files = self.root / 'application-files'
+        files.mkdir()
+        conflict = files / 'finereport/kf_htxxb/LIMS-客服-合同汇总表.cpt'
+        conflict.parent.mkdir(parents=True)
+        conflict.write_bytes(b'existing different operator file')
+        with self.assertRaisesRegex(STAGER.StageError, 'existing attachment differs'):
+            self.install(files)
+        self.assertEqual([conflict], [p for p in files.rglob('*') if p.is_file()])
+        self.assertEqual(b'existing different operator file', conflict.read_bytes())
+
+    def test_attachment_tamper_and_destination_symlinks_are_rejected(self):
+        self.stage()
+        receipt = json.loads((self.output / 'staging-manifest.json').read_text())
+        source = self.output / receipt['attachment_files'][0]['path']
+        original = source.read_bytes()
+        source.write_bytes(original + b'tamper')
+        files = self.root / 'application-files'
+        files.mkdir()
+        with self.assertRaisesRegex(STAGER.StageError, 'hash mismatch'):
+            self.install(files)
+        self.assertEqual([], list(files.iterdir()))
+        source.write_bytes(original)
+        elsewhere = self.root / 'elsewhere'
+        elsewhere.mkdir()
+        (files / 'finereport').symlink_to(elsewhere, target_is_directory=True)
+        with self.assertRaisesRegex(STAGER.StageError, 'symbolic link'):
+            self.install(files)
+        self.assertEqual([], list(elsewhere.iterdir()))
+
+    def test_attachment_and_engine_rehash_cannot_change_pinned_template(self):
+        self.stage()
+        receipt_path = self.output / 'staging-manifest.json'
+        receipt = json.loads(receipt_path.read_text())
+        attachment, engine = receipt['attachment_files'][0], receipt['assets'][0]
+        for entry in (attachment, engine):
+            path = self.output / entry['path']
+            path.write_bytes(path.read_bytes() + b'<!-- replaced template -->')
+            entry.update(fingerprint(path))
+        receipt_path.write_text(json.dumps(receipt))
+        files = self.root / 'application-files'
+        files.mkdir()
+        with self.assertRaisesRegex(STAGER.StageError, 'attachment.*binding'):
+            self.install(files)
+        self.assertEqual([], list(files.iterdir()))
+
+    def test_attachment_manifest_scope_and_paths_are_rejected(self):
+        self.stage()
+        receipt_path = self.output / 'staging-manifest.json'
+        original = json.loads(receipt_path.read_text())
+        files = self.root / 'application-files'
+        files.mkdir()
+        for mutation in ('missing', 'duplicate', 'escape', 'input-hash'):
+            with self.subTest(mutation=mutation):
+                receipt = json.loads(json.dumps(original))
+                if mutation == 'missing':
+                    receipt['attachment_files'].pop()
+                elif mutation == 'duplicate':
+                    receipt['attachment_files'][1] = receipt['attachment_files'][0]
+                elif mutation == 'escape':
+                    receipt['attachment_files'][0]['relative_path'] = '../outside.cpt'
+                else:
+                    receipt['input_manifest_sha256'] = '0' * 64
+                receipt_path.write_text(json.dumps(receipt))
+                with self.assertRaisesRegex(STAGER.StageError, 'attachment|manifest'):
+                    self.install(files)
+                self.assertEqual([], list(files.iterdir()))
 
     def test_asset_hash_tamper_is_rejected(self):
         asset = self.materials / self.assets()[0]['path']

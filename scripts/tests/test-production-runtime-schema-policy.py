@@ -150,7 +150,13 @@ def copy_pinned_inputs(root):
                         elif isinstance(value, list):
                             for item in value:
                                 collect(item)
-                        elif isinstance(value, str) and (ROOT / value).is_file():
+                        elif (isinstance(value, str)
+                              and value.startswith(('api-fixtures/schema/', 'project/', 'reconstituted/', 'scripts/'))
+                              and (ROOT / value).is_file()):
+                            # Provenance can name private capture receipts that
+                            # happen to exist in a developer checkout. They are
+                            # not installation inputs and must not be discovered
+                            # or copied into this source-only fixture.
                             names.add(value)
                     collect(json.loads(source.read_text()))
     for name in names:

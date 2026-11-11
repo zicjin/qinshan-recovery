@@ -14,6 +14,7 @@ import com.sunwayworld.framework.context.LocalContextHelper;
 import com.sunwayworld.framework.database.context.ColumnContext;
 import com.sunwayworld.framework.database.core.DatabaseManager;
 import com.sunwayworld.framework.database.dialect.DialectRepository;
+import com.sunwayworld.framework.database.sql.ExternalLogicalSql;
 import com.sunwayworld.framework.database.sql.Order;
 import com.sunwayworld.framework.database.sql.SqlHelper;
 import com.sunwayworld.framework.exception.InvalidDataException;
@@ -273,6 +274,6 @@ public class CoreCustomDsSqlServiceImpl implements CoreCustomDsSqlService {
          }
       }
 
-      return sqlContent;
+      return ExternalLogicalSql.render(sqlContent);
    }
 }

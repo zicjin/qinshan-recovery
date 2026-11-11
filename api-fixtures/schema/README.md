@@ -101,6 +101,29 @@ binding inputs. Observed schema hashes remain runtime-contract inputs. This work
 does not change application source, provide API equivalence, promote strict
 evidence or close `API-ALIGNMENT-GATE`.
 
+`external-index-alignment-20261112.sql` replaces exactly four legacy UNIQUE
+constraint-name backing indexes with the formal NONUNIQUE index names in
+`deployment/oracle/external-schema/{structure.json,30-indexes.sql,35-constraints.sql}`.
+Validate the complete source/SQL contract offline first:
+
+```sh
+python3 scripts/verify-external-index-alignment.py
+```
+
+With the application and every other schema writer stopped, retain an approved
+backup and run the SQL in a clean `LIMS_RUNTIME_LOCAL` SQL*Plus session on
+`FREEPDB1` using `@api-fixtures/schema/external-index-alignment-20261112.sql`.
+The principal must already have SELECT access to `DBA_CONSTRAINTS` so the script
+can reject incoming foreign keys across all owners before migration DDL. The
+script grants no permissions. It stages index visibility, keeps the old index
+while the constraint is disabled, enables and validates the constraint using the
+formal target index, and drops the old index only after verifying no constraint
+references. DDL commits implicitly; preserve logs and inspect a failure before
+rerunning. Only the explicitly guarded intermediate states resume. Existing rows
+and the separate `UKT_LIMS_FOLDERS_FOLDERNO` NOVALIDATE constraint are preserved;
+record full content hashes and metadata before/after and repeat the script to
+verify the final no-op state. This migration does not refresh the application.
+
 `external-schema-clone-manifest.json` is a separate production dependency
 inventory for Oracle domains reached through `@LIMS_CZJKY_HT`,
 `@LIMS_CZJKY_SP` and `@LIMS_CZJKY_XFP`. It records the production link

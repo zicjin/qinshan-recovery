@@ -1,0 +1,68 @@
+{
+  "schema": "external-index-alignment-v1",
+  "target_owner": "LIMS_RUNTIME_LOCAL",
+  "target_container": "FREEPDB1",
+  "source_class": "current-production-at-capture",
+  "business_rows_written": false,
+  "production_writes": false,
+  "mappings": [
+    {
+      "table": "T_CRM_CONTRACT",
+      "constraint": "T_CRM_CONTRACT_UN",
+      "old_index": "T_CRM_CONTRACT_UN",
+      "target_index": "T_CRM_CONTRACT_CONTRACTNO_IDX",
+      "column": "CONTRACTNO",
+      "kind": "U"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "constraint": "PK_T_LIMS_CLEARANCEFORM_ID",
+      "old_index": "PK_T_LIMS_CLEARANCEFORM_ID",
+      "target_index": "IDX_T_LIMS_CLEARANCEFORM_ID",
+      "column": "ID",
+      "kind": "P"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "constraint": "PK_FOLDERS_ID",
+      "old_index": "PK_FOLDERS_ID",
+      "target_index": "IDX_FOLDERS_ID",
+      "column": "ID",
+      "kind": "P"
+    },
+    {
+      "table": "T_XFP_REPORT",
+      "constraint": "T_XFP_REPORT_UNIQUE",
+      "old_index": "T_XFP_REPORT_UNIQUE",
+      "target_index": "T_XFP_REPORT_PROJID_IDX",
+      "column": "PROJID",
+      "kind": "U"
+    }
+  ],
+  "sources": [
+    {
+      "path": "deployment/oracle/external-schema/structure.json",
+      "sha256": "7b8541e25c3055a0f440e137a5f08b5fd10c77adcdbcc5dd58adc519a77fd878"
+    },
+    {
+      "path": "deployment/oracle/external-schema/30-indexes.sql",
+      "sha256": "81d5ed6266a83feb65a4e98dcab95ae3c9c705f4bb2e87205d3983a8a0bb0b56"
+    },
+    {
+      "path": "deployment/oracle/external-schema/35-constraints.sql",
+      "sha256": "d678dd28a305729e63fc22318d654fa6b829b06a5cf3062ffa4cd54c9995094d"
+    }
+  ],
+  "sql": {
+    "path": "api-fixtures/schema/external-index-alignment-20261112.sql",
+    "sha256": "9f2d484d3901b38ea8be5c271b59a46dbff2083b68652290aa3817cdb46625f9"
+  },
+  "limits": [
+    "Only the four listed legacy UNIQUE constraint-name indexes to formal NONUNIQUE backing indexes. ENABLED VALIDATED NOT DEFERRABLE IMMEDIATE is the final constraint contract.",
+    "Stop all schema writers and use a dedicated clean application-principal session; retain approved full backup and logs. No transactional DDL rollback.",
+    "All known metadata/state conflicts and DBA_CONSTRAINTS all-owner incoming foreign keys are checked before the first migration DDL. SELECT privilege on DBA_CONSTRAINTS is required; no grant is performed.",
+    "Visibility staging permits the Oracle same-column indexes to coexist. Keep the old index through successful ENABLE VALIDATE USING INDEX and drop it only after verifying no constraint references.",
+    "Rerun accepts only the enumerated states created by this migration, including its disabled NOVALIDATE intermediate state. Other states reject and require inspection or approved restore.",
+    "The separate UKT_LIMS_FOLDERS_FOLDERNO ENABLE NOVALIDATE constraint is untouched. No row conversion, sequence operation, CASCADE, or business DML."
+  ]
+}

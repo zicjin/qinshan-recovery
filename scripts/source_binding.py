@@ -237,6 +237,7 @@ _HARNESS_SUFFIXES = (
     "scripts/generate-external-logical-clone-ddl.py",
     "scripts/verify-external-logical-clone-fixture.py",
     "scripts/external_notnull_alignment.py",
+    "scripts/verify-external-index-alignment.py",
     "scripts/verify-external-logical-clone-runtime.py",
     "scripts/verify-clean-device-contract.py",
     "scripts/verify-core-schema-package.py",

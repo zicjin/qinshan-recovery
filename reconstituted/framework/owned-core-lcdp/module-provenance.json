@@ -35,7 +35,7 @@
     "CFR": 466,
     "Vineflower": 34
   },
-  "source_file_count": 500,
+  "source_file_count": 501,
   "source_files": [
     {
       "class_sha256": "229d4c5b09fb169c7690c334ffa8e6d7861145f16f1fd5167a44d4eb78aa5826",
@@ -5224,6 +5224,20 @@
       ]
     },
     {
+      "class_sha256": null,
+      "compile_status": "pass",
+      "decompiler": "tracked-override",
+      "decompiler_version": null,
+      "path": "src/main/java/com/sunwayworld/cloud/module/lcdp/resource/support/LcdpScriptPath.java",
+      "sha256": "7bea09a511ccdafd8239535f864d0f20f8a188a9a4339c2e7bee9786e32e7d50",
+      "source_class_path": "com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptPath",
+      "source_jar": "tracked-override",
+      "source_sha256_before_transform": null,
+      "transformations": [
+        "owned-script-path-validation:ad815abfa74348bee8b2455686ac21d2177320ec"
+      ]
+    },
+    {
       "class_sha256": "5b1afff596a2dca4181b40cbe856e622c44932d93e0b8c10de70c8768891c4c8",
       "compile_status": "pass",
       "decompiler": "CFR",
@@ -7049,7 +7063,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "55a44972961dcd1188e7db013f4d9b6c327843adaf7600c2edb3a57fbf5122f4",
+  "source_tree_sha256": "d07154db88cfa708f322aaf60caa83aaaa88ee158095feccb0527a85bbe657b2",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "cc82d85926049feee8ed8b40c13c7e81a9ece832168e26f1dbf7aa7bd722703a",

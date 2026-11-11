@@ -95,12 +95,12 @@
       "output_jar_sha256": "74549f5d3461aa7df9e79279ef0ef42a0ba38464315afee2d717cb57278332b9",
       "reason": "LCDP interfaces and services.",
       "resource_file_count": 1551,
-      "source_file_count": 500,
+      "source_file_count": 501,
       "source_jars": [
         "gikam-core-lcdp-interface-14.1.5.jar",
         "gikam-core-lcdp-service-14.1.5.jar"
       ],
-      "source_tree_sha256": "55a44972961dcd1188e7db013f4d9b6c327843adaf7600c2edb3a57fbf5122f4"
+      "source_tree_sha256": "d07154db88cfa708f322aaf60caa83aaaa88ee158095feccb0527a85bbe657b2"
     },
     {
       "compile_status": "pass",
@@ -162,7 +162,7 @@
   "schema": "reconstituted-framework-module-registry-v1",
   "source_closure_gate_status": "all-framework-source-compile-pass",
   "source_closure_mode": "all-framework-source-compile",
-  "source_file_count": 4577,
+  "source_file_count": 4578,
   "status": "compiled-source-only",
   "strict_evidence": false,
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",

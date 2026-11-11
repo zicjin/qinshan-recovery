@@ -44,6 +44,13 @@ AUDIT_DEFINITION_COLUMNS = {
     "T_CORE_MENU_EXT": {"ID", "SERVICENAME", "TABLENAME", "TYPE", "ENABLE", "EXT"},
 }
 BOOTSTRAP_TABLES.update(AUDIT_DEFINITION_COLUMNS)
+AUDIT_CONFIGURATION_COLUMNS = {
+    "T_CORE_AT_CONFIG": {"ID", "AUDITTRAIL"},
+    "T_CORE_AT_CONFIG_LINE": {"ID", "CONFIGID", "COLUMNID", "AUDITTRAIL"},
+    "T_CORE_AUDIT_CONFIG": {"ID", "NAME", "CATEGORY", "SELECTDESCSQL", "SELECTPARENTSQL", "AUDITABLE"},
+    "T_CORE_AUDIT_CONFIG_COLUMN": {"ID", "CONFIGID", "COLUMN", "SELECTVALUESQL", "AUDITABLE"},
+}
+BOOTSTRAP_TABLES.update(AUDIT_CONFIGURATION_COLUMNS)
 IMPORT_COLUMNS = {
     "T_CORE_IMPORT_TMPL": {"ID", "TMPLCODE", "TMPLNAME", "TABLENAME", "STARTROWINDEX"},
     "T_CORE_IMPORT_TMPL_CONFIG": {"ID", "IMPORTTMPLID", "EXCELCOLUMNNO", "EXCELCOLUMN", "DBFIELD",
@@ -284,12 +291,24 @@ def check_bootstrap(text: str) -> None:
         require(table in BOOTSTRAP_TABLES,
                 "bootstrap inserts into a table outside the technical configuration allowlist")
         projections = {**DICTIONARY_COLUMNS, **LCDP_COLUMNS, **ACCESS_COLUMNS,
-                       **AUDIT_DEFINITION_COLUMNS, **IMPORT_COLUMNS}
+                       **AUDIT_DEFINITION_COLUMNS, **AUDIT_CONFIGURATION_COLUMNS, **IMPORT_COLUMNS}
         if table in projections:
             columns = [identifier(name.strip()) for name in insert.group("columns").split(",")]
             require(len(columns) == len(set(columns)) and set(columns) == projections[table],
                     "bootstrap columns differ from the reviewed technical projection")
         expression = insert.group("values")
+        if table in AUDIT_CONFIGURATION_COLUMNS:
+            # These captured rows contain scalar literals only. String contents
+            # are already blanked, so commas inside NAME cannot split a value.
+            # Keep the three source SQL fields NULL rather than admitting new
+            # executable configuration through the general literal allowlist.
+            require(re.search(r"[()+|]", expression) is None,
+                    "audit bootstrap requires scalar literals only")
+            values = [value.strip() for value in expression.split(",")]
+            require(len(values) == len(columns), "audit bootstrap value count differs from its projection")
+            for column, value in zip(columns, values):
+                if column in {"SELECTDESCSQL", "SELECTPARENTSQL", "SELECTVALUESQL"}:
+                    require(value.upper() == "NULL", "audit bootstrap SQL fields must be literal NULL")
         words = re.findall(r"[A-Za-z_$#][A-Za-z0-9_$#]*", expression)
         require(all(word.upper() in {"NULL", "TO_CLOB", "CHR", "TO_DATE", "TO_TIMESTAMP"}
                     for word in words), "bootstrap VALUES contains an unapproved SQL expression")

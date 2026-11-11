@@ -431,6 +431,115 @@ END;
                 pin_bootstrap(prefix + bad + 'COMMIT;\n')
                 self.assert_rejected()
 
+    def test_audit_bootstrap_requires_exact_technical_projections(self):
+        projections = {
+            'T_CORE_AT_CONFIG': (('ID', 'AUDITTRAIL'), ("'T_EMC_SAMPLE_SET'", "'1'")),
+            'T_CORE_AT_CONFIG_LINE': (
+                ('ID', 'CONFIGID', 'COLUMNID', 'AUDITTRAIL'),
+                ('101', "'T_EMC_SAMPLE_SET'", "'REMARK'", "'1'")),
+            'T_CORE_AUDIT_CONFIG': (
+                ('ID', 'NAME', 'CATEGORY', 'SELECTDESCSQL', 'SELECTPARENTSQL', 'AUDITABLE'),
+                ("'T_EMC_SAMPLE_SET'", "'Sample, configuration'", "'service'", 'NULL', 'NULL', "'1'")),
+            'T_CORE_AUDIT_CONFIG_COLUMN': (
+                ('ID', 'CONFIGID', 'COLUMN', 'SELECTVALUESQL', 'AUDITABLE'),
+                ('201', "'T_EMC_EQUIPT_SET'", "'REMARK'", 'NULL', "'0'")),
+        }
+        prefix = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT ''' + ' + '.join('(SELECT COUNT(*) FROM ' + table + ')' for table in projections) + ''' INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+'''
+        initializer = (self.root / 'install.sql').read_text()
+        self.write('install.sql', initializer.replace('@@90-verify.sql', '@@70-bootstrap.sql\n@@90-verify.sql'))
+
+        def statement(table, columns, values):
+            return ('INSERT INTO ' + table + ' (' + ','.join('"' + column + '"' for column in columns)
+                    + ') VALUES (' + ','.join(values) + ');\n')
+
+        def pin_bootstrap(replacement=None):
+            text = prefix + ''.join(replacement[1] if replacement and table == replacement[0]
+                                    else statement(table, *scope) for table, scope in projections.items()) + 'COMMIT;\n'
+            self.write('70-bootstrap.sql', text)
+            self.pin()
+            raw = (self.root / '70-bootstrap.sql').read_bytes()
+            self.manifest['files'].append({'path': '70-bootstrap.sql', 'role': 'bootstrap',
+                                          'sha256': sha(raw), 'bytes': len(raw)})
+            self.write('manifest.json', json.dumps(self.manifest))
+
+        pin_bootstrap()
+        result = self.run_verifier()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(json.loads(result.stdout)['deployment_ready'])
+        self.assertEqual(self.run_verifier(check=False).returncode, 2)
+        for table, (columns, values) in projections.items():
+            for index, column in enumerate(columns):
+                with self.subTest(table=table, missing_column=column):
+                    pin_bootstrap((table, statement(table, columns[:index] + columns[index + 1:],
+                                                    values[:index] + values[index + 1:])))
+                    self.assert_rejected()
+            for extra in ('CREATEDBYID', 'CREATEDBYNAME', 'CREATEDBYORGID', 'CREATEDBYORGNAME',
+                          'CREATEDTIME', 'LASTMODIFIEDBYID', 'VERSION', 'UNREVIEWED'):
+                with self.subTest(table=table, extra_column=extra):
+                    pin_bootstrap((table, statement(table, (*columns, extra), (*values, 'NULL'))))
+                    self.assert_rejected()
+            with self.subTest(table=table, duplicate_column=True):
+                pin_bootstrap((table, statement(table, (*columns, columns[0]), (*values, values[0]))))
+                self.assert_rejected()
+
+    def test_audit_bootstrap_sql_fields_require_literal_null(self):
+        projections = {
+            'T_CORE_AUDIT_CONFIG': (
+                ('ID', 'NAME', 'CATEGORY', 'SELECTDESCSQL', 'SELECTPARENTSQL', 'AUDITABLE'),
+                ("'T_EMC_SAMPLE_SET'", "'Sample, configuration'", "'service'", 'NULL', 'NULL', "'1'")),
+            'T_CORE_AUDIT_CONFIG_COLUMN': (
+                ('ID', 'CONFIGID', 'COLUMN', 'SELECTVALUESQL', 'AUDITABLE'),
+                ('201', "'T_EMC_EQUIPT_SET'", "'REMARK'", 'NULL', "'0'")),
+        }
+        prefix = '''WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+SET DEFINE OFF
+DECLARE n NUMBER;
+BEGIN
+ SELECT (SELECT COUNT(*) FROM T_CORE_AUDIT_CONFIG) + (SELECT COUNT(*) FROM T_CORE_AUDIT_CONFIG_COLUMN) INTO n FROM DUAL;
+ IF n<>0 THEN RAISE_APPLICATION_ERROR(-20120, 'Bootstrap target configuration must be empty'); END IF;
+END;
+/
+'''
+        initializer = (self.root / 'install.sql').read_text()
+        self.write('install.sql', initializer.replace('@@90-verify.sql', '@@70-bootstrap.sql\n@@90-verify.sql'))
+
+        def pin_bootstrap(table, columns, values):
+            text = (prefix + 'INSERT INTO ' + table + ' ('
+                    + ','.join('"' + column + '"' for column in columns) + ') VALUES ('
+                    + ','.join(values) + ');\nCOMMIT;\n')
+            self.write('70-bootstrap.sql', text)
+            self.pin()
+            raw = (self.root / '70-bootstrap.sql').read_bytes()
+            self.manifest['files'].append({'path': '70-bootstrap.sql', 'role': 'bootstrap',
+                                          'sha256': sha(raw), 'bytes': len(raw)})
+            self.write('manifest.json', json.dumps(self.manifest))
+
+        for table, (columns, values) in projections.items():
+            for ordered_columns, ordered_values in ((columns, values), (columns[::-1], values[::-1])):
+                with self.subTest(table=table, column_order=ordered_columns):
+                    pin_bootstrap(table, ordered_columns, ordered_values)
+                    result = self.run_verifier()
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    for index, column in enumerate(ordered_columns):
+                        if column not in ('SELECTDESCSQL', 'SELECTPARENTSQL', 'SELECTVALUESQL'):
+                            continue
+                        for expression in ("'SELECT 1 FROM DUAL'", "'NULL'", "''", "TO_CLOB('')",
+                                           '0', "NULL || ''", 'NULL,NULL'):
+                            with self.subTest(column=column, expression=expression):
+                                bad_values = (*ordered_values[:index], expression, *ordered_values[index + 1:])
+                                pin_bootstrap(table, ordered_columns, bad_values)
+                                result = self.run_verifier()
+                                self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+                                self.assertIn('audit bootstrap', json.loads(result.stdout)['reason'])
+
     def test_import_templates_and_file_metadata_require_exact_technical_projections(self):
         projections = {
             'T_CORE_IMPORT_TMPL': (

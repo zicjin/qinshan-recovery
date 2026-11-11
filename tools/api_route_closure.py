@@ -74,6 +74,8 @@ def _report_family_status(report: Mapping[str, Any],
                           ledger: Mapping[str, Any]) -> Tuple[bool, str, list[dict[str, Any]]]:
     expected = _family_binding_index(ledger)
     stale: list[dict[str, Any]] = []
+    schema = report.get("schema", 1)
+    fingerprinted_schema = type(schema) is not int or schema != 1
     for index, case in enumerate(report.get("cases", [])):
         if not isinstance(case, Mapping):
             continue
@@ -93,10 +95,6 @@ def _report_family_status(report: Mapping[str, Any],
             if route_id in expected and expected[route_id]["family_fingerprint"]
         }
         declared = str(case.get("family_fingerprint") or "")
-        try:
-            fingerprinted_schema = int(report.get("schema", 1)) >= 2
-        except (TypeError, ValueError):
-            fingerprinted_schema = True
         if fingerprints and not declared and fingerprinted_schema:
             stale.append({
                 "case_index": index,
@@ -141,6 +139,9 @@ def _report_family_status(report: Mapping[str, Any],
 
 
 def _strict_report_valid(report: Mapping[str, Any], ledger: Mapping[str, Any], report_path: Path) -> Tuple[bool, str]:
+    schema = report.get("schema", 1)
+    if type(schema) is not int or schema < 1:
+        return False, "report schema must be a positive integer"
     registered_class = _registry_class(report_path)
     if registered_class is not None and registered_class not in {"canonical-strict", "historical-superseded", "unregistered"}:
         return False, "canonical evidence registry does not classify report as canonical-strict"

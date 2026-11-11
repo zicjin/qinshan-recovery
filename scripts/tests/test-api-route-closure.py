@@ -275,6 +275,64 @@ class ClosureTest(unittest.TestCase):
         self.assertEqual(result["revalidated_by_fingerprint_count"], 1)
         self.assertFalse(result["failures"])
 
+    def test_invalid_report_schema_is_diagnostic_with_complete_fingerprints(self):
+        for schema in ("invalid", None, True, False, 1.0, 1.5, "1", "2", 0, -1, [], {}):
+            with self.subTest(schema=schema):
+                report, ledger = self.fingerprint_report()
+                report["schema"] = schema
+                with tempfile.TemporaryDirectory() as temp:
+                    path = Path(temp) / "invalid-schema.json"
+                    path.write_text(json.dumps(report), encoding="utf-8")
+                    result = module.build_closure(ledger, [path])
+                self.assertEqual(result["strict_pass_count"], 0)
+                self.assertEqual(result["executed_strict_count"], 0)
+                self.assertEqual(result["revalidated_by_fingerprint_count"], 0)
+                self.assertEqual(result["required_unknown"], 1)
+                self.assertEqual(result["diagnostic_observation_count"], 1)
+                self.assertEqual(result["affected_replay"]["route_ids"], ["r1"])
+                self.assertEqual(result["reports"][0]["strict_contract"],
+                                 "report schema must be a positive integer")
+                self.assertFalse(result["routes"][0]["evidence"])
+                self.assertFalse(result["failures"])
+
+    def test_schema_coercion_cannot_bypass_fingerprint_requirements(self):
+        for schema in (True, False, 1.0, 1.5, "1"):
+            with self.subTest(schema=schema):
+                report, ledger = self.fingerprint_report()
+                report["schema"] = schema
+                for field in ("family_fingerprint", "request_fingerprint", "response_fingerprint"):
+                    report["cases"][0].pop(field)
+                with tempfile.TemporaryDirectory() as temp:
+                    path = Path(temp) / "stripped-fingerprints.json"
+                    path.write_text(json.dumps(report), encoding="utf-8")
+                    result = module.build_closure(ledger, [path])
+                self.assertEqual(result["strict_pass_count"], 0)
+                self.assertEqual(result["required_unknown"], 1)
+                self.assertEqual(result["diagnostic_observation_count"], 1)
+                self.assertEqual(result["affected_replay"]["route_ids"], ["r1"])
+                self.assertEqual(result["reports"][0]["strict_contract"],
+                                 "report schema must be a positive integer")
+
+                self.assertTrue(any(
+                    item["reason"] == "family-fingerprint-missing"
+                    for item in result["reports"][0]["family_stale"]
+                ))
+
+    def test_missing_schema_keeps_legacy_reports_without_fingerprints_valid(self):
+        report, ledger = self.fingerprint_report()
+        report.pop("schema")
+        for field in ("family_fingerprint", "request_fingerprint", "response_fingerprint"):
+            report["cases"][0].pop(field)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "legacy-default-schema.json"
+            path.write_text(json.dumps(report), encoding="utf-8")
+            result = module.build_closure(ledger, [path])
+        self.assertEqual(result["strict_pass_count"], 1)
+        self.assertEqual(result["executed_strict_count"], 1)
+        self.assertEqual(result["required_unknown"], 0)
+        self.assertFalse(result["diagnostics"])
+        self.assertFalse(result["failures"])
+
     def test_family_fingerprint_mismatch_is_stale_and_enters_affected_replay(self):
         report, ledger = self.fingerprint_report(
             validation_mode="revalidated-by-fingerprint",

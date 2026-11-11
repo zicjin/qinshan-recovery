@@ -647,22 +647,22 @@
       "sha256": "f450db0da66fb93327af4ca45ad1096241ed5701ffcd7802f04e09f93c27448d"
     },
     {
-      "bytes": 3356258,
+      "bytes": 3515247,
       "path": "70-bootstrap.sql",
       "role": "bootstrap",
-      "sha256": "c3a86fb343b0e0f11b7ae065739b6b3b7735e099c72f23bb01a23e332c2356bc"
+      "sha256": "a03f1cbcfd8db6bc4ee9adfea4328fda0670bf97a9a8e1a77fc6895320f3be9a"
     },
     {
-      "bytes": 6698052,
+      "bytes": 6861751,
       "path": "80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "af563667cc6cf5ecfd42f85b5cefadb526e4b68ece7e7ab50933bd009c545d5e"
+      "sha256": "bd3a1edc652397254ab678700b13084bf0f83d94bb7d7662b9501a94d6c51d02"
     },
     {
-      "bytes": 4624415,
+      "bytes": 4658214,
       "path": "bootstrap-provenance.json",
       "role": "source-metadata",
-      "sha256": "3f3500ee6332e906d60cf8e3e6a9fcf0246d4960776fe24fda7cc5a8befc497d"
+      "sha256": "2e6586be60eced37dd0da4d59ad68c8fd932d33d69bef6373dddfb793a2e6fa3"
     },
     {
       "bytes": 1891610,
@@ -13587,6 +13587,34 @@
     {
       "path": "private/source-dictionary-installation-20261111/20261111T091126Z-code_i18n_message-private.json",
       "sha256": "cecc8718d068a50dc89597ef4dc78c8eed02611711f96b9c2fe159dc91461d44"
+    },
+    {
+      "path": "private/lcdp-bootstrap-20261111/20261110T171319Z-resource-private.json",
+      "sha256": "b10831a3714f421b292cd8ed867619295d0bcd535d260cb4dc02564405eb6e91"
+    },
+    {
+      "path": "private/lcdp-bootstrap-20261111/20261110T171319Z-history-private.json",
+      "sha256": "018c55530480be5e8868a7d55e194ccc6575e8b5ca1e939157e22370eeaf9c7a"
+    },
+    {
+      "path": "private/lcdp-bootstrap-20261111/20261110T171319Z-page_comp-private.json",
+      "sha256": "3f3fae1ea83de82400de8ef6f71f1d1b87425e444b321334777127d138bd501e"
+    },
+    {
+      "path": "private/lcdp-bootstrap-20261111/20261110T171319Z-page_i18n-private.json",
+      "sha256": "9a05060cb9ad9a2cdce10463f4f1789f3179c3f70c57c3d8e38a06aec39d7fe4"
+    },
+    {
+      "path": "private/lcdp-bootstrap-20261111/20261110T171319Z-page_i18n_code-private.json",
+      "sha256": "53090fc143d6e6dbc2480bbe77910369068bcfc7f230ffaff5bbcb74b0c6e434"
+    },
+    {
+      "path": "private/lcdp-bootstrap-20261111/20261110T171319Z-menu-private.json",
+      "sha256": "4550f02cdf07536c3f28be3b45e3275317c9fc29959ce7249f03252fc9778cce"
+    },
+    {
+      "path": "private/lcdp-bootstrap-20261111/20261110T171319Z-request_url-private.json",
+      "sha256": "ada1d88fdcbd197af597998869102991bcb09a3aa968b508b93bf9984173e1a4"
     }
   ],
   "source_class": "current-production-at-capture",
@@ -13597,7 +13625,7 @@
   },
   "technical_bootstrap": {
     "complete": false,
-    "excluded_rows": 36,
+    "excluded_rows": 35,
     "path": "bootstrap-provenance.json",
     "row_counts": {
       "T_CORE_ADMIN_SELECT_CONFIG": 37,
@@ -13616,7 +13644,7 @@
       "T_CORE_IMPORT_TMPL": 2,
       "T_CORE_IMPORT_TMPL_CONFIG": 11,
       "T_CORE_LOGIN_CONFIG": 1,
-      "T_CORE_MENU": 402,
+      "T_CORE_MENU": 403,
       "T_CORE_MENU_EXT": 41,
       "T_CORE_REQUEST_URL": 188,
       "T_CORE_ROLE_PERMISSION_TYPE": 3,
@@ -13626,11 +13654,11 @@
       "T_CORE_TABLE": 467,
       "T_CORE_TABLE_HIERARCHY": 170,
       "T_CORE_USER_PERMISSION_TYPE": 3,
-      "T_LCDP_MODULE_PAGE_COMP": 229,
-      "T_LCDP_MODULE_PAGE_I18N": 123,
-      "T_LCDP_PAGE_I18N_CODE": 242,
-      "T_LCDP_RESOURCE": 41,
-      "T_LCDP_RESOURCE_HISTORY": 30
+      "T_LCDP_MODULE_PAGE_COMP": 258,
+      "T_LCDP_MODULE_PAGE_I18N": 156,
+      "T_LCDP_PAGE_I18N_CODE": 268,
+      "T_LCDP_RESOURCE": 45,
+      "T_LCDP_RESOURCE_HISTORY": 33
     }
   }
 }

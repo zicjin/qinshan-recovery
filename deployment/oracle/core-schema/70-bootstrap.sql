@@ -91787,4 +91787,3626 @@ TO_CLOB('前中中后管'),
 NULL,
 '0',
 NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1583577938790944,
+'LcdpEmcReportSendInfoOracleMapper',
+'mapper',
+1583577935735328,
+1,
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.reportSendExpress.mapper.LcdpEmcReportSendInfoMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.* FROM ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        (')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            SELECT ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ters.*,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.ENTRUSTORGNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ter.REPORTNO,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.ENTRUSTORGID,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.BUSINESSUSERID,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            D.USERNAME AS BUSINESSUSERNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            D.MOBILE,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            c.MAIL,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.DELIVERYDATE')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            from T_EMC_REPORT_SEND_INFO ters')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_REPORT ter ON ters.PROJID =ter.PROJID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =ters.PROJID ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_CLIENT c ON c.ID =tep.ENTRUSTORGID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_CORE_USER D ON D.ID =tep.BUSINESSUSERID ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHERE (ter.STATUS =''reportSeal'')')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ) T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectNullTable" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT Q.* FROM T_EMC_REPORT_SEND_INFO Q WHERE ID IS NULL')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>  ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+14,
+'emc.reportSendExpress.mapper.LcdpEmcReportSendInfoOracleMapper',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1583577937947194,
+'reportSendExpressEditPage',
+'view',
+1583577935735328,
+1,
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.reportSendExpress.server.LcdpEmcReportSendInfoService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseFileUrl = "common.commonService.server.LcdpFileService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.reportSendExpress.page.reportSendExpressDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''projid'') {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, { id: row.id, sourcePage: ''edit'' });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function export_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var tmplCode = "reportSendInfo";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var querySqlMapperUrl = "emc.reportSendExpress.mapper.LcdpEmcReportSendInfoMapper.selectNullTable";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var wrapper = Gikam.getJsonWrapper({ "tmplCode": tmplCode, "QuerySqlMapperUrl": querySqlMapperUrl });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.postText(baseFileUrl + ''.exportData'', wrapper).done(function (fileUri) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        var fileUrl = fileUri;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.download(fileUrl);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function import_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var tmplCode = "reportSendInfo";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.create(''simpleUploader'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onAfterClose: function (fileList) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            var wrapper = Gikam.getJsonWrapper({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                "id": fileList[0].id,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                "tmplCode": tmplCode,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.post(baseFileUrl + ''.getImportData'', wrapper).done(function (list) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                Gikam.postText(baseUrl + ''.updateByImport'', Gikam.getJsonWrapper({}, ['''', list])).done(function (text) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    if (Gikam.isEmpty(text)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Gikam.alert(''CORE.MODULE.ITEM.IMPORTTMPLS.TIP.IMPORT_SUCCSS'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    } else {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Gikam.alert(text);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    Gikam.getComp(''reportsendexpress-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function simplecheckbox_1_onchange(field, value, rowIndex, oldValue, text) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var grid = Gikam.getComp(''reportsendexpress-edit-grid'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var showFlags = value;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (showFlags === ''1'') {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        grid.refresh({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            requestData: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                reportno_SE: ''G'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    } else {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        grid.refresh({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            requestData: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                reportno_SE: '''',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_3_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpress-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    let flag1 = selections.some(item => Gikam.isEmpty(item.entrustorgid));')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (flag1) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''存在报告未找到对应的客户信息，可在任务信息修改菜单，重新维护下受检单位'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var entrustorgid = selections[0].entrustorgid;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    let flag2 = selections.some(item => item.entrustorgid !== entrustorgid);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (flag2) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''只能批量发送同一受检单位的报告'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    let modal = Gikam.create(''modal'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        title: "邮箱地址",')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        width: 400,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        height: 220,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onAfterClose: function (data) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.getComp(''reportsendexpress-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var layout = Gikam.create(''layout'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        renderTo: modal.window.$dom,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        center: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            items: [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                type: ''btnToolbar'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                items: [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    type: ''button'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    text: ''发送'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    class: ''blue'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    onClick: function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (!Gikam.getComp(''reportsendexpress-edit-form'').validate()) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        var email = Gikam.getComp(''reportsendexpress-edit-form'').getData().email;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        sendEmail(email);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }, {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    type: ''button'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    text: ''保存为客户邮箱'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    onClick: function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (!Gikam.getComp(''reportsendexpress-edit-form'').validate()) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        var email = Gikam.getComp(''reportsendexpress-edit-form'').getData().email;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        updateEmail(email);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }, {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    type: ''button'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    text: ''GIKAM.BUTTON.CANCEL'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    onClick: function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        modal.close();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }]')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }]')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var form = Gikam.create(''form'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        id: ''reportsendexpress-edit-form'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        renderTo: layout.options.center.$dom,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        columns: 1,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        titleWidth: 80,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        fields: [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            field: ''entrustorgname'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            title: ''委托单位'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            readonly: true,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }, {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            field: ''email'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            title: ''邮箱地址'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            validators: [''notEmpty''],')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }],')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        autoSave: false,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onRendered: function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            this.setData({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                email: selections[0].mail,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                entrustorgname: selections[0].entrustorgname,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        },')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function updateEmail(email) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpress-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.put(''/secure/gikam/actions/instant'', Gikam.getJsonWrapper({}, [''emcClientServiceImpl'', [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        id: selections[0].entrustorgid,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        mail: email')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }]])).done(function (id) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.getLastModal().close();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.getComp(''reportsendexpress-edit-grid'').refreshRowById(selections[0].id);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function sendEmail(email) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpress-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var url = baseUrl + ''.sendEmail'';')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.post(url, Gikam.getJsonWrapper({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ''email'': email,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }, [null, selections])).done(function (res) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.getLastModal().close();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        selections.forEach(function (item) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.getComp(''reportsendexpress-edit-grid'').refreshRowById(item.id);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''发送成功。'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function simplecheckbox_3_onchange(field, value, rowIndex, oldValue, text) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var grid = Gikam.getComp(''reportsendexpress-edit-grid'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var showFlags = value;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (showFlags === ''1'') {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        grid.refresh({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            requestData: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                issurer_ISNULL: ''1'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    } else {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        grid.refresh({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            requestData: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                issurer_ISNULL: '''',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+20,
+'emc.reportSendExpress.page.reportSendExpressEditPage',
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1583577938561594,
+'LcdpEmcReportSendInfoService',
+'java',
+1583577935735328,
+1,
+TO_CLOB('import java.time.LocalDate;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.utils.CoreFileUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.io.file.FilePathManager;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.service.CoreFileService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.bean.CoreFileBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.emc.module.bp.report.report.service.EmcReportService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.beans.factory.annotation.Autowired;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.context.ApplicationContextHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.context.LocalContextHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.time.LocalDateTime;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.DateTimeUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.exception.InvalidDataException;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mail.MailHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.exception.checked.CheckedException;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.ArrayUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.ObjectUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.database.context.TableContext;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.stream.Collectors;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mybatis.mapper.MatchPattern;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mybatis.mapper.SearchFilter;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.StringUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.context.annotation.Lazy;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.io.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcReportSendInfoService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Autowired')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Lazy private EmcReportService reportService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Autowired')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    private CoreFileService coreFileService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT_SEND_INFO";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.reportSendExpress.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /** 新增数据 */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据", type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "通过导入数据更新", type = MappingType.UPDATE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.SAVE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String updateByImport(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 根据导入模板配置取得报告编号')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> reportNoList = new ArrayList<>();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        list.forEach(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                l -> {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    if (!ObjectUtils.isEmpty(l.get("projid"))) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        String reportNo = MapUtils.getString(l, "projid");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (reportNo.indexOf("、") > -1) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            reportNoList.addAll(ArrayUtils.asList(reportNo.split("、")));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        } else {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            reportNoList.add(reportNo);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> reportSendInfoList = this.selectListByFilter(SearchFilter.instance().match("REPORTNO", reportNoList).filter(MatchPattern.OR));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> deliveryReportList = reportSendInfoList.stream().filter(r -> !StringUtils.isBlank(MapUtils.getString(r, "DELIVERYDATE"))).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> noDeliveryReportList = reportSendInfoList.stream().filter(r -> StringUtils.isBlank(MapUtils.getString(r, "DELIVERYDATE"))).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String info = "";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!noDeliveryReportList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LocalDateTime now = LocalDateTime.now();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            noDeliveryReportList.forEach(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    sendInfo -> {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Map<String, Object> map = list.stream().filter(l -> MapUtils.getString(l, "projid").indexOf(MapUtils.getString(sendInfo, "reportno")) > -1).findFirst().orElse(null);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (map != null) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("address", map.get("address"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("username", map.get("username"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("phone", map.get("phone"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("issurer", map.get("issurer"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("issurerdate", map.get("issurerdate"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("expresstype", map.get("expresstype"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("expressno", map.get("expressno"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("isreceived", map.get("isreceived"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("importdatetime", now);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    });')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            this.updateIfChanged(TableContext.of(getTable()), noDeliveryReportList);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        info += "导入成功" + noDeliveryReportList.size() + "条。<br>";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!deliveryReportList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            List<String> deliveryReportNoList = deliveryReportList.stream().map(r -> MapUtils.getString(r, "reportno")).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            info += "以下报告已出库:\r\n" + StringUtils.join(deliveryReportNoList, "、");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> infoReportNoList = reportSendInfoList.stream().map(r -> MapUtils.getString(r, "reportno")).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> noMatchReportNoList = reportNoList.stream().filter(r -> !infoReportNoList.contains(r)).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!noMatchReportNoList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            info += "以下报告未处于报告发送环节，请检查后导入:\r\n" + StringUtils.join(noMatchReportNoList, "、");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return info;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "发送邮件", type = MappingType.UPDATE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String sendEmail(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String email = wrapper.getParamValue("email");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (StringUtils.isBlank(email)) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("邮箱有误");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> reportsendinfoList = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> reportnoList = reportsendinfoList.stream().map(e -> MapUtils.getString(e, "reportno")).distinct().collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<EmcReportBean> reportList = reportService.getDao().selectListByOneColumnValues(reportnoList, "reportno");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (reportList.size() != reportnoList.size()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("存在报告在系统中未找到");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> targetIdList = reportList.stream().map(e -> "T_EMC_REPORT$" + e.getId()).distinct().collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<CoreFileBean> coreFileList = coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", targetIdList).filter(MatchPattern.OR).match("ext", "sealPdf").filter(MatchPattern.SEQ));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        File[] files = coreFileList.stream().map(coreFile -> CoreFileUtils.getLocalPath(coreFile).toFile()).toArray(File[]::new);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String topicTemp = "%s您好！%s检测报告已完成，敬请查收";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String topic = String.format(topicTemp, MapUtils.getString(reportsendinfoList.get(0), "entrustorgname"), StringUtils.join(reportnoList, ","));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 邮件模板字符串')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String template =')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                "您好！<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "贵司委托我司开展的%s相关检测工作已按规范顺利完成，对应的检测报告现同步送达，烦请您及时查收。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "若您需要申领纸质版报告，或对报告数据、检测流程等内容有任何疑问、需进一步沟通说明，可联系对接%s。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "请您在收到本邮件后5个工作日内反馈确认结果或相关疑问，逾期未回复将视为贵司已认可该报告内容及检测结果。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "感谢贵司对我司\"科学、公正、准确、满意\"服务理念的认可与支持，我司将持续以专业的技术能力、严谨的服务态度为您保驾护航。后续如有环保检测、咨询等相关业务需求，欢迎随时与我们联系。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 生成业务人员信息')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Map<String, Map<String, Object>> reportsendinfoMap = reportsendinfoList.stream().collect(Collectors.toMap(map -> MapUtils.getString(map, "businessusername"), map -> map, (a, b) -> a));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String contactInfo = "";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        for (Map.Entry<String, Map<String, Object>> e : reportsendinfoMap.entrySet()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            contactInfo = "业务经理" + e.getKey() + "（联系电话：" + MapUtils.getString(e.getValue(), "mobile") + "）";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 填充模板生成最终邮件内容')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String content = String.format(template, StringUtils.join(reportnoList, ","), contactInfo);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String footer = com.sunwayworld.framework.context.ApplicationContextHelper.getEnvironment()')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                .getRequiredProperty("owned.report-send.mail.footer-text");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        content += org.springframework.web.util.HtmlUtils.htmlEscape(footer)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                .replace("\r\n", "\n").replace("\r", "\n").replace("\n", "<br>");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        try {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            MailHelper.sendHtmlMail(topic, content, Collections.singletonList(email), files);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        } catch (Exception e) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            e.printStackTrace();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            log(e.getMessage());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("邮箱发送失败");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String currentDate = DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        for (Map<String, Object> reportsendinfo : reportsendinfoList) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("issurer", LocalContextHelper.getLoginUserName());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("issurerdate", currentDate);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("sendemail", email);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("expresstype", "邮箱");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("expressno", email);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        this.getMapDao().update("T_EMC_REPORT_SEND_INFO", reportsendinfoList, "issurer", "issurerdate", "sendemail", "expresstype", "expressno");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "1";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(10)),
+23,
+'emc.reportSendExpress.server.LcdpEmcReportSendInfoService',
+'0',
+NULL,
+TO_CLOB('import java.time.LocalDate;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.utils.CoreFileUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.io.file.FilePathManager;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.service.CoreFileService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.bean.CoreFileBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.emc.module.bp.report.report.service.EmcReportService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.beans.factory.annotation.Autowired;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.context.ApplicationContextHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.context.LocalContextHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.time.LocalDateTime;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.DateTimeUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.exception.InvalidDataException;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mail.MailHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.exception.checked.CheckedException;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.ArrayUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.ObjectUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.database.context.TableContext;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.stream.Collectors;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mybatis.mapper.MatchPattern;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mybatis.mapper.SearchFilter;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.StringUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.context.annotation.Lazy;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.io.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class ReportSendExpressLcdpEmcReportSendInfoServicev23 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Autowired')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Lazy private EmcReportService reportService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Autowired')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    private CoreFileService coreFileService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT_SEND_INFO";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.reportSendExpress.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /** 新增数据 */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据", type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "通过导入数据更新", type = MappingType.UPDATE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.SAVE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String updateByImport(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 根据导入模板配置取得报告编号')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> reportNoList = new ArrayList<>();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        list.forEach(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                l -> {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    if (!ObjectUtils.isEmpty(l.get("projid"))) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        String reportNo = MapUtils.getString(l, "projid");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (reportNo.indexOf("、") > -1) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            reportNoList.addAll(ArrayUtils.asList(reportNo.split("、")));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        } else {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            reportNoList.add(reportNo);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> reportSendInfoList = this.selectListByFilter(SearchFilter.instance().match("REPORTNO", reportNoList).filter(MatchPattern.OR));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> deliveryReportList = reportSendInfoList.stream().filter(r -> !StringUtils.isBlank(MapUtils.getString(r, "DELIVERYDATE"))).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> noDeliveryReportList = reportSendInfoList.stream().filter(r -> StringUtils.isBlank(MapUtils.getString(r, "DELIVERYDATE"))).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String info = "";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!noDeliveryReportList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LocalDateTime now = LocalDateTime.now();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            noDeliveryReportList.forEach(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    sendInfo -> {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Map<String, Object> map = list.stream().filter(l -> MapUtils.getString(l, "projid").indexOf(MapUtils.getString(sendInfo, "reportno")) > -1).findFirst().orElse(null);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (map != null) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("address", map.get("address"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("username", map.get("username"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("phone", map.get("phone"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("issurer", map.get("issurer"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("issurerdate", map.get("issurerdate"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("expresstype", map.get("expresstype"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("expressno", map.get("expressno"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("isreceived", map.get("isreceived"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("importdatetime", now);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    });')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            this.updateIfChanged(TableContext.of(getTable()), noDeliveryReportList);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        info += "导入成功" + noDeliveryReportList.size() + "条。<br>";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!deliveryReportList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            List<String> deliveryReportNoList = deliveryReportList.stream().map(r -> MapUtils.getString(r, "reportno")).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            info += "以下报告已出库:\r\n" + StringUtils.join(deliveryReportNoList, "、");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> infoReportNoList = reportSendInfoList.stream().map(r -> MapUtils.getString(r, "reportno")).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> noMatchReportNoList = reportNoList.stream().filter(r -> !infoReportNoList.contains(r)).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!noMatchReportNoList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            info += "以下报告未处于报告发送环节，请检查后导入:\r\n" + StringUtils.join(noMatchReportNoList, "、");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return info;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "发送邮件", type = MappingType.UPDATE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String sendEmail(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String email = wrapper.getParamValue("email");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (StringUtils.isBlank(email)) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("邮箱有误");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> reportsendinfoList = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> reportnoList = reportsendinfoList.stream().map(e -> MapUtils.getString(e, "reportno")).distinct().collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<EmcReportBean> reportList = reportService.getDao().selectListByOneColumnValues(reportnoList, "reportno");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (reportList.size() != reportnoList.size()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("存在报告在系统中未找到");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> targetIdList = reportList.stream().map(e -> "T_EMC_REPORT$" + e.getId()).distinct().collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<CoreFileBean> coreFileList = coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", targetIdList).filter(MatchPattern.OR).match("ext", "sealPdf").filter(MatchPattern.SEQ));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        File[] files = coreFileList.stream().map(coreFile -> CoreFileUtils.getLocalPath(coreFile).toFile()).toArray(File[]::new);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String topicTemp = "%s您好！%s检测报告已完成，敬请查收";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String topic = String.format(topicTemp, MapUtils.getString(reportsendinfoList.get(0), "entrustorgname"), StringUtils.join(reportnoList, ","));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 邮件模板字符串')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String template =')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                "您好！<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "贵司委托我司开展的%s相关检测工作已按规范顺利完成，对应的检测报告现同步送达，烦请您及时查收。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "若您需要申领纸质版报告，或对报告数据、检测流程等内容有任何疑问、需进一步沟通说明，可联系对接%s。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "请您在收到本邮件后5个工作日内反馈确认结果或相关疑问，逾期未回复将视为贵司已认可该报告内容及检测结果。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "感谢贵司对我司\"科学、公正、准确、满意\"服务理念的认可与支持，我司将持续以专业的技术能力、严谨的服务态度为您保驾护航。后续如有环保检测、咨询等相关业务需求，欢迎随时与我们联系。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 生成业务人员信息')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Map<String, Map<String, Object>> reportsendinfoMap = reportsendinfoList.stream().collect(Collectors.toMap(map -> MapUtils.getString(map, "businessusername"), map -> map, (a, b) -> a));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String contactInfo = "";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        for (Map.Entry<String, Map<String, Object>> e : reportsendinfoMap.entrySet()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            contactInfo = "业务经理" + e.getKey() + "（联系电话：" + MapUtils.getString(e.getValue(), "mobile") + "）";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 填充模板生成最终邮件内容')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String content = String.format(template, StringUtils.join(reportnoList, ","), contactInfo);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String footer = com.sunwayworld.framework.context.ApplicationContextHelper.getEnvironment()')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                .getRequiredProperty("owned.report-send.mail.footer-text");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        content += org.springframework.web.util.HtmlUtils.htmlEscape(footer)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                .replace("\r\n", "\n").replace("\r", "\n").replace("\n", "<br>");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        try {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            MailHelper.sendHtmlMail(topic, content, Collections.singletonList(email), files);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        } catch (Exception e) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            e.printStackTrace();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            log(e.getMessage());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("邮箱发送失败");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String currentDate = DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        for (Map<String, Object> reportsendinfo : reportsendinfoList) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("issurer", LocalContextHelper.getLoginUserName());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("issurerdate", currentDate);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("sendemail", email);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("expresstype", "邮箱");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("expressno", email);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        this.getMapDao().update("T_EMC_REPORT_SEND_INFO", reportsendinfoList, "issurer", "issurerdate", "sendemail", "expresstype", "expressno");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "1";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(10)),
+'ReportSendExpressLcdpEmcReportSendInfoServicev23');
+INSERT INTO T_LCDP_RESOURCE (ID,RESOURCENAME,RESOURCECATEGORY,PARENTID,ORDERNO,CONTENT,EFFECTVERSION,PATH,DELETEFLAG,DATATYPE,CLASSCONTENT,CLASSNAME) VALUES (1583577935735328,
+'reportSendExpress',
+'module',
+1583426288284192,
+1,
+NULL,
+NULL,
+NULL,
+'0',
+NULL,
+NULL,
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1910585934329472,
+1583577937947194,
+'reportSendExpressEditPage',
+'view',
+TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseUrl = "emc.reportSendExpress.server.LcdpEmcReportSendInfoService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var baseFileUrl = "common.commonService.server.LcdpFileService";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var pageParam = CURRENT_WINDOW.getPageParam();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('var detailPagePath = "emc.reportSendExpress.page.reportSendExpressDetailPage";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function getGridRequestData() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    return pageParam;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function loadDetailPage(field, row) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (field === ''projid'') {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.loadPage(detailPagePath, { id: row.id, sourcePage: ''edit'' });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function export_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var tmplCode = "reportSendInfo";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var querySqlMapperUrl = "emc.reportSendExpress.mapper.LcdpEmcReportSendInfoMapper.selectNullTable";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var wrapper = Gikam.getJsonWrapper({ "tmplCode": tmplCode, "QuerySqlMapperUrl": querySqlMapperUrl });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.postText(baseFileUrl + ''.exportData'', wrapper).done(function (fileUri) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        var fileUrl = fileUri;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.download(fileUrl);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function import_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var tmplCode = "reportSendInfo";')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.create(''simpleUploader'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onAfterClose: function (fileList) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            var wrapper = Gikam.getJsonWrapper({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                "id": fileList[0].id,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                "tmplCode": tmplCode,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.post(baseFileUrl + ''.getImportData'', wrapper).done(function (list) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                Gikam.postText(baseUrl + ''.updateByImport'', Gikam.getJsonWrapper({}, ['''', list])).done(function (text) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    if (Gikam.isEmpty(text)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Gikam.alert(''CORE.MODULE.ITEM.IMPORTTMPLS.TIP.IMPORT_SUCCSS'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    } else {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Gikam.alert(text);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    Gikam.getComp(''reportsendexpress-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function simplecheckbox_1_onchange(field, value, rowIndex, oldValue, text) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var grid = Gikam.getComp(''reportsendexpress-edit-grid'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var showFlags = value;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (showFlags === ''1'') {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        grid.refresh({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            requestData: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                reportno_SE: ''G'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    } else {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        grid.refresh({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            requestData: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                reportno_SE: '''',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function button_3_onclick() {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpress-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (Gikam.isEmpty(selections)) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''GIKAM.TIP.CHOOSE_AT_LEAST_ONE_ITEM'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    let flag1 = selections.some(item => Gikam.isEmpty(item.entrustorgid));')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (flag1) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''存在报告未找到对应的客户信息，可在任务信息修改菜单，重新维护下受检单位'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var entrustorgid = selections[0].entrustorgid;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    let flag2 = selections.some(item => item.entrustorgid !== entrustorgid);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (flag2) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''只能批量发送同一受检单位的报告'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    let modal = Gikam.create(''modal'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        title: "邮箱地址",')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        width: 400,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        height: 220,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onAfterClose: function (data) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.getComp(''reportsendexpress-edit-grid'').refresh();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var layout = Gikam.create(''layout'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        renderTo: modal.window.$dom,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        center: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            items: [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                type: ''btnToolbar'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                items: [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    type: ''button'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    text: ''发送'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    class: ''blue'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    onClick: function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (!Gikam.getComp(''reportsendexpress-edit-form'').validate()) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        var email = Gikam.getComp(''reportsendexpress-edit-form'').getData().email;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        sendEmail(email);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }, {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    type: ''button'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    text: ''保存为客户邮箱'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    onClick: function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (!Gikam.getComp(''reportsendexpress-edit-form'').validate()) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            return;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        var email = Gikam.getComp(''reportsendexpress-edit-form'').getData().email;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        updateEmail(email);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }, {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    type: ''button'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    text: ''GIKAM.BUTTON.CANCEL'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    onClick: function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        modal.close();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                }]')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }]')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var form = Gikam.create(''form'', {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        id: ''reportsendexpress-edit-form'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        renderTo: layout.options.center.$dom,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        columns: 1,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        titleWidth: 80,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        fields: [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            field: ''entrustorgname'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            title: ''委托单位'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            readonly: true,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }, {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            field: ''email'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            title: ''邮箱地址'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            validators: [''notEmpty''],')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }],')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        autoSave: false,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        onRendered: function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            this.setData({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                email: selections[0].mail,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                entrustorgname: selections[0].entrustorgname,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        },')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function updateEmail(email) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpress-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.put(''/secure/gikam/actions/instant'', Gikam.getJsonWrapper({}, [''emcClientServiceImpl'', [{')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        id: selections[0].entrustorgid,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        mail: email')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }]])).done(function (id) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.getLastModal().close();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.getComp(''reportsendexpress-edit-grid'').refreshRowById(selections[0].id);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function sendEmail(email) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var selections = Gikam.getComp(''reportsendexpress-edit-grid'').getSelections();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var url = baseUrl + ''.sendEmail'';')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    workspace.window.showMask(true);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    Gikam.post(url, Gikam.getJsonWrapper({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ''email'': email,')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }, [null, selections])).done(function (res) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.getLastModal().close();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        selections.forEach(function (item) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            Gikam.getComp(''reportsendexpress-edit-grid'').refreshRowById(item.id);')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        })')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Gikam.alert(''发送成功。'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }).always(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        workspace.window.closeMask();')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('function simplecheckbox_3_onchange(field, value, rowIndex, oldValue, text) {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var grid = Gikam.getComp(''reportsendexpress-edit-grid'');')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    var showFlags = value;')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    if (showFlags === ''1'') {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        grid.refresh({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            requestData: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                issurer_ISNULL: ''1'',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    } else {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        grid.refresh({')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            requestData: {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                issurer_ISNULL: '''',')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }).done(function () {')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        });')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(13))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}'),
+20,
+'yes',
+'yes',
+'emc.reportSendExpress.page.reportSendExpressEditPage',
+2,
+'0',
+NULL);
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1801415419050528,
+1583577938561594,
+'LcdpEmcReportSendInfoService',
+'java',
+TO_CLOB('import java.time.LocalDate;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.utils.CoreFileUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.io.file.FilePathManager;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.service.CoreFileService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.bean.CoreFileBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.emc.module.bp.report.report.service.EmcReportService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.beans.factory.annotation.Autowired;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.context.ApplicationContextHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.context.LocalContextHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.time.LocalDateTime;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.DateTimeUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.exception.InvalidDataException;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mail.MailHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.exception.checked.CheckedException;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.ArrayUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.ObjectUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.database.context.TableContext;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.stream.Collectors;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mybatis.mapper.MatchPattern;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mybatis.mapper.SearchFilter;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.StringUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.context.annotation.Lazy;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.io.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class LcdpEmcReportSendInfoService implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Autowired')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Lazy private EmcReportService reportService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Autowired')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    private CoreFileService coreFileService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT_SEND_INFO";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.reportSendExpress.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /** 新增数据 */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据", type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "通过导入数据更新", type = MappingType.UPDATE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.SAVE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String updateByImport(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 根据导入模板配置取得报告编号')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> reportNoList = new ArrayList<>();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        list.forEach(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                l -> {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    if (!ObjectUtils.isEmpty(l.get("projid"))) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        String reportNo = MapUtils.getString(l, "projid");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (reportNo.indexOf("、") > -1) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            reportNoList.addAll(ArrayUtils.asList(reportNo.split("、")));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        } else {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            reportNoList.add(reportNo);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> reportSendInfoList = this.selectListByFilter(SearchFilter.instance().match("REPORTNO", reportNoList).filter(MatchPattern.OR));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> deliveryReportList = reportSendInfoList.stream().filter(r -> !StringUtils.isBlank(MapUtils.getString(r, "DELIVERYDATE"))).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> noDeliveryReportList = reportSendInfoList.stream().filter(r -> StringUtils.isBlank(MapUtils.getString(r, "DELIVERYDATE"))).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String info = "";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!noDeliveryReportList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LocalDateTime now = LocalDateTime.now();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            noDeliveryReportList.forEach(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    sendInfo -> {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Map<String, Object> map = list.stream().filter(l -> MapUtils.getString(l, "projid").indexOf(MapUtils.getString(sendInfo, "reportno")) > -1).findFirst().orElse(null);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (map != null) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("address", map.get("address"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("username", map.get("username"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("phone", map.get("phone"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("issurer", map.get("issurer"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("issurerdate", map.get("issurerdate"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("expresstype", map.get("expresstype"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("expressno", map.get("expressno"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("isreceived", map.get("isreceived"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("importdatetime", now);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    });')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            this.updateIfChanged(TableContext.of(getTable()), noDeliveryReportList);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        info += "导入成功" + noDeliveryReportList.size() + "条。<br>";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!deliveryReportList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            List<String> deliveryReportNoList = deliveryReportList.stream().map(r -> MapUtils.getString(r, "reportno")).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            info += "以下报告已出库:\r\n" + StringUtils.join(deliveryReportNoList, "、");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> infoReportNoList = reportSendInfoList.stream().map(r -> MapUtils.getString(r, "reportno")).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> noMatchReportNoList = reportNoList.stream().filter(r -> !infoReportNoList.contains(r)).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!noMatchReportNoList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            info += "以下报告未处于报告发送环节，请检查后导入:\r\n" + StringUtils.join(noMatchReportNoList, "、");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return info;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "发送邮件", type = MappingType.UPDATE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String sendEmail(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String email = wrapper.getParamValue("email");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (StringUtils.isBlank(email)) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("邮箱有误");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> reportsendinfoList = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> reportnoList = reportsendinfoList.stream().map(e -> MapUtils.getString(e, "reportno")).distinct().collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<EmcReportBean> reportList = reportService.getDao().selectListByOneColumnValues(reportnoList, "reportno");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (reportList.size() != reportnoList.size()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("存在报告在系统中未找到");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> targetIdList = reportList.stream().map(e -> "T_EMC_REPORT$" + e.getId()).distinct().collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<CoreFileBean> coreFileList = coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", targetIdList).filter(MatchPattern.OR).match("ext", "sealPdf").filter(MatchPattern.SEQ));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        File[] files = coreFileList.stream().map(coreFile -> CoreFileUtils.getLocalPath(coreFile).toFile()).toArray(File[]::new);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String topicTemp = "%s您好！%s检测报告已完成，敬请查收";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String topic = String.format(topicTemp, MapUtils.getString(reportsendinfoList.get(0), "entrustorgname"), StringUtils.join(reportnoList, ","));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 邮件模板字符串')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String template =')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                "您好！<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "贵司委托我司开展的%s相关检测工作已按规范顺利完成，对应的检测报告现同步送达，烦请您及时查收。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "若您需要申领纸质版报告，或对报告数据、检测流程等内容有任何疑问、需进一步沟通说明，可联系对接%s。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "请您在收到本邮件后5个工作日内反馈确认结果或相关疑问，逾期未回复将视为贵司已认可该报告内容及检测结果。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "感谢贵司对我司\"科学、公正、准确、满意\"服务理念的认可与支持，我司将持续以专业的技术能力、严谨的服务态度为您保驾护航。后续如有环保检测、咨询等相关业务需求，欢迎随时与我们联系。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 生成业务人员信息')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Map<String, Map<String, Object>> reportsendinfoMap = reportsendinfoList.stream().collect(Collectors.toMap(map -> MapUtils.getString(map, "businessusername"), map -> map, (a, b) -> a));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String contactInfo = "";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        for (Map.Entry<String, Map<String, Object>> e : reportsendinfoMap.entrySet()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            contactInfo = "业务经理" + e.getKey() + "（联系电话：" + MapUtils.getString(e.getValue(), "mobile") + "）";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 填充模板生成最终邮件内容')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String content = String.format(template, StringUtils.join(reportnoList, ","), contactInfo);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String footer = com.sunwayworld.framework.context.ApplicationContextHelper.getEnvironment()')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                .getRequiredProperty("owned.report-send.mail.footer-text");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        content += org.springframework.web.util.HtmlUtils.htmlEscape(footer)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                .replace("\r\n", "\n").replace("\r", "\n").replace("\n", "<br>");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        try {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            MailHelper.sendHtmlMail(topic, content, Collections.singletonList(email), files);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        } catch (Exception e) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            e.printStackTrace();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            log(e.getMessage());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("邮箱发送失败");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String currentDate = DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        for (Map<String, Object> reportsendinfo : reportsendinfoList) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("issurer", LocalContextHelper.getLoginUserName());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("issurerdate", currentDate);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("sendemail", email);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("expresstype", "邮箱");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("expressno", email);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        this.getMapDao().update("T_EMC_REPORT_SEND_INFO", reportsendinfoList, "issurer", "issurerdate", "sendemail", "expresstype", "expressno");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "1";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(10)),
+23,
+'yes',
+'yes',
+'emc.reportSendExpress.server.LcdpEmcReportSendInfoService',
+9,
+'0',
+TO_CLOB('import java.time.LocalDate;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.utils.CoreFileUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.io.file.FilePathManager;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.service.CoreFileService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.module.item.file.bean.CoreFileBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.emc.module.bp.report.report.bean.EmcReportBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.emc.module.bp.report.report.service.EmcReportService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.beans.factory.annotation.Autowired;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.context.ApplicationContextHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.context.LocalContextHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.time.LocalDateTime;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.DateTimeUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.exception.InvalidDataException;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mail.MailHelper;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.exception.checked.CheckedException;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.ArrayUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.ObjectUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.database.context.TableContext;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.stream.Collectors;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mybatis.mapper.MatchPattern;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.mybatis.mapper.SearchFilter;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.StringUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.Mapping;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.annotation.MappingType;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpScriptUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.utils.MapUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.spring.SpringCaller;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpResultDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.LcdpTreeDataDTO;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.base.service.LcdpBaseService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.cloud.module.lcdp.resource.support.LcdpWrapperParseUtils;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.constant.AuditConstant;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.audit.aunnotation.Audit;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import com.sunwayworld.framework.restful.data.RestJsonWrapperBean;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.transaction.annotation.Transactional;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.stereotype.Repository;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.util.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import org.springframework.context.annotation.Lazy;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('import java.io.*;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('@Repository')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('public class ReportSendExpressLcdpEmcReportSendInfoServicev23m9 implements LcdpBaseService {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Autowired')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Lazy private EmcReportService reportService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Autowired')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    private CoreFileService coreFileService;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getTable() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "T_EMC_REPORT_SEND_INFO";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Override')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String getQuerySqlMapperId() {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "emc.reportSendExpress.mapper.LcdpEmcReportSendInfoMapper.selectByCondition";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    /** 新增数据 */')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "Lcdp新增数据", type = MappingType.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.INSERT)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String insertData(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return this.lcdpInsert(list);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "通过导入数据更新", type = MappingType.UPDATE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Audit(AuditConstant.SAVE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String updateByImport(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> list = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 根据导入模板配置取得报告编号')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> reportNoList = new ArrayList<>();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        list.forEach(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                l -> {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    if (!ObjectUtils.isEmpty(l.get("projid"))) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        String reportNo = MapUtils.getString(l, "projid");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (reportNo.indexOf("、") > -1) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            reportNoList.addAll(ArrayUtils.asList(reportNo.split("、")));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        } else {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            reportNoList.add(reportNo);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                });')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> reportSendInfoList = this.selectListByFilter(SearchFilter.instance().match("REPORTNO", reportNoList).filter(MatchPattern.OR));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> deliveryReportList = reportSendInfoList.stream().filter(r -> !StringUtils.isBlank(MapUtils.getString(r, "DELIVERYDATE"))).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> noDeliveryReportList = reportSendInfoList.stream().filter(r -> StringUtils.isBlank(MapUtils.getString(r, "DELIVERYDATE"))).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String info = "";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!noDeliveryReportList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LocalDateTime now = LocalDateTime.now();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            noDeliveryReportList.forEach(')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    sendInfo -> {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        Map<String, Object> map = list.stream().filter(l -> MapUtils.getString(l, "projid").indexOf(MapUtils.getString(sendInfo, "reportno")) > -1).findFirst().orElse(null);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        if (map != null) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("address", map.get("address"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("username", map.get("username"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("phone", map.get("phone"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("issurer", map.get("issurer"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("issurerdate", map.get("issurerdate"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("expresstype", map.get("expresstype"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("expressno", map.get("expressno"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("isreceived", map.get("isreceived"));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                            sendInfo.put("importdatetime", now);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                    });')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            this.updateIfChanged(TableContext.of(getTable()), noDeliveryReportList);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        info += "导入成功" + noDeliveryReportList.size() + "条。<br>";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!deliveryReportList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            List<String> deliveryReportNoList = deliveryReportList.stream().map(r -> MapUtils.getString(r, "reportno")).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            info += "以下报告已出库:\r\n" + StringUtils.join(deliveryReportNoList, "、");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> infoReportNoList = reportSendInfoList.stream().map(r -> MapUtils.getString(r, "reportno")).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> noMatchReportNoList = reportNoList.stream().filter(r -> !infoReportNoList.contains(r)).collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (!noMatchReportNoList.isEmpty()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            info += "以下报告未处于报告发送环节，请检查后导入:\r\n" + StringUtils.join(noMatchReportNoList, "、");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return info;')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Mapping(value = "发送邮件", type = MappingType.UPDATE)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    @Transactional')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    public String sendEmail(RestJsonWrapperBean wrapper) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String email = wrapper.getParamValue("email");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (StringUtils.isBlank(email)) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("邮箱有误");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<Map<String, Object>> reportsendinfoList = LcdpWrapperParseUtils.parseList(wrapper);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> reportnoList = reportsendinfoList.stream().map(e -> MapUtils.getString(e, "reportno")).distinct().collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<EmcReportBean> reportList = reportService.getDao().selectListByOneColumnValues(reportnoList, "reportno");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        if (reportList.size() != reportnoList.size()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("存在报告在系统中未找到");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<String> targetIdList = reportList.stream().map(e -> "T_EMC_REPORT$" + e.getId()).distinct().collect(Collectors.toList());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        List<CoreFileBean> coreFileList = coreFileService.selectListByFilter(SearchFilter.instance().match("targetId", targetIdList).filter(MatchPattern.OR).match("ext", "sealPdf").filter(MatchPattern.SEQ));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        File[] files = coreFileList.stream().map(coreFile -> CoreFileUtils.getLocalPath(coreFile).toFile()).toArray(File[]::new);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String topicTemp = "%s您好！%s检测报告已完成，敬请查收";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String topic = String.format(topicTemp, MapUtils.getString(reportsendinfoList.get(0), "entrustorgname"), StringUtils.join(reportnoList, ","));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 邮件模板字符串')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String template =')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                "您好！<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "贵司委托我司开展的%s相关检测工作已按规范顺利完成，对应的检测报告现同步送达，烦请您及时查收。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "若您需要申领纸质版报告，或对报告数据、检测流程等内容有任何疑问、需进一步沟通说明，可联系对接%s。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "请您在收到本邮件后5个工作日内反馈确认结果或相关疑问，逾期未回复将视为贵司已认可该报告内容及检测结果。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "感谢贵司对我司\"科学、公正、准确、满意\"服务理念的认可与支持，我司将持续以专业的技术能力、严谨的服务态度为您保驾护航。后续如有环保检测、咨询等相关业务需求，欢迎随时与我们联系。<br>"')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                        + "<br>";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 生成业务人员信息')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        Map<String, Map<String, Object>> reportsendinfoMap = reportsendinfoList.stream().collect(Collectors.toMap(map -> MapUtils.getString(map, "businessusername"), map -> map, (a, b) -> a));')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String contactInfo = "";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        for (Map.Entry<String, Map<String, Object>> e : reportsendinfoMap.entrySet()) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            contactInfo = "业务经理" + e.getKey() + "（联系电话：" + MapUtils.getString(e.getValue(), "mobile") + "）";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        // 填充模板生成最终邮件内容')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String content = String.format(template, StringUtils.join(reportnoList, ","), contactInfo);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String footer = com.sunwayworld.framework.context.ApplicationContextHelper.getEnvironment()')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                .getRequiredProperty("owned.report-send.mail.footer-text");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        content += org.springframework.web.util.HtmlUtils.htmlEscape(footer)')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                .replace("\r\n", "\n").replace("\r", "\n").replace("\n", "<br>");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        try {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            MailHelper.sendHtmlMail(topic, content, Collections.singletonList(email), files);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        } catch (Exception e) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            e.printStackTrace();')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            log(e.getMessage());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            throw new InvalidDataException("邮箱发送失败");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        String currentDate = DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), "yyyy-MM-dd HH:mm:ss");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        for (Map<String, Object> reportsendinfo : reportsendinfoList) {')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("issurer", LocalContextHelper.getLoginUserName());')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("issurerdate", currentDate);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("sendemail", email);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("expresstype", "邮箱");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            reportsendinfo.put("expressno", email);')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        this.getMapDao().update("T_EMC_REPORT_SEND_INFO", reportsendinfoList, "issurer", "issurerdate", "sendemail", "expresstype", "expressno");')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        return "1";')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    }')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('}')
+ || TO_CLOB(CHR(10)));
+INSERT INTO T_LCDP_RESOURCE_HISTORY (ID,RESOURCEID,RESOURCENAME,RESOURCECATEGORY,CONTENT,VERSION,SUBMITFLAG,EFFECTFLAG,PATH,MODIFYVERSION,DELETEFLAG,CLASSCONTENT) VALUES (1801422657935904,
+1583577938790944,
+'LcdpEmcReportSendInfoOracleMapper',
+'mapper',
+TO_CLOB('<?xml version="1.0" encoding="UTF-8"?>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('<mapper namespace="emc.reportSendExpress.mapper.LcdpEmcReportSendInfoMapper">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectByCondition" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT T.* FROM ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        (')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            SELECT ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ters.*,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.ENTRUSTORGNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            ter.REPORTNO,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.ENTRUSTORGID,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.BUSINESSUSERID,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            D.USERNAME AS BUSINESSUSERNAME,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            D.MOBILE,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            c.MAIL,')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            tep.DELIVERYDATE')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            from T_EMC_REPORT_SEND_INFO ters')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_REPORT ter ON ters.PROJID =ter.PROJID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_PROJECT tep ON tep.ID =ters.PROJID ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_EMC_CLIENT c ON c.ID =tep.ENTRUSTORGID')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            LEFT JOIN T_CORE_USER D ON D.ID =tep.BUSINESSUSERID ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            WHERE (ter.STATUS =''reportSeal'')')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ) T')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendWhereClausesIfPresent" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <if test=''authority_audit == "1"''>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                AND <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </if>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <include refid="com.sunwayworld.cloud.module.lcdp.base.persistent.mapper.LcdpBaseMapper.auditAuthorityWhereClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </where>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        ORDER BY')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        <choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <when test="orderParams != null and orderParams.size > 0">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                <include refid="com.sunwayworld.framework.mybatis.mapper.GlobalMapper.appendOrderClause" />')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </when>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            <otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('                T.ID DESC')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('            </otherwise>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        </choose>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    <select id="selectNullTable" parameterType="map" resultType="map">')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('        SELECT Q.* FROM T_EMC_REPORT_SEND_INFO Q WHERE ID IS NULL')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('    </select>  ')
+ || TO_CLOB(CHR(10))
+ || TO_CLOB(CHR(10))
+ || TO_CLOB('</mapper>'),
+14,
+'yes',
+'yes',
+'emc.reportSendExpress.mapper.LcdpEmcReportSendInfoOracleMapper',
+3,
+'0',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('05f44ea4e2404bef8cbf6c7390314cd6',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.username.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"05f44ea4e2404bef8cbf6c7390314cd6","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_username","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"username","width":100,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1011c3719a1d407e9b90f6726a90d596',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'Form',
+'1b2403c45e4843e9bdb070e7702f918c',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":["1b33d6f58d87491e90d7695e177f246c"],"columns":2,"caption":{"en-US":"","zh-CN":""},"dependentWidgetId":"","type":"Form","autoSave":true,"onTitleClick__$S$__":"","onUpdated__$S$__":"","uuid":"1011c3719a1d407e9b90f6726a90d596","readonly":false,"titleWidthAuto":false,"titleWidth":100,"onValidating__$S$__":"","id":"Form_1","panelFoldable":true,"defaultPanelExpand":true,"inputTitle":false,"onBeforeUpdate__$S$__":"","url":"","instantSavePath":"","titleAlign":"right","layout":"inline","onInserted__$S$__":"","onLoadSuccess__$S$__":"","fields":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1af19b2e204147fca9107b1e8ea43272',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'SimpleCheckbox',
+'600aa4e19728457b828d4a7896945034',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"refreshGrid":false,"titleTip":{"en-US":"","zh-CN":""},"title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.Form_2.simpleCheckbox.title","type":"i18n"},"type":"SimpleCheckbox","uuid":"1af19b2e204147fca9107b1e8ea43272","visibleRoles":[],"onChange__$S$__":"simplecheckbox_3_onchange","colspan":1,"field":"simpleCheckbox","readonly":false,"titleStyleFormatter__$S$__":"","width":"","tip":{"en-US":"","zh-CN":""},"id":"SimpleCheckbox_3","value":"0","editRoles":[],"onDataChange__$S$__":"","resourceType":"manual"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1b2403c45e4843e9bdb070e7702f918c',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridToolbar',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["5f25f4d4fa1c4abcaba3500ccac493e0","b572f294abae4c3e8210bc5a306cc99d","5e78073639be4831b1b3963c2dd0eff1","1011c3719a1d407e9b90f6726a90d596","600aa4e19728457b828d4a7896945034"],"generalPanelTrigger":[],"toolbarAlign":"left","toolbarWrap":false,"generalButtonGroupShow":true,"id":"GridToolbar_1","generalButtonGroup":[],"uuid":"1b2403c45e4843e9bdb070e7702f918c"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1b33d6f58d87491e90d7695e177f246c',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'SimpleCheckbox',
+'1011c3719a1d407e9b90f6726a90d596',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"refreshGrid":false,"titleTip":{"en-US":"","zh-CN":""},"title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.Form_1.simpleCheckbox.title","type":"i18n"},"type":"SimpleCheckbox","uuid":"1b33d6f58d87491e90d7695e177f246c","visibleRoles":[],"onChange__$S$__":"simplecheckbox_1_onchange","colspan":1,"field":"simpleCheckbox","readonly":false,"titleStyleFormatter__$S$__":"","width":"","tip":{"en-US":"","zh-CN":""},"id":"SimpleCheckbox_1","value":"0","editRoles":[],"onDataChange__$S$__":"","resourceType":"manual"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('1ee15445b40447b8a1ab61ae987e9788',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"index":true,"id":"GridColumn_index","gridColumnType":"index","title":{"zh-CN":"序号"},"uuid":"1ee15445b40447b8a1ab61ae987e9788"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('22cb57bd801a4019a9ccbf3ceb07f468',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"enableSecond":true,"lcdpVisible":true,"validators":[],"source":"dataSource","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.issurerdate.title","type":"i18n"},"gridColumnType":"dateTime","type":"dateTime","uuid":"22cb57bd801a4019a9ccbf3ceb07f468","visibleRoles":[],"getDateRanger__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_issurerdate","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"issurerdate","width":150,"fixed":false,"getPrefixIcons__$S$__":""}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('2a05a603aaad4a3f803e49215a2dc9c7',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'LayoutNorth',
+'ad34b9ce927348988420b52f6b3cb9ef',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutNorth_1","uuid":"2a05a603aaad4a3f803e49215a2dc9c7","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('38606fdc7a4143cfbe5dbb30bdd276a7',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'LayoutCenter',
+'ad34b9ce927348988420b52f6b3cb9ef',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":["ec75631ea1704848b1150b1f692c51d3"],"id":"LayoutCenter_1","uuid":"38606fdc7a4143cfbe5dbb30bdd276a7"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('404a64e1d67f414bbac6a304e863473a',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.expresstype.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"404a64e1d67f414bbac6a304e863473a","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_expresstype","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"expresstype","width":100,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('40d79cffecc844bb844e1d7bc1516782',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.phone.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"40d79cffecc844bb844e1d7bc1516782","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_phone","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"phone","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('4c4f7a96386b438da74149b516b6420a',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.isreceived.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"4c4f7a96386b438da74149b516b6420a","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_isreceived","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"isreceived","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('52cab68b54c2400b9502bb56eafacaba',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'LayoutWest',
+'ad34b9ce927348988420b52f6b3cb9ef',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutWest_1","uuid":"52cab68b54c2400b9502bb56eafacaba"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('5e78073639be4831b1b3963c2dd0eff1',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'Button',
+'1b2403c45e4843e9bdb070e7702f918c',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"od-send-mail","id":"Button_3","text":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.Button_3.text","type":"i18n"},"uuid":"5e78073639be4831b1b3963c2dd0eff1","onClick__$S$__":"button_3_onclick","visibleRoles":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('5f25f4d4fa1c4abcaba3500ccac493e0',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'Button',
+'1b2403c45e4843e9bdb070e7702f918c',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"export-excel","id":"Button_1","text":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.Button_1.text","type":"i18n"},"uuid":"5f25f4d4fa1c4abcaba3500ccac493e0","onClick__$S$__":"export_onclick","visibleRoles":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('600aa4e19728457b828d4a7896945034',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'Form',
+'1b2403c45e4843e9bdb070e7702f918c',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":["1af19b2e204147fca9107b1e8ea43272"],"columns":2,"caption":{"en-US":"","zh-CN":""},"dependentWidgetId":"","type":"Form","autoSave":true,"onTitleClick__$S$__":"","onUpdated__$S$__":"","uuid":"600aa4e19728457b828d4a7896945034","readonly":false,"titleWidthAuto":false,"titleWidth":100,"onValidating__$S$__":"","id":"Form_2","panelFoldable":true,"defaultPanelExpand":true,"inputTitle":false,"onBeforeUpdate__$S$__":"","url":"","instantSavePath":"","titleAlign":"right","layout":"inline","onInserted__$S$__":"","onLoadSuccess__$S$__":"","fields":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('60c85239d9424538a06b980abed8286f',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.issurer.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"60c85239d9424538a06b980abed8286f","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_issurer","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"issurer","width":100,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('998872c69c29447ca1155fba701cd2c3',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"checkbox":true,"id":"GridColumn_checkbox","gridColumnType":"checkbox","title":{"zh-CN":"复选框列"},"uuid":"998872c69c29447ca1155fba701cd2c3"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('9ee6020ea46a49dbab71430a64a9466a',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'LayoutEast',
+'ad34b9ce927348988420b52f6b3cb9ef',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"width":"0","id":"LayoutEast_1","uuid":"9ee6020ea46a49dbab71430a64a9466a"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('aa85dd95956c4994b99c3613475db799',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.entrustorgname.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"aa85dd95956c4994b99c3613475db799","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_entrustorgname","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"entrustorgname","width":200,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('ab024b381f2940f0b21d7cd1d34adfb8',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'LayoutSouth',
+'ad34b9ce927348988420b52f6b3cb9ef',
+NULL,
+NULL,
+NULL,
+'{"childrenWidgetId":[],"id":"LayoutSouth_1","uuid":"ab024b381f2940f0b21d7cd1d34adfb8","height":"0"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('ad34b9ce927348988420b52f6b3cb9ef',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'Layout',
+NULL,
+NULL,
+NULL,
+NULL,
+'{"layout":"all","childrenWidgetId":["2a05a603aaad4a3f803e49215a2dc9c7","ab024b381f2940f0b21d7cd1d34adfb8","9ee6020ea46a49dbab71430a64a9466a","52cab68b54c2400b9502bb56eafacaba","38606fdc7a4143cfbe5dbb30bdd276a7"],"id":"Layout_1","uuid":"ad34b9ce927348988420b52f6b3cb9ef","height":"100%"}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('b572f294abae4c3e8210bc5a306cc99d',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'Button',
+'1b2403c45e4843e9bdb070e7702f918c',
+NULL,
+NULL,
+NULL,
+'{"onRendered__$S$__":"","childrenWidgetId":[],"hidden":false,"color":"#007AFF","display":"inline","enableSign":false,"iconType":"import-excel","id":"Button_2","text":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.Button_2.text","type":"i18n"},"uuid":"b572f294abae4c3e8210bc5a306cc99d","onClick__$S$__":"import_onclick","visibleRoles":[]}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('c9a125a918904cceb65177a8578aefd6',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.address.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"c9a125a918904cceb65177a8578aefd6","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_address","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"address","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('cfd77a92360a4090ab9c07595eb049b4',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.remark.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"cfd77a92360a4090ab9c07595eb049b4","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_remark","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"remark","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('d5a9b9e2c04c4b34abcf2b4ce35df574',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.expressno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"d5a9b9e2c04c4b34abcf2b4ce35df574","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_expressno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":true,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"expressno","width":150,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('eaa2b7b984304dffa77789f0787dac41',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"enableSecond":true,"lcdpVisible":true,"validators":[],"source":"custom","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.importdatetime.title","type":"i18n"},"gridColumnType":"dateTime","type":"dateTime","uuid":"eaa2b7b984304dffa77789f0787dac41","visibleRoles":[],"getDateRanger__$S$__":"","readonly":false,"onBeforeSelect__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_importdatetime","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"importdatetime","width":150,"fixed":false,"getPrefixIcons__$S$__":""}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('ec75631ea1704848b1150b1f692c51d3',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'Grid',
+'38606fdc7a4143cfbe5dbb30bdd276a7',
+NULL,
+NULL,
+NULL,
+'{"onCheckboxClick__$S$__":"","columnAutoFill":false,"pageSize":50,"autoSave":true,"onUnSelect__$S$__":"","onBeforeRowActive__$S$__":"","readonly":true,"checkOnActiveGroupRow":true,"exportWithStyle":true,"onValidating__$S$__":"","id":"reportsendexpress-edit-grid","height":"100%","order":{},"onCellClick__$S$__":"loadDetailPage","deleteFormatter__$S$__":"","textLineFeed":false,"showPagination":true,"allowMultiColSort":false,"columnResize":true,"onBeforeDelete__$S$__":"","checkOneOnActive":true,"activateFormatter__$S$__":"","childrenWidgetId":["998872c69c29447ca1155fba701cd2c3","1ee15445b40447b8a1ab61ae987e9788","aa85dd95956c4994b99c3613475db799","f42e40303fa4432996a15e71c9343926","c9a125a918904cceb65177a8578aefd6","05f44ea4e2404bef8cbf6c7390314cd6","40d79cffecc844bb844e1d7bc1516782","60c85239d9424538a06b980abed8286f","22cb57bd801a4019a9ccbf3ceb07f468","eaa2b7b984304dffa77789f0787dac41","404a64e1d67f414bbac6a304e863473a","d5a9b9e2c04c4b34abcf2b4ce35df574","4c4f7a96386b438da74149b516b6420a","cfd77a92360a4090ab9c07595eb049b4"],"headRequestData":{},"columns":[],"commonSearch":false,"columnsSelect":false,"sum":{"endIndex":1,"beginIndex":0,"fixed":false,"nonNumberFields":[],"fields":[]},"onColumnsWidthChange__$S$__":"","keyDownSelectContent":true,"toolbarAlign":"left","formatterKeyDirection__$S$__":"","onLoadFail__$S$__":"","showCheckedNum":false,"contextmenu_childrenWidgetId":[],"toolbarWrap":false,"onSelect__$S$__":"","generalButtonGroupShow":true,"requestData":{},"activateFirstRow":true,"canGeneralRequest":true,"onUnAllSelect__$S$__":"","getRequestData__$S$__":"getGridRequestData","onHeaderClick__$S$__":"","onBeforeLoad__$S$__":"","toolbarHidden":false,"url":"emc.reportSendExpress.server.LcdpEmcReportSendInfoService.selectPaginationData","instantSavePath":"","onRowActive__$S$__":"","toolbar":[],"filter":true,"onCellDbClick__$S$__":"","generalPanelTrigger":[],"firstRowFixed":false,"showCheckedBadgeGt":1,"onBeforeHeadRequest__$S$__":"","onRendered__$S$__":"","advancedSearch'
+ || '":{"mode":"top","expand":true,"maxHeight":300,"show":false,"titleStyle":"","title":""},"confirmField":"projid","filterOpen":true,"suspendFormatter__$S$__":"","uuid":"1b2403c45e4843e9bdb070e7702f918c","contextMenuConfig":false,"filterImmediate":false,"defaultColumnWidth":150,"onBeforeRefresh__$S$__":"","activeOnCheck":false,"group":{"groupCheckbox":true,"formatter__$S$__":"","expand":true,"checkBadgeMode":"normal","groupIndex":false,"fields":[],"sortEnable":true},"initRequest":true,"onAfterChoose__$S$__":"","onBeforeSuspend__$S$__":"","sort":true,"exportExcelHeader":"","onColumnActive__$S$__":"","onBeforeActivate__$S$__":"","name":"","onLoadSuccess__$S$__":"","page":true,"formatterParamOnExportExcel__$S$__":"","toggleCheckOnActive":true,"appendButtonsToGeneral_childrenWidgetId":[],"serverSearch":true,"onUpdated__$S$__":"","exportHiddenColumns":true,"onDrag__$S$__":"","loadingMode":"normal","onRowDblclick__$S$__":"","cellValueFillByDrag":true,"showSortArrow":true,"enterKeyDownActive":tru',
+'e,"onAllSelect__$S$__":"","onBeforeUpdate__$S$__":"","generalButtonGroup":[],"onBeforeEditorRender__$S$__":"","enableKeySwitchEditor":true,"checkedIds":[],"toolbar_childrenWidgetId":["1b2403c45e4843e9bdb070e7702f918c"],"pageList":[50,100,150,200,"grid.all.data"],"checkOnActive":true}');
+INSERT INTO T_LCDP_MODULE_PAGE_COMP (ID,MODULEPAGEHISTORYID,MODULEPAGEID,MODULEPAGEVERSION,COMPID,TYPE,PARENTID,PREVIOUSID,VISIBLE,EDITABLE,CONFIG,CONFIGEXTEND) VALUES ('f42e40303fa4432996a15e71c9343926',
+1910585934329472,
+1583577937947194,
+20,
+NULL,
+'GridColumn',
+'ec75631ea1704848b1150b1f692c51d3',
+NULL,
+NULL,
+NULL,
+'{"getStyle__$S$__":"","childrenWidgetId":[],"lcdpVisible":true,"validators":[],"onInput__$S$__":"","source":"dataSource","autoCompleteUrl":"","title":{"i18nCode":"emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.reportno.title","type":"i18n"},"gridColumnType":"text","type":"text","uuid":"f42e40303fa4432996a15e71c9343926","visibleRoles":[],"onKeyDown__$S$__":"","children":[{}],"tagFormatter__$S$__":"","id":"GridColumn_reportno","placeholder":{"en-US":"","zh-CN":""},"value":"","editRoles":[],"onDataChange__$S$__":"","editor":false,"contentAlign":"left","sort":true,"onBeforeEditorRender__$S$__":"","onChange__$S$__":"","filter":true,"formatter__$S$__":"","textStyleFormatter__$S$__":"","field":"reportno","width":120,"fixed":false}',
+NULL);
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001989,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Button_1.text',
+'en-US',
+'Button');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002012,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Button_2.text',
+'en-US',
+'Button');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001997,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Button_3.text',
+'en-US',
+'Button');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001985,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Form_1.simpleCheckbox.title',
+'en-US',
+'simpleCheckbox');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002000,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Form_2.simpleCheckbox.title',
+'en-US',
+'simpleCheckbox');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002008,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.address.title',
+'en-US',
+'address');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002002,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.entrustorgname.title',
+'en-US',
+'entrustorgname');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002004,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.expressno.title',
+'en-US',
+'expressno');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001995,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.expresstype.title',
+'en-US',
+'expresstype');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002014,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.isreceived.title',
+'en-US',
+'isreceived');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002006,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.issurer.title',
+'en-US',
+'issurer');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001991,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.issurerdate.title',
+'en-US',
+'issurerdate');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001993,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.phone.title',
+'en-US',
+'phone');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531010176,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.remark.title',
+'en-US',
+'remark');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001987,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.reportno.title',
+'en-US',
+'reportno');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002010,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.username.title',
+'en-US',
+'processStatus');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001990,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Button_1.text',
+'zh-CN',
+'下载导入模板');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002013,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Button_2.text',
+'zh-CN',
+'导入快递单号');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001998,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Button_3.text',
+'zh-CN',
+'发送邮箱');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001986,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Form_1.simpleCheckbox.title',
+'zh-CN',
+'退改报告');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002001,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.Form_2.simpleCheckbox.title',
+'zh-CN',
+'未发送快递');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002009,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.address.title',
+'zh-CN',
+'收件地址');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002003,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.entrustorgname.title',
+'zh-CN',
+'委托单位');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002005,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.expressno.title',
+'zh-CN',
+'快递单号');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001996,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.expresstype.title',
+'zh-CN',
+'快递公司');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001999,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.importdatetime.title',
+'zh-CN',
+'导快递操作时间');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002015,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.isreceived.title',
+'zh-CN',
+'是否收款');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002007,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.issurer.title',
+'zh-CN',
+'发放人');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001992,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.issurerdate.title',
+'zh-CN',
+'发放日期');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001994,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.phone.title',
+'zh-CN',
+'收件人电话');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531010177,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.remark.title',
+'zh-CN',
+'备注');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531001988,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.reportno.title',
+'zh-CN',
+'报告编号');
+INSERT INTO T_LCDP_MODULE_PAGE_I18N (ID,MODULEPAGEID,MODULEPAGEHISTORYID,CODE,I18NCONFIGID,MESSAGE) VALUES (1910586531002011,
+1583577937947194,
+1910585934329472,
+'emc.reportSendExpress.page.reportSendExpressEditPage.reportsendexpress-edit-grid.username.title',
+'zh-CN',
+'收件人');
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957807744,
+'GIKAM.BUTTON.DELETE',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957799552,
+'GIKAM.BUTTON.INSERT',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957856896,
+'T_EMC_REPORT_SEND_INFO.ADDRESS',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957840513,
+'T_EMC_REPORT_SEND_INFO.BACKSENDNO',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957865089,
+'T_EMC_REPORT_SEND_INFO.CNENREPORTCNT',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957889664,
+'T_EMC_REPORT_SEND_INFO.CNREPORTCNT',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957832321,
+'T_EMC_REPORT_SEND_INFO.CREATEDBYID',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957832320,
+'T_EMC_REPORT_SEND_INFO.CREATEDBYNAME',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957815937,
+'T_EMC_REPORT_SEND_INFO.CREATEDBYORGID',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957815936,
+'T_EMC_REPORT_SEND_INFO.CREATEDBYORGNAME',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957824128,
+'T_EMC_REPORT_SEND_INFO.CREATEDTIME',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957873281,
+'T_EMC_REPORT_SEND_INFO.ENREPORTCNT',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957897857,
+'T_EMC_REPORT_SEND_INFO.EXPRESSNO',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957906048,
+'T_EMC_REPORT_SEND_INFO.EXPRESSTYPE',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957873280,
+'T_EMC_REPORT_SEND_INFO.NEEDCNENREPORT',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957889665,
+'T_EMC_REPORT_SEND_INFO.NEEDCNREPORT',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957881472,
+'T_EMC_REPORT_SEND_INFO.NEEDENREPORT',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957840512,
+'T_EMC_REPORT_SEND_INFO.ORGID',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957856897,
+'T_EMC_REPORT_SEND_INFO.PHONE',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957848704,
+'T_EMC_REPORT_SEND_INFO.PIC',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957922433,
+'T_EMC_REPORT_SEND_INFO.PROJID',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957897856,
+'T_EMC_REPORT_SEND_INFO.REMARK',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957914240,
+'T_EMC_REPORT_SEND_INFO.SENDEMAIL',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957922432,
+'T_EMC_REPORT_SEND_INFO.SENDTOQUOTER',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957914241,
+'T_EMC_REPORT_SEND_INFO.SENDTOSALER',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_LCDP_PAGE_I18N_CODE (ID,CODE,MODULEPAGEID,MODULEPAGEHISTORYID) VALUES (1910585957865088,
+'T_EMC_REPORT_SEND_INFO.USERNAME',
+1583577937947194,
+1910585934329472);
+INSERT INTO T_CORE_MENU (ID,MENUNAME,PARENTID,ORDERNO,MENUINITNAME,ICON,TODOICON,I18NCODE,RESOURCEID,RESOURCENAME,BPID,RESOURCEPATH,MENUPARAM,HREF,CLIENTSCRIPT) VALUES ('20250200002',
+'快递发送登记',
+'20250200001',
+1,
+'快递发送登记',
+'057.svg',
+NULL,
+NULL,
+1583577937947194,
+'reportSendExpressEditPage',
+NULL,
+'emc.reportSendExpress.page.reportSendExpressEditPage',
+NULL,
+NULL,
+NULL);
 COMMIT;

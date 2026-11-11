@@ -37,15 +37,23 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 17,397 rows across thirty-one explicitly selected
+The technical bootstrap contains 17,493 rows across thirty-one explicitly selected
 configuration tables: 2 locales, 5,339 internationalization keys, 5,397 messages,
-392 static and 10 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
+392 static and 11 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
 relations, one system UI config, one login UI config and 37 source-referenced
 select configs, plus 2 dictionary classes, 224 categories and 1,056 options.
 Seven published LCDP modules contribute 37 resource/ancestor nodes, 29 published
 histories, 229 components, 123 page translations and 242 dependent translation keys.
 The two original file-service Java resources and their ancestors add four resource
-nodes and one genuine published history, for 41 resources and 30 histories overall.
+nodes and one genuine published history, for 41 resources and 30 histories before the courier addition.
+The published `emc.reportSendExpress` closure adds its module node, three
+resources (page v20, Oracle mapper v14, Java service v23), three effective
+histories, 29 components, 33 page translations, 26 page i18n-code rows and menu
+`20250200002`. Its shared `emc` category is reused. Overall totals are 45
+resources and 33 histories. The preceding 17,397 INSERT statements and original
+row hashes remain unchanged; this addition contributes 96 rows. Its Java mail
+footer is the one declared source transformation, documented in
+[report email configuration](../../../docs/deployment/report-send-mail-footer.md).
 `lcdp.file.server.FileScript` is the captured active-only resource with parent `0`;
 the original runtime explicitly permits its absent history. The bootstrap preserves
 that exception without creating a history or changing another resource's contract.
@@ -145,7 +153,7 @@ That source metadata records exact reviewed code, description, default message
 and unique locale values for a separate versioned existing-database upgrade;
 it contains source references and exclusions, not an HTTP message-map fallback.
 It does not overwrite existing translations or make the full installer ready.
-One other dynamic-resource menu, three
+Three
 external-target menus and entity relationships outside the structural closure
 remain excluded. Other select configs can still require dictionaries/workflows and
 other dependencies that this finite subset does not supply.

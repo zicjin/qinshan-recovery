@@ -1,0 +1,60 @@
+{
+  "schema": "external-clearance-integer-alignment-v1",
+  "target_owner": "LIMS_RUNTIME_LOCAL",
+  "target_container": "FREEPDB1",
+  "source_class": "current-production-at-capture",
+  "required_rows": 0,
+  "business_rows_written": false,
+  "production_writes": false,
+  "sources": [
+    {
+      "path": "deployment/oracle/external-schema/structure.json",
+      "sha256": "7b8541e25c3055a0f440e137a5f08b5fd10c77adcdbcc5dd58adc519a77fd878"
+    },
+    {
+      "path": "deployment/oracle/external-schema/20-tables.sql",
+      "sha256": "77a98d714c3a61edb754462d79877a95b42de8c85163ae475161c09896f35689"
+    }
+  ],
+  "columns": [
+    {
+      "name": "CCID",
+      "position": 104,
+      "type": "NUMBER",
+      "length": "22",
+      "precision": null,
+      "scale": "0",
+      "nullable": "Y",
+      "char_used": null,
+      "char_length": "0",
+      "default": null
+    },
+    {
+      "name": "VERSION",
+      "position": 105,
+      "type": "NUMBER",
+      "length": "22",
+      "precision": null,
+      "scale": "0",
+      "nullable": "Y",
+      "char_used": null,
+      "char_length": "0",
+      "default": null
+    }
+  ],
+  "source_lines": [
+    405,
+    406
+  ],
+  "sql": {
+    "path": "api-fixtures/schema/external-clearance-integer-alignment-20261112.sql",
+    "sha256": "36c48b41efc6edc5279f81e9873413298fc743c85f6e2d50bd1f2b3cf0385ac7"
+  },
+  "limits": [
+    "Only CCID position104 and VERSION position105: unconstrained NUMBER to formal NUMBER(*,0), or exact no-op. All other metadata conflicts reject.",
+    "Require empty table before any DDL and before/after each change; no conversion or update of rows. App/schema writers must remain stopped.",
+    "Dedicated clean local session; explicit COMMIT releases equivalent-path table lock. DDL also releases lock and implicitly commits.",
+    "Partial failure requires preserved logs and metadata inspection. With empty table and only allowed shapes a rerun skips completed columns; otherwise restore retained approved backup. No transactional DDL rollback.",
+    "Run stage1 strict defaults migration afterward. This stage does not relax its guards or resolve NOT NULL/index drift."
+  ]
+}

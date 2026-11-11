@@ -268,3 +268,33 @@ those differences can be removed. Successful default restoration does not make
 the local schema identical to the formal package, grant strict evidence or
 relax a runtime policy. No application, Oracle or Redis restart is part of this
 fixture.
+
+`external-clearance-integer-alignment-20261112.sql` is a separate **stage 0**
+prerequisite discovered when stage 1 correctly rejected the two clearance
+columns `CCID` (position 104) and `VERSION` (105). Formal `20-tables.sql` lines
+405–406 declare `NUMBER(*,0)`; the earlier clone had unconstrained `NUMBER`.
+Verify the source pins and reviewed guarded SQL before approved local execution:
+
+```bash
+python3 scripts/verify-external-logical-clone-fixture.py \
+  --integer-alignment-manifest api-fixtures/schema/external-clearance-integer-alignment-20261112.json
+python3 scripts/tests/test-external-clearance-integer-alignment.py
+```
+
+Use a dedicated clean SQLPlus session as `LIMS_RUNTIME_LOCAL` in `FREEPDB1`,
+with unchanged current schema, application/schema writers stopped and retained
+backup/content hashes. All identity, table, two-column shape, empty-table and
+constraint/index dependency checks finish before any ALTER. Only exact nullable
+NUMBER columns with precision NULL and scale NULL or 0, no default and the source
+positions qualify. The table must have **zero rows even on an equivalent rerun**.
+Unconstrained columns become `NUMBER(*,0)`; already exact columns skip. No row is
+converted or written. The exclusive preflight lock is released by DDL commits;
+stopped writers remain a requirement. An explicit final COMMIT releases the lock
+when both columns already match, so this must never share pending session work.
+
+DDL implicitly commits. Preserve original failure and execution logs. After a
+partial failure, inspect both columns and row count; only the same empty allowed
+states permit rerun, which skips completed columns. Other states require explicit
+backup recovery, never a claimed SQL rollback. Then rerun unchanged stage 1 to
+check all 1,303 source columns and restore defaults. Neither stage changes the
+formal installer or relaxes NOT NULL/index or strict acceptance requirements.

@@ -198,11 +198,53 @@ def verify_alignment(manifest_path):
                       "columns_checked": sum(len(t["columns"]) for t in structure["tables"]), "strict_evidence": False}))
     return 0
 
+
+# A finite reviewed SQL pin protects guards as well as the two formal ALTERs.
+INTEGER_SQL_SHA256 = "36c48b41efc6edc5279f81e9873413298fc743c85f6e2d50bd1f2b3cf0385ac7"
+
+
+def verify_integer_alignment(manifest_path):
+    plan = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if plan.get("schema") != "external-clearance-integer-alignment-v1":
+        fail("unsupported integer alignment")
+    if plan.get("target_owner") != "LIMS_RUNTIME_LOCAL" or plan.get("target_container") != "FREEPDB1":
+        fail("integer alignment target must be LIMS_RUNTIME_LOCAL/FREEPDB1")
+    expected_sources = [SOURCE_DIRECTORY + p for p in ("structure.json", "20-tables.sql")]
+    if [entry.get("path") for entry in plan.get("sources", [])] != expected_sources:
+        fail("integer alignment source closure differs")
+    for entry in plan["sources"]:
+        if digest(ROOT / entry["path"]) != entry.get("sha256"):
+            fail("integer alignment source hash mismatch")
+    structure = json.loads((ROOT / expected_sources[0]).read_text(encoding="utf-8"))
+    table = next(t for t in structure["tables"] if t["name"] == "T_LIMS_CLEARANCEFORM")
+    expected = [c for c in table["columns"] if c["name"] in ("CCID", "VERSION")]
+    if plan.get("columns") != expected or plan.get("required_rows") != 0:
+        fail("integer alignment differs from exact two source columns/empty table")
+    if plan.get("business_rows_written") is not False or plan.get("production_writes") is not False:
+        fail("integer alignment cannot claim business or production writes")
+    lines = (ROOT / expected_sources[1]).read_text(encoding="utf-8").splitlines()
+    if plan.get("source_lines") != [405, 406] or lines[404:406] != ['    "CCID" NUMBER(*,0),', '    "VERSION" NUMBER(*,0),']:
+        fail("integer alignment source statement lines drifted")
+    entry = plan["sql"]
+    path = Path(entry["path"])
+    if path.is_absolute() or ".." in path.parts or path.parts[:2] != ("api-fixtures", "schema"):
+        fail("integer alignment SQL path must be a portable fixture")
+    if entry.get("sha256") != INTEGER_SQL_SHA256 or digest(ROOT / path) != INTEGER_SQL_SHA256:
+        fail("integer alignment SQL differs from reviewed guarded source transformation")
+    print(json.dumps({"status": "pass", "stage": "empty-clearance-integer", "columns": 2, "required_rows": 0, "strict_evidence": False}))
+    return 0
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", type=Path, default=MANIFEST)
     parser.add_argument("--alignment-manifest", type=Path, help="verify the finite local production-default migration")
+    parser.add_argument("--integer-alignment-manifest", type=Path, help="verify the two empty clearance integer-column corrections")
     args = parser.parse_args()
+    if args.integer_alignment_manifest is not None:
+        try:
+            return verify_integer_alignment(args.integer_alignment_manifest.resolve())
+        except (OSError, ValueError, KeyError, TypeError, StopIteration) as exc:
+            fail("invalid integer alignment inputs: " + str(exc))
     if args.alignment_manifest is not None:
         try:
             return verify_alignment(args.alignment_manifest.resolve())

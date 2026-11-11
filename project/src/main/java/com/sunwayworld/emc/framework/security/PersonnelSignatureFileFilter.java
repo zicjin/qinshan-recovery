@@ -229,11 +229,13 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
         }
         String relativePath = path.substring(FILE_CONTENT_PREFIX.length());
         String[] segments = relativePath.split("/", 4);
-        if (segments.length != 4 || segments[2].isEmpty()) {
+        int irregularNameIndex = "temp".equals(segments[0]) && segments.length == 3 ? 1 : 2;
+        if ((segments.length != 4 && !("temp".equals(segments[0]) && segments.length == 3))
+                || segments[irregularNameIndex].isEmpty()) {
             return null;
         }
-        // /files/{scope}/{date}/{md5Name}/{fileName}; the filename may be URL encoded.
-        String md5Name = segments[2];
+        // FilePathManager also supports temp/{irregularName}/{fileName} without a timestamp.
+        String md5Name = segments[irregularNameIndex];
         return coreFileService.selectFirstByFilter(
                 SearchFilter.instance().match("MD5NAME", md5Name).filter(MatchPattern.SEQ));
     }
@@ -479,10 +481,43 @@ public class PersonnelSignatureFileFilter extends OncePerRequestFilter {
             return true;
         }
         String[] segments = rawPath.substring(FILE_CONTENT_PREFIX.length()).split("/", 4);
-        return segments.length != 4
-                || !segments[0].matches("[A-Za-z0-9_-]+")
+        if ("temp".equals(segments[0])) {
+            segments = rawPath.substring(FILE_CONTENT_PREFIX.length()).split("/", -1);
+            if (!isCanonicalContentFileName(segments[segments.length - 1])) {
+                return true;
+            }
+            // Original producers use dates, epoch milliseconds or no timestamp.
+            // Their random names are UUIDs or the fixed hex lengths below; this
+            // changes path validation only, never personnel/signature permission.
+            if (segments.length == 3) {
+                return !segments[1].matches("[A-Fa-f0-9]{8}");
+            }
+            if (segments.length != 4) {
+                return true;
+            }
+            String uuid = "[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}";
+            boolean dated = segments[1].matches("[0-9]{8}")
+                    && (segments[2].matches("[A-Fa-f0-9]{16}|[A-Fa-f0-9]{32}") || segments[2].matches(uuid));
+            boolean millis = segments[1].matches("[0-9]{13}")
+                    && (segments[2].matches("[A-Fa-f0-9]{8}") || segments[2].matches(uuid));
+            return !dated && !millis;
+        }
+        return segments.length != 4 || !segments[0].matches("[A-Za-z0-9_-]+")
                 || !segments[1].matches("[0-9]{8}")
                 || !segments[2].matches("[A-Fa-f0-9]{32}");
+    }
+
+    private boolean isCanonicalContentFileName(String rawName) {
+        final String name;
+        try {
+            name = UriUtils.decode(rawName, StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException invalidEncoding) {
+            return false;
+        }
+        return !name.isEmpty() && !".".equals(name) && !"..".equals(name)
+                && name.indexOf('/') < 0 && name.indexOf('\\') < 0 && name.indexOf(';') < 0
+                && name.indexOf(':') < 0 && name.chars().noneMatch(c -> c < 32 || c == 127)
+                && !name.matches("(?i).*%(?:2e|2f|5c|00).*");
     }
 
     private boolean isNonCanonicalRoutePath(HttpServletRequest request, String normalizedPath) {

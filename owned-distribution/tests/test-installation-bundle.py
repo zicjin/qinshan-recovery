@@ -27,7 +27,8 @@ class InstallationBundleTest(unittest.TestCase):
             contract = {'schema': 'external-schema-build-contract-v1', 'mode': 'original-db-link',
                         'profile': None, 'profile_sha256': None, 'manifest': None, 'manifest_sha256': None,
                         'renderer': None, 'renderer_sha256': None,
-                        'mappers': [{'path': name, 'sha256': hashlib.sha256(b'<mapper/>').hexdigest()} for name in mappers]}
+                        'mappers': [{'path': name, 'sha256': hashlib.sha256(b'<mapper/>').hexdigest()} for name in mappers],
+                        'dynamic_sql': None}
             raw = json.dumps(contract).encode()
             with zipfile.ZipFile(source, 'w') as archive:
                 archive.writestr('example/Main.class', b'fixture application')

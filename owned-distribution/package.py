@@ -48,7 +48,7 @@ def external_schema_contract(entries, required):
     except (UnicodeDecodeError, json.JSONDecodeError):
         fail('embedded JSON is invalid')
     expected_keys = {'schema', 'mode', 'profile', 'profile_sha256', 'manifest',
-                     'manifest_sha256', 'renderer', 'renderer_sha256', 'mappers'}
+                     'manifest_sha256', 'renderer', 'renderer_sha256', 'mappers', 'dynamic_sql'}
     if not isinstance(contract, dict) or set(contract) != expected_keys:
         fail('metadata fields differ from the supported schema')
     if contract.get('schema') != 'external-schema-build-contract-v1':
@@ -62,6 +62,26 @@ def external_schema_contract(entries, required):
                 fail('original SQL must not claim unused profile inputs')
         elif not portable(contract[name]) or not is_hash(contract[name + '_sha256']):
             fail('profile provenance is missing or non-portable')
+    dynamic = contract['dynamic_sql']
+    if mode == 'original-db-link':
+        if dynamic is not None:
+            fail('original SQL must not claim dynamic logical access')
+    else:
+        if not isinstance(dynamic, dict) or set(dynamic) != {'qualifier_schemas', 'objects_by_qualifier'}:
+            fail('dynamic SQL profile fields differ')
+        schemas, objects = dynamic['qualifier_schemas'], dynamic['objects_by_qualifier']
+        identifier = re.compile(r'[A-Z][A-Z0-9_$#]{0,29}\Z')
+        if (not isinstance(schemas, dict) or not schemas or not isinstance(objects, dict)
+                or set(schemas) != set(objects)):
+            fail('dynamic SQL profile coverage differs')
+        for qualifier, schema in schemas.items():
+            if (not isinstance(qualifier, str) or not identifier.fullmatch(qualifier)
+                    or not isinstance(schema, str) or not identifier.fullmatch(schema)
+                    or not isinstance(objects[qualifier], list) or not objects[qualifier]
+                    or any(not isinstance(name, str) or not identifier.fullmatch(name)
+                           for name in objects[qualifier])
+                    or objects[qualifier] != sorted(set(objects[qualifier]))):
+                fail('dynamic SQL profile identifiers differ')
     records = contract.get('mappers')
     if not isinstance(records, list) or len(records) != len(EXTERNAL_SCHEMA_MAPPERS):
         fail('mapper coverage is incomplete')
@@ -153,6 +173,12 @@ def package_installation(output):
                        'deployment/oracle/import-templates/manifest.json',
                        'deployment/oracle/import-templates/README.md',
                        'deployment/oracle/import-templates/' + template_asset['source']))
+        # The optional report engine itself stays an operator-supplied third-party
+        # input. Package only owned integration source and source-bound assets.
+        inputs.add('scripts/install-report-engine.py')
+        inputs.update(path.relative_to(REPO_ROOT).as_posix()
+                      for path in (REPO_ROOT / 'deployment/report-engine').rglob('*')
+                      if path.is_file())
         installation = output / 'installation'
         verifier.core.require(not installation.is_symlink(), 'installation output may not be a symbolic link')
         readme = verifier.core.package_file(REPO_ROOT, 'owned-distribution/installation-README.md')

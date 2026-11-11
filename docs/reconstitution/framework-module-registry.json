@@ -21,15 +21,15 @@
       "forbidden_content_status": "pass",
       "module": "owned-core-common",
       "output_jar": "owned-core-common/target/owned-core-common-1.0.0-SNAPSHOT.jar",
-      "output_jar_sha256": "eb653b9cc8fb29b8cf0fe562fb407655300ae7928b5945461a719a56d5ac1af0",
+      "output_jar_sha256": "374acf098042e582da697a7f3bbd5342a132b51f7085e4551dd194d093568780",
       "reason": "Merges the common foundation and its immediately downstream base-interface JAR to avoid a two-module cycle-free core with no independent runtime boundary.",
       "resource_file_count": 1064,
-      "source_file_count": 2222,
+      "source_file_count": 2223,
       "source_jars": [
         "gikam-core-base-interface-14.1.5.jar",
         "gikam-core-common-14.1.5.jar"
       ],
-      "source_tree_sha256": "7a357be9fd908d4c5c156f2ee793e89713647fe575b9b03742f4ec722b84d2c1"
+      "source_tree_sha256": "85a845cc164acf89bab03203850fc444d7d7185f0dea02e2eb6a00fcf742f6b3"
     },
     {
       "compile_status": "pass",
@@ -39,14 +39,14 @@
       "forbidden_content_status": "pass",
       "module": "owned-core-base-service",
       "output_jar": "owned-core-base-service/target/owned-core-base-service-1.0.0-SNAPSHOT.jar",
-      "output_jar_sha256": "5dc4adb7ea266ecd3db26b817c842f1890a5b45bdb32186b143c02bc968dadff",
+      "output_jar_sha256": "e75c3fe2e4b1860d5532d1808e33b4d82b56e614985e55f0ad11848522d0649d",
       "reason": "Generic persistence and service behavior.",
       "resource_file_count": 384,
       "source_file_count": 801,
       "source_jars": [
         "gikam-core-base-service-14.1.5.jar"
       ],
-      "source_tree_sha256": "1ab1d6e826d0a9f0786ec063799aaf2bd8b7968305fe2560329b2fc83f6f488d"
+      "source_tree_sha256": "6fdb0afffe70f0464e70e9d568dac27ef779ebc6ee417d68c8f082074980f123"
     },
     {
       "compile_status": "pass",
@@ -162,7 +162,7 @@
   "schema": "reconstituted-framework-module-registry-v1",
   "source_closure_gate_status": "all-framework-source-compile-pass",
   "source_closure_mode": "all-framework-source-compile",
-  "source_file_count": 4576,
+  "source_file_count": 4577,
   "status": "compiled-source-only",
   "strict_evidence": false,
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",

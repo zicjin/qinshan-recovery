@@ -21,6 +21,7 @@ import com.sunwayworld.framework.database.context.ColumnContext;
 import com.sunwayworld.framework.database.core.DatabaseManager;
 import com.sunwayworld.framework.database.dialect.DialectRepository;
 import com.sunwayworld.framework.database.sql.Order;
+import com.sunwayworld.framework.database.sql.ExternalLogicalSql;
 import com.sunwayworld.framework.database.sql.SqlHelper;
 import com.sunwayworld.framework.exception.InvalidDataException;
 import com.sunwayworld.framework.i18n.I18nHelper;
@@ -559,7 +560,7 @@ public class CoreCustomDsServiceImpl implements CoreCustomDsService {
          }
       }
 
-      return sqlContent;
+      return ExternalLogicalSql.render(sqlContent);
    }
 
    private List<CoreCustomDsFieldBean> updateDsFieldListBySql(Long dsId, String sqlContent) {

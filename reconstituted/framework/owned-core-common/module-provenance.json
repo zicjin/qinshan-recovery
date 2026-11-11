@@ -225,9 +225,19 @@
       "path": "src/main/java/com/sunwayworld/framework/context/listener/ApplicationServletRequestListener.java"
     },
     {
+      "generated_sha256": "ba683fe91e610ac1a24f38d8847c766062b8b5cd07d2b157fab4462768aac2e4",
+      "override_sha256": "bfe9e81b1a81c8628d39d991ccd22b2982169299b67725ab09d20a72380d35d2",
+      "path": "src/main/java/com/sunwayworld/framework/database/dialect/OracleDialect.java"
+    },
+    {
       "generated_sha256": "915ebf90d70e96e5af9272c0335d4b1f108cc8453439c18041dddf476a6db631",
       "override_sha256": "588a7d56327ba17fd217b76922068553f874ee70559b3b10d37fa5e461e56118",
       "path": "src/main/java/com/sunwayworld/framework/database/monitor/DataSourceMonitor.java"
+    },
+    {
+      "generated_sha256": null,
+      "override_sha256": "758456e15ce36ffacfe90a9e7b22b396d1f8e59e4bf2ffb5fb120b246621a4dd",
+      "path": "src/main/java/com/sunwayworld/framework/database/sql/ExternalLogicalSql.java"
     },
     {
       "generated_sha256": "008a465924ab06c0b96bbf47fa09c276f79c85ab58d60d6253ec3eacd24c03f8",
@@ -280,6 +290,11 @@
       "path": "src/main/java/com/sunwayworld/framework/security/service/DefaultUserDetailsService.java"
     },
     {
+      "generated_sha256": "ec3df52c35afee8f6e832b35b515cd21ebec520b7da9a1d707af1e2442077991",
+      "override_sha256": "ec3df52c35afee8f6e832b35b515cd21ebec520b7da9a1d707af1e2442077991",
+      "path": "src/main/java/com/sunwayworld/framework/support/PersistableHelper.java"
+    },
+    {
       "generated_sha256": "6b8bbcf93456f3989f77a8b894faf0ec78cded4feb5d47efb059337f501a5112",
       "override_sha256": "c6dcb5376bc9e2077687b13ef0fdf4aebdb9fafe02bac7865ef90d53b4bc7aaa",
       "path": "src/main/java/com/sunwayworld/framework/support/base/service/GenericService.java"
@@ -315,24 +330,14 @@
       "path": "src/main/java/com/sunwayworld/framework/utils/SystemUtils.java"
     },
     {
-      "generated_sha256": "8c0e74212e37c0e451383faae4d0d00d8fe221fce610478b38fb3e0ad864125b",
-      "override_sha256": "a86fa2c28ba95545b88db18e536e044e6845f13311a36092394f67e038dcdbaf",
-      "path": "src/main/java/com/sunwayworld/module/sys/todo/callable/SelectTodoCallable.java"
-    },
-    {
-      "generated_sha256": "ba683fe91e610ac1a24f38d8847c766062b8b5cd07d2b157fab4462768aac2e4",
-      "override_sha256": "bfe9e81b1a81c8628d39d991ccd22b2982169299b67725ab09d20a72380d35d2",
-      "path": "src/main/java/com/sunwayworld/framework/database/dialect/OracleDialect.java"
-    },
-    {
       "generated_sha256": "2d7a78e7142e1ccd9fa93057ccb72b5aae426d0c84cdc03fd7ff1c2fa7ba9af7",
       "override_sha256": "6716d385818a7ba710c6c37969de89bbd8dd2ebd50fa07325f4f1ab56fa77f3f",
       "path": "src/main/java/com/sunwayworld/module/sys/i18n/CoreI18nCache.java"
     },
     {
-      "generated_sha256": "ec3df52c35afee8f6e832b35b515cd21ebec520b7da9a1d707af1e2442077991",
-      "override_sha256": "ec3df52c35afee8f6e832b35b515cd21ebec520b7da9a1d707af1e2442077991",
-      "path": "src/main/java/com/sunwayworld/framework/support/PersistableHelper.java"
+      "generated_sha256": "8c0e74212e37c0e451383faae4d0d00d8fe221fce610478b38fb3e0ad864125b",
+      "override_sha256": "a86fa2c28ba95545b88db18e536e044e6845f13311a36092394f67e038dcdbaf",
+      "path": "src/main/java/com/sunwayworld/module/sys/todo/callable/SelectTodoCallable.java"
     }
   ],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
@@ -352,7 +357,7 @@
     "Vineflower": 148,
     "tracked-override": 1
   },
-  "source_file_count": 2222,
+  "source_file_count": 2223,
   "source_files": [
     {
       "class_sha256": "9cdca938a81139d5f32d029d86083b2223ae621cbf8f5bbb667445e7344f4e9a",
@@ -7526,6 +7531,21 @@
       "transformations": [
         "normalization:generated-source",
         "overlay:src/main/java/com/sunwayworld/framework/database/monitor/DataSourceMonitor.java"
+      ]
+    },
+    {
+      "class_sha256": null,
+      "compile_status": "pass",
+      "decompiler": "tracked-override",
+      "decompiler_version": null,
+      "path": "src/main/java/com/sunwayworld/framework/database/sql/ExternalLogicalSql.java",
+      "sha256": "758456e15ce36ffacfe90a9e7b22b396d1f8e59e4bf2ffb5fb120b246621a4dd",
+      "source_class_path": "com.sunwayworld.framework.database.sql.ExternalLogicalSql",
+      "source_jar": "tracked-override",
+      "source_sha256_before_overlay": null,
+      "source_sha256_before_transform": null,
+      "transformations": [
+        "overlay:src/main/java/com/sunwayworld/framework/database/sql/ExternalLogicalSql.java"
       ]
     },
     {
@@ -31630,7 +31650,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "7a357be9fd908d4c5c156f2ee793e89713647fe575b9b03742f4ec722b84d2c1",
+  "source_tree_sha256": "85a845cc164acf89bab03203850fc444d7d7185f0dea02e2eb6a00fcf742f6b3",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "cc82d85926049feee8ed8b40c13c7e81a9ece832168e26f1dbf7aa7bd722703a",

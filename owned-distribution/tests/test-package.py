@@ -51,7 +51,7 @@ def prepare_build_snapshot(source_root, root, inherited_environment):
     source_root = Path(source_root).resolve()
     root = Path(root).resolve()
     for name in ('project', 'reconstituted', 'scripts', 'docs', 'build-support',
-                 'api-fixtures/schema', 'deployment/oracle',
+                 'api-fixtures/schema', 'deployment/oracle', 'deployment/report-engine',
                  *[path.name for path in source_root.glob('owned-*') if path.is_dir()]):
         shutil.copytree(source_root / name, root / name,
                         ignore=shutil.ignore_patterns('target', '__pycache__', '.git'))
@@ -163,6 +163,11 @@ def verify_distribution(ROOT, build_environment):
     assert manifest['installation']['import_templates']['assets'] == 1
     assert manifest['installation']['import_templates']['blocked'] == 1
     assert 'installation/deployment/oracle/import-templates/assets/reportSendInfo.xlsx' in manifest['files']
+    assert 'installation/deployment/report-engine/assets/commission-summary.cpt' in manifest['files']
+    assert 'installation/deployment/report-engine/assets/contract-summary.cpt' in manifest['files']
+    assert 'installation/deployment/report-engine/dependencies/external-contract-packprice-20261111.sql' in manifest['files']
+    assert 'installation/scripts/install-report-engine.py' in manifest['files']
+    assert not any('fine-core-' in name or name.endswith('FanRuan.lic') for name in manifest['files'])
     schema_contract = manifest['external_schema']
     expected_schema_mode = 'original-db-link'
     if build_environment.get('EXTERNAL_SCHEMA_PROFILE'):

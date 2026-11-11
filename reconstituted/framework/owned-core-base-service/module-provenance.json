@@ -12,7 +12,13 @@
   "forbidden_content_report": "forbidden-content-report.json",
   "module": "owned-core-base-service",
   "module_reason": "Generic persistence and service behavior.",
-  "override_source_files": [],
+  "override_source_files": [
+    {
+      "generated_sha256": "ed526683ca45922764e1ebcad223b9f550ac51b71f47fa0e2520e6adc0351f0d",
+      "override_sha256": "d8c02092ea13bed287f3d24589e8c770fe8d00e3d5b1b37ce3f1bb03ac5b3866",
+      "path": "src/main/java/com/sunwayworld/cloud/module/item/customds/service/impl/CoreCustomDsServiceImpl.java"
+    }
+  ],
   "public_dependency_allowlist": "public-dependency-allowlist.json",
   "removed_source_files": [],
   "resource_file_count": 384,
@@ -3685,12 +3691,14 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/cloud/module/item/customds/service/impl/CoreCustomDsServiceImpl.java",
-      "sha256": "ed526683ca45922764e1ebcad223b9f550ac51b71f47fa0e2520e6adc0351f0d",
+      "sha256": "d8c02092ea13bed287f3d24589e8c770fe8d00e3d5b1b37ce3f1bb03ac5b3866",
       "source_class_path": "com/sunwayworld/cloud/module/item/customds/service/impl/CoreCustomDsServiceImpl.class",
       "source_jar": "BOOT-INF/lib/gikam-core-base-service-14.1.5.jar",
+      "source_sha256_before_overlay": "ed526683ca45922764e1ebcad223b9f550ac51b71f47fa0e2520e6adc0351f0d",
       "source_sha256_before_transform": "ed526683ca45922764e1ebcad223b9f550ac51b71f47fa0e2520e6adc0351f0d",
       "transformations": [
-        "cfr-to-vineflower-fallback"
+        "cfr-to-vineflower-fallback",
+        "overlay:src/main/java/com/sunwayworld/cloud/module/item/customds/service/impl/CoreCustomDsServiceImpl.java"
       ]
     },
     {
@@ -11242,7 +11250,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "1ab1d6e826d0a9f0786ec063799aaf2bd8b7968305fe2560329b2fc83f6f488d",
+  "source_tree_sha256": "6fdb0afffe70f0464e70e9d568dac27ef779ebc6ee417d68c8f082074980f123",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "cc82d85926049feee8ed8b40c13c7e81a9ece832168e26f1dbf7aa7bd722703a",

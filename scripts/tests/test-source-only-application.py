@@ -43,6 +43,7 @@ def verify_external_schema_contract(builder, root: Path) -> None:
     assert contract["profile_sha256"] is None
     assert contract["manifest_sha256"] is None
     assert contract["renderer_sha256"] is None
+    assert contract["dynamic_sql"] is None
     assert {record["path"] for record in contract["mappers"]} == set(mapper_paths)
     for record in contract["mappers"]:
         assert record["sha256"] == hashlib.sha256((resources / record["path"]).read_bytes()).hexdigest()
@@ -66,6 +67,8 @@ def verify_external_schema_contract(builder, root: Path) -> None:
         assert contract["manifest_sha256"] == hashlib.sha256(manifest.read_bytes()).hexdigest()
         assert contract["renderer_sha256"] == hashlib.sha256(
             (ROOT / "scripts/render-external-logical-mappers.py").read_bytes()).hexdigest()
+        assert contract["dynamic_sql"]["qualifier_schemas"] == json.loads(profile.read_text())["qualifier_schemas"]
+        assert "T_CRM_CONTRACT" in contract["dynamic_sql"]["objects_by_qualifier"]["LIMS_CZJKY_HT"]
 
     external_profile = root / "deployment-profile.json"
     external_manifest = root / "clone-manifest.json"

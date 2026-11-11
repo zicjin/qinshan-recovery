@@ -259,6 +259,7 @@ def write_external_schema_build_contract(
 ) -> dict[str, object]:
     """Bind the selected SQL access mode to the exact packaged mapper bytes."""
     mode = "original-db-link"
+    dynamic_sql = None
     renderer = ROOT / "scripts/render-external-logical-mappers.py"
     effective_manifest = manifest or ROOT / "api-fixtures/schema/external-schema-clone-manifest.json"
 
@@ -277,8 +278,23 @@ def write_external_schema_build_contract(
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         try:
-            mode, _ = module._load_profile(
-                profile, json.loads(effective_manifest.read_text(encoding="utf-8")))
+            manifest_data = json.loads(effective_manifest.read_text(encoding="utf-8"))
+            mode, mapping = module._load_profile(profile, manifest_data)
+            objects_by_qualifier = {}
+            for domain in manifest_data["domains"]:
+                objects = domain.get("objects")
+                if (not isinstance(objects, list) or not objects
+                        or any(not isinstance(name, str) or not module.IDENT_RE.fullmatch(name)
+                               for name in objects)):
+                    raise ValueError("invalid external object allowlist")
+                for qualifier in domain["clone_access"]["production_qualifiers"]:
+                    if qualifier in objects_by_qualifier:
+                        raise ValueError("duplicate external qualifier domain")
+                    objects_by_qualifier[qualifier] = sorted(set(objects))
+            if set(objects_by_qualifier) != set(mapping):
+                raise ValueError("external objects and profile qualifier coverage differ")
+            dynamic_sql = {"qualifier_schemas": mapping,
+                           "objects_by_qualifier": objects_by_qualifier}
         except (OSError, ValueError, TypeError) as error:
             raise SystemExit("external schema build profile is invalid") from error
     elif manifest is not None:
@@ -299,6 +315,7 @@ def write_external_schema_build_contract(
         "renderer": reference(renderer) if profile is not None else None,
         "renderer_sha256": digest(renderer) if profile is not None else None,
         "mappers": mapper_records,
+        "dynamic_sql": dynamic_sql,
     }
     raw = (json.dumps(contract, ensure_ascii=True, sort_keys=True, indent=2) + "\n").encode("utf-8")
     target = resources / EXTERNAL_SCHEMA_CONTRACT
@@ -520,6 +537,7 @@ def main(argv: list[str] | None = None) -> int:
         ROOT / name / "src/main/resources"
         for name in (
             "owned-framework",
+            "owned-distribution",
             "owned-personnel",
             "owned-equipment",
             "owned-consumables",
@@ -536,7 +554,7 @@ def main(argv: list[str] | None = None) -> int:
     resource_records.extend(copy_license_clean_frontend_overlay(resources))
     merge_spring_factories(
         [resource_source_root]
-        + [ROOT / "owned-framework" / "src/main/resources"],
+        + [ROOT / name / "src/main/resources" for name in ("owned-framework", "owned-distribution")],
         resources,
     )
     if args.external_schema_profile:

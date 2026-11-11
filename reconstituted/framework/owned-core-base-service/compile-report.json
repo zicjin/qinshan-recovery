@@ -9,11 +9,11 @@
   "maven_runtime": "\u001b[1mApache Maven 3.9.12\u001b[m",
   "module": "owned-core-base-service",
   "output_jar": "owned-core-base-service/target/owned-core-base-service-1.0.0-SNAPSHOT.jar",
-  "output_jar_sha256": "5dc4adb7ea266ecd3db26b817c842f1890a5b45bdb32186b143c02bc968dadff",
+  "output_jar_sha256": "e75c3fe2e4b1860d5532d1808e33b4d82b56e614985e55f0ad11848522d0649d",
   "schema": "supplier-reconstituted-module-compile-v1",
   "source_file_count": 801,
   "source_only_framework_classpath": true,
-  "source_tree_sha256": "1ab1d6e826d0a9f0786ec063799aaf2bd8b7968305fe2560329b2fc83f6f488d",
+  "source_tree_sha256": "6fdb0afffe70f0464e70e9d568dac27ef779ebc6ee417d68c8f082074980f123",
   "status": "pass",
   "supplier_private_jars_on_classpath": false
 }

@@ -391,3 +391,8 @@ changes select affected replay through `scripts/source_binding.py`.
 The canonical evidence registry is optional in a standalone checkout and is
 created only when canonical reports are promoted. Parent `.scratch/` history
 is never a build or deployment input.
+
+统计报表中的“委托汇总统计表”还需安装源绑定的单 CPT 和独立授权的 FineReport 11
+运行库；见 [报表安装说明](deployment/report-engine/README.md)。该引擎在本应用 JVM
+内装配，不新增 application 或数据库。只复制应用 JAR 而不安装报表文件、元数据和
+引擎配置，不能恢复该页面。

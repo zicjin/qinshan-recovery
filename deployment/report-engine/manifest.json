@@ -1,0 +1,276 @@
+{
+  "schema": "owned-report-engine-inputs/v1",
+  "third_party_engine": {
+    "product": "FineReport",
+    "version": "11.0",
+    "external_authorized_input_required": true,
+    "libraries": [
+      {
+        "name": "fine-accumulator-11.0.jar",
+        "sha256": "16b6d8d370c8063408dbf1e527bb79d34d24c5e33b9c5dc75af11cf2f6c1f27c",
+        "bytes": 88231
+      },
+      {
+        "name": "fine-activator-11.0.jar",
+        "sha256": "70f08c5d5708d8769cd18d58bc389497ff5dea8f94dfea5433ef6ec60c39967d",
+        "bytes": 15195
+      },
+      {
+        "name": "fine-cbb-11.0.jar",
+        "sha256": "35db4f6d79a517ad4f1b47dd64310fc9630a839b381cfccd605363cb145f7ad3",
+        "bytes": 86285686
+      },
+      {
+        "name": "fine-core-11.0.jar",
+        "sha256": "a93bbe76b916b48071f3eb2a04ba1b62a07ae2a6981dbf4201b136bd115dbbf3",
+        "bytes": 53101255
+      },
+      {
+        "name": "fine-datasource-11.0.jar",
+        "sha256": "776588812041569c4181c9f007333db1a2083a800cd8a95bc8d101673e950f47",
+        "bytes": 15542708
+      },
+      {
+        "name": "fine-decision-11.0.jar",
+        "sha256": "3d52c0c25b1f48562b0457352e7afbd01b44c1bef29081b260f5cb1aea6e306d",
+        "bytes": 28753158
+      },
+      {
+        "name": "fine-decision-report-11.0.jar",
+        "sha256": "d8d5620bdb0189253c8bea62a4c29b0e545815b980270beeea9845e572bf0579",
+        "bytes": 1142958
+      },
+      {
+        "name": "fine-report-engine-11.0.jar",
+        "sha256": "ec9c089edd2aa26ff06d5a5d90a637a6b277414cb784bdbbca51032efa7be835",
+        "bytes": 31149111
+      },
+      {
+        "name": "fine-schedule-11.0.jar",
+        "sha256": "f5452c2cd3daadf7b152681af2f6429f59da33c5aa640a56e740f307a2ac19e4",
+        "bytes": 481552
+      },
+      {
+        "name": "fine-schedule-report-11.0.jar",
+        "sha256": "b43eff776d15e9450e23394306d79f7d352751f692249b1999025a7c2d34d12d",
+        "bytes": 153018
+      },
+      {
+        "name": "fine-swift-log-adaptor-11.0.jar",
+        "sha256": "3446578ec846151c28878e512d0845dd8a9ac54c7f62a61715c637bdf561e341",
+        "bytes": 2367860
+      },
+      {
+        "name": "fine-third-11.0.jar",
+        "sha256": "133c119eb20968d9b8fb64324de9cfa709a731b1df57e395290b0b9de0f7693c",
+        "bytes": 125162737
+      },
+      {
+        "name": "fine-webui-11.0.jar",
+        "sha256": "7bf9c042b132b530fbdd06ac15daeec3de77d574a97bcf9616d8afd1010ad42c",
+        "bytes": 19369802
+      }
+    ]
+  },
+  "public_libraries": [
+    {
+      "name": "commons-fileupload-1.4.jar",
+      "bytes": 72446,
+      "sha256": "a4ec02336f49253ea50405698b79232b8c5cbf02cb60df3a674d77a749a1def7"
+    },
+    {
+      "name": "commons-io-2.4.jar",
+      "bytes": 185140,
+      "sha256": "cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581"
+    },
+    {
+      "name": "disruptor-3.3.6.jar",
+      "bytes": 84123,
+      "sha256": "8c5df12a17f614464ccacc9b7c4935e5f16e694b7788e714cde4b7587d5dd266"
+    },
+    {
+      "name": "sqlite-jdbc-3.31.1.jar",
+      "bytes": 7180428,
+      "sha256": "e15e75d49d2939a3c4c2146397c2d45f914f89d4abf5207465832afcfb1035e0"
+    },
+    {
+      "name": "jakarta.el-3.0.3.jar",
+      "bytes": 237826,
+      "sha256": "e2bcb8551b02a5c2afdc4cab77302ba5c76705cf1fc832345ca880df80bf4716"
+    },
+    {
+      "name": "tomcat-embed-jasper-9.0.64.jar",
+      "bytes": 648343,
+      "sha256": "3069cb50990499b89b2202547fa2bc1cf706fb012fffb069212f3e0aa5bec97e"
+    },
+    {
+      "name": "ecj-3.18.0.jar",
+      "bytes": 2870966,
+      "sha256": "69dad18a1fcacd342a7d44c5abf74f50e7529975553a24c64bce0b29b86af497"
+    },
+    {
+      "name": "ojdbc8-19.3.0.0.jar",
+      "bytes": 4210517,
+      "sha256": "a66d27a14f3adee484427cc4de008af85a5c3e78e2e3285a4dba1277332978a5"
+    }
+  ],
+  "asset": {
+    "path": "assets/commission-summary.cpt",
+    "bytes": 78171,
+    "sha256": "575b0345c1791b8160bf20afc28b07c679bdf024090d9b825446c7dc0e70a5d4",
+    "install_path": "WEB-INF/reportlets/kf_htrwtjb/LIMS-客服-委托汇总表.cpt",
+    "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+    "datasource_occurrences": 2,
+    "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+    "schema_occurrences": 1
+  },
+  "provenance": {
+    "original_sha256": "f5a77c8929672a5b27423491a37c3316fd4d3f968948a4ce0f5373c58b708ae6",
+    "original_bytes": 78750,
+    "local_projection_sha256": "606b58804cb9c762efc212812b093a5c7e2f35872c3fcd67146cdeb382598160",
+    "local_projection_bytes": 78729,
+    "prior_projection_transforms": [
+      {
+        "operation": "remove_exact_external_dblink_qualifier",
+        "count": 3
+      },
+      {
+        "operation": "replace_named_datasource_with_placeholder",
+        "count": 2
+      },
+      {
+        "operation": "replace_dictionary_schema_with_placeholder",
+        "count": 1
+      }
+    ],
+    "deployment_transforms": [
+      {
+        "operation": "clear_parameter_default",
+        "xml_path": "/WorkBook/TableDataMap/TableData/Parameters/Parameter[7]/O",
+        "before_sha256": "1c142b2d01aa34e9a36bde480645a57fd69e14155dacfab5a3f9257b77fdc8d8",
+        "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "count": 1
+      },
+      {
+        "operation": "remove_origin_marker",
+        "xml_path": "/WorkBook/TemplateIdAttMark",
+        "before_sha256": "026f8ce797840374ac733b00360c9a76c324cf807f760b5f176e70a87f660b17",
+        "count": 1
+      },
+      {
+        "operation": "remove_origin_marker",
+        "xml_path": "/WorkBook/ForkIdAttrMark",
+        "before_sha256": "3b7359fd28322b851ca00d848bfb648d315f5e665339a60ceff35c6b9bd449a8",
+        "count": 1
+      },
+      {
+        "operation": "remove_origin_marker",
+        "xml_path": "/WorkBook/TemplateCloudInfoAttrMark",
+        "before_sha256": "289be3129d12d1193910c1610ef9962053d59266c05e3a95a77bb0d489f23320",
+        "count": 1
+      }
+    ],
+    "query_text_sha256": "d9ceaafd8e7f5a34982bc44c27081e3ecf3de02162f75eca2d01f3692a88e06b",
+    "query_and_report_layout_unchanged_from_projection": true,
+    "asset_source_role": "original CPT file referenced by the active homePageReport/kf_htrwtjb configuration",
+    "resource_source": "production deployed report file read-only capture; rendered HTML is not a template"
+  },
+  "excluded_external_inputs": [
+    "license",
+    "production configuration",
+    "FineDB",
+    "connection credentials",
+    "production endpoints"
+  ],
+  "scope": "commission and contract summary templates; offline staging only",
+  "source_class": "current-production-at-capture",
+  "assets": [
+    {
+      "path": "assets/commission-summary.cpt",
+      "bytes": 78171,
+      "sha256": "575b0345c1791b8160bf20afc28b07c679bdf024090d9b825446c7dc0e70a5d4",
+      "install_path": "WEB-INF/reportlets/kf_htrwtjb/LIMS-客服-委托汇总表.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 2,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 1,
+      "metadata_source": "install-metadata.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}"
+    },
+    {
+      "path": "assets/contract-summary.cpt",
+      "bytes": 38489,
+      "sha256": "96154eb3dc16da480880d9f2a39a4fbcf95e38a8abb1adb7e24317a89da5afe4",
+      "install_path": "WEB-INF/reportlets/kf_htxxb/LIMS-客服-合同汇总表.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "install-contract-metadata.sql",
+      "metadata_size_token": "${OWNED_CONTRACT_REPORT_ASSET_BYTES}"
+    }
+  ],
+  "additional_provenance": [
+    {
+      "asset_path": "assets/contract-summary.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "78b55f271c2472191c055507873f0e2e051036432a11c0369fa8543554cc0d81",
+      "original_bytes": 38815,
+      "deployment_sha256": "96154eb3dc16da480880d9f2a39a4fbcf95e38a8abb1adb7e24317a89da5afe4",
+      "deployment_bytes": 38489,
+      "query_text_sha256": "14e8f36919a0b926985df93792ebb4a62496cb7efd17cd9f88749877d828b9eb",
+      "query_and_report_layout_unchanged": true,
+      "transformations": [
+        {
+          "operation": "remove_exact_external_dblink_qualifier",
+          "count": 2,
+          "allowlist": [
+            [
+              "T_CRM_CONTRACT",
+              "LIMS_CZJKY_HT"
+            ],
+            [
+              "T_CRM_CONTRACT_PACKPRICE",
+              "LIMS_CZJKY_HT"
+            ]
+          ]
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_marker",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 2,
+          "source_fragment_sha256": [
+            "8d612a8aa7ff91da5cb2a24cd926664e2bdff2fa4420c52f841f319835185d90"
+          ]
+        },
+        {
+          "operation": "remove_origin_marker",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 2,
+          "source_fragment_sha256": [
+            "a1a1592b6799b7cf6d325a3a0552cdb125291194854510bdc2a0fa31ca4fa1f8"
+          ]
+        }
+      ],
+      "source_capture_manifest_sha256": "fdb1fd7a7e99d89409b7efa41466ecb6716436e3cdeb8c2644d12e9491cce684"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "dependencies/external-contract-packprice-20261111.json",
+      "bytes": 11628,
+      "sha256": "4fdc594b7e345134df5cfd00cce6ef756f5fbbfb97a672c3b40ab534cf0d19b0",
+      "role": "provenance"
+    },
+    {
+      "path": "dependencies/external-contract-packprice-20261111.sql",
+      "bytes": 6075,
+      "sha256": "23a132da617659376fc88712ec2d079ab6570a0e11895ccbd5f154c2a273c987",
+      "role": "schema"
+    }
+  ]
+}

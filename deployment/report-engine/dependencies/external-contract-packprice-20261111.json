@@ -1,0 +1,454 @@
+{
+  "schema": "external-contract-packprice-clone-v1",
+  "source_class": "current-production-at-capture",
+  "source_owner": "LIMS_CZJKY_HT",
+  "source_link": "LIMS_CZJKY_HT",
+  "object": "T_CRM_CONTRACT_PACKPRICE",
+  "production_writes": false,
+  "business_rows_read": false,
+  "runtime_access_mode": "local-view",
+  "target_owner": "connected installation user; SYS/SYSTEM rejected",
+  "metadata": {
+    "objects": {
+      "columns": [
+        "OWNER",
+        "OBJECT_NAME",
+        "OBJECT_TYPE",
+        "STATUS"
+      ],
+      "rows": [
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "TABLE",
+          "VALID"
+        ]
+      ],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-objects-private.json",
+      "source_sha256": "74fe860c89a151b80dac9366b54f3d2bb9790f84f82b8a975b9bde46d0335cc1"
+    },
+    "columns": {
+      "columns": [
+        "OWNER",
+        "TABLE_NAME",
+        "COLUMN_ID",
+        "COLUMN_NAME",
+        "DATA_TYPE",
+        "DATA_LENGTH",
+        "DATA_PRECISION",
+        "DATA_SCALE",
+        "NULLABLE",
+        "CHAR_USED",
+        "CHAR_LENGTH",
+        "DEFAULT_LENGTH"
+      ],
+      "rows": [
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "1",
+          "ID",
+          "VARCHAR2",
+          "32",
+          null,
+          null,
+          "N",
+          "B",
+          "32",
+          null
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "2",
+          "CONTRACTID",
+          "VARCHAR2",
+          "32",
+          null,
+          null,
+          "Y",
+          "B",
+          "32",
+          null
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "3",
+          "PROJECTNAME",
+          "VARCHAR2",
+          "320",
+          null,
+          null,
+          "Y",
+          "B",
+          "320",
+          null
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "4",
+          "PACKINFO",
+          "VARCHAR2",
+          "320",
+          null,
+          null,
+          "Y",
+          "B",
+          "320",
+          null
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "5",
+          "AMOUNT",
+          "NUMBER",
+          "22",
+          "18",
+          "2",
+          "Y",
+          null,
+          "0",
+          null
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "6",
+          "OPERATOR",
+          "VARCHAR2",
+          "300",
+          null,
+          null,
+          "Y",
+          "B",
+          "300",
+          null
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "7",
+          "OPERATETIME",
+          "DATE",
+          "7",
+          null,
+          null,
+          "Y",
+          null,
+          "0",
+          null
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "8",
+          "REMARK",
+          "VARCHAR2",
+          "300",
+          null,
+          null,
+          "Y",
+          "B",
+          "300",
+          null
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "9",
+          "REALAMOUNT",
+          "NUMBER",
+          "22",
+          "18",
+          "2",
+          "Y",
+          null,
+          "0",
+          null
+        ]
+      ],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-columns-private.json",
+      "source_sha256": "28c8d521da2e9e935855f807782969d3d180ce9afb8c1824f91633a095c2ba45"
+    },
+    "column_defaults": {
+      "columns": [
+        "OWNER",
+        "TABLE_NAME",
+        "COLUMN_NAME",
+        "DEFAULT_LENGTH",
+        "DATA_DEFAULT"
+      ],
+      "rows": [],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-column_defaults-private.json",
+      "source_sha256": "12809c4643e3dc837d0406ab6688dd97c7c771d99ec378d3240e86a9c14dbdb7"
+    },
+    "constraints": {
+      "columns": [
+        "OWNER",
+        "TABLE_NAME",
+        "CONSTRAINT_NAME",
+        "CONSTRAINT_TYPE",
+        "STATUS",
+        "VALIDATED",
+        "DEFERRABLE",
+        "DEFERRED",
+        "GENERATED",
+        "R_CONSTRAINT_NAME",
+        "DELETE_RULE",
+        "SEARCH_CONDITION_VC"
+      ],
+      "rows": [
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "PK_CRM_CONTRACT_PACKPRICE",
+          "P",
+          "ENABLED",
+          "VALIDATED",
+          "NOT DEFERRABLE",
+          "IMMEDIATE",
+          "USER NAME",
+          null,
+          null,
+          null
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "SYS_C0016140",
+          "C",
+          "ENABLED",
+          "VALIDATED",
+          "NOT DEFERRABLE",
+          "IMMEDIATE",
+          "GENERATED NAME",
+          null,
+          null,
+          "\"ID\" IS NOT NULL"
+        ]
+      ],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-constraints-private.json",
+      "source_sha256": "3221aa0bfb756491ef485d805915ea7c8e9586d86e87973425184cc49673c927"
+    },
+    "constraint_columns": {
+      "columns": [
+        "OWNER",
+        "TABLE_NAME",
+        "CONSTRAINT_NAME",
+        "COLUMN_NAME",
+        "POSITION"
+      ],
+      "rows": [
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "PK_CRM_CONTRACT_PACKPRICE",
+          "ID",
+          "1"
+        ],
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "SYS_C0016140",
+          "ID",
+          null
+        ]
+      ],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-constraint_columns-private.json",
+      "source_sha256": "b81d74069d213bab258d7a1303bcb07fce12016e72d67f96bdb7bd8ec342f4dc"
+    },
+    "constraint_index_links": {
+      "columns": [
+        "OWNER",
+        "TABLE_NAME",
+        "CONSTRAINT_NAME",
+        "CONSTRAINT_TYPE",
+        "STATUS",
+        "VALIDATED",
+        "DEFERRABLE",
+        "DEFERRED",
+        "INDEX_OWNER",
+        "INDEX_NAME"
+      ],
+      "rows": [
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "PK_CRM_CONTRACT_PACKPRICE",
+          "P",
+          "ENABLED",
+          "VALIDATED",
+          "NOT DEFERRABLE",
+          "IMMEDIATE",
+          "LIMS_CZJKY_HT",
+          "PK_CRM_CONTRACT_PACKPRICE"
+        ]
+      ],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-constraint_index_links-private.json",
+      "source_sha256": "0108933d2c0b5030b90d4666c70637de8a218fb82c7902e3d972b1ec1fa8c076"
+    },
+    "indexes": {
+      "columns": [
+        "OWNER",
+        "INDEX_NAME",
+        "INDEX_TYPE",
+        "UNIQUENESS",
+        "STATUS",
+        "TABLE_NAME"
+      ],
+      "rows": [
+        [
+          "LIMS_CZJKY_HT",
+          "PK_CRM_CONTRACT_PACKPRICE",
+          "NORMAL",
+          "UNIQUE",
+          "VALID",
+          "T_CRM_CONTRACT_PACKPRICE"
+        ]
+      ],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-indexes-private.json",
+      "source_sha256": "8ef2d282303dbf6e5e4bab9c1c9d91b869a324ea64bd14532b6ce370db443fd3"
+    },
+    "index_columns": {
+      "columns": [
+        "INDEX_OWNER",
+        "INDEX_NAME",
+        "TABLE_OWNER",
+        "TABLE_NAME",
+        "COLUMN_NAME",
+        "COLUMN_POSITION",
+        "DESCEND"
+      ],
+      "rows": [
+        [
+          "LIMS_CZJKY_HT",
+          "PK_CRM_CONTRACT_PACKPRICE",
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "ID",
+          "1",
+          "ASC"
+        ]
+      ],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-index_columns-private.json",
+      "source_sha256": "74607cbadcfa7a507e70bca90356ab15f4648cd88d2f342bb2f7cdda583235b0"
+    },
+    "index_expressions": {
+      "columns": [
+        "INDEX_OWNER",
+        "INDEX_NAME",
+        "TABLE_OWNER",
+        "TABLE_NAME",
+        "COLUMN_POSITION",
+        "COLUMN_EXPRESSION"
+      ],
+      "rows": [],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-index_expressions-private.json",
+      "source_sha256": "c28b78fd62da2bb192b9651b8998e93225ba4723b8cce00a5e81486f112f8bc2"
+    },
+    "triggers": {
+      "columns": [
+        "OWNER",
+        "TRIGGER_NAME",
+        "TRIGGER_TYPE",
+        "TRIGGERING_EVENT",
+        "TABLE_OWNER",
+        "TABLE_NAME",
+        "STATUS"
+      ],
+      "rows": [],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-triggers-private.json",
+      "source_sha256": "09d6702a6c1063482c773950e624cad8f0df43c1311a72c14d6f6c1ec485edee"
+    },
+    "dependencies": {
+      "columns": [
+        "OWNER",
+        "NAME",
+        "TYPE",
+        "REFERENCED_OWNER",
+        "REFERENCED_NAME",
+        "REFERENCED_TYPE",
+        "REFERENCED_LINK_NAME"
+      ],
+      "rows": [],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-dependencies-private.json",
+      "source_sha256": "5b58d5fc901306444426823f8aa80b68bb280ee19f66d28a272b168521a66f4c"
+    },
+    "grants": {
+      "columns": [
+        "GRANTOR",
+        "GRANTEE",
+        "TABLE_SCHEMA",
+        "TABLE_NAME",
+        "PRIVILEGE",
+        "GRANTABLE",
+        "HIERARCHY"
+      ],
+      "rows": [],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-grants-private.json",
+      "source_sha256": "36df8a2525214e56e0d72886798ef1137ba4e3bc614babddf8d34d2178ad7a64"
+    },
+    "synonyms": {
+      "columns": [
+        "OWNER",
+        "SYNONYM_NAME",
+        "TABLE_OWNER",
+        "TABLE_NAME",
+        "DB_LINK"
+      ],
+      "rows": [],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-synonyms-private.json",
+      "source_sha256": "8b9f8f1ca094f89d0d594cf21e2fe28434a3ced27995e1bf6ff4874bc4708659"
+    },
+    "table_semantics": {
+      "columns": [
+        "OWNER",
+        "TABLE_NAME",
+        "TEMPORARY",
+        "SECONDARY",
+        "NESTED",
+        "DURATION",
+        "DEPENDENCIES",
+        "ROW_MOVEMENT",
+        "PARTITIONED",
+        "IOT_TYPE",
+        "CLUSTER_NAME"
+      ],
+      "rows": [
+        [
+          "LIMS_CZJKY_HT",
+          "T_CRM_CONTRACT_PACKPRICE",
+          "N",
+          "N",
+          "NO",
+          null,
+          "DISABLED",
+          "DISABLED",
+          "NO",
+          null,
+          null
+        ]
+      ],
+      "source_path": "private/contract-summary-report-20261111/20261111T063325Z-table_semantics-private.json",
+      "source_sha256": "dd606c81e36c97e28158f9079977336e839a8cc7a9c416eef14e7a09d27d1577"
+    }
+  },
+  "ddl_capture": {
+    "status": "dictionary-rendered-logical-ddl",
+    "get_ddl_error_code": 6553,
+    "reason": "Remote DBMS_METADATA invocation unavailable; full selected table dictionary and zero dependencies captured instead."
+  },
+  "sql": {
+    "path": "deployment/report-engine/dependencies/external-contract-packprice-20261111.sql",
+    "sha256": "23a132da617659376fc88712ec2d079ab6570a0e11895ccbd5f154c2a273c987"
+  },
+  "limitations": [
+    "Structure only; minimal related business rows require a separate bounded source-backed capture.",
+    "Source system-generated NOT NULL name is represented by Oracle target-generated name; ID nullability is preserved.",
+    "Oracle DDL implicitly commits; no transaction rollback claim.",
+    "Existing conflicting table/index/constraint rejects; no business rows deleted."
+  ]
+}

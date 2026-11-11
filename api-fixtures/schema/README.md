@@ -222,3 +222,49 @@ A repeat is safe only for the declared equivalent or absent paths. This is not a
 new-device installer, an automatic repair of arbitrary schema drift, a baseline
 change or API/strict evidence. It restarts no application, Oracle or Redis and
 changes no cache or privilege.
+
+`external-production-structure-alignment-20261112.sql` is **stage 1 only** of
+aligning the existing local external clone to the formal production-derived
+package. It restores all 33 formal default expressions without changing rows,
+constraints, indexes, the empty-schema installer or runtime acceptance policy.
+The adjacent JSON pins tracked formal structure, package manifest and SQL files;
+no private receipt is needed. Verify it from a standalone checkout:
+
+```bash
+python3 scripts/verify-external-logical-clone-fixture.py \
+  --alignment-manifest api-fixtures/schema/external-production-structure-alignment-20261112.json
+python3 scripts/tests/test-external-production-structure-alignment.py
+```
+
+The coordinator must stop the application and other schema writers, establish
+the approved local target and retain a backup plus before/after content hashes.
+Execute through the existing approved SQLPlus channel only as
+`SESSION_USER=CURRENT_SCHEMA=LIMS_RUNTIME_LOCAL`, `CON_NAME=FREEPDB1`. Before any
+ALTER TABLE, the script checks all ten tables and 1,303 column definitions,
+including byte/character semantics, nullable, collation, identity/virtual flags,
+all default expressions, ordinary writable table attributes, absent triggers and
+formal NLS. Only the 33 source defaults may be absent; additional or conflicting
+defaults reject, including explicit `DEFAULT NULL`. Full LONG expressions are
+compared after trimming outer spaces, matching the formal verifier. Existing
+source-equivalent defaults skip, and missing defaults are reread immediately
+before their individual ALTER. The terminal preflight requires all 33 defaults.
+The script executes no business-data SELECT or DML; independent content hashes
+remain the coordinator's evidence that rows stayed unchanged.
+
+Oracle DDL **implicitly commits**. All known conflicts fail before the first
+ALTER, but permissions, storage or concurrent changes can still cause a partial
+application. Save the SQLPlus log and inspect all 33 defaults after failure.
+With writers still stopped, rerun only if every default is missing or exactly
+source-equivalent and the complete preflight still passes; completed items skip.
+Any other state stops the migration. Restore from the retained approved backup
+when recovery is required; no automatic inverse migration is supplied. SQLPlus
+`ROLLBACK` cannot undo successful ALTER statements.
+
+The **13 redundant generated NOT NULL checks and four differing PK/UNIQUE
+backing-index definitions/links remain unresolved**. This stage deliberately
+performs no drop, index rebuild, constraint disable/recreate or nullability
+change. A separate reviewed sequence must preserve constraint semantics before
+those differences can be removed. Successful default restoration does not make
+the local schema identical to the formal package, grant strict evidence or
+relax a runtime policy. No application, Oracle or Redis restart is part of this
+fixture.

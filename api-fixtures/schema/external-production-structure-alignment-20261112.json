@@ -1,0 +1,222 @@
+{
+  "schema": "external-production-structure-alignment-v1",
+  "stage": "defaults-only",
+  "source_class": "current-production-at-capture",
+  "target_owner": "LIMS_RUNTIME_LOCAL",
+  "target_container": "FREEPDB1",
+  "business_rows_written": false,
+  "production_writes": false,
+  "sources": [
+    {
+      "path": "deployment/oracle/external-schema/structure.json",
+      "sha256": "7b8541e25c3055a0f440e137a5f08b5fd10c77adcdbcc5dd58adc519a77fd878"
+    },
+    {
+      "path": "deployment/oracle/external-schema/manifest.json",
+      "sha256": "722c98160ba0683254dcbda8be05a697cb9a7498645f15a7667be55953744e22"
+    },
+    {
+      "path": "deployment/oracle/external-schema/20-tables.sql",
+      "sha256": "77a98d714c3a61edb754462d79877a95b42de8c85163ae475161c09896f35689"
+    },
+    {
+      "path": "deployment/oracle/external-schema/30-indexes.sql",
+      "sha256": "81d5ed6266a83feb65a4e98dcab95ae3c9c705f4bb2e87205d3983a8a0bb0b56"
+    },
+    {
+      "path": "deployment/oracle/external-schema/35-constraints.sql",
+      "sha256": "d678dd28a305729e63fc22318d654fa6b829b06a5cf3062ffa4cd54c9995094d"
+    },
+    {
+      "path": "deployment/oracle/external-schema/90-verify.sql",
+      "sha256": "3893ba5dc1b3c9bcd8e14d5e5800f3f4584faad9d1b936d3521a0800c3378d23"
+    }
+  ],
+  "defaults": [
+    {
+      "table": "T_CRM_INVOICE",
+      "column": "ISRED",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_CRM_INVOICE",
+      "column": "VOIDSTATUS",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_CRM_INVOICE",
+      "column": "SYNCSTATUS",
+      "expression": "'未推送'"
+    },
+    {
+      "table": "T_CRM_INVOICE",
+      "column": "SYNCBINDSTATUS",
+      "expression": "'未推送'"
+    },
+    {
+      "table": "T_CRM_INVOICE",
+      "column": "BINDSTATUS",
+      "expression": "'draft'"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "column": "ISPRINT",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "column": "PAYTYPE",
+      "expression": "'现付'"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "column": "DATAVALIDFLAG",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "column": "ISBASICMEDICINE",
+      "expression": "0"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "column": "IFSC",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "column": "IFMYLIMS",
+      "expression": "0"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "column": "ISEXCELIMPORT",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "column": "FINALMONEY",
+      "expression": "0"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "CNAS",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "CMA",
+      "expression": "'1'"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "SFDA",
+      "expression": "'N'"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "REPORTPRINTFLAG",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "RESULT",
+      "expression": "'合格'"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "WFBACKWARDFLAG",
+      "expression": "0"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "PIEXPORTED",
+      "expression": "0"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "PIPUBLISHED",
+      "expression": "0"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "ISCA",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "ISUPLOAD",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "ISSELECTPLAN",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "PUSHNCSTATUS",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "ISAPPENDSUFFIX",
+      "expression": "'1'"
+    },
+    {
+      "table": "T_XFP_PROJECT",
+      "column": "ISENERGY",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_XFP_PROJECT",
+      "column": "DIRECTAPPOINT",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_XFP_REPORT",
+      "column": "STATUS",
+      "expression": "'draft'"
+    },
+    {
+      "table": "T_XFP_REPORT",
+      "column": "PROJFLAG",
+      "expression": "0"
+    },
+    {
+      "table": "T_XFP_REPORT",
+      "column": "ACHRIVESTATUS",
+      "expression": "'0'"
+    },
+    {
+      "table": "T_XFP_REPORT",
+      "column": "ISSEND",
+      "expression": "'未发放'"
+    },
+    {
+      "table": "T_XFP_REPORT",
+      "column": "REPORTHIDE",
+      "expression": "'0'"
+    }
+  ],
+  "sql": {
+    "path": "api-fixtures/schema/external-production-structure-alignment-20261112.sql",
+    "sha256": "8417fe7d90386a98e478d880649f87cd2b0168e16bb0e85ecd7623a3db2e8af5"
+  },
+  "counts": {
+    "tables_checked": 10,
+    "columns_checked": 1303,
+    "defaults": 33
+  },
+  "remaining": [
+    "13 redundant generated NOT NULL checks require separate reviewed alignment",
+    "4 primary/unique backing index definitions and links require separate reviewed alignment"
+  ],
+  "limits": [
+    "Stage 1 only. No constraint/index DDL, business row read/write, package modification, runtime policy relaxation or API/strict acceptance.",
+    "All known source table/column/default/NLS conflicts reject before any ALTER TABLE. Application/schema writers must remain idle.",
+    "Only absent defaults become formal expressions; equivalent defaults skip; differing defaults, explicit DEFAULT NULL and additional defaults reject.",
+    "Oracle DDL implicitly commits. Preserve execution logs and metadata after partial failure. Rerun only when each item remains absent or source-equivalent; no automatic inverse migration or transaction rollback.",
+    "Coordinator owns isolated target identity, stopped application, pre-migration backup, content hashes, actual execution and recovery. No private input is needed by this migration or verifier."
+  ]
+}

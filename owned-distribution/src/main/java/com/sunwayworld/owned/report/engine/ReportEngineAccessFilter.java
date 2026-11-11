@@ -36,6 +36,25 @@ public final class ReportEngineAccessFilter implements Filter {
         menus.put(TEMPLATE,"20250800005"); menus.put(CONTRACT_TEMPLATE,"20250800006");
         MENUS=Collections.unmodifiableMap(menus);
     }
+    private static final Map<String,String> REPORT_LINES;
+    static {
+        Map<String,String> lines = new HashMap<>();
+        try (java.io.InputStream input = ReportEngineAccessFilter.class.getResourceAsStream("home-report-templates.json")) {
+            if (input == null) throw new IllegalStateException("Report template registry is absent");
+            com.alibaba.fastjson.JSONArray entries = com.alibaba.fastjson.JSON.parseObject(input,
+                com.alibaba.fastjson.JSONArray.class);
+            for (Object entry : entries) {
+                com.alibaba.fastjson.JSONObject row = (com.alibaba.fastjson.JSONObject) entry;
+                String template = row.getString("template"), line = row.getString("line_id");
+                if (template == null || template.contains("..") || template.startsWith("/")
+                        || line == null || !line.matches("[0-9]+") || lines.put(template, line) != null)
+                    throw new IllegalStateException("Invalid report template registry");
+            }
+            if (lines.size() != 27) throw new IllegalStateException("Incomplete report template registry");
+        } catch (java.io.IOException failure) { throw new ExceptionInInitializerError(failure); }
+        REPORT_LINES = Collections.unmodifiableMap(lines);
+    }
+    static Set<String> installedTemplates() { return REPORT_LINES.keySet(); }
     private static final String OWNER = "owned.portal.report.owner.v1";
     private static final Set<String> OPERATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
         "widget", "fr_dialog", "fr_paramstpl", "page_content", "get_pages", "page", "close")));
@@ -47,9 +66,10 @@ public final class ReportEngineAccessFilter implements Filter {
     interface IdentitySource { Identity authenticate(HttpServletRequest request, HttpServletResponse response); }
     static final class Identity {
         final String name, owner;
+        String userNo;
         final Set<String> templates;
-        Identity(String name, String owner) { this(name,owner,MENUS.keySet()); }
-        Identity(String name,String owner,Set<String> templates) { this.name=name;this.owner=owner;this.templates=templates; }
+        Identity(String name, String owner) { this(name,owner,REPORT_LINES.keySet()); }
+        Identity(String name,String owner,Set<String> templates) { this.name=name;this.owner=owner;this.templates=templates;this.userNo=name; }
     }
     // CREATE runs on Fine's executor. Correlate its raw request-parameter map
     // with a one-use server nonce; merged execution parameters omit this value.
@@ -112,7 +132,7 @@ public final class ReportEngineAccessFilter implements Filter {
         if(!(path instanceof String)) return null;
         String value=(String)path;
         if(value.startsWith("reportlets/")) value=value.substring("reportlets/".length());
-        return MENUS.containsKey(value)?value:null;
+        return REPORT_LINES.containsKey(value)?value:null;
     }
     private boolean target(Object report) throws ReflectiveOperationException { return templatePath(report)!=null; }
     private boolean owns(String sid,Identity identity) throws ReflectiveOperationException {
@@ -136,7 +156,7 @@ public final class ReportEngineAccessFilter implements Filter {
         if (parameter!=null && header!=null && !parameter.equals(header)) throw new SecurityException();
         return parameter!=null ? parameter : header;
     }
-    private static void validateQueryContainer(HttpServletRequest request) {
+    private static void validateQueryContainer(HttpServletRequest request, Identity identity) {
         String value=single(request,"__parameters__");
         if(value==null) return;
         if(value.length()>32768) throw new SecurityException();
@@ -148,13 +168,14 @@ public final class ReportEngineAccessFilter implements Filter {
             com.alibaba.fastjson.JSONObject parameters=com.alibaba.fastjson.JSON.parseObject(decoded);
             if(parameters==null) throw new SecurityException();
             for(String key:parameters.keySet()) {
-                if(!key.matches("[A-Za-z][A-Za-z0-9_]{0,63}")) throw new SecurityException();
+                if(!key.matches("[\\p{L}][\\p{L}\\p{N}_]{0,63}")) throw new SecurityException();
                 Object supplied=parameters.get(key);
                 if(supplied instanceof Map) throw new SecurityException();
                 if(supplied instanceof java.util.List) {
                     for(Object item:(java.util.List<?>)supplied) if(!(item instanceof String || item instanceof Number || item instanceof Boolean)) throw new SecurityException();
                 } else if(supplied!=null && !(supplied instanceof String || supplied instanceof Number || supplied instanceof Boolean)) throw new SecurityException();
                 String normalized=key.toLowerCase(java.util.Locale.ROOT);
+                if(normalized.equals("userid") && !identity.userNo.equals(supplied)) throw new SecurityException();
                 if(normalized.equals("sessionid") || normalized.equals("viewlet") || normalized.equals("reportlet")
                     || normalized.equals("formlet") || normalized.equals("logintype") || normalized.equals("op")
                     || normalized.equals("__parameters__") || normalized.equals(NONCE)) throw new SecurityException();
@@ -170,6 +191,8 @@ public final class ReportEngineAccessFilter implements Filter {
         if ("/decision/resources".equals(path)) return resource(single(request,"path"));
         if ("/decision/v1/cloud/file".equals(path)) return CLOUD.contains(single(request,"resource"));
         if (!"/decision/view/report".equals(path)) return false;
+        if ("fr_attach".equals(op) && "ah_image".equals(single(request,"cmd")))
+            return "/com/fr/plugin/chart/empty/image/emptydata_en.png".equals(single(request,"id"));
         if ("emb".equals(op)) return EMBEDDED.contains(single(request,"resource"));
         if ("resource".equals(op)) return resource(single(request,"resource"));
         return "toolbar_icon".equals(op) && "toolbar-image.png".equals(single(request,"id"));
@@ -198,13 +221,17 @@ public final class ReportEngineAccessFilter implements Filter {
             // through Servlet APIs; never reinterpret an encoded viewlet or ID.
             if (single(request,"sessionid")!=null || single(request,"loginType")!=null) throw new SecurityException();
             if (viewlet!=null && !identity.templates.contains(viewlet)) throw new SecurityException();
+            String requestedUser = single(request,"userid");
+            if (requestedUser != null && !identity.userNo.equals(requestedUser)) throw new SecurityException();
             for(String name:request.getParameterMap().keySet()) {
                 if ("__owned_portal_report_nonce".equalsIgnoreCase(name) || (sid==null && "__parameters__".equalsIgnoreCase(name))) throw new SecurityException();
             }
             boolean initial="/decision/view/report".equals(path) && "GET".equals(request.getMethod()) && identity.templates.contains(viewlet) && op==null && sid==null;
-            validateQueryContainer(request);
+            validateQueryContainer(request, identity);
             boolean ownedSession=sid!=null && sid.matches("[A-Za-z0-9-]{16,128}") && owns(sid,identity);
-            boolean continuation=ownedSession && (("/decision/view/report".equals(path) && OPERATIONS.contains(op))
+            boolean chart = "GET".equals(request.getMethod()) && "chart".equals(op)
+                && "writer_out_html".equals(single(request,"cmd")) && single(request,"chartID") != null;
+            boolean continuation=ownedSession && (("/decision/view/report".equals(path) && (OPERATIONS.contains(op) || chart))
                 || ("POST".equals(request.getMethod()) && "/decision/preview/info/collect".equals(path)));
             boolean telemetry=("GET".equals(request.getMethod()) && ("/decision/detect/enable".equals(path) || "/decision/esd/last/updated".equals(path)))
                 || ("POST".equals(request.getMethod()) && "/decision/report/check/frontEndException".equals(path));
@@ -220,11 +247,11 @@ public final class ReportEngineAccessFilter implements Filter {
             } else {nonce=null;}
             final Principal principal=() -> identity.name;
             HttpServletRequest wrapper=new HttpServletRequestWrapper(request) {
-                @Override public String getParameter(String name) { return NONCE.equals(name)?nonce:super.getParameter(name); }
-                @Override public String[] getParameterValues(String name) { return NONCE.equals(name)?(nonce==null?null:new String[]{nonce}):super.getParameterValues(name); }
+                @Override public String getParameter(String name) { return NONCE.equals(name)?nonce:("userid".equals(name)?identity.userNo:super.getParameter(name)); }
+                @Override public String[] getParameterValues(String name) { return NONCE.equals(name)?(nonce==null?null:new String[]{nonce}):("userid".equals(name)?new String[]{identity.userNo}:super.getParameterValues(name)); }
                 @Override public Map<String,String[]> getParameterMap() {
                     Map<String,String[]> values=new HashMap<>(super.getParameterMap());values.remove(NONCE);
-                    if(nonce!=null) values.put(NONCE,new String[]{nonce});return Collections.unmodifiableMap(values);
+                    if(nonce!=null) values.put(NONCE,new String[]{nonce});values.put("userid",new String[]{identity.userNo});return Collections.unmodifiableMap(values);
                 }
                 @Override public java.util.Enumeration<String> getParameterNames() { return Collections.enumeration(getParameterMap().keySet()); }
                 @Override public Principal getUserPrincipal() { return principal; }
@@ -255,9 +282,32 @@ public final class ReportEngineAccessFilter implements Filter {
             DefaultUserDetailsChecker.check(user);
             Set<String> templates=new HashSet<>();
             ApplicationContextHelper.getBean(CoreMenuService.class).selectCurrentUserMenuList().forEach(menu -> MENUS.forEach((template,id) -> {if(id.equals(menu.getId())) templates.add(template);}));
+            // Use current server identity and current grants, never caller-supplied user/role IDs.
+            // This is the original report permission type's equality/admin-target contract.
+            javax.sql.DataSource datasource = ApplicationContextHelper.getBean(javax.sql.DataSource.class);
+            org.springframework.jdbc.core.JdbcTemplate jdbc = new org.springframework.jdbc.core.JdbcTemplate(datasource);
+            java.util.List<Object> parameters = new java.util.ArrayList<>();
+            parameters.add(user.getUsername());
+            String selectedRole = user.getRoleId() == null ? "" : " AND RU.ROLEID=?";
+            if (user.getRoleId() != null) parameters.add(user.getRoleId());
+            parameters.add(user.getUsername());
+            java.util.List<String> grants = jdbc.queryForList(
+                "SELECT RP.TARGETID FROM T_CORE_ROLE_PERMISSION RP JOIN T_CORE_ROLE_USER RU ON RU.ROLEID=RP.ROLEID"
+                + " WHERE RU.USERID=? AND RP.PERMISSIONTYPEID='T_CORE_REPORT_CONFIG_LINE'" + selectedRole
+                + " UNION SELECT TARGETID FROM T_CORE_USER_PERMISSION WHERE USERID=? AND PERMISSIONTYPEID='T_CORE_REPORT_CONFIG_LINE'",
+                parameters.toArray(), String.class);
+            boolean administrator = "sysAdmin".equals(LocalContextHelper.getLoginUser().getUserType()) || grants.contains("0");
+            REPORT_LINES.forEach((template, line) -> { if (administrator || grants.contains(line)) templates.add(template); });
+            // Disabled configurations must not regain access through an old grant or menu.
+            java.util.List<String> active = jdbc.queryForList(
+                "SELECT TO_CHAR(ID) FROM T_CORE_REPORT_CONFIG_LINE WHERE REPORTCONFIGID='homePageReport' AND REPORTCATEGORY='fanruan' AND ACTIVATEDFLAG='1'", String.class);
+            templates.removeIf(template -> !active.contains(REPORT_LINES.get(template)));
             if(templates.isEmpty()) throw new SecurityException();
             String owner=hash(token+"\n"+user.getUsername()+"\n"+user.getOrgId()+"\n"+user.getRoleId());
-            return new Identity(user.getUsername(),owner,Collections.unmodifiableSet(templates));
+            Identity identity = new Identity(user.getUsername(),owner,Collections.unmodifiableSet(templates));
+            identity.userNo = LocalContextHelper.getLoginUser().getUserNo();
+            if (identity.userNo == null || identity.userNo.isEmpty()) throw new SecurityException();
+            return identity;
         } finally {
             SecurityContextHolder.setContext(oldContext);
             if(oldRequest==null) LocalContextHelper.removeServletRequest(); else LocalContextHelper.setServletRequest(oldRequest);

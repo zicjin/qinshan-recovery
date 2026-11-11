@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+import shutil
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -33,6 +34,9 @@ def main():
     private.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='report-engine-access-', dir=private) as temporary:
         temp = Path(temporary)
+        registry = temp / 'com/sunwayworld/owned/report/engine/home-report-templates.json'
+        registry.parent.mkdir(parents=True)
+        shutil.copyfile(ROOT / 'owned-distribution/src/main/resources/com/sunwayworld/owned/report/engine/home-report-templates.json', registry)
         (temp / 'log4j2-test.xml').write_text(
             '<Configuration status="OFF"><Appenders/><Loggers><Root level="off"/></Loggers></Configuration>\n',
             encoding='utf-8')

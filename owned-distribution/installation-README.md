@@ -85,8 +85,8 @@ does not overwrite an existing application's uploads. Select
 directory across starts. Full file/bootstrap/business acceptance remains
 separate; see the bundled import-template README.
 
-委托汇总统计表与合同汇总表使用可选的 FineReport 11 引擎。安装包保留两份原 CPT 的脱敏投影、
-来源 hash、三条原报表配置、附件修复 SQL 和离线安装脚本，见
+首页全部 27 份报表使用可选的 FineReport 11 引擎。安装包保留 27 份原 CPT 的脱敏投影、
+来源 hash、28条原报表配置、27份附件修复 SQL 和离线安装脚本，见
 `deployment/report-engine/README.md`。原引擎 JAR 和合法授权由运维独立提供，
 不从供应商 run JAR 构建，不复制生产连接或授权。它在同一 application JVM/端口内
 运行，复用门户身份和菜单权限；不新增报表进程或内部 HTTP bridge。

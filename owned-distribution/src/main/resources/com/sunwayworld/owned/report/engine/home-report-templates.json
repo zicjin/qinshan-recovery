@@ -1,0 +1,110 @@
+[
+  {
+    "template": "kf_htrwtjb/LIMS-客服-委托汇总表.cpt",
+    "line_id": "1533345555174176"
+  },
+  {
+    "template": "kf_htxxb/LIMS-客服-合同汇总表.cpt",
+    "line_id": "1682633607010880"
+  },
+  {
+    "template": "jdkb/任务进度看板.cpt",
+    "line_id": "1389452644773344"
+  },
+  {
+    "template": "rwjdkbcy/任务进度看板-采样.cpt",
+    "line_id": "1389464558218720"
+  },
+  {
+    "template": "rwjdkbfx/任务进度看板-分析.cpt",
+    "line_id": "1389464703528416"
+  },
+  {
+    "template": "rwjdkbbg/任务进度看板-报告.cpt",
+    "line_id": "1389464916356579"
+  },
+  {
+    "template": "jcjgcx/检测结果.cpt",
+    "line_id": "1389624399859168"
+  },
+  {
+    "template": "rwqm/统计-人员签名查询.cpt",
+    "line_id": "1389665817128416"
+  },
+  {
+    "template": "fxkb/分析看板.cpt",
+    "line_id": "1391751419556224"
+  },
+  {
+    "template": "fxkbtjpd/分析看板(按日期统计排单).cpt",
+    "line_id": "1469555387403840"
+  },
+  {
+    "template": "yqcrk/仪器设备出入库及使用过程性能检查记录表.cpt",
+    "line_id": "1511240290732896"
+  },
+  {
+    "template": "gsrwjdkb/生产任务看板.cpt",
+    "line_id": "1516502645514560"
+  },
+  {
+    "template": "cyapwzx/采样安排-已安排未采样.cpt",
+    "line_id": "1517068322189920"
+  },
+  {
+    "template": "bgjdkb/报告-报告进度看板_2603-01.cpt",
+    "line_id": "1518396586296736"
+  },
+  {
+    "template": "scjckb2/生产任务看板.cpt",
+    "line_id": "1546806278272480"
+  },
+  {
+    "template": "resl/任务数量看板.cpt",
+    "line_id": "1558284399977536"
+  },
+  {
+    "template": "fxryjxtj/统计_实验室工作量统计表.cpt",
+    "line_id": "1579155852848576"
+  },
+  {
+    "template": "cxdbsjcjgb/查询-检测结果表(横向)_2606.cpt",
+    "line_id": "1595473245765344"
+  },
+  {
+    "template": "bgzzltj/工作量统计-报告工作量.cpt",
+    "line_id": "1609691922740064"
+  },
+  {
+    "template": "kf_tcbltjb/客服-合同提成统计表.cpt",
+    "line_id": "1683439152962112"
+  },
+  {
+    "template": "cysjtj/统计_现场室工作量统计表.cpt",
+    "line_id": "1692400913685120"
+  },
+  {
+    "template": "tjrwrkyzypltj/统计-任务入库因子样品数量_2603.cpt",
+    "line_id": "1694089578136256"
+  },
+  {
+    "template": "fxthyjtj/分析审核退回.cpt",
+    "line_id": "1699853647404768"
+  },
+  {
+    "template": "sysrpj/统计_实验室工作量统计表2.cpt",
+    "line_id": "1706506964086784"
+  },
+  {
+    "template": "xccyjh/统计_现场室工作量统计表.cpt",
+    "line_id": "1706557505163264"
+  },
+  {
+    "template": "cythyitj/采样审核退回.cpt",
+    "line_id": "1735579720293280"
+  },
+  {
+    "template": "bgthyjtj/报告审核退回.cpt",
+    "line_id": "1865261756650944"
+  }
+]

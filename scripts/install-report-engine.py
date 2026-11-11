@@ -176,9 +176,9 @@ def compile_listener(javac, libraries, classes):
 def verify_configuration(manifest):
     """Verify the finite report bootstrap, without opening private captures or a DB."""
     configuration = manifest.get("configuration")
-    expected_counts = {"T_CORE_REPORT_CONFIG": 1, "T_CORE_REPORT_CONFIG_LINE": 2}
+    expected_counts = {"T_CORE_REPORT_CONFIG": 1, "T_CORE_REPORT_CONFIG_LINE": 27}
     if (not isinstance(configuration, dict)
-            or configuration.get("schema") != "owned-two-report-configuration/v1"
+            or configuration.get("schema") != "owned-home-report-configuration/v2"
             or configuration.get("row_counts") != expected_counts):
         raise StageError("report configuration bootstrap is missing or differs")
     entries = configuration.get("files")
@@ -200,12 +200,17 @@ def verify_configuration(manifest):
             "sha256": sha256(sql), "bytes": sql.stat().st_size}:
         raise StageError("report configuration SQL differs from provenance")
     rows = provenance.get("rows")
-    expected_ids = {("T_CORE_REPORT_CONFIG", "homePageReport"),
-                    ("T_CORE_REPORT_CONFIG_LINE", "1533345555174176"),
-                    ("T_CORE_REPORT_CONFIG_LINE", "1682633607010880")}
-    if (not isinstance(rows, list) or len(rows) != 3
+    if not isinstance(rows, list):
+        raise StageError("report configuration rows are absent")
+    expected_ids = {("T_CORE_REPORT_CONFIG", "homePageReport")} | {
+        ("T_CORE_REPORT_CONFIG_LINE", line_id) for line_id in ('1389452644773344', '1389464558218720', '1389464703528416', '1389464916356579', '1389624399859168', '1389665817128416', '1391751419556224', '1469555387403840', '1511240290732896', '1516502645514560', '1517068322189920', '1518396586296736', '1533345555174176', '1546806278272480', '1558284399977536', '1579155852848576', '1595473245765344', '1609691922740064', '1682633607010880', '1683439152962112', '1692400913685120', '1694089578136256', '1699853647404768', '1706506964086784', '1706557505163264', '1735579720293280', '1865261756650944')}
+    if (not isinstance(rows, list) or len(rows) != 28
             or {(row.get("table"), row.get("id")) for row in rows} != expected_ids):
         raise StageError("report configuration row scope differs")
+    declared_lines = {asset.get("report_line_id") for asset in manifest.get("assets", [])}
+    configuration_lines = {row["id"] for row in rows if row["table"] == "T_CORE_REPORT_CONFIG_LINE"}
+    if not declared_lines or not declared_lines.issubset(configuration_lines):
+        raise StageError("report asset configuration binding differs")
     for row in rows:
         values = row.get("values")
         if not isinstance(values, dict) or values.get("ID") != row["id"]:
@@ -233,8 +238,8 @@ def stage(args):
     public = public_inputs(args.public_lib, manifest["public_libraries"])
     schema = local_schema(args.application_config)
     asset_entries = manifest.get("assets", [manifest["asset"]])
-    if not isinstance(asset_entries, list) or not 1 <= len(asset_entries) <= 2:
-        raise StageError("manifest must declare one or two reviewed report templates")
+    if not isinstance(asset_entries, list) or not 1 <= len(asset_entries) <= 27:
+        raise StageError("manifest must declare one to 27 reviewed report templates")
     if any(asset_entries[0].get(key) != value for key, value in manifest["asset"].items()):
         raise StageError("primary report asset differs from compatibility entry")
     staged_assets = []
@@ -262,14 +267,17 @@ def stage(args):
             raise StageError("invalid or duplicate asset installation path")
         seen_install.add(str(install))
         metadata_path = asset_entry.get("metadata_source", "install-metadata.sql")
-        if metadata_path not in ("install-metadata.sql", "install-contract-metadata.sql"):
+        metadata_relative = PurePosixPath(metadata_path)
+        if metadata_path not in ("install-metadata.sql", "install-contract-metadata.sql") and not (
+                len(metadata_relative.parts) == 2 and metadata_relative.parts[0] == "metadata"
+                and re.fullmatch(r"[a-z0-9_]+\.sql", metadata_relative.name)) :
             raise StageError("unreviewed metadata source")
         metadata_source = checked_file(MATERIALS / metadata_path,
             {"bytes": asset_entry["metadata_bytes"], "sha256": asset_entry["metadata_sha256"]},
             "report attachment metadata").read_bytes()
         metadata_token = asset_entry.get("metadata_size_token", "${OWNED_REPORT_ASSET_BYTES}").encode("ascii")
-        if metadata_source.count(metadata_token) != 3:
-            raise StageError("metadata SQL must contain exactly three asset-size placeholders")
+        if metadata_source.count(metadata_token) != (4 if metadata_path.startswith("metadata/") else 3):
+            raise StageError("metadata SQL must contain the declared asset-size placeholders")
         metadata = metadata_source.replace(metadata_token, str(len(asset)).encode("ascii"))
         if b"${" in metadata:
             raise StageError("metadata SQL contains an unresolved placeholder")
@@ -293,13 +301,14 @@ def stage(args):
             destination = webroot.joinpath(*install.parts)
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(asset)
+            (webroot / metadata_path).parent.mkdir(parents=True, exist_ok=True)
             (webroot / metadata_path).write_bytes(metadata)
             asset_records.append({"path": str(install), "bytes": len(asset),
                                   "sha256": hashlib.sha256(asset).hexdigest()})
             metadata_records.append({"path": metadata_path,
                                      "source_sha256": hashlib.sha256(metadata_source).hexdigest(),
                                      "bytes": len(metadata), "sha256": hashlib.sha256(metadata).hexdigest(),
-                                     "asset_size_replacements": 3})
+                                     "asset_size_replacements": metadata_source.count(metadata_token)})
         configuration_records = []
         for entry, source in configuration_files:
             shutil.copyfile(source, webroot / entry["path"])

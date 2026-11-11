@@ -1,0 +1,1064 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20211223" releaseVersion="11.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Desensitizations desensitizeOpen="false"/>
+<Parameters>
+<Parameter>
+<Attributes name="begindate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="enddate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="contractno"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="BUSINESSUSERNAME"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="ENTRUSTORGNAME"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="reportno"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>${OWNED_REPORT_DATASOURCE_NAME}</DatabaseName>
+</Connection>
+<Query>
+<![CDATA[WITH contract AS (
+	select 
+		tcc.id,
+		tcc.CONTRACTNO AS 合同号,
+		tcc.SIGNDATE AS 合同签订日期,
+		tcc.CLIENTCONTACT AS 客户联系人,
+		tcc.CLIENTCONTACTPHONE AS 客户联系人电话,
+		tcc.CONTRACTPRICE AS 合同金额,
+		to_char(tcc.CREATEDTIME,'YYYY-MM-DD') AS 合同创建日期,
+		'' AS 合同返回日期,
+		'' AS 合同状态,
+		tcc.BUSINESSAREA AS 所属区域,
+		tcc.SIGNUSERNAME AS 签约人,
+		tcc.ASSISTANT AS 业务助理,
+		tcc.PREMIUMDISCOUNT AS 预计折扣,
+		tcc.COMMISSIONRATE AS 提成比例,
+		'' AS 邮箱,
+		'' AS 业务分类,
+		tcc.remark AS 备注
+	from 
+	t_crm_contract tcc
+),
+contractfb AS (
+	select 
+		tcpc.CONTRACTID,
+		LISTAGG(tcpc.PACKINFO||':'||tcpc.AMOUNT||'\n',',') AS 预登记分包,
+		LISTAGG(tcpc.PACKINFO||':'||tcpc.REALAMOUNT||'\n',',')  AS 实际记分包
+	from T_CRM_CONTRACT_PACKPRICE tcpc
+	GROUP BY tcpc.CONTRACTID
+),
+project AS (
+	SELECT
+		to_char(tep.id) AS id,
+		tep.contractno AS 合同号,
+		tep.projno AS 任务号,
+		tep.ENTRUSTORGNAME AS 委托单位,
+		to_char(tep.ENTRUSTDATE,'YYYY-MM-DD') AS 委托日期
+	from 
+	t_emc_project tep
+	WHERE tep.status<>'cancel'
+),
+payment AS (
+	SELECT
+		tcpp.PROJID,
+		tcpp.CURPAY AS 本次收款,
+		to_char(tcp.COLLECTIONDATE,'YYYY-MM-DD') AS 收款日期
+	FROM
+		T_CRM_PAY_PROJECT tcpp
+	LEFT JOIN T_CRM_PAYMENT tcp ON tcpp.PAYMENTID =tcp.ID
+)
+SELECT 
+	contract.合同号,contract.合同金额,contract.合同签订日期,contract.提成比例,contract.签约人,contract.业务助理,contract.合同返回日期,contract.预计折扣,
+	contractfb.实际记分包,
+	project.任务号,project.委托单位,project.委托日期,
+	payment.本次收款,payment.收款日期
+FROM payment
+inner JOIN project ON project.id=payment.projid
+LEFT JOIN contract ON contract.合同号=project.合同号
+LEFT JOIN contractfb ON contract.id=contractfb.CONTRACTID
+WHERE 
+payment.收款日期 BETWEEN '${begindate}' and '${enddate}'
+${if(len(contractno)==0,"","and project.合同号 like '%"+contractno+"%'")}
+${if(len(reportno)==0,"","and project.任务号 like '%"+reportno+"%'")}
+${if(len(ENTRUSTORGNAME)==0,"","and project.委托单位 like '%"+ENTRUSTORGNAME+"%'")}
+${if(len(BUSINESSUSERNAME)==0,"","and contract.签约人 like '%"+BUSINESSUSERNAME+"%'")}]]></Query>
+<PageQuery>
+<![CDATA[]]></PageQuery>
+</TableData>
+</TableDataMap>
+<ElementCaseMobileAttr>
+<ElementCaseMobileAttrProvider horizontal="1" vertical="1" zoom="true" refresh="false" isUseHTML="false" isMobileCanvasSize="false" appearRefresh="false" allowFullScreen="false" allowDoubleClickOrZoom="true" functionalWhenUnactivated="false"/>
+</ElementCaseMobileAttr>
+<Report class="com.fr.report.worksheet.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR F="0" T="0"/>
+<FR/>
+<HC/>
+<FC/>
+<UPFCR COLUMN="false" ROW="true"/>
+<USE REPEAT="true" PAGE="true" WRITE="false"/>
+</ReportPageAttr>
+<ColumnPrivilegeControl/>
+<RowPrivilegeControl/>
+<RowHeight defaultValue="723900">
+<![CDATA[1152000,1152000,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[3168000,3600000,3600000,7559040,2743200,3322320,3870960,3168000,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,3168000,3291840,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" s="0">
+<O>
+<![CDATA[委托日期\\n(任务)]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="1" r="0" s="1">
+<O>
+<![CDATA[合同编号]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="2" r="0" s="1">
+<O>
+<![CDATA[任务编号]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="3" r="0" s="1">
+<O>
+<![CDATA[委托单位]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="4" r="0" s="1">
+<O>
+<![CDATA[合同金额]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="0" s="1">
+<O>
+<![CDATA[扣除项\\n(实际分包)]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="6" r="0" s="1">
+<O>
+<![CDATA[核对费用列]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="7" r="0" s="1">
+<O>
+<![CDATA[收款日期]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="8" r="0" s="1">
+<O>
+<![CDATA[收款金额]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="9" r="0" s="1">
+<O>
+<![CDATA[应收账款]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="10" r="0" s="1">
+<O>
+<![CDATA[业务员核对]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="11" r="0" s="1">
+<O>
+<![CDATA[回款期限]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="12" r="0" s="1">
+<O>
+<![CDATA[折扣%]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="13" r="0" s="1">
+<O>
+<![CDATA[ 提成 ]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="14" r="0" s="1">
+<O>
+<![CDATA[备注]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="15" r="0" s="1">
+<O>
+<![CDATA[业务员1]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="16" r="0" s="1">
+<O>
+<![CDATA[提成比例]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="17" r="0" s="1">
+<O>
+<![CDATA[回签时间]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="18" r="0" s="1">
+<O>
+<![CDATA[合同签订日期]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="0" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="委托日期"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+<cellSortAttr>
+<sortExpressions/>
+</cellSortAttr>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="1" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="合同号"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="2" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="任务号"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="3" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="委托单位"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="4" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="合同金额"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="5" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="实际记分包"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="6" r="1" s="2">
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="7" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="收款日期"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="8" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="本次收款"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="9" r="1" s="2">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="10" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="签约人"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="11" r="1" s="2">
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="12" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="预计折扣"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="13" r="1" s="2">
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="14" r="1" s="2">
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="15" r="1" s="2">
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="16" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="提成比例"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="17" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="合同返回日期"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="18" r="1" s="2">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="合同签订日期"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<PaperSize width="30240000" height="85968000"/>
+<Margin top="986400" left="288000" bottom="986400" right="2743200"/>
+</PaperSetting>
+<FollowingTheme background="true"/>
+<Background name="ColorBackground">
+<color>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</color>
+</Background>
+</ReportSettings>
+</ReportAttrSet>
+<PrivilegeControl/>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="false" windowPosition="1" align="0" useParamsTemplate="false" currentIndex="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+<ParameterUI class="com.fr.form.main.parameter.FormParameterUI">
+<Parameters/>
+<Layout class="com.fr.form.ui.container.WParameterLayout">
+<WidgetName name="para"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+</WidgetAttr>
+<FollowingTheme borderStyle="false"/>
+<Margin top="0" left="0" bottom="0" right="0"/>
+<Border>
+<border style="0" borderRadius="0" type="0" borderStyle="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+<WidgetTitle>
+<O>
+<![CDATA[新建标题]]></O>
+<FRFont name="SimSun" style="0" size="72"/>
+<Position pos="0"/>
+</WidgetTitle>
+<Alpha alpha="1.0"/>
+</Border>
+<Background name="ColorBackground">
+<color>
+<FineColor color="-526086" hor="-1" ver="-1"/>
+</color>
+</Background>
+<LCAttr vgap="0" hgap="0" compInterval="0"/>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.parameter.FormSubmitButton">
+<WidgetName name="formSubmit0"/>
+<WidgetID widgetID="0ea77301-5db3-48c0-ac64-4a61a9b0dc15"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+</WidgetAttr>
+<Text>
+<![CDATA[查询]]></Text>
+<Hotkeys>
+<![CDATA[enter]]></Hotkeys>
+</InnerWidget>
+<BoundsAttr x="1180" y="7" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.DateEditor">
+<WidgetName name="enddate"/>
+<WidgetID widgetID="82c4f3bd-fb4b-406b-bfa8-e7d10f595c7c"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="enddate_c"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13732432" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-1720411469" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="259300019" hor="-1" ver="-1"/>
+</color>
+</Background>
+<IconColor>
+<FineColor color="-9135437" hor="-1" ver="-1"/>
+</IconColor>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<DateAttr/>
+<widgetValue>
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=TODAY()]]></Attributes>
+</O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="1031" y="7" width="123" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label7_c"/>
+<LabelName name="下单日期："/>
+<WidgetID widgetID="16fcf22f-c909-4806-a784-263a6b313138"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[~]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="1004" y="7" width="27" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.DateEditor">
+<WidgetName name="begindate"/>
+<WidgetID widgetID="be69b936-fe14-43ec-bff4-e46f167610be"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="begindate_c"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13732432" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-1720411469" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="259300019" hor="-1" ver="-1"/>
+</color>
+</Background>
+<IconColor>
+<FineColor color="-9135437" hor="-1" ver="-1"/>
+</IconColor>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<DateAttr/>
+<widgetValue>
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=DATEINMONTH(TODAY(),1)]]></Attributes>
+</O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="881" y="7" width="123" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label6_c"/>
+<WidgetID widgetID="978bedc3-6aa8-43a4-8ca4-32214a3ad9a8"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[收款日期：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="801" y="7" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="BUSINESSUSERNAME"/>
+<WidgetID widgetID="9c7e0b92-450b-4b90-950e-64fa2a040d3c"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="BUSINESSUSERNAME_c"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13732432" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-1720411469" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="259300019" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<TextAttr/>
+<Reg class="com.fr.form.ui.reg.NoneReg"/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+<MobileScanCodeAttr scanCode="true" textInputMode="0" isSupportManual="true" isSupportScan="true" isSupportNFC="false" nfcContentType="0"/>
+<MobileTextEditAttr allowOneClickClear="true"/>
+</InnerWidget>
+<BoundsAttr x="689" y="7" width="112" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label5_c"/>
+<LabelName name="受检单位："/>
+<WidgetID widgetID="833dc439-b630-43e8-9e9e-d3f0d0d7f3b4"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[业务员：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="609" y="7" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="ENTRUSTORGNAME"/>
+<WidgetID widgetID="72f7b275-ac22-49c3-96c1-7ded4a50ba23"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="ENTRUSTORGNAME_c"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13732432" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-1720411469" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="259300019" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<TextAttr/>
+<Reg class="com.fr.form.ui.reg.NoneReg"/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+<MobileScanCodeAttr scanCode="true" textInputMode="0" isSupportManual="true" isSupportScan="true" isSupportNFC="false" nfcContentType="0"/>
+<MobileTextEditAttr allowOneClickClear="true"/>
+</InnerWidget>
+<BoundsAttr x="479" y="7" width="130" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label3_c"/>
+<WidgetID widgetID="997685db-bfea-4d9b-a7f2-06cbf58b3672"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[委托单位：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="399" y="7" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="reportno"/>
+<WidgetID widgetID="6f86b96b-6cc4-492f-8db4-26b1f38fc60a"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="reportno_c"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13732432" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-1720411469" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="259300019" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<TextAttr/>
+<Reg class="com.fr.form.ui.reg.NoneReg"/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+<MobileScanCodeAttr scanCode="true" textInputMode="0" isSupportManual="true" isSupportScan="true" isSupportNFC="false" nfcContentType="0"/>
+<MobileTextEditAttr allowOneClickClear="true"/>
+</InnerWidget>
+<BoundsAttr x="298" y="7" width="101" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label2_c"/>
+<WidgetID widgetID="7914ee1a-a7d7-493f-8450-906789282cb3"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[任务/报告编号：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="196" y="7" width="102" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="contractno"/>
+<WidgetID widgetID="128be5fd-fa46-41bd-acb7-03c2b2993280"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="contractno_c"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13732432" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-1720411469" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="259300019" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<TextAttr/>
+<Reg class="com.fr.form.ui.reg.NoneReg"/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+<MobileScanCodeAttr scanCode="true" textInputMode="0" isSupportManual="true" isSupportScan="true" isSupportNFC="false" nfcContentType="0"/>
+<MobileTextEditAttr allowOneClickClear="true"/>
+</InnerWidget>
+<BoundsAttr x="84" y="8" width="112" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label0_c"/>
+<WidgetID widgetID="7689fbe9-d568-4c7d-b58c-58050f35489a"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[合同编号：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="4" y="8" width="80" height="21"/>
+</Widget>
+<ShowBookmarks showBookmarks="false"/>
+<Sorted sorted="false"/>
+<MobileWidgetList>
+<Widget widgetName="reportno"/>
+<Widget widgetName="ENTRUSTORGNAME"/>
+<Widget widgetName="BUSINESSUSERNAME"/>
+<Widget widgetName="begindate"/>
+<Widget widgetName="enddate"/>
+<Widget widgetName="formSubmit0"/>
+<Widget widgetName="contractno"/>
+</MobileWidgetList>
+<FrozenWidgets/>
+<MobileBookMarkStyle class="com.fr.form.ui.mobile.impl.DefaultMobileBookMarkStyle"/>
+<Display display="true"/>
+<DelayDisplayContent delay="false"/>
+<UseParamsTemplate use="false"/>
+<paramFireStopEdit fireEvent="false"/>
+<Position position="0"/>
+<Design_Width design_width="1309"/>
+<NameTagModified/>
+<WidgetNameTagMap/>
+<ParamAttr class="com.fr.report.mobile.DefaultMobileParamStyle"/>
+<ParamStyle class="com.fr.form.ui.mobile.impl.DefaultMobileParameterStyle"/>
+<FollowingTheme background="true"/>
+</Layout>
+<DesignAttr width="1309" height="37"/>
+</ParameterUI>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="4">
+<FRFont name="宋体" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="4">
+<FRFont name="宋体" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+<DesensitizationList/>
+<DesignerVersion DesignerVersion="LAA"/>
+<PreviewType PreviewType="0"/>
+<StrongestControlAttr class="com.fr.widgettheme.control.attr.WidgetDisplayEnhanceMarkAttr">
+<StrongestControlAttr widgetEnhance="false"/>
+</StrongestControlAttr>
+<TemplateThemeAttrMark class="com.fr.base.iofile.attr.TemplateThemeAttrMark">
+<TemplateThemeAttrMark name="自定义主题" dark="false"/>
+</TemplateThemeAttrMark>
+<StrategyConfigsAttr class="com.fr.esd.core.strategy.persistence.StrategyConfigsAttr">
+<StrategyConfigs>
+<StrategyConfig dsName="ds1" enabled="false" useGlobal="true" shouldMonitor="true" shouldEvolve="false" scheduleBySchema="false" timeToLive="1500000" timeToIdle="86400000" updateInterval="1500000" terminalTime="" updateSchema="0 0 8 * * ? *" activeInitiation="false"/>
+</StrategyConfigs>
+</StrategyConfigsAttr>
+
+
+
+</WorkBook>

@@ -120,6 +120,13 @@ class ReportInstallationTest(unittest.TestCase):
                 self.assertEqual(13, len(list((self.output / 'WEB-INF/lib').glob('fine-*.jar'))))
                 self.assertFalse(list(self.output.rglob('*.lic')))
 
+    def test_all_home_templates_stage_with_metadata(self):
+        self.assertEqual(27, len(self.assets()))
+        self.assertEqual(27, self.stage()['templates'])
+        receipt = json.loads((self.output / 'staging-manifest.json').read_text())
+        self.assertEqual(27, len(receipt['metadata_sql_files']))
+        self.assertTrue(any('fxryjxtj/' in entry['path'] for entry in receipt['assets']))
+
     def test_asset_hash_tamper_is_rejected(self):
         asset = self.materials / self.assets()[0]['path']
         asset.write_bytes(asset.read_bytes() + b'\n<!-- tampered -->\n')
@@ -191,7 +198,7 @@ class ReportInstallationTest(unittest.TestCase):
             self.assertEqual((self.materials / path).read_bytes(), (self.output / path).read_bytes())
         receipt = json.loads((self.output / 'staging-manifest.json').read_text())
         self.assertEqual(2, len(receipt['configuration_files']))
-        self.assertEqual({'T_CORE_REPORT_CONFIG': 1, 'T_CORE_REPORT_CONFIG_LINE': 2},
+        self.assertEqual({'T_CORE_REPORT_CONFIG': 1, 'T_CORE_REPORT_CONFIG_LINE': 27},
                          self.manifest['configuration']['row_counts'])
 
     def test_configuration_sql_tamper_is_rejected(self):

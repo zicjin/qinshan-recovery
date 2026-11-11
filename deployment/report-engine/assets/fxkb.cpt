@@ -1,0 +1,1756 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20211223" releaseVersion="11.0.0">
+<TableDataMap>
+<TableData name="结果" class="com.fr.data.impl.DBTableData">
+<Desensitizations desensitizeOpen="false"/>
+<Parameters>
+<Parameter>
+<Attributes name="yzzb"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="enddate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="projName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="bgdate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="projNo"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="methodName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="orderCategory"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="testName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="isDg"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>${OWNED_REPORT_DATASOURCE_NAME}</DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT 
+	tt.任务编号,tt.任务名称,tt.样品类型,tt.点位样品名称,tt.采送样日期,tt.检测因子分类,tt.方法,
+	listagg(DISTINCT 检测因子,',') AS 检测因子,
+	tt.分析员 AS 分析员,
+	tt.工作日数量,
+	CASE WHEN tt.任务编号 LIKE '%HS%' AND tt.工作日数量>=3 AND tt.工作日数量<4 THEN '预警数据'
+	WHEN tt.任务编号 LIKE '%HS%' AND tt.工作日数量>=4 THEN '超期数据'
+	WHEN tt.任务编号 LIKE '%TS%' AND tt.工作日数量>=5 AND tt.工作日数量<6 THEN '预警数据'
+	WHEN tt.任务编号 LIKE '%TS%' AND tt.工作日数量>=6 THEN '超期数据' ELSE '正常数据' END AS 时效性,
+	COUNT(DISTINCT tt.样品容器id) AS 样品数量,
+	COUNT(DISTINCT CASE WHEN tt.因子状态 IN('approve','audit','done') THEN tt.样品容器id ELSE null end) AS 完成数量,
+	COUNT(DISTINCT CASE WHEN tt.因子状态 IN('draft','prelogged') THEN tt.样品容器id ELSE null end) AS 未分析,
+	COUNT(DISTINCT CASE WHEN tt.因子状态 IN('logged') THEN tt.样品容器id ELSE null end) AS 分析中
+FROM 
+(
+	select 
+	tep.PROJNO AS 任务编号,
+	tep.PROJNAME AS 任务名称,
+	teo.ORDERCATEGORY AS 样品类型,
+	nvl2(tef.MONITORPOINTNAME,tef.MONITORPOINTNAME,teo.CLIENTORDERNAME) AS 点位样品名称,
+	to_char(nvl2(teo.SENDDATE,teo.SENDDATE,teo.SAMPLEBEGINDATE),'YYYY-MM-DD') AS 采送样日期,
+	decode(tetm.TESTMETHODTYPE,'inorganic','无机','chemical','理化','organic','有机') AS 检测因子分类,
+	CASE WHEN teot.ORDERCONTAINERID IS NULL THEN 1428608141171456 ELSE teot.ORDERCONTAINERID END AS 样品容器id, /*送样无容器信息的置为999的那个容器*/
+	teot.methodname AS 方法,
+	teot.TESTNAME AS 检测因子,
+	teot.INPUTUSERNAME AS 分析员,
+	teot.status AS 因子状态,
+	tes.ACCEPTEDDATE AS 接样日期,
+	SYSDATE AS 当前系统日期,
+	ter.ANALYSISENDDATE AS 分析完成日期,
+	WORKDAYS_BETWEEN(tes.ACCEPTEDDATE,nvl(ter.ANALYSISENDDATE,SYSDATE)) AS 工作日数量
+	from T_EMC_ORDER_TASK teot 
+	LEFT JOIN T_EMC_TEST_METHOD tetm ON tetm.ID =teot.TESTMETHODID
+	LEFT JOIN T_EMC_ORDER teo ON teo.ID =teot.ORDERID 
+	LEFT JOIN T_EMC_FOLDER tef ON tef.ID =teo.FOLDERID 
+	LEFT JOIN T_EMC_PROJECT tep ON tep.ID =tef.PROJID 
+	LEFT JOIN T_EMC_SAMPLE tes ON tes.ID = teo.SAMPLEID 
+	LEFT JOIN T_EMC_RUN ter ON ter.ID = teot.RUNID 
+	WHERE 
+	tep.STATUS <> 'cancel'
+	AND tep.projnode NOT LIKE '报告%'
+	AND teot.STATUS IN ('prelogged','logged','approve','audit','done')
+	AND ANALYSISTYPE='analysis'
+	--AND tep.projno='CQTS240775' /*用于调试数据*/
+	${if(len(projNo)==0,"","and tep.projno like '%"+projNo+"%'")}
+	${if(len(projName)==0,"","and tep.projname like '%"+projName+"%'")}
+	${if(len(methodName)==0,"","and teot.methodName like '%"+methodName+"%'")}
+	and to_char(nvl2(teo.SENDDATE,teo.SENDDATE,teo.SAMPLEBEGINDATE),'YYYY-MM-DD') between '${bgdate}' and '${enddate}'
+	${if(len(testName)==0,"","and teot.testname like '%"+testName+"%'")}
+	${if(len(orderCategory)==0,"","and teo.ordercategory like '%"+orderCategory+"%'")}
+	${if(len(yzzb)==0,"","and tetm.TESTMETHODTYPE = '"+yzzb+"'")}
+	${if(len(methodName)==0,"","and teot.methodName like '%"+methodName+"%'")}
+	${if(isDg,"and (tep.sample=0 or tep.projname like '单轨%')","")}
+) tt
+GROUP BY tt.任务编号,tt.任务名称,tt.样品类型,tt.点位样品名称,tt.采送样日期,tt.检测因子分类,tt.方法,tt.分析员,tt.工作日数量]]></Query>
+<PageQuery>
+<![CDATA[]]></PageQuery>
+</TableData>
+</TableDataMap>
+<ElementCaseMobileAttr>
+<ElementCaseMobileAttrProvider horizontal="1" vertical="1" zoom="true" refresh="false" isUseHTML="false" isMobileCanvasSize="false" appearRefresh="false" allowFullScreen="false" allowDoubleClickOrZoom="true" functionalWhenUnactivated="false"/>
+</ElementCaseMobileAttr>
+<Report class="com.fr.report.worksheet.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR F="1" T="1"/>
+<FR/>
+<HC/>
+<FC/>
+<UPFCR COLUMN="false" ROW="true"/>
+<USE REPEAT="false" PAGE="false" WRITE="false"/>
+</ReportPageAttr>
+<ColumnPrivilegeControl/>
+<RowPrivilegeControl/>
+<RowHeight defaultValue="723900">
+<![CDATA[792480,1152000,1341120,1152000,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[1981200,3352800,7162800,2743200,4785360,3535680,3352800,5638800,14356080,2743200,2743200,2743200,2743200,2743200,6553200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" cs="8" s="0">
+<O>
+<![CDATA[说明：1、单轨任务包含送样任务，采样任务名称包含单轨的任务；2、已经流转至报告环节的任务不再显示；]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="0" r="1" s="1">
+<O>
+<![CDATA[序号]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="1" r="1" s="1">
+<O>
+<![CDATA[任务编号]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="2" r="1" s="1">
+<O>
+<![CDATA[任务名称]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="3" r="1" s="1">
+<O>
+<![CDATA[样品类型]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="4" r="1" s="1">
+<O>
+<![CDATA[点位(样品名称)]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="1" s="1">
+<O>
+<![CDATA[采(送)样日期]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="6" r="1" s="1">
+<O>
+<![CDATA[检测因子类别]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="7" r="1" s="1">
+<O>
+<![CDATA[方法]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="1" s="1">
+<O>
+<![CDATA[检测因子]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="9" r="1" s="2">
+<O>
+<![CDATA[分析员]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="10" r="1" s="1">
+<O>
+<![CDATA[样品数量]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="11" r="1" s="1">
+<O>
+<![CDATA[完成数量]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="12" r="1" s="1">
+<O>
+<![CDATA[未分析]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="13" r="1" s="1">
+<O>
+<![CDATA[分析中]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="14" r="1" s="1">
+<O>
+<![CDATA[完成进度]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="15" r="1" s="3">
+<O>
+<![CDATA[时效性]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="0" r="2" s="4">
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=seq()]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand leftParentDefault="false" left="H3"/>
+</C>
+<C c="1" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="任务编号"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0" leftParentDefault="false"/>
+</C>
+<C c="2" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="任务名称"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="3" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="样品类型"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="4" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="点位样品名称"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="5" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="采送样日期"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="6" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="检测因子分类"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="7" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="方法"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<HighlightList>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[预警数据]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[P3 = "预警数据"]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.BackgroundHighlightAction">
+<Background name="ColorBackground">
+<color>
+<FineColor color="-256" hor="-1" ver="-1"/>
+</color>
+</Background>
+</HighlightAction>
+</Highlight>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[超期数据]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[P3 = "超期数据"]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.BackgroundHighlightAction">
+<Background name="ColorBackground">
+<color>
+<FineColor color="-65536" hor="-1" ver="-1"/>
+</color>
+</Background>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="8" r="2" s="5">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="检测因子"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<CellGUIAttr adjustmode="1"/>
+<CellPageAttr/>
+<HighlightList>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[预警数据]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[P3 = "预警数据"]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.BackgroundHighlightAction">
+<Background name="ColorBackground">
+<color>
+<FineColor color="-256" hor="-1" ver="-1"/>
+</color>
+</Background>
+</HighlightAction>
+</Highlight>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[超期数据]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[P3 = "超期数据"]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.BackgroundHighlightAction">
+<Background name="ColorBackground">
+<color>
+<FineColor color="-65536" hor="-1" ver="-1"/>
+</color>
+</Background>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="9" r="2" s="2">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="分析员"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<HighlightList>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[预警数据]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[P3 = "预警数据"]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.BackgroundHighlightAction">
+<Background name="ColorBackground">
+<color>
+<FineColor color="-256" hor="-1" ver="-1"/>
+</color>
+</Background>
+</HighlightAction>
+</Highlight>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[超期数据]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[P3 = "超期数据"]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.BackgroundHighlightAction">
+<Background name="ColorBackground">
+<color>
+<FineColor color="-65536" hor="-1" ver="-1"/>
+</color>
+</Background>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="10" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="样品数量"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="11" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="完成数量"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="12" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="未分析"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="13" r="2" s="4">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="分析中"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="14" r="2" s="6">
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=L3 / K3]]></Attributes>
+</O>
+<PrivilegeControl/>
+<CellPageAttr/>
+<HighlightList>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.ObjectCondition">
+<Compare op="0">
+<O>
+<![CDATA[1]]></O>
+</Compare>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.BackgroundHighlightAction">
+<Background name="ColorBackground">
+<color>
+<FineColor color="-16711936" hor="-1" ver="-1"/>
+</color>
+</Background>
+</HighlightAction>
+</Highlight>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[根据是否完成控件判断是否隐藏行]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[and($isdone = "100.00%",$$$ != 1)]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.RowHeightHighlightAction"/>
+</Highlight>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性3]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[and($isdone = "0.00%",$$$ = 1)]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.RowHeightHighlightAction"/>
+</Highlight>
+</HighlightList>
+<CellInsertPolicy/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="15" r="2" s="3">
+<O t="DSColumn">
+<Attributes dsName="结果" columnName="时效性"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+<cellSortAttr/>
+</O>
+<PrivilegeControl/>
+<HighlightList>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[and(len($shixiao) > 0,$$$ != $shixiao)]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.RowHeightHighlightAction"/>
+</Highlight>
+</HighlightList>
+<Expand dir="0">
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="0" r="3" cs="10" s="7">
+<O>
+<![CDATA[合计：]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="10" r="3" s="1">
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=sum(K3)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="11" r="3" s="1">
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=sum(L3)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="12" r="3" s="1">
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=sum(M3)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="13" r="3" s="1">
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=sum(N3)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="14" r="3" s="6">
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=L4 / K4]]></Attributes>
+</O>
+<PrivilegeControl/>
+<HighlightList>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.ObjectCondition">
+<Compare op="0">
+<O>
+<![CDATA[1]]></O>
+</Compare>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.BackgroundHighlightAction">
+<Background name="ColorBackground">
+<color>
+<FineColor color="-16711936" hor="-1" ver="-1"/>
+</color>
+</Background>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+<C c="15" r="3" s="3">
+<O>
+<![CDATA[/]]></O>
+<PrivilegeControl/>
+<Expand>
+<cellSortAttr/>
+</Expand>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<PaperSize width="73440000" height="72000000"/>
+<Margin top="986400" left="986400" bottom="986400" right="986400"/>
+</PaperSetting>
+<FollowingTheme background="false"/>
+<Background name="ColorBackground">
+<color>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</color>
+</Background>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+<PrivilegeControl/>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="false" windowPosition="1" align="0" useParamsTemplate="true" currentIndex="4"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+<ParameterUI class="com.fr.form.main.parameter.FormParameterUI">
+<Parameters/>
+<Layout class="com.fr.form.ui.container.WParameterLayout">
+<WidgetName name="para"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+</WidgetAttr>
+<FollowingTheme borderStyle="false"/>
+<Margin top="0" left="0" bottom="0" right="0"/>
+<Border>
+<border style="0" borderRadius="0" type="0" borderStyle="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+<WidgetTitle>
+<O>
+<![CDATA[新建标题]]></O>
+<FRFont name="SimSun" style="0" size="72"/>
+<Position pos="0"/>
+</WidgetTitle>
+<Alpha alpha="1.0"/>
+</Border>
+<Background name="ColorBackground">
+<color>
+<FineColor color="-526086" hor="-1" ver="-1"/>
+</color>
+</Background>
+<LCAttr vgap="0" hgap="0" compInterval="0"/>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.CheckBox">
+<WidgetName name="isDg"/>
+<WidgetID widgetID="562d9cd8-5fee-412c-b287-d9acd9c8a885"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="checkBox0"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaButtonTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<Text>
+<![CDATA[]]></Text>
+<Hotkeys>
+<![CDATA[]]></Hotkeys>
+<widgetValue>
+<O t="B">
+<![CDATA[true]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="1008" y="10" width="34" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label9"/>
+<WidgetID widgetID="8912ad3d-4bf7-4d5c-8217-e5c32eade093"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[显示单轨任务：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="906" y="10" width="102" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.ComboBox">
+<WidgetName name="shixiao"/>
+<WidgetID widgetID="863e9d06-41a2-43cb-ae47-43d88637f3a7"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="comboBox0"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<IconColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</IconColor>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<Dictionary class="com.fr.data.impl.CustomDictionary">
+<CustomDictAttr>
+<Dict key="超期数据" value="超期数据"/>
+<Dict key="预警数据" value="预警数据"/>
+<Dict key="正常数据" value="正常数据"/>
+</CustomDictAttr>
+</Dictionary>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="796" y="10" width="99" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label8"/>
+<WidgetID widgetID="be26281c-8379-461c-8a0c-bf9f8aef7ea9"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="-1.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[时效性:]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="716" y="10" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.ComboBox">
+<WidgetName name="isdone"/>
+<LabelName name="是否完成："/>
+<WidgetID widgetID="95d4e8c2-bf17-4ece-9296-9116e307e7d3"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="yzzb_c"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<IconColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</IconColor>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<Dictionary class="com.fr.data.impl.CustomDictionary">
+<CustomDictAttr>
+<Dict key="100.00%" value="已完成"/>
+<Dict key="0.00%" value="未完成"/>
+</CustomDictAttr>
+</Dictionary>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="963" y="44" width="79" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="labe"/>
+<WidgetID widgetID="2b9ece70-d32c-48a0-9702-8c244e47fd94"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName="done"/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[是否完成：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="883" y="44" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="projName"/>
+<LabelName name="任务名称："/>
+<WidgetID widgetID="edcd6967-0a2f-4a20-9805-c79e718e6263"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<TextAttr/>
+<Reg class="com.fr.form.ui.reg.NoneReg"/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+<MobileScanCodeAttr scanCode="true" textInputMode="0" isSupportManual="true" isSupportScan="true" isSupportNFC="false" nfcContentType="0"/>
+<MobileTextEditAttr allowOneClickClear="true"/>
+</InnerWidget>
+<BoundsAttr x="270" y="10" width="122" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="projNo"/>
+<LabelName name="任务编号："/>
+<WidgetID widgetID="f4ce3fcc-ab9d-43a9-9e28-9a3895487ec0"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<TextAttr/>
+<Reg class="com.fr.form.ui.reg.NoneReg"/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+<MobileScanCodeAttr scanCode="true" textInputMode="0" isSupportManual="true" isSupportScan="true" isSupportNFC="false" nfcContentType="0"/>
+<MobileTextEditAttr allowOneClickClear="true"/>
+</InnerWidget>
+<BoundsAttr x="80" y="10" width="110" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label7"/>
+<LabelName name="任务编号："/>
+<WidgetID widgetID="5e3429ca-257a-4eda-a1be-7af5cffc0723"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[任务名称：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="190" y="10" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label6"/>
+<WidgetID widgetID="032654f0-37f1-4011-8b68-bd04fa5d94cb"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[任务编号：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="0" y="10" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="methodName"/>
+<LabelName name="检测方法："/>
+<WidgetID widgetID="870c6112-3216-4377-806a-dae51e8f2725"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<TextAttr/>
+<Reg class="com.fr.form.ui.reg.NoneReg"/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+<MobileScanCodeAttr scanCode="true" textInputMode="0" isSupportManual="true" isSupportScan="true" isSupportNFC="false" nfcContentType="0"/>
+<MobileTextEditAttr allowOneClickClear="true"/>
+</InnerWidget>
+<BoundsAttr x="674" y="44" width="209" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label5"/>
+<LabelName name="检测因子："/>
+<WidgetID widgetID="b0f84459-c94f-4aff-9af1-6a914c564de9"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[检测方法：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="594" y="44" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label4"/>
+<LabelName name="样品类型："/>
+<WidgetID widgetID="0246035e-f07a-4911-ad66-32bb444b2424"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[因子组别：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="190" y="44" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.ComboBox">
+<WidgetName name="yzzb"/>
+<LabelName name="因子组别："/>
+<WidgetID widgetID="95d4e8c2-bf17-4ece-9296-9116e307e7d3"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<IconColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</IconColor>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<Dictionary class="com.fr.data.impl.CustomDictionary">
+<CustomDictAttr>
+<Dict key="organic" value="有机"/>
+<Dict key="chemical" value="理化"/>
+<Dict key="inorganic" value="无机"/>
+</CustomDictAttr>
+</Dictionary>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="270" y="44" width="122" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="orderCategory"/>
+<LabelName name="样品类型："/>
+<WidgetID widgetID="404533e5-0464-4b33-b3be-1e65c7b16ced"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<TextAttr/>
+<Reg class="com.fr.form.ui.reg.NoneReg"/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+<MobileScanCodeAttr scanCode="true" textInputMode="0" isSupportManual="true" isSupportScan="true" isSupportNFC="false" nfcContentType="0"/>
+<MobileTextEditAttr allowOneClickClear="true"/>
+</InnerWidget>
+<BoundsAttr x="80" y="44" width="110" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label3"/>
+<WidgetID widgetID="2b9ece70-d32c-48a0-9702-8c244e47fd94"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[样品类型：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="0" y="44" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.parameter.FormSubmitButton">
+<WidgetName name="formSubmit0"/>
+<LabelName name="检测因子："/>
+<WidgetID widgetID="2c2af6e6-4e3c-4b1f-8b3d-dcdd03f1326f"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaNormalButtonTheme">
+<FollowingTheme styleSetting="true"/>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<FRFont name="Default" style="0" size="96">
+<foreground>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+<ButtonBackground>
+<initial>
+<Background name="ColorBackground">
+<color>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</color>
+</Background>
+</initial>
+<over>
+<Background name="ColorBackground">
+<color>
+<FineColor color="-868841998" hor="-1" ver="-1"/>
+</color>
+</Background>
+</over>
+<click>
+<Background name="ColorBackground">
+<color>
+<FineColor color="-868841998" hor="-1" ver="-1"/>
+</color>
+</Background>
+</click>
+</ButtonBackground>
+</WidgetTheme>
+</WidgetAttr>
+<Text>
+<![CDATA[查询]]></Text>
+<Hotkeys>
+<![CDATA[enter]]></Hotkeys>
+</InnerWidget>
+<BoundsAttr x="1098" y="10" width="80" height="55"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.TextEditor">
+<WidgetName name="testName"/>
+<LabelName name="检测因子："/>
+<WidgetID widgetID="e58691cc-3342-4ddc-a08e-f18bb353932f"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<TextAttr/>
+<Reg class="com.fr.form.ui.reg.NoneReg"/>
+<widgetValue>
+<O>
+<![CDATA[]]></O>
+</widgetValue>
+<MobileScanCodeAttr scanCode="true" textInputMode="0" isSupportManual="true" isSupportScan="true" isSupportNFC="false" nfcContentType="0"/>
+<MobileTextEditAttr allowOneClickClear="true"/>
+</InnerWidget>
+<BoundsAttr x="472" y="44" width="122" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label2"/>
+<WidgetID widgetID="7dd2e5e1-0a6a-40db-bde6-992c37ae9ce7"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[检测因子：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="392" y="44" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.DateEditor">
+<WidgetName name="enddate"/>
+<LabelName name="-"/>
+<WidgetID widgetID="fe402ead-08c5-4b1e-8cf5-921b160b1410"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<IconColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</IconColor>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<DateAttr/>
+<widgetValue>
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=dateinweek(today(),-1)]]></Attributes>
+</O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="599" y="10" width="96" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label1"/>
+<WidgetID widgetID="534f8659-99dc-49d7-9b50-e4c9e4509ba5"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[-]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="582" y="10" width="17" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.DateEditor">
+<WidgetName name="bgdate"/>
+<LabelName name="采(送)样日期："/>
+<WidgetID widgetID="33624b2c-70c1-49f0-882b-94cf0bbeb354"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.ParaEditorTheme">
+<FollowingTheme styleSetting="true"/>
+<ThemeColor>
+<FineColor color="-13203982" hor="-1" ver="-1"/>
+</ThemeColor>
+<selectBackgroundColor>
+<FineColor color="-1" hor="-1" ver="-1"/>
+</selectBackgroundColor>
+<BorderStyle radius="2.0" lineType="1">
+<borderColor>
+<FineColor color="-2433305" hor="-1" ver="-1"/>
+</borderColor>
+</BorderStyle>
+<Background name="ColorBackground">
+<color>
+<FineColor color="16777215" hor="-1" ver="-1"/>
+</color>
+</Background>
+<IconColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</IconColor>
+<FontStyle fontSize="12" name="宋体" bold="false" italic="false">
+<fontColor>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</fontColor>
+</FontStyle>
+</WidgetTheme>
+</WidgetAttr>
+<DateAttr/>
+<widgetValue>
+<O t="XMLable" class="com.fr.base.Formula">
+<Attributes>
+<![CDATA[=DATEINWEEK(today(),1)]]></Attributes>
+</O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="487" y="10" width="95" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="label0"/>
+<LabelName name="任务名称："/>
+<WidgetID widgetID="7cd8026b-9a84-466a-9535-aa8ae3a0fa82"/>
+<WidgetAttr aspectRatioLocked="false" aspectRatioBackup="0.0" description="">
+<MobileBookMark useBookMark="false" bookMarkName="" frozen="false" index="-1" oldWidgetName=""/>
+<PrivilegeControl/>
+<WidgetTheme class="com.fr.widgettheme.theme.widget.theme.LabelTheme">
+<FollowingTheme styleSetting="true"/>
+<FRFont name="SimSun" style="0" size="96">
+<foreground>
+<FineColor color="-16179648" hor="-1" ver="-1"/>
+</foreground>
+</FRFont>
+</WidgetTheme>
+</WidgetAttr>
+<widgetValue>
+<O>
+<![CDATA[采(送)样日期：]]></O>
+</widgetValue>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<border style="0">
+<color>
+<FineColor color="-723724" hor="-1" ver="-1"/>
+</color>
+</border>
+</InnerWidget>
+<BoundsAttr x="392" y="10" width="95" height="21"/>
+</Widget>
+<ShowBookmarks showBookmarks="false"/>
+<Sorted sorted="false"/>
+<MobileWidgetList>
+<Widget widgetName="projNo"/>
+<Widget widgetName="projName"/>
+<Widget widgetName="bgdate"/>
+<Widget widgetName="enddate"/>
+<Widget widgetName="shixiao"/>
+<Widget widgetName="isDg"/>
+<Widget widgetName="formSubmit0"/>
+<Widget widgetName="orderCategory"/>
+<Widget widgetName="yzzb"/>
+<Widget widgetName="testName"/>
+<Widget widgetName="methodName"/>
+<Widget widgetName="isdone"/>
+</MobileWidgetList>
+<FrozenWidgets/>
+<MobileBookMarkStyle class="com.fr.form.ui.mobile.impl.DefaultMobileBookMarkStyle"/>
+<Display display="true"/>
+<DelayDisplayContent delay="false"/>
+<UseParamsTemplate use="true"/>
+<paramFireStopEdit fireEvent="false"/>
+<Position position="0"/>
+<Design_Width design_width="1347"/>
+<NameTagModified>
+<TagModified tag="formSubmit0" modified="true"/>
+<TagModified tag="yzzb" modified="true"/>
+<TagModified tag="enddate" modified="true"/>
+<TagModified tag="bgdate" modified="true"/>
+<TagModified tag="projName" modified="true"/>
+<TagModified tag="methodName" modified="true"/>
+<TagModified tag="orderCategory" modified="true"/>
+<TagModified tag="testName" modified="true"/>
+</NameTagModified>
+<WidgetNameTagMap>
+<NameTag name="formSubmit0" tag="检测因子："/>
+<NameTag name="yzzb" tag="因子组别："/>
+<NameTag name="enddate" tag="-"/>
+<NameTag name="bgdate" tag="采(送)样日期："/>
+<NameTag name="projName" tag="任务名称："/>
+<NameTag name="methodName" tag="检测方法："/>
+<NameTag name="orderCategory" tag="样品类型："/>
+<NameTag name="testName" tag="检测因子："/>
+</WidgetNameTagMap>
+<ParamAttr class="com.fr.report.mobile.DefaultMobileParamStyle"/>
+<ParamStyle class="com.fr.form.ui.mobile.impl.DefaultMobileParameterStyle"/>
+<FollowingTheme background="false"/>
+</Layout>
+<DesignAttr width="1347" height="72"/>
+</ParameterUI>
+</ReportParameterAttr>
+<StyleList>
+<Style style_name="默认" full="true" border_source="-1" imageLayout="1">
+<FRFont name="simhei" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="宋体" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="simhei" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<Format class="com.fr.base.CoreDecimalFormat" roundingMode="6">
+<![CDATA[#0.00%]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+<DesensitizationList/>
+<DesignerVersion DesignerVersion="LAA"/>
+<PreviewType PreviewType="0"/>
+<TemplateThemeAttrMark class="com.fr.base.iofile.attr.TemplateThemeAttrMark">
+<TemplateThemeAttrMark name="兼容主题" dark="false"/>
+</TemplateThemeAttrMark>
+<StrategyConfigsAttr class="com.fr.esd.core.strategy.persistence.StrategyConfigsAttr">
+<StrategyConfigs>
+<StrategyConfig dsName="结果" enabled="false" useGlobal="true" shouldMonitor="true" shouldEvolve="false" scheduleBySchema="false" timeToLive="1500000" timeToIdle="86400000" updateInterval="1500000" terminalTime="" updateSchema="0 0 8 * * ? *" activeInitiation="false"/>
+</StrategyConfigs>
+</StrategyConfigsAttr>
+
+
+</WorkBook>

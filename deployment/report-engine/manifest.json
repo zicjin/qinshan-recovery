@@ -122,7 +122,11 @@
     "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
     "datasource_occurrences": 2,
     "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
-    "schema_occurrences": 1
+    "schema_occurrences": 1,
+    "metadata_source": "install-metadata.sql",
+    "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+    "metadata_sha256": "d1ea5b4b1cb6ae3c5db5b47ec1edc825c8507d2fcca1b3fbbb22e57662bed474",
+    "metadata_bytes": 2457
   },
   "provenance": {
     "original_sha256": "f5a77c8929672a5b27423491a37c3316fd4d3f968948a4ce0f5373c58b708ae6",
@@ -182,7 +186,7 @@
     "connection credentials",
     "production endpoints"
   ],
-  "scope": "commission and contract summary templates; offline staging only",
+  "scope": "all 27 current-production homePageReport templates and their internal template links",
   "source_class": "current-production-at-capture",
   "assets": [
     {
@@ -197,7 +201,10 @@
       "metadata_source": "install-metadata.sql",
       "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
       "metadata_sha256": "d1ea5b4b1cb6ae3c5db5b47ec1edc825c8507d2fcca1b3fbbb22e57662bed474",
-      "metadata_bytes": 2457
+      "metadata_bytes": 2457,
+      "report_line_id": "1533345555174176",
+      "report_code": "kf_htrwtjb",
+      "report_name": "委托汇总统计表"
     },
     {
       "path": "assets/contract-summary.cpt",
@@ -211,7 +218,435 @@
       "metadata_source": "install-contract-metadata.sql",
       "metadata_size_token": "${OWNED_CONTRACT_REPORT_ASSET_BYTES}",
       "metadata_sha256": "734593203c093f6907ec7de96a0a1dbcac1cbe7d581575e1559fea428b71ccb8",
-      "metadata_bytes": 2476
+      "metadata_bytes": 2476,
+      "report_line_id": "1682633607010880",
+      "report_code": "kf_htxxb",
+      "report_name": "合同汇总表"
+    },
+    {
+      "path": "assets/jdkb.cpt",
+      "bytes": 43342,
+      "sha256": "7b7ab51ff4dc85d3c234fd20dd78bd625fc95ee7caa8dd38fc38072f8c7402cf",
+      "install_path": "WEB-INF/reportlets/jdkb/任务进度看板.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/jdkb.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "85a0d1b3e63a3052087b5addb8a5c8e00b87e6aa9d1bbe35eb843cb29d8dd957",
+      "metadata_bytes": 2276,
+      "report_line_id": "1389452644773344",
+      "report_code": "jdkb",
+      "report_name": "任务进度看板"
+    },
+    {
+      "path": "assets/rwjdkbcy.cpt",
+      "bytes": 14814,
+      "sha256": "546113667bb972f1a44441a1952a2673cab9b9dd68c0920a2da6acd75f91d0a5",
+      "install_path": "WEB-INF/reportlets/rwjdkbcy/任务进度看板-采样.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/rwjdkbcy.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "1fcca1ff52f66c379e5cb71ac028f34dc4ba9b2373793fb335ec2c121b1cdaec",
+      "metadata_bytes": 2313,
+      "report_line_id": "1389464558218720",
+      "report_code": "rwjdkbcy",
+      "report_name": "任务进度看板-采样"
+    },
+    {
+      "path": "assets/rwjdkbfx.cpt",
+      "bytes": 24116,
+      "sha256": "f915299672395481bf04b144081ce92756bd72930e64052dd63ecbbf41c3d6d3",
+      "install_path": "WEB-INF/reportlets/rwjdkbfx/任务进度看板-分析.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/rwjdkbfx.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "b5bb05405acd64d1fad9bdc1f3eb91af3f1edccdd0916ad8d49adea04c7246f2",
+      "metadata_bytes": 2313,
+      "report_line_id": "1389464703528416",
+      "report_code": "rwjdkbfx",
+      "report_name": "任务进度看板-分析"
+    },
+    {
+      "path": "assets/rwjdkbbg.cpt",
+      "bytes": 11738,
+      "sha256": "586da6089ede715915c162ed829054950fa1b816adc3870de72252064c4c3f2e",
+      "install_path": "WEB-INF/reportlets/rwjdkbbg/任务进度看板-报告.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/rwjdkbbg.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "e4befc7a83e273207b391f2d7afda13ef1bb0ac794444722400e112d2386a1e4",
+      "metadata_bytes": 2313,
+      "report_line_id": "1389464916356579",
+      "report_code": "rwjdkbbg",
+      "report_name": "任务进度看板-报告"
+    },
+    {
+      "path": "assets/jcjgcx.cpt",
+      "bytes": 28209,
+      "sha256": "66403ea75c7a974a2b532feb39994e0b6987e4c3dc6fdde2f5c64e9d5e0c3ed6",
+      "install_path": "WEB-INF/reportlets/jcjgcx/检测结果.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/jcjgcx.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "35334665e764b0cbfa23eaf719060c58baa32ace74d7aa4577ce0fe6384ae5d8",
+      "metadata_bytes": 2266,
+      "report_line_id": "1389624399859168",
+      "report_code": "jcjgcx",
+      "report_name": "检测结果查询"
+    },
+    {
+      "path": "assets/rwqm.cpt",
+      "bytes": 11267,
+      "sha256": "b7e37fc20ac8650f2805b20ea9a5cf7458578d038f5b06b5ad64dda355a9a257",
+      "install_path": "WEB-INF/reportlets/rwqm/统计-人员签名查询.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/rwqm.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "0cc6dffac89bede8dca16e4c2487798f4d009b98922e55cdd2919ac718877c2a",
+      "metadata_bytes": 2297,
+      "report_line_id": "1389665817128416",
+      "report_code": "rwqm",
+      "report_name": "人员签名"
+    },
+    {
+      "path": "assets/fxkb.cpt",
+      "bytes": 52947,
+      "sha256": "ebadee93f88cc2f2279e4db62750a1304ca446cbf9d85b178197dec69600e527",
+      "install_path": "WEB-INF/reportlets/fxkb/分析看板.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/fxkb.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "cfb5db4246d3e95c53f4676ff7dcdb370573c584beca0affab4f77bda5840540",
+      "metadata_bytes": 2258,
+      "report_line_id": "1391751419556224",
+      "report_code": "fxkb",
+      "report_name": "分析看板"
+    },
+    {
+      "path": "assets/fxkbtjpd.cpt",
+      "bytes": 29917,
+      "sha256": "76c60fc65bd3fabf1acfa0af274e336d6997317dee971a9b3b3e2cce2a81edd4",
+      "install_path": "WEB-INF/reportlets/fxkbtjpd/分析看板(按日期统计排单).cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/fxkbtjpd.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "051210943ac084dc23ea1b282f8d89c6a448b411e768bb197fd821827525a616",
+      "metadata_bytes": 2343,
+      "report_line_id": "1469555387403840",
+      "report_code": "fxkbtjpd",
+      "report_name": "分析看板(统计排单)"
+    },
+    {
+      "path": "assets/yqcrk.cpt",
+      "bytes": 20509,
+      "sha256": "6630ac73212af3d1767cef22c1f8f5b820577623f311bcb65204798f830be2a5",
+      "install_path": "WEB-INF/reportlets/yqcrk/仪器设备出入库及使用过程性能检查记录表.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/yqcrk.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "b0b6e6d1822e5d079ccfe2db9a2b3c36c1128aa95c2d3329f30ead5de626ebbf",
+      "metadata_bytes": 2397,
+      "report_line_id": "1511240290732896",
+      "report_code": "yqcrk",
+      "report_name": "仪器设备出入库及使用过程性能检查记录表"
+    },
+    {
+      "path": "assets/gsrwjdkb.cpt",
+      "bytes": 31535,
+      "sha256": "a2280a55fc06cc0561ccd6f5d3628a3188636cb22e859d6efb704110ef8bcc4c",
+      "install_path": "WEB-INF/reportlets/gsrwjdkb/生产任务看板.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/gsrwjdkb.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "c1b032e78aa38290c425b128155f08b3b91d31addd634262ca70d667ae1fdb41",
+      "metadata_bytes": 2292,
+      "report_line_id": "1516502645514560",
+      "report_code": "gsrwjdkb",
+      "report_name": "生产任务看板(旧)"
+    },
+    {
+      "path": "assets/cyapwzx.cpt",
+      "bytes": 20001,
+      "sha256": "3f120302a9ea2f0fd1db4bf3767bf8355f40b267ea5297f0a97546a52cba38a1",
+      "install_path": "WEB-INF/reportlets/cyapwzx/采样安排-已安排未采样.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/cyapwzx.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "4bca1c713722c6f964bbbef860d3e02c5fbe50d0b61c85785c30c5a1abd92d2d",
+      "metadata_bytes": 2327,
+      "report_line_id": "1517068322189920",
+      "report_code": "cyapwzx",
+      "report_name": "采样安排未采样点位"
+    },
+    {
+      "path": "assets/bgjdkb.cpt",
+      "bytes": 26344,
+      "sha256": "02535ffba3a3dc7e330aec42bc50544b42ca065e8c31f59851942310a80ac9c5",
+      "install_path": "WEB-INF/reportlets/bgjdkb/报告-报告进度看板_2603-01.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/bgjdkb.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "170cd878db7b1861d9822e718a4e0ae6c6c5314fbceacd3f500fd1f7925a7d2f",
+      "metadata_bytes": 2329,
+      "report_line_id": "1518396586296736",
+      "report_code": "bgjdkb",
+      "report_name": "报告-报告进度看板"
+    },
+    {
+      "path": "assets/scjckb2.cpt",
+      "bytes": 35915,
+      "sha256": "2d2c77df62f1f53f41afe9185457fd8c846c82632f516bd06de3d0ba1dd0ca0c",
+      "install_path": "WEB-INF/reportlets/scjckb2/生产任务看板.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/scjckb2.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "f1796829346f3cd30f9b17199f9ae96bf8b1049f67a33e85f5847734ede9225d",
+      "metadata_bytes": 2288,
+      "report_line_id": "1546806278272480",
+      "report_code": "scjckb2",
+      "report_name": "生产进度看板"
+    },
+    {
+      "path": "assets/resl.cpt",
+      "bytes": 12772,
+      "sha256": "279fcffdd30983b99fa980af3733bd5e9d4abc310b08deeca55aa22d6842b730",
+      "install_path": "WEB-INF/reportlets/resl/任务数量看板.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/resl.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "217ec531c40b11e69b6103f877ebd2e28e3765100965f611ed371b752ec8e288",
+      "metadata_bytes": 2276,
+      "report_line_id": "1558284399977536",
+      "report_code": "resl",
+      "report_name": "各分公司-任务数量看板"
+    },
+    {
+      "path": "assets/fxryjxtj.cpt",
+      "bytes": 48439,
+      "sha256": "6ebb0ea0b72520ae168dda682401efd853409b1a1b7cb852854090f6d7344581",
+      "install_path": "WEB-INF/reportlets/fxryjxtj/统计_实验室工作量统计表.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/fxryjxtj.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "850e923c495af198bb54fb6e5100b94c321c7c3cf6eb8c789c43f4e3845e0df7",
+      "metadata_bytes": 2340,
+      "report_line_id": "1579155852848576",
+      "report_code": "fxryjxtj",
+      "report_name": "分析人员工作量统计"
+    },
+    {
+      "path": "assets/cxdbsjcjgb.cpt",
+      "bytes": 11659,
+      "sha256": "2e8f37e8c462b0d83a40096141e1d2b5c8ce1e5d55be622df01ba600c24acea0",
+      "install_path": "WEB-INF/reportlets/cxdbsjcjgb/查询-检测结果表(横向)_2606.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/cxdbsjcjgb.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "bc10d3d1c3883c833b814c350fb6860af52b03e2018bc0d355ca8668cae2e11e",
+      "metadata_bytes": 2351,
+      "report_line_id": "1595473245765344",
+      "report_code": "cxdbsjcjgb",
+      "report_name": "查询-检测结果表(横向)"
+    },
+    {
+      "path": "assets/bgzzltj.cpt",
+      "bytes": 41329,
+      "sha256": "13e3ccedfd250c614f693b886698ab97f5737af6263eb285dff39114acca21ce",
+      "install_path": "WEB-INF/reportlets/bgzzltj/工作量统计-报告工作量.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/bgzzltj.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "bd500c927070d712ddace68cd514b488a753ffe4e6b852d8150e5dc59c29f100",
+      "metadata_bytes": 2327,
+      "report_line_id": "1609691922740064",
+      "report_code": "bgzzltj",
+      "report_name": "报告工作量统计"
+    },
+    {
+      "path": "assets/kf_tcbltjb.cpt",
+      "bytes": 30075,
+      "sha256": "5ddacd28f985feb6936cac1a596685f86809b29121cfa20ff8bb96cb701c9107",
+      "install_path": "WEB-INF/reportlets/kf_tcbltjb/客服-合同提成统计表.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/kf_tcbltjb.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "42d3b81a01e0814e047fc1f8d0ff63a61fecd005ed91c8ee749437061ff49262",
+      "metadata_bytes": 2330,
+      "report_line_id": "1683439152962112",
+      "report_code": "kf_tcbltjb",
+      "report_name": "合同提成统计表"
+    },
+    {
+      "path": "assets/cysjtj.cpt",
+      "bytes": 46191,
+      "sha256": "ffed6009eddded70c2be89205a4c782e1cfc5ce6e1d6879291be2ae69345860f",
+      "install_path": "WEB-INF/reportlets/cysjtj/统计_现场室工作量统计表.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/cysjtj.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "393ec713d22d3d5cb478984d96e7b8b10dc92014c006bde8ddf504f3eea4d7fb",
+      "metadata_bytes": 2332,
+      "report_line_id": "1692400913685120",
+      "report_code": "cysjtj",
+      "report_name": "采样工作量统计"
+    },
+    {
+      "path": "assets/tjrwrkyzypltj.cpt",
+      "bytes": 16178,
+      "sha256": "2edb383651bb9aa72d5ba611e2653f8f63b2fe9d1ec2b99e83dada33151e6d7c",
+      "install_path": "WEB-INF/reportlets/tjrwrkyzypltj/统计-任务入库因子样品数量_2603.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 2,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/tjrwrkyzypltj.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "91da33a8b688f2a97d19e097adb36bf58052da6835f81e5279e5588597a33f5c",
+      "metadata_bytes": 2384,
+      "report_line_id": "1694089578136256",
+      "report_code": "tjrwrkyzypltj",
+      "report_name": "统计-任务入库因子数量统计"
+    },
+    {
+      "path": "assets/fxthyjtj.cpt",
+      "bytes": 17243,
+      "sha256": "6b88d3c3026f11b5dd367a5f99ac92fb3462002611a28fdbd6f561428583b22d",
+      "install_path": "WEB-INF/reportlets/fxthyjtj/分析审核退回.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/fxthyjtj.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "2bab7eb95366191d88d99fb3d9ba17a853ebe3fc26f77176f99deb9c90bca728",
+      "metadata_bytes": 2292,
+      "report_line_id": "1699853647404768",
+      "report_code": "fxthyjtj",
+      "report_name": "分析-退回意见统计"
+    },
+    {
+      "path": "assets/sysrpj.cpt",
+      "bytes": 47430,
+      "sha256": "7d8d50a6b50d2108caddf4f08711d73bc949dfd6e6e6684835261ce1397685b6",
+      "install_path": "WEB-INF/reportlets/sysrpj/统计_实验室工作量统计表2.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/sysrpj.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "1bee9a0539284546f020f3c4ab8c6f4cf9e39cddcec110a29c9c8163c3a94712",
+      "metadata_bytes": 2335,
+      "report_line_id": "1706506964086784",
+      "report_code": "sysrpj",
+      "report_name": "分析-实验室日平均工作量统计"
+    },
+    {
+      "path": "assets/xccyjh.cpt",
+      "bytes": 41170,
+      "sha256": "3b61f1858628d2e549fffd88bdce265fa4d30b1176f2288005e8386359046d1e",
+      "install_path": "WEB-INF/reportlets/xccyjh/统计_现场室工作量统计表.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/xccyjh.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "3e1392a7c893b63b92aef31beeadc48d0d5ceb5d70ea56666a29bad4506395eb",
+      "metadata_bytes": 2332,
+      "report_line_id": "1706557505163264",
+      "report_code": "xccyjh",
+      "report_name": "计划采样统计表"
+    },
+    {
+      "path": "assets/cythyitj.cpt",
+      "bytes": 22583,
+      "sha256": "25d6b376b94c6556d8851b5ec1e681a40182bd8d2f4a6b552ab18c951127f09d",
+      "install_path": "WEB-INF/reportlets/cythyitj/采样审核退回.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/cythyitj.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "e7371a763086c15b425bec45e0e3806fd273c3e42f5067be390fb2be7def08d9",
+      "metadata_bytes": 2292,
+      "report_line_id": "1735579720293280",
+      "report_code": "cythyitj",
+      "report_name": "采样退回意见统计"
+    },
+    {
+      "path": "assets/bgthyjtj.cpt",
+      "bytes": 20773,
+      "sha256": "9b8473a8046d2611fd4c3d8ca4683e2e9043cb11c9a401d604a1e6eef74f54fe",
+      "install_path": "WEB-INF/reportlets/bgthyjtj/报告审核退回.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 1,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/bgthyjtj.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "f91fa14c8f3c027a861d820a162dc79bb56a0eb915c17d795554e09e2f8d69f6",
+      "metadata_bytes": 2292,
+      "report_line_id": "1865261756650944",
+      "report_code": "bgthyjtj",
+      "report_name": "报告退回意见统计"
     }
   ],
   "additional_provenance": [
@@ -261,6 +696,721 @@
         }
       ],
       "source_capture_manifest_sha256": "fdb1fd7a7e99d89409b7efa41466ecb6716436e3cdeb8c2644d12e9491cce684"
+    },
+    {
+      "asset_path": "assets/jdkb.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "d2b703fc914262c3dbc6b9e3f7ef02168dd8fb3d2ea4f79ac27136a33bee7650",
+      "original_bytes": 43661,
+      "deployment_sha256": "7b7ab51ff4dc85d3c234fd20dd78bd625fc95ee7caa8dd38fc38072f8c7402cf",
+      "transformations": [
+        {
+          "operation": "clear_source_user_parameter_default",
+          "parameter": "userid",
+          "source_sha256": "d17aaf6a31729aed35b1a9c7ce7f6a32197061fee443a856cfede267f6987f2b"
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "9c71f2dc5f0c703015dd4676d7a09f30b821cb13ee3f12a5774d980dbdfe7862"
+    },
+    {
+      "asset_path": "assets/rwjdkbcy.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "28a0c855bf0842e0ce7faeedd522e5b3a5c44a1c442ecac0ff323ca7dba91d1f",
+      "original_bytes": 15112,
+      "deployment_sha256": "546113667bb972f1a44441a1952a2673cab9b9dd68c0920a2da6acd75f91d0a5",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "6c57c98b16a5b516a65b26dbfac00c8dbb26c0a532730bda07e4cb9be0a5e2f7"
+    },
+    {
+      "asset_path": "assets/rwjdkbfx.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "786b67ca7f1168a50136d71f3cfb251ab61bb01818768fb7a5604b8d8eca7f82",
+      "original_bytes": 24414,
+      "deployment_sha256": "f915299672395481bf04b144081ce92756bd72930e64052dd63ecbbf41c3d6d3",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "043e5e1aca89114b17be2632f437985d3e5532be671a494237c17506aeb07f44"
+    },
+    {
+      "asset_path": "assets/rwjdkbbg.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "51acf955d7c586c35c5fa6da7279229679799dc94f75fdfaaf47245e9df59d7b",
+      "original_bytes": 12036,
+      "deployment_sha256": "586da6089ede715915c162ed829054950fa1b816adc3870de72252064c4c3f2e",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "8886248781ead9a5d8133510759df095d573359123fc9faa4800c96450248e83"
+    },
+    {
+      "asset_path": "assets/jcjgcx.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "165a3e640c84ff92b4f8694e2441f881571655259cf33c85a87240d2dafc05d9",
+      "original_bytes": 28507,
+      "deployment_sha256": "66403ea75c7a974a2b532feb39994e0b6987e4c3dc6fdde2f5c64e9d5e0c3ed6",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "e802ab879ba09a57cf177d874ebe0813f8c572e39c32acef16b1a55c175281de"
+    },
+    {
+      "asset_path": "assets/rwqm.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "68680bc3f03ab512f66f0fa695ba656d1e459b14ea970276c426f95729e65fb8",
+      "original_bytes": 11420,
+      "deployment_sha256": "b7e37fc20ac8650f2805b20ea9a5cf7458578d038f5b06b5ad64dda355a9a257",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "0c52f31decfab8699ef2e21817baaca93049866f8a14bce296fe37793eaf276e"
+    },
+    {
+      "asset_path": "assets/fxkb.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "04c4c0d14e4600587cdc6bfddb0d8d067eb4fbf61fc6f0b51261cfc6f5d5415c",
+      "original_bytes": 53245,
+      "deployment_sha256": "ebadee93f88cc2f2279e4db62750a1304ca446cbf9d85b178197dec69600e527",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "e58be53de1a89b63a9c873d06a32e58870a6bf79d9f0348baae22e6108008f0a"
+    },
+    {
+      "asset_path": "assets/fxkbtjpd.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "9963bd5d6ec0f7f3672b6772d35f6255aab843c904c26f32460df27eafc7081f",
+      "original_bytes": 30469,
+      "deployment_sha256": "76c60fc65bd3fabf1acfa0af274e336d6997317dee971a9b3b3e2cce2a81edd4",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "f236153f6ade4871919c1f5b63550fd6ab411d6a723ccab6646df2aaa76a0022"
+    },
+    {
+      "asset_path": "assets/yqcrk.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "44d27add0394b312cd5e4e5ba7d7f59eb61c2eb1b5dc22412c23b1dabb7b70bd",
+      "original_bytes": 21052,
+      "deployment_sha256": "6630ac73212af3d1767cef22c1f8f5b820577623f311bcb65204798f830be2a5",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "4485631a22378a8a1f8a7813a3864c36d7a63d966e193aab890258a758daa32c"
+    },
+    {
+      "asset_path": "assets/gsrwjdkb.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "a4d9e54c6ce5ab4170d34ba1eddb194e69bd7c188b01543ac6c57b439a51eb0b",
+      "original_bytes": 32087,
+      "deployment_sha256": "a2280a55fc06cc0561ccd6f5d3628a3188636cb22e859d6efb704110ef8bcc4c",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "d64c75db53a0e49326308d733daae5c9aff7a4085b014caaa8769d1362744c2b"
+    },
+    {
+      "asset_path": "assets/cyapwzx.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "25a65be35d280f3d5bf3bfff03350e36e484bba27fc8af9c3ff7118bc50719ac",
+      "original_bytes": 20553,
+      "deployment_sha256": "3f120302a9ea2f0fd1db4bf3767bf8355f40b267ea5297f0a97546a52cba38a1",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "045aa26f594d4e16b9a68cdc3c832e6af73f3f9e0f92250c20174054b4273c93"
+    },
+    {
+      "asset_path": "assets/bgjdkb.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "8e3e98bea656c3407052150ef9749c70ac59a4b0d8c8efbf6904327bf447d6d5",
+      "original_bytes": 26888,
+      "deployment_sha256": "02535ffba3a3dc7e330aec42bc50544b42ca065e8c31f59851942310a80ac9c5",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "e91f73639339401ee9157ac51f76148bf7269a9fbaa59d9d06e9c78dda746efe"
+    },
+    {
+      "asset_path": "assets/scjckb2.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "5a10fcc5018f586e2f284466ee8f70d2797a14abc93c9a50252db5004aeb3bfb",
+      "original_bytes": 36467,
+      "deployment_sha256": "2d2c77df62f1f53f41afe9185457fd8c846c82632f516bd06de3d0ba1dd0ca0c",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "bb40e71228a0524e7c9608ade2cea052797351a4b627bd09e1f63b69f38754a1"
+    },
+    {
+      "asset_path": "assets/resl.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "5619bf2ddfb5bfd5e0fbae8c1f3eda3cf2c71a80ef2b56487b4c31ad077a9221",
+      "original_bytes": 13324,
+      "deployment_sha256": "279fcffdd30983b99fa980af3733bd5e9d4abc310b08deeca55aa22d6842b730",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "0d451194853ab5a6816a111771982bbb0f8faa324198a9f02f61e991299affd8"
+    },
+    {
+      "asset_path": "assets/fxryjxtj.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "ed3fe8d255d164d05208811cba093a941927e514dd6acf5f90528b1eea2d17fb",
+      "original_bytes": 49003,
+      "deployment_sha256": "6ebb0ea0b72520ae168dda682401efd853409b1a1b7cb852854090f6d7344581",
+      "transformations": [
+        {
+          "operation": "clear_source_user_parameter_default",
+          "parameter": "userid",
+          "source_sha256": "d17aaf6a31729aed35b1a9c7ce7f6a32197061fee443a856cfede267f6987f2b"
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "fa5578913120892159105fe306b763555b380837408d09e5fc8a9afbbf5874ce"
+    },
+    {
+      "asset_path": "assets/cxdbsjcjgb.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "916836954726c0fbd75a97382e16efd9deb1f47e002fcb1af5baa89e71bc7875",
+      "original_bytes": 12203,
+      "deployment_sha256": "2e8f37e8c462b0d83a40096141e1d2b5c8ce1e5d55be622df01ba600c24acea0",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "e10c4a9e55155c95e9f8178fbeeee19c4b8e8c4dab06c3da86a539d821218bc1"
+    },
+    {
+      "asset_path": "assets/bgzzltj.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "f95a097ea7ed8c5ab5371ec55e373a7a43fafeb327f678fd142a1cad007553f9",
+      "original_bytes": 41881,
+      "deployment_sha256": "13e3ccedfd250c614f693b886698ab97f5737af6263eb285dff39114acca21ce",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "45882a33c365584cbe0a404b123d41f24c1fab1e895d692649515a2232c39f75"
+    },
+    {
+      "asset_path": "assets/kf_tcbltjb.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "437d3425d3e040869977947bf50a2130631b5ae74aa020a9ef8ee0899ebd1758",
+      "original_bytes": 30674,
+      "deployment_sha256": "5ddacd28f985feb6936cac1a596685f86809b29121cfa20ff8bb96cb701c9107",
+      "transformations": [
+        {
+          "operation": "remove_exact_external_dblink_qualifier",
+          "object": "T_CRM_CONTRACT",
+          "qualifier": "LIMS_CZJKY_HT"
+        },
+        {
+          "operation": "remove_exact_external_dblink_qualifier",
+          "object": "T_CRM_CONTRACT_PACKPRICE",
+          "qualifier": "LIMS_CZJKY_HT"
+        },
+        {
+          "operation": "remove_exact_external_dblink_qualifier",
+          "object": "T_CRM_PAY_PROJECT",
+          "qualifier": "LIMS_CZJKY_HT"
+        },
+        {
+          "operation": "remove_exact_external_dblink_qualifier",
+          "object": "T_CRM_PAYMENT",
+          "qualifier": "LIMS_CZJKY_HT"
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "f595a550a0196a0098066ebb27a06b3cc238695ef486900d22e45b1dd54a9504"
+    },
+    {
+      "asset_path": "assets/cysjtj.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "6da6099c0ae16e631ed3c0c316828965ff2e7beb924284538dfc2d5264d55f34",
+      "original_bytes": 46734,
+      "deployment_sha256": "ffed6009eddded70c2be89205a4c782e1cfc5ce6e1d6879291be2ae69345860f",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "135a560e05a88dabfefbe8f1157a46c39ff53d3a052f4315c47b0021064909fd"
+    },
+    {
+      "asset_path": "assets/tjrwrkyzypltj.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "433eb09c9029359ec41761d39091f01978403137a7866a9019faff8688a5691f",
+      "original_bytes": 16713,
+      "deployment_sha256": "2edb383651bb9aa72d5ba611e2653f8f63b2fe9d1ec2b99e83dada33151e6d7c",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 2
+        }
+      ],
+      "query_text_sha256": "b498e585870405fc707046a93ebaafe050e1e705aa88379a6abf2cbca2424539"
+    },
+    {
+      "asset_path": "assets/fxthyjtj.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "05cf22689019a5f499d81341d11ac4099d44d43df79ab7868ccb69352f45fd35",
+      "original_bytes": 17541,
+      "deployment_sha256": "6b88d3c3026f11b5dd367a5f99ac92fb3462002611a28fdbd6f561428583b22d",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "ec67293fcd29c74733f154baf5537e506530c98fa5a4df07c1384c8ab995bf6c"
+    },
+    {
+      "asset_path": "assets/sysrpj.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "97de0d06ef7265373152240de1015a0798fa3b9286028de1e613617276f0d8ad",
+      "original_bytes": 47994,
+      "deployment_sha256": "7d8d50a6b50d2108caddf4f08711d73bc949dfd6e6e6684835261ce1397685b6",
+      "transformations": [
+        {
+          "operation": "clear_source_user_parameter_default",
+          "parameter": "userid",
+          "source_sha256": "d17aaf6a31729aed35b1a9c7ce7f6a32197061fee443a856cfede267f6987f2b"
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "2a04fc68d0e03432102675cd321704a3400fc76147107b45d7f86472db6c4a15"
+    },
+    {
+      "asset_path": "assets/xccyjh.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "655c9e0ab957826bf8e2fc5a69e64cbc4202b4850cf4e0177ae2b1a7a263d528",
+      "original_bytes": 41713,
+      "deployment_sha256": "3b61f1858628d2e549fffd88bdce265fa4d30b1176f2288005e8386359046d1e",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "946b67fbd455365a94a8ea1ffa0719e77903ec5f0f94eb16b664c901c0349215"
+    },
+    {
+      "asset_path": "assets/cythyitj.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "b9f35104fba04f03c3ed1db0a560ee523a378d61bb53d5cba833911a985368eb",
+      "original_bytes": 23126,
+      "deployment_sha256": "25d6b376b94c6556d8851b5ec1e681a40182bd8d2f4a6b552ab18c951127f09d",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "e92291c259aef44d679a8817b4b7b78cf2d01b3a29409b9fa6320e06632dff49"
+    },
+    {
+      "asset_path": "assets/bgthyjtj.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "b36693675d8355eee62d57b88ccfa22c2412e4725d9bcd42fe2034f1244990a0",
+      "original_bytes": 21317,
+      "deployment_sha256": "9b8473a8046d2611fd4c3d8ca4683e2e9043cb11c9a401d604a1e6eef74f54fe",
+      "transformations": [
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "replace_named_datasource_with_placeholder",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "db15de6a611a1cf1115b06201216fcba7a125324a1ffec20bcf58917242d510d"
     }
   ],
   "dependencies": [
@@ -278,22 +1428,22 @@
     }
   ],
   "configuration": {
-    "schema": "owned-two-report-configuration/v1",
+    "schema": "owned-home-report-configuration/v2",
     "row_counts": {
       "T_CORE_REPORT_CONFIG": 1,
-      "T_CORE_REPORT_CONFIG_LINE": 2
+      "T_CORE_REPORT_CONFIG_LINE": 27
     },
     "files": [
       {
         "path": "install-config.sql",
-        "bytes": 6688,
-        "sha256": "3cc35f97dd2bd2f5ebbd9a67a2b881d8e54ae3810a97cb8fc11cbb99cb9be6ea",
+        "bytes": 65448,
+        "sha256": "5b4e235eec29fe228e1a197c65f7232163b477c0668d2a84eacfe0bbeb0e9e2d",
         "role": "configuration"
       },
       {
         "path": "config-provenance.json",
-        "bytes": 2980,
-        "sha256": "ad21ca77ebe8692ac8144e5fc3808df21f5933f48ec72b7c205c7cf38f194e92",
+        "bytes": 23120,
+        "sha256": "7155891825731cb8734e58593c78c125a026ab53b17a985b88c16122459c764e",
         "role": "provenance"
       }
     ]

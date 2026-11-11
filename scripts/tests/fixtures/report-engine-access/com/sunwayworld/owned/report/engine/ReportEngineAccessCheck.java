@@ -247,6 +247,10 @@ public final class ReportEngineAccessCheck {
         require(first.entered == 1, "authenticated initial rendering must reach engine");
         require(!target.attributes.isEmpty(), "new async report session must receive ownership binding");
         require(invoke(filter, continuation(SID), null).entered == 1, "same owner must be able to query/page its report session");
+        Request chart = new Request("GET", "/decision/view/report").parameter("op", "chart").parameter("cmd", "writer_out_html").parameter("sessionID", SID).parameter("chartID", "Cells__A2__chart");
+        require(invoke(filter, chart, null).entered == 1, "owned chart rendering must reach engine");
+        denied(filter, new Request("GET", "/decision/view/report").parameter("op", "chart").parameter("cmd", "delete").parameter("sessionID", SID), 403);
+        denied(filter, new Request("GET", "/decision/view/report").parameter("op", "chart").parameter("cmd", "writer_out_html"), 403);
         Request headerOnly = new Request("POST", "/decision/view/report").parameter("op", "widget").header("sessionID", SID);
         require(invoke(filter, headerOnly, null).entered == 1, "Fine widget request must accept actual sessionID header transport");
         require(invoke(filter, new Request("POST", "/decision/view/report").parameter("op", "fr_paramstpl").header("SESSIONID", SID), null).entered == 1, "Fine parameter request must accept case-insensitive header names");
@@ -323,6 +327,7 @@ public final class ReportEngineAccessCheck {
             require(values.equals(raw.getParameter("__parameters__")), "declared report filter JSON must reach the real engine unchanged"));
         require(accepted.entered == 1, "owned Fine fr_dialog query container must be accepted");
         require(invoke(filter, dialog(SID, "{}"), null).entered == 1, "empty query object must preserve empty filter behavior");
+        require(invoke(filter, dialog(SID, "{\"编制人\":\"\",\"接收节点\":\"\"}"), null).entered == 1, "original Chinese parameter names must reach engine");
         require(invoke(filter, dialog(SID, "{\"kpzt\":[\"已开票\",\"未开票\"]}"), null).entered == 1,
             "declared checkbox array must retain normal Fine filter behavior");
         ReportEngineAccessFilter.Identity owner = portal.identity;
@@ -335,6 +340,7 @@ public final class ReportEngineAccessCheck {
         denied(filter, new Request("POST", "/decision/view/report").parameter("op", "fr_dialog").parameter("__parameters__", values), 403);
         denied(filter, dialog("session-fixture-unknown", values), 403);
         denied(filter, dialog(SID, values).parameter("__parameters__", values, values), 403);
+        denied(filter, dialog(SID, "{\"userid\":\"another-user\"}"), 403);
         for (String key : new String[] {"sessionID", "SESSIONID", "viewlet", "ViewLet", "reportlet", "formlet", "loginType", "op", NONCE, NONCE.toUpperCase(Locale.ROOT), "__parameters__", "@type"}) {
             denied(filter, dialog(SID, "{\"" + key + "\":\"forged\"}"), 403);
         }
@@ -510,6 +516,17 @@ public final class ReportEngineAccessCheck {
             PortalIdentity portal = new PortalIdentity();
             ReportEngineAccessFilter filter = new ReportEngineAccessFilter(portal);
             filter.configureEngine(engineLoader);
+            require(ReportEngineAccessFilter.installedTemplates().size() == 27, "all home templates must be registered");
+            for (String template : ReportEngineAccessFilter.installedTemplates()) {
+                Result restored = invoke(filter, new Request("GET", "/decision/view/report").parameter("viewlet", template), null);
+                require(restored.entered == 1 && restored.response.status == 200, "restored template must reach engine: " + template);
+                portal.identity = new ReportEngineAccessFilter.Identity("fixture-user", "fixture-token-role-org-A", Collections.emptySet());
+                denied(filter, new Request("GET", "/decision/view/report").parameter("viewlet", template), 403);
+                portal.identity = new ReportEngineAccessFilter.Identity("fixture-user", "fixture-token-role-org-A");
+            }
+            denied(filter, new Request("GET", "/decision/view/report").parameter("viewlet", "fxryjxtj/undefined"), 403);
+            denied(filter, initial().parameter("userid", "another-user"), 403);
+
             authenticationAndRouting(portal, filter);
             ownership(portal, filter);
             resourcesAndCleanup(portal, filter);

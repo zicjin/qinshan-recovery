@@ -12,7 +12,10 @@ package: 737 tables, ordered indexes/constraints, types, selected routines and
 per-table verification. It also ships a finite technical bootstrap for locale,
 translations, static menus, entity metadata and safe UI/select configuration,
 plus exact verification of that subset. The distribution provides the separate
-first-administrator installer. Its schema manifest remains partial and the SQL
+first-administrator installer. The finite bootstrap also restores the original
+four-table [audit configuration](audit-configuration.md), preserving enabled and
+disabled states without enabling runtime profiles or copying audit history.
+Its schema manifest remains partial and the SQL
 initializer rejects before applying any DDL. Run
 `python3 scripts/verify-core-schema-package.py --check-package` to validate shipped
 files without private inputs; this does not establish complete deployment readiness.

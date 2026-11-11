@@ -179,7 +179,7 @@ python3 scripts/verify-core-schema-package.py --check-package
 
 This does not grant deployment readiness. The normal package gate and SQL
 installer still reject the incomplete package before applying DDL.
-Its finite `70-bootstrap.sql` supplies 4,871 reviewed technical rows across 25
+Its finite `70-bootstrap.sql` supplies 8,207 reviewed technical rows across 29
 tables, including locale, menu, entity and UI configuration, 28 dictionary
 categories, 120 options and their translation dependencies. Captures are bound
 separately; empty production categories remain empty.
@@ -210,6 +210,11 @@ definitions in `T_CORE_MENU_EXT`, preserving 40 enabled and one disabled entry.
 Service definitions are separate from process XML, versions, organization scope
 and candidate assignments; those workflow dependencies are not installed by
 these metadata rows.
+The four original audit configuration tables are also included with all 3,336
+captured technical rows. Existing enabled/disabled states and source orphan or
+duplicate targets are retained. This does not enable audit profiles or field
+switches. See [audit configuration](docs/deployment/audit-configuration.md) for
+the two distinct audit modes and their installation boundary.
 The distribution now includes a one-time
 [first-administrator command](docs/deployment/first-administrator.md), accepting
 private installer identities, password and policy. It initializes a verified

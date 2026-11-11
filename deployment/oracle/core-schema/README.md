@@ -37,7 +37,7 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 4,871 rows across twenty-five explicitly selected
+The technical bootstrap contains 8,207 rows across twenty-nine explicitly selected
 configuration tables: 2 locales, 1,350 internationalization keys, 1,375 messages,
 392 static and 10 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
 relations, one system UI config, one login UI config and 37 source-referenced
@@ -70,6 +70,14 @@ business service. They contain no process instances, candidate identities,
 organizations, role grants or workflow XML. The original list and generic detail
 queries apply `ENABLE='1'`; a disabled definition is not made visible by this
 installation.
+The four audit configuration tables add 186 table switches, 3,038 old-audit field
+switches, six new-audit table definitions and 106 new-audit column switches.
+They preserve every captured row, including disabled switches, duplicate targets
+and original stale references. The three SQL configuration fields are all NULL;
+no audit records or actor/organization/time provenance are included. This seed
+changes neither runtime profiles nor operation switches. See
+[audit configuration](../../../docs/deployment/audit-configuration.md).
+
 `bootstrap-provenance.json` pins every emitted statement and selected
 source row. Identity/audit-origin columns are not copied. No users, organizations,
 roles, passwords or permission grants are copied from production.

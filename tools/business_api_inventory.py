@@ -418,7 +418,7 @@ def _routes_for_source(info: Dict[str, object], infos: Dict[str, Dict[str, objec
         for base in bases:
             item = dict(route)
             item["class_base"] = base
-            item["path"] = _join(base, route["path"])
+            item["path"] = _join(base, route.get("declared_path", route["path"]))
             resolved.append(item)
     # Generic resource interfaces contribute a large inherited API surface that
     # is invisible to a source-only annotation scan.  Register those routes
@@ -469,8 +469,8 @@ def _routes_for_source(info: Dict[str, object], infos: Dict[str, Dict[str, objec
                 visited.add(parent["qualified"])
                 parent_routes = extract_routes(parent["text"], str(parent["relative"]), parent["constants"])
                 for route in parent_routes:
-                    suffix = route["path"]
-                    if route.get("class_base"):
+                    suffix = route.get("declared_path", route["path"])
+                    if "declared_path" not in route and route.get("class_base"):
                         suffix = suffix[len(route["class_base"]):]
                     for base in bases:
                         # An inherited class mapping is already in bases;
@@ -524,6 +524,7 @@ def extract_routes(source: str, source_path: str, constants: Optional[Mapping[st
                     "class_base": base,
                     "method": method,
                     "path": _join(base, path),
+                    "declared_path": path,
                     "annotation": name,
                 })
         pending = None

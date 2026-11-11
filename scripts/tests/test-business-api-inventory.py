@@ -250,6 +250,24 @@ public class Documents {
             ("GET", "/documents"),
         ], [(r["method"], r["path"]) for r in extract_routes(source, "Documents.java")])
 
+    def test_inherited_empty_mapping_does_not_gain_explicit_slash(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "Root.java").write_text('''
+public interface Root {
+ @PostMapping void insert();
+ @GetMapping("/") void slash();
+}
+''')
+            (root / "Concrete.java").write_text('''
+@RestController
+@RequestMapping("/concrete")
+public class Concrete implements Root {}
+''')
+            rows = build_owned_boundary_inventory([root], [])
+            self.assertEqual({("POST", "/concrete"), ("GET", "/concrete/")},
+                             {(r["method"], r["path"]) for r in rows})
+
     def test_inventory_marks_packaged_class_and_unknown_route(self):
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)

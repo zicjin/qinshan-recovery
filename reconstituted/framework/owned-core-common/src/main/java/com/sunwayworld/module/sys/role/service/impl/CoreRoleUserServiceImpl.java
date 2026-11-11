@@ -7,6 +7,7 @@ import com.sunwayworld.framework.context.ApplicationContextHelper;
 import com.sunwayworld.framework.data.page.Page;
 import com.sunwayworld.framework.data.page.Pagination;
 import com.sunwayworld.framework.database.sql.Order;
+import com.sunwayworld.framework.exception.core.ApplicationWarningException;
 import com.sunwayworld.framework.mybatis.mapper.MapperParameter;
 import com.sunwayworld.framework.mybatis.mapper.MatchPattern;
 import com.sunwayworld.framework.mybatis.mapper.SearchFilter;
@@ -89,6 +90,11 @@ public class CoreRoleUserServiceImpl implements CoreRoleUserService {
       if (roleIdList.isEmpty()) {
          return null;
       } else {
+         for (Long roleId : roleIdList) {
+            if (roleId == null || this.coreRoleService.getDao().selectByIdIfPresent(roleId) == null) {
+               throw new ApplicationWarningException("GIKAM.EXCEPTION.NO_VALUE_EXISTS");
+            }
+         }
          List<CoreRoleUserBean> insertRoleUserList = roleIdList.stream().map(r -> {
             CoreRoleUserBean roleUser = new CoreRoleUserBean();
             roleUser.setId(ApplicationContextHelper.getNextIdentity());

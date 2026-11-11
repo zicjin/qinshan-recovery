@@ -54,7 +54,10 @@ runs alongside it. Oracle, Redis and other network peers are not restarted or
 replaced.
 
 The entry waits for a nonempty RSA X.509 public key at the readiness URL. Empty
-HTTP 200 responses do not establish readiness. It checks the protected network
+HTTP 200 responses do not establish readiness. The default deadline is 360
+seconds: the real application can take more than 120 seconds to finish startup.
+Use `--readiness-timeout` only when the target's measured startup requires a
+different deadline. It checks the protected network
 peer identities and writes a private receipt. Receipt metadata is diagnostic,
 not strict API evidence. After switching, log in and read
 `/core/module/sys/logins/account` in the same session, then read meaningful

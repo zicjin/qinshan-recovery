@@ -355,7 +355,8 @@ def main():
     parser.add_argument('--receipt', required=True, type=Path, help='new private receipt file (0600)')
     parser.add_argument('--backup-name', help='retained current name; default NAME-retained-ID12')
     parser.add_argument('--docker-socket', default='/var/run/docker.sock', help='absolute local Unix socket path')
-    parser.add_argument('--readiness-timeout', type=float, default=120)
+    parser.add_argument('--readiness-timeout', type=float, default=360,
+                        help='seconds to await a valid RSA key (default: 360)')
     parser.add_argument('--execute', action='store_true', help='perform the switch; default validates only')
     args = parser.parse_args()
     receipt = {'schema': 1, 'status': 'preflight', 'execute': args.execute}

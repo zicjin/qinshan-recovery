@@ -254,6 +254,7 @@ _HARNESS_SUFFIXES = (
     "scripts/cleanup-strict-sss2-api-runtime.sh",
     "scripts/refresh-owned-sss2-app.sh",
     "scripts/rollback-owned-sss2-app.sh",
+    "scripts/switch-owned-application.py",
     "scripts/owned_readiness.py",
     "scripts/observe-sss2-clone-runtime.sh",
     "scripts/replay-vertical-slice.py",

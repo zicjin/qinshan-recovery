@@ -76,6 +76,17 @@ class SourceBindingTest(unittest.TestCase):
         self.assertEqual(first['application_binding'], second['application_binding'])
         self.assertIn('scripts/http_write_proof.py', second['harness_scope'])
 
+    def test_retained_application_switch_changes_harness_only(self):
+        before = self.capture()
+        (self.root / "scripts/switch-owned-application.py").write_text("activation-v1\n")
+        after = self.capture()
+        self.assertEqual(binding.binding_delta(before, after), {
+            "application": False, "harness": True, "runtime_contract": False,
+            "planning": False, "governance": False,
+        })
+        self.assertTrue(after["harness_dirty"])
+        self.assertEqual(before["distribution_input_digest"], after["distribution_input_digest"])
+
     def test_docs_and_registry_archive_only_commit_preserve_all_bindings(self):
         first = self.capture()
         (self.root / "docs" / "spec.md").write_text("docs-v2\n", encoding="utf-8")

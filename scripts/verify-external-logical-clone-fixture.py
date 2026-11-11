@@ -239,12 +239,19 @@ def main() -> int:
     parser.add_argument("--manifest", type=Path, default=MANIFEST)
     parser.add_argument("--alignment-manifest", type=Path, help="verify the finite local production-default migration")
     parser.add_argument("--integer-alignment-manifest", type=Path, help="verify the two empty clearance integer-column corrections")
+    parser.add_argument("--notnull-alignment-manifest", type=Path, help="verify the finite local thirteen-NOT-NULL migration")
     args = parser.parse_args()
     if args.integer_alignment_manifest is not None:
         try:
             return verify_integer_alignment(args.integer_alignment_manifest.resolve())
         except (OSError, ValueError, KeyError, TypeError, StopIteration) as exc:
             fail("invalid integer alignment inputs: " + str(exc))
+    if args.notnull_alignment_manifest is not None:
+        from external_notnull_alignment import verify
+        try:
+            return verify(args.notnull_alignment_manifest.resolve(), ROOT)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            fail("invalid NOT NULL alignment inputs: " + str(exc))
     if args.alignment_manifest is not None:
         try:
             return verify_alignment(args.alignment_manifest.resolve())

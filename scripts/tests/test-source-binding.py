@@ -229,6 +229,7 @@ class SourceBindingTest(unittest.TestCase):
         for relative in ('api-fixtures/schema/missing-runtime-tables.sql',
                          'api-fixtures/schema/missing-runtime-tables.json',
                          'scripts/schema_fixture.py',
+                         'scripts/external_notnull_alignment.py',
                          'project/sql/oracle/oracle_sql_emc.txt',
                          'project/sql/核心发版14.1.5/init-sql/oracle/0.common_sql_oracle-1.txt'):
             with self.subTest(relative=relative):

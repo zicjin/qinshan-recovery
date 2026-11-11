@@ -1,0 +1,142 @@
+{
+  "schema": "external-notnull-alignment-v1",
+  "stage": "not-null-only",
+  "source_class": "current-production-at-capture",
+  "strict_evidence": false,
+  "target_owner": "LIMS_RUNTIME_LOCAL",
+  "target_container": "FREEPDB1",
+  "business_rows_written": false,
+  "production_writes": false,
+  "sources": [
+    {
+      "path": "deployment/oracle/external-schema/structure.json",
+      "sha256": "7b8541e25c3055a0f440e137a5f08b5fd10c77adcdbcc5dd58adc519a77fd878"
+    },
+    {
+      "path": "deployment/oracle/external-schema/manifest.json",
+      "sha256": "722c98160ba0683254dcbda8be05a697cb9a7498645f15a7667be55953744e22"
+    },
+    {
+      "path": "deployment/oracle/external-schema/20-tables.sql",
+      "sha256": "77a98d714c3a61edb754462d79877a95b42de8c85163ae475161c09896f35689"
+    },
+    {
+      "path": "deployment/oracle/external-schema/30-indexes.sql",
+      "sha256": "81d5ed6266a83feb65a4e98dcab95ae3c9c705f4bb2e87205d3983a8a0bb0b56"
+    },
+    {
+      "path": "deployment/oracle/external-schema/35-constraints.sql",
+      "sha256": "d678dd28a305729e63fc22318d654fa6b829b06a5cf3062ffa4cd54c9995094d"
+    },
+    {
+      "path": "deployment/oracle/external-schema/90-verify.sql",
+      "sha256": "3893ba5dc1b3c9bcd8e14d5e5800f3f4584faad9d1b936d3521a0800c3378d23"
+    }
+  ],
+  "not_null_constraints": [
+    {
+      "table": "T_CRM_CONTRACT",
+      "column": "ID",
+      "constraint": "T_CRM_CONTRACT_CHECK",
+      "temporary_constraint": "SW_NN_DUP_01"
+    },
+    {
+      "table": "T_CRM_INVOICE_PROJ",
+      "column": "ID",
+      "constraint": "SYS_C0016549",
+      "temporary_constraint": "SW_NN_DUP_02"
+    },
+    {
+      "table": "T_CRM_INVOICE",
+      "column": "ID",
+      "constraint": "SYS_C0014712",
+      "temporary_constraint": "SW_NN_DUP_03"
+    },
+    {
+      "table": "T_CRM_INVOICE",
+      "column": "VOIDSTATUS",
+      "constraint": "SYS_C0016504",
+      "temporary_constraint": "SW_NN_DUP_04"
+    },
+    {
+      "table": "T_CRM_PAY_PROJECT",
+      "column": "ID",
+      "constraint": "SYS_C0019775",
+      "temporary_constraint": "SW_NN_DUP_05"
+    },
+    {
+      "table": "T_CRM_PAYMENT",
+      "column": "ID",
+      "constraint": "SYS_C0015696",
+      "temporary_constraint": "SW_NN_DUP_06"
+    },
+    {
+      "table": "T_LIMS_CLEARANCEFORM",
+      "column": "ID",
+      "constraint": "SYS_C007852",
+      "temporary_constraint": "SW_NN_DUP_07"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "ID",
+      "constraint": "SYS_C008260",
+      "temporary_constraint": "SW_NN_DUP_08"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "APPRSTS",
+      "constraint": "SYS_C008261",
+      "temporary_constraint": "SW_NN_DUP_09"
+    },
+    {
+      "table": "T_LIMS_FOLDERS",
+      "column": "FOLDERNO",
+      "constraint": "SYS_C008262",
+      "temporary_constraint": "SW_NN_DUP_10"
+    },
+    {
+      "table": "T_XFP_ORDER_TASK",
+      "column": "ID",
+      "constraint": "SYS_C008979",
+      "temporary_constraint": "SW_NN_DUP_11"
+    },
+    {
+      "table": "T_XFP_PROJECT",
+      "column": "ID",
+      "constraint": "SYS_C008981",
+      "temporary_constraint": "SW_NN_DUP_12"
+    },
+    {
+      "table": "T_XFP_REPORT",
+      "column": "ID",
+      "constraint": "SYS_C009295",
+      "temporary_constraint": "SW_NN_DUP_13"
+    }
+  ],
+  "sql": {
+    "path": "api-fixtures/schema/external-not-null-alignment-20261112.sql",
+    "sha256": "52e9c5e93a2f559eb64946ee3c25c8f13d1b5d6a6f30e57135bf723b7005f267"
+  },
+  "counts": {
+    "tables_checked": 10,
+    "not_null_constraints": 13,
+    "formal_constraints": 26
+  },
+  "resumable_states": [
+    "canonical ordinary CHECK plus generated actual inline NOT NULL",
+    "temporary ordinary CHECK plus actual inline NOT NULL",
+    "canonical actual inline NOT NULL plus temporary ordinary CHECK",
+    "canonical actual inline NOT NULL only"
+  ],
+  "remaining": [
+    "4 primary/unique backing index definitions and links require separate reviewed alignment"
+  ],
+  "limits": [
+    "Stage 2a only. Formal selected-ten-table structure is pinned; this is not full external dependency closure, API acceptance or current-strict evidence.",
+    "Only LIMS_RUNTIME_LOCAL/FREEPDB1. Coordinator owns stopped writers, target identity, pre-migration backup, content fingerprints, actual SQL execution and recovery. No private input is needed by SQL or offline verifier.",
+    "All thirteen state paths, name collisions, target column shapes and unrelated key closure are checked before the first constraint DDL. Each step rechecks actual metadata. Oracle DDL implicitly commits; preserve errors and rerun only from the four declared states.",
+    "Exact DBMS_METADATA.GET_DDL for the dictionary constraint name and owner distinguishes actual MODIFY NOT NULL from ordinary ADD CHECK. Canonical inline must retain NULLABLE=N and formal GENERATED=USER NAME before any temporary CHECK is dropped.",
+    "Only rename canonical ordinary CHECK to finite SW_NN_DUP_xx, rename actual inline NOT NULL to canonical, then drop that confirmed temporary ordinary CHECK. No CASCADE, business DML, row deletion, index DDL, package edit, service/cache operation or automatic inverse migration.",
+    "No application/API/strict promotion. Coordinator must prove idempotence, all thirteen canonical inline constraints and unchanged business content in the isolated target."
+  ]
+}

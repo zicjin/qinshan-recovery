@@ -1,156 +1,4 @@
 {
-  "schema": "combined-oracle-installation-v1",
-  "status": "partial",
-  "deployment_ready": false,
-  "complete_external_domains": false,
-  "target": {
-    "owner": "current-session-user",
-    "requires_empty_schema": true
-  },
-  "packages": [
-    {
-      "id": "external",
-      "path": "external-schema/manifest.json",
-      "sha256": "722c98160ba0683254dcbda8be05a697cb9a7498645f15a7667be55953744e22"
-    },
-    {
-      "id": "core",
-      "path": "core-schema/manifest.json",
-      "sha256": "e19435e9e8c0059b85fa969aed52d2117f3e034341f1af43dd96a6b068f7a6ad"
-    }
-  ],
-  "files": [
-    {
-      "path": "install.sql",
-      "role": "initializer",
-      "sha256": "e5f4e9c3a372bab49a7321f7bf23c187ca469388443a41aa88f3a51593afb4b1",
-      "bytes": 756
-    },
-    {
-      "path": "00-preflight.sql",
-      "role": "preflight",
-      "sha256": "4be68aff017c73098859f7b97eb1c777822e97035a8d27d44f33ae6057b5dd99",
-      "bytes": 900
-    },
-    {
-      "path": "99-verify.sql",
-      "role": "verifier",
-      "sha256": "5b719aad04bd4e99d40b21072f5eec12fb9ea7f36e5dcaf3ff062ab479d55c68",
-      "bytes": 82937
-    }
-  ],
-  "phases": [
-    {
-      "path": "00-preflight.sql",
-      "role": "preflight",
-      "sha256": "4be68aff017c73098859f7b97eb1c777822e97035a8d27d44f33ae6057b5dd99",
-      "bytes": 900
-    },
-    {
-      "bytes": 50273,
-      "path": "external-schema/20-tables.sql",
-      "role": "tables",
-      "sha256": "77a98d714c3a61edb754462d79877a95b42de8c85163ae475161c09896f35689",
-      "package": "external"
-    },
-    {
-      "bytes": 8125,
-      "path": "external-schema/30-indexes.sql",
-      "role": "indexes",
-      "sha256": "81d5ed6266a83feb65a4e98dcab95ae3c9c705f4bb2e87205d3983a8a0bb0b56",
-      "package": "external"
-    },
-    {
-      "bytes": 1886,
-      "path": "external-schema/35-constraints.sql",
-      "role": "constraints",
-      "sha256": "d678dd28a305729e63fc22318d654fa6b829b06a5cf3062ffa4cd54c9995094d",
-      "package": "external"
-    },
-    {
-      "bytes": 849082,
-      "path": "external-schema/90-verify.sql",
-      "role": "verifier",
-      "sha256": "3893ba5dc1b3c9bcd8e14d5e5800f3f4584faad9d1b936d3521a0800c3378d23",
-      "package": "external"
-    },
-    {
-      "bytes": 1984,
-      "path": "core-schema/10-types.sql",
-      "role": "types",
-      "sha256": "ebb61ba39c975d2ea18ab7077fae426230a47dbbf0e7c17d417362f80fb32ad7",
-      "package": "core"
-    },
-    {
-      "bytes": 510908,
-      "path": "core-schema/20-tables.sql",
-      "role": "tables",
-      "sha256": "f8d8d309fe29dfc82ef0907599a502f5aa759a1aa677fbb8976f35ba3a238b25",
-      "package": "core"
-    },
-    {
-      "bytes": 62723,
-      "path": "core-schema/30-indexes.sql",
-      "role": "indexes",
-      "sha256": "2ba9105586ad5202a37ee186bc9219a3be1a9d67bed172842e2d2ead0cd7cc36",
-      "package": "core"
-    },
-    {
-      "bytes": 345,
-      "path": "core-schema/35-constraints.sql",
-      "role": "constraints",
-      "sha256": "6a54eb75f1966073852eae407b2f9bd0e982b3cc9a65d887631208f398265177",
-      "package": "core"
-    },
-    {
-      "bytes": 300,
-      "path": "core-schema/60-sequences.sql",
-      "role": "sequences",
-      "sha256": "58e89dff655d02aad818301043fc7b41d9bba8ec84b43799c5d0d90651a66812",
-      "package": "core"
-    },
-    {
-      "bytes": 8230,
-      "path": "core-schema/40-routines.sql",
-      "role": "stored-code",
-      "sha256": "b162048071c45b10818e928a7b0660d8df40b2cea5bdd13de1a9fc1ea8df0a4c",
-      "package": "core"
-    },
-    {
-      "bytes": 743652,
-      "path": "core-schema/50-comments.sql",
-      "role": "comments",
-      "sha256": "f60c4691b4467a39124bda333e5c9a210dd77b8e02c81f03c54a1f0084d55cb9",
-      "package": "core"
-    },
-    {
-      "bytes": 1966696,
-      "path": "core-schema/70-bootstrap.sql",
-      "role": "bootstrap",
-      "sha256": "e818d017cde8111fa880c7a7bfe4bd8fe9055119f0be99b9912d6eab4e656cb6",
-      "package": "core"
-    },
-    {
-      "bytes": 3644230,
-      "path": "core-schema/80-bootstrap-verify.sql",
-      "role": "bootstrap-verifier",
-      "sha256": "40e8814cf07281c80b425047f0a38e1a5987cc605bf3c4dc4b0078dc1fd4e4cc",
-      "package": "core"
-    },
-    {
-      "bytes": 4505980,
-      "path": "core-schema/90-verify.sql",
-      "role": "verifier",
-      "sha256": "9bba82a064a6656b0d5ebeebc69365076d9f1da4780b3cea8f569da506959d49",
-      "package": "core"
-    },
-    {
-      "path": "99-verify.sql",
-      "role": "verifier",
-      "sha256": "5b719aad04bd4e99d40b21072f5eec12fb9ea7f36e5dcaf3ff062ab479d55c68",
-      "bytes": 82937
-    }
-  ],
   "blockers": [
     {
       "id": "configuration-bootstrap",
@@ -164,5 +12,157 @@
       "id": "full-system-installation-acceptance",
       "reason": "Combined structural phases are diagnostic only; complete new-device restoration and real application acceptance remain incomplete."
     }
-  ]
+  ],
+  "complete_external_domains": false,
+  "deployment_ready": false,
+  "files": [
+    {
+      "bytes": 756,
+      "path": "install.sql",
+      "role": "initializer",
+      "sha256": "e5f4e9c3a372bab49a7321f7bf23c187ca469388443a41aa88f3a51593afb4b1"
+    },
+    {
+      "bytes": 900,
+      "path": "00-preflight.sql",
+      "role": "preflight",
+      "sha256": "4be68aff017c73098859f7b97eb1c777822e97035a8d27d44f33ae6057b5dd99"
+    },
+    {
+      "bytes": 82937,
+      "path": "99-verify.sql",
+      "role": "verifier",
+      "sha256": "5b719aad04bd4e99d40b21072f5eec12fb9ea7f36e5dcaf3ff062ab479d55c68"
+    }
+  ],
+  "packages": [
+    {
+      "id": "external",
+      "path": "external-schema/manifest.json",
+      "sha256": "722c98160ba0683254dcbda8be05a697cb9a7498645f15a7667be55953744e22"
+    },
+    {
+      "id": "core",
+      "path": "core-schema/manifest.json",
+      "sha256": "547d9a5bd40edea9f470c86acf696712930a38b73958984ed4838ae17cf2772f"
+    }
+  ],
+  "phases": [
+    {
+      "bytes": 900,
+      "path": "00-preflight.sql",
+      "role": "preflight",
+      "sha256": "4be68aff017c73098859f7b97eb1c777822e97035a8d27d44f33ae6057b5dd99"
+    },
+    {
+      "bytes": 50273,
+      "package": "external",
+      "path": "external-schema/20-tables.sql",
+      "role": "tables",
+      "sha256": "77a98d714c3a61edb754462d79877a95b42de8c85163ae475161c09896f35689"
+    },
+    {
+      "bytes": 8125,
+      "package": "external",
+      "path": "external-schema/30-indexes.sql",
+      "role": "indexes",
+      "sha256": "81d5ed6266a83feb65a4e98dcab95ae3c9c705f4bb2e87205d3983a8a0bb0b56"
+    },
+    {
+      "bytes": 1886,
+      "package": "external",
+      "path": "external-schema/35-constraints.sql",
+      "role": "constraints",
+      "sha256": "d678dd28a305729e63fc22318d654fa6b829b06a5cf3062ffa4cd54c9995094d"
+    },
+    {
+      "bytes": 849082,
+      "package": "external",
+      "path": "external-schema/90-verify.sql",
+      "role": "verifier",
+      "sha256": "3893ba5dc1b3c9bcd8e14d5e5800f3f4584faad9d1b936d3521a0800c3378d23"
+    },
+    {
+      "bytes": 1984,
+      "package": "core",
+      "path": "core-schema/10-types.sql",
+      "role": "types",
+      "sha256": "ebb61ba39c975d2ea18ab7077fae426230a47dbbf0e7c17d417362f80fb32ad7"
+    },
+    {
+      "bytes": 510908,
+      "package": "core",
+      "path": "core-schema/20-tables.sql",
+      "role": "tables",
+      "sha256": "f8d8d309fe29dfc82ef0907599a502f5aa759a1aa677fbb8976f35ba3a238b25"
+    },
+    {
+      "bytes": 62723,
+      "package": "core",
+      "path": "core-schema/30-indexes.sql",
+      "role": "indexes",
+      "sha256": "2ba9105586ad5202a37ee186bc9219a3be1a9d67bed172842e2d2ead0cd7cc36"
+    },
+    {
+      "bytes": 345,
+      "package": "core",
+      "path": "core-schema/35-constraints.sql",
+      "role": "constraints",
+      "sha256": "6a54eb75f1966073852eae407b2f9bd0e982b3cc9a65d887631208f398265177"
+    },
+    {
+      "bytes": 300,
+      "package": "core",
+      "path": "core-schema/60-sequences.sql",
+      "role": "sequences",
+      "sha256": "58e89dff655d02aad818301043fc7b41d9bba8ec84b43799c5d0d90651a66812"
+    },
+    {
+      "bytes": 8230,
+      "package": "core",
+      "path": "core-schema/40-routines.sql",
+      "role": "stored-code",
+      "sha256": "b162048071c45b10818e928a7b0660d8df40b2cea5bdd13de1a9fc1ea8df0a4c"
+    },
+    {
+      "bytes": 743652,
+      "package": "core",
+      "path": "core-schema/50-comments.sql",
+      "role": "comments",
+      "sha256": "f60c4691b4467a39124bda333e5c9a210dd77b8e02c81f03c54a1f0084d55cb9"
+    },
+    {
+      "bytes": 3160821,
+      "package": "core",
+      "path": "core-schema/70-bootstrap.sql",
+      "role": "bootstrap",
+      "sha256": "7670396a7edfcf63a1987748bbf484f1c2d175940f94d272a17037b21e02ebf7"
+    },
+    {
+      "bytes": 6320775,
+      "package": "core",
+      "path": "core-schema/80-bootstrap-verify.sql",
+      "role": "bootstrap-verifier",
+      "sha256": "d8f36a61fe08bab938dfb1e3912398ee0b62f1f46d0f4970bfd545527bd15cdb"
+    },
+    {
+      "bytes": 4505980,
+      "package": "core",
+      "path": "core-schema/90-verify.sql",
+      "role": "verifier",
+      "sha256": "9bba82a064a6656b0d5ebeebc69365076d9f1da4780b3cea8f569da506959d49"
+    },
+    {
+      "bytes": 82937,
+      "path": "99-verify.sql",
+      "role": "verifier",
+      "sha256": "5b719aad04bd4e99d40b21072f5eec12fb9ea7f36e5dcaf3ff062ab479d55c68"
+    }
+  ],
+  "schema": "combined-oracle-installation-v1",
+  "status": "partial",
+  "target": {
+    "owner": "current-session-user",
+    "requires_empty_schema": true
+  }
 }

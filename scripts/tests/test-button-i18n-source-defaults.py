@@ -9,6 +9,43 @@ import hashlib
 import json
 
 ROOT = Path(__file__).resolve().parents[2]
+# Exact values independently observed in the current-production zh-CN map.
+# Both original project resources contain these keys with different values;
+# the current-production basename order makes the projectfunction value win.
+PRODUCTION_PROJECT_MESSAGES = {
+    "EMC.MODULE.BP.ORDER.ORDERRECEIPTS.BUTTON.MATCHBARCODE": "匹配二维码",
+    "EMC.MODULE.BP.ORDER.ORDERRECEIPTS.TIP.CONFIRM_MATCH_BARCODE": "确认匹配二维码",
+    "EMC.MODULE.BP.ORDER.ORDERRECEIPTS.TIP.NOTMATCH": "未匹配上任何二维码",
+    "EMC.MODULE.BP.RESULT.RUNS.MODAL.EDIT_EQUIPT": "修改仪器",
+    "EMC.MODULE.BP.RESULT.RUNS.TIP.EMPTY_REPORT_RESULT": "【{0}】样品下的报出结果字段为空，不能提交",
+    "EMC.MODULE.BP.RESULT.RUNS.TIP.EXIST_UNFINISHED_ORDER_TASK": "【{0}】下的【{1}】测试还没有建批",
+    "EMC.MODULE.BP.RESULT.RUNS.TIP.EXIST_UNFINISHED_RUN": "【{0}】下的【{2}】测试批【{1}】还未提交完成",
+    "EMC.MODULE.BP.RESULT.RUNS.TITLE.CHOOSE_ORDER_TASK": "选择测试",
+    "EMC.MODULE.BP.RESULT.RUNS.TITLE.CHOOSE_RUN": "选择测试批",
+    "EMC.MODULE.MDM.BASEMDM.MTLS.STOCK.TIP.BATCH_NO_EXIST": "唯一性编号重复",
+    "EMC.MODULE.MDM.EQUIPT.EQUIPTS.TAB.BASE_INFO": "基本信息",
+    "GIKAM.BUTTON.LABEL_PRINT": "任务分析表打印",
+    "T_EMC_CURVE.MARKINGNO": "标准使用液编号",
+    "T_EMC_EQUIPT_CALIBRATION_LINE.GASNAME1": "标准参数",
+    "T_EMC_EQUIPT_CALIBRATION_LINE.STANDRESULT1": "标准值",
+    "T_EMC_IMPROVEMENT.CREATEDBYNAME": "编制人",
+    "T_EMC_IMPROVEMENT.CREATEDTIME": "编制时间",
+    "T_EMC_ORDER.LABELNO2": "客户样品编号",
+    "T_EMC_ORDER_TASK.STOCKBATCHNO": "标准物质质控编号",
+    "T_EMC_PROJECT.CREATEDBYNAME": "下单人",
+    "T_EMC_PROJECT.CREATEDTIME": "下单创建日期",
+    "T_EMC_PROJECT.ENTRUSTORGNAME": "委托单位",
+    "T_EMC_PROJECT.PROJNAME": "任务名称",
+    "T_EMC_PROJECT.TESTORGADDRESS": "受检地址",
+    "T_EMC_PROJECT.TESTORGNAME": "受检单位",
+    "T_EMC_PROJ_ORDER.TESTMETHODBASIS": "方法依据",
+    "T_EMC_QUALITY_SUPERVISION_PLAN.CREATEDBYNAME": "编制人",
+    "T_EMC_QUALITY_SUPERVISION_PLAN.CREATEDTIME": "编制时间",
+    "T_EMC_REPORT.REFUSEREASON": "回退原因",
+    "T_EMC_RUN.CREATEDTIME": "建批时间",
+    "T_EMC_SOL.TAKEWEIGHTORVOLUME": "标准液称重量(体积)",
+    "T_EMC_SOL.TOCALIBRATESOLVOLUME": "待标液称重量(体积)",
+}
 JAVA = r"""
 import java.lang.reflect.*;
 import java.util.*;
@@ -29,6 +66,7 @@ import com.sunwayworld.module.sys.i18n.bean.*;
 import com.sunwayworld.module.sys.i18n.service.*;
 import com.sunwayworld.module.sys.i18n.dao.CoreI18nMessageDao;
 import org.springframework.context.i18n.LocaleContextHolder;
+import java.io.*;
 
 public class ButtonI18nContract {
     static void equal(Object expected, Object actual, String msg) {
@@ -56,9 +94,13 @@ public class ButtonI18nContract {
     public static void main(String[] args) throws Exception {
         boolean custom=args.length>0 && "custom".equals(args[0]);
         boolean project=args.length>0 && "project".equals(args[0]);
+        boolean configured=args.length>0 && "configured".equals(args[0]);
         StaticApplicationContext ctx = new StaticApplicationContext();
         if (custom) ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("test",
             Collections.<String,Object>singletonMap("spring.messages.basename","custom/messages")));
+        if (configured) ctx.getEnvironment().getPropertySources().addFirst(new MapPropertySource("test",
+            Collections.<String,Object>singletonMap("spring.messages.basename",
+                "static/emc/i18n/messages-emc,static/emc/projectfunction/i18n/messages-weipu")));
         CoreI18nConfigBean zh=new CoreI18nConfigBean();zh.setId("zh-CN");
         CoreI18nConfigBean en=new CoreI18nConfigBean();en.setId("en-US");
         List<CoreI18nMessageBean> db=new ArrayList<>();
@@ -88,6 +130,16 @@ public class ButtonI18nContract {
         try {
             DatabaseDrivenMessageSource resolver=new DatabaseDrivenMessageSource(ctx);
             new I18nHelper().setMessageSource(resolver);LocaleContextHolder.setLocale(Locale.CHINA);
+            if (!custom) {
+                Properties expected = new Properties();
+                String expectedPath=configured?"/configured-project-messages.properties":"/production-project-messages.properties";
+                try(Reader reader=new InputStreamReader(ButtonI18nContract.class.getResourceAsStream(expectedPath),"UTF-8")){expected.load(reader);}
+                equal(32,expected.size(),"complete production duplicate-key regression scope");
+                for(String code:expected.stringPropertyNames()) {
+                    equal(expected.getProperty(code),CoreI18nCache.instance().getI18nLocaleMap("zh-CN").get(code),"public locale map project precedence "+code);
+                    equal(expected.getProperty(code),I18nHelper.getMessage(code),"message resolver project precedence "+code);
+                }
+            }
             equal(custom?"数据库添加":"添加",I18nHelper.getMessage("GIKAM.BUTTON.INSERT"),"actual helper INSERT");
             equal(custom?"自定义删除":"删除",I18nHelper.getMessage("GIKAM.BUTTON.DELETE"),"actual helper DELETE");
             equal(custom?"数据库保存":"保存",I18nHelper.getMessage("GIKAM.BUTTON.SAVE"),"actual helper SAVE");
@@ -119,7 +171,7 @@ public class ButtonI18nContract {
                 equal("重载后的数据库选择提示",I18nHelper.getMessage("GIKAM.TIP.CHOOSE_ONE_ITEM"),"later database prompt override survives cache reload");
                 equal("必填项，请填写",I18nHelper.getMessage("GIKAM.VALIDATOR.REQUIRED"),"other prompt default remains after reload");
             }
-            System.out.println("button i18n actual cache/helper "+(custom?"database/custom precedence":project?"original project-over-database precedence":"source defaults and subsequent database reload")+": PASS");
+            System.out.println("button i18n actual cache/helper "+(custom?"database/custom precedence":configured?"explicit basename precedence":project?"original project-over-database precedence":"production basename defaults and subsequent database reload")+": PASS");
         } finally {executor.shutdownNow();LocaleContextHolder.resetLocaleContext();ctx.close();}
     }
 }
@@ -155,8 +207,14 @@ def main():
     resources=ROOT/'reconstituted/framework/owned-core-common/src/main/resources'
     with tempfile.TemporaryDirectory(prefix='button-i18n-')as directory:
         out=Path(directory);test=out/'ButtonI18nContract.java';test.write_text(JAVA,encoding='utf-8');custom=out/'custom';custom.mkdir();(custom/'messages_zh-cn.properties').write_text('GIKAM.BUTTON.DELETE=自定义删除\nGIKAM.TIP.CHOOSE_ONE_ITEM=项目选择提示\nGIKAM.VALIDATOR.REQUIRED=项目必填提示\n',encoding='utf-8')
+        (out/'production-project-messages.properties').write_text(''.join(k+'='+v+'\n' for k,v in PRODUCTION_PROJECT_MESSAGES.items()),encoding='utf-8')
+        original_first={}
+        for line in (ROOT/'project/src/main/resources/static/emc/i18n/messages-emc_zh-cn.properties').read_text(encoding='utf-8').splitlines():
+            if line.strip() and not line.strip().startswith('#') and '=' in line:
+                key,value=line.split('=',1);original_first.setdefault(key.strip(),value.strip())
+        (out/'configured-project-messages.properties').write_text(''.join(k+'='+original_first[k]+'\n' for k in PRODUCTION_PROJECT_MESSAGES),encoding='utf-8')
         cp=':'.join(str(x)for x in [out,resources,ROOT/'project/src/main/resources',*jars])
         subprocess.run([javac,'-source','8','-target','8','-encoding','UTF-8','-proc:none','-cp',cp,'-d',str(out),str(source),str(test)],check=True)
-        for scenario in [[],['custom'],['project']]:subprocess.run([java,'-cp',cp,'ButtonI18nContract',*scenario],check=True)
+        for scenario in [[],['custom'],['project'],['configured']]:subprocess.run([java,'-cp',cp,'ButtonI18nContract',*scenario],check=True)
 
 if __name__=='__main__':main()

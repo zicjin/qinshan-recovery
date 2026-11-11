@@ -657,22 +657,28 @@
       "sha256": "34c43de299eb20a45435b6d343badb43ebc16cefece4df9d9415f865a8093638"
     },
     {
-      "bytes": 1966696,
+      "bytes": 3160821,
       "path": "70-bootstrap.sql",
       "role": "bootstrap",
-      "sha256": "e818d017cde8111fa880c7a7bfe4bd8fe9055119f0be99b9912d6eab4e656cb6"
+      "sha256": "7670396a7edfcf63a1987748bbf484f1c2d175940f94d272a17037b21e02ebf7"
     },
     {
-      "bytes": 3644230,
+      "bytes": 6320775,
       "path": "80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "40e8814cf07281c80b425047f0a38e1a5987cc605bf3c4dc4b0078dc1fd4e4cc"
+      "sha256": "d8f36a61fe08bab938dfb1e3912398ee0b62f1f46d0f4970bfd545527bd15cdb"
     },
     {
-      "bytes": 2264097,
+      "bytes": 4323926,
       "path": "bootstrap-provenance.json",
       "role": "source-metadata",
-      "sha256": "684cbd8a51bfc8ca821b9f1cc01963d7ebfd6907fe68518cc482bbc8b59cc588"
+      "sha256": "56dfad56bbdb749f58c949344d58ca54382ac5e14ba112e9dc718ece0e4990f3"
+    },
+    {
+      "bytes": 1891610,
+      "path": "i18n-runtime-source.json",
+      "role": "source-metadata",
+      "sha256": "b9d69d69d4feb2e62963fc637b2dce82796e80e0cce13fb0f272d96f0fe504cb"
     }
   ],
   "limitations": [
@@ -13510,6 +13516,22 @@
     {
       "path": "private/ddl-alignment-20261109/production-index_columns-private.json",
       "sha256": "4fb0ac665220febbbe13a534b1ca15328d4e2710f1a0b06aac1dc3666e92757b"
+    },
+    {
+      "path": "private/remaining-i18n-20261111/20261111T023354Z-all-i18n-full-manifest-private.json",
+      "sha256": "238c0fde85d66f9ba4319aec2de776d60c42602cf021b3555cb5cd0cf31a157a"
+    },
+    {
+      "path": "private/remaining-i18n-20261111/20261111T023354Z-all-i18n-locale-private.json",
+      "sha256": "58b7464fa1139033912f057a4f5ee7c8f8e0354264e8fca9eb02b2b030a2e73a"
+    },
+    {
+      "path": "private/remaining-i18n-20261111/20261111T023354Z-all-i18n-private.json",
+      "sha256": "311d646f8802bfb72e9da4d199aea50e4b693e195147386a5ef572476106059d"
+    },
+    {
+      "path": "private/remaining-i18n-20261111/20261111T023354Z-all-i18n-message-private.json",
+      "sha256": "8922cac353bdb70571ed072e40aa6b24310f36cce649be3c858e1057c84779da"
     }
   ],
   "source_class": "current-production-at-capture",
@@ -13520,7 +13542,7 @@
   },
   "technical_bootstrap": {
     "complete": false,
-    "excluded_rows": 35,
+    "excluded_rows": 36,
     "path": "bootstrap-provenance.json",
     "row_counts": {
       "T_CORE_ADMIN_SELECT_CONFIG": 37,
@@ -13533,9 +13555,9 @@
       "T_CORE_CODE_CLASS": 2,
       "T_CORE_CONSTANT": 2,
       "T_CORE_FILE": 1,
-      "T_CORE_I18N": 1350,
+      "T_CORE_I18N": 5339,
       "T_CORE_I18N_CONFIG": 2,
-      "T_CORE_I18N_MESSAGE": 1375,
+      "T_CORE_I18N_MESSAGE": 5397,
       "T_CORE_IMPORT_TMPL": 2,
       "T_CORE_IMPORT_TMPL_CONFIG": 11,
       "T_CORE_LOGIN_CONFIG": 1,

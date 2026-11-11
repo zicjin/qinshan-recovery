@@ -37,7 +37,7 @@ public class CoreI18nCache {
    public static final String REDIS_I18N_MD5_NAME = "PERM_$I18N";
    public static final String REDIS_I18N_MD5_KEY = "MD5";
    private static final String DEFAULT_MESSAGE_BASENAMES =
-      "static/emc/i18n/messages-emc,static/emc/projectfunction/i18n/messages-weipu";
+      "static/i18n/messages-core,static/emc/projectfunction/i18n/messages-weipu,static/emc/i18n/messages-emc";
    private static final Logger logger = LogManager.getLogger(CoreI18nCache.class);
    private Map<String, Map<String, String>> fileI18nMap;
    private Map<String, Map<String, String>> buttonDefaultMap;

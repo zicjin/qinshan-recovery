@@ -37,8 +37,8 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 8,254 rows across thirty-one explicitly selected
-configuration tables: 2 locales, 1,350 internationalization keys, 1,375 messages,
+The technical bootstrap contains 16,265 rows across thirty-one explicitly selected
+configuration tables: 2 locales, 5,339 internationalization keys, 5,397 messages,
 392 static and 10 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
 relations, one system UI config, one login UI config and 37 source-referenced
 select configs, plus 2 dictionary classes, 28 categories and 120 options.
@@ -127,8 +127,18 @@ The bootstrap checks all selected target tables are empty before any INSERT,
 then commits the technical configuration together. It is an initial-install
 phase, not an idempotent upgrade: rerunning it rejects with `ORA-20120` before
 inserting rows. A deployment must resolve remaining bootstrap exclusions first.
-Two conflicting translation keys have no arbitrary winner; equal duplicate
-messages retain their original rows. One other dynamic-resource menu, three
+Three conflicting translation keys have no arbitrary winner; equal duplicate
+messages retain their original rows. The complete technical language capture adds
+the namespaces omitted by the earlier CORE/GIKAM/EMC prefix selection, including
+table-field labels, LCDP and other framework labels. The previous 8,254 rows and
+their INSERT statement bytes are unchanged. The supplier license-capacity login
+message remains excluded; three explicit license-related field labels contain
+UI text only and carry an allowlist in `i18n-runtime-source.json`.
+That source metadata records exact reviewed code, description, default message
+and unique locale values for a separate versioned existing-database upgrade;
+it contains source references and exclusions, not an HTTP message-map fallback.
+It does not overwrite existing translations or make the full installer ready.
+One other dynamic-resource menu, three
 external-target menus and entity relationships outside the structural closure
 remain excluded. Other select configs can still require dictionaries/workflows and
 other dependencies that this finite subset does not supply.

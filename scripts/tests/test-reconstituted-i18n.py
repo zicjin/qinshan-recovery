@@ -14,8 +14,9 @@ class ReconstitutedI18nTest(unittest.TestCase):
             "com/sunwayworld/module/sys/i18n/CoreI18nCache.java"
         ).read_text(encoding="utf-8")
         self.assertIn(
-            "static/emc/i18n/messages-emc,"
-            "static/emc/projectfunction/i18n/messages-weipu",
+            "static/i18n/messages-core,"
+            "static/emc/projectfunction/i18n/messages-weipu,"
+            "static/emc/i18n/messages-emc",
             source,
         )
         self.assertIn("if (StringUtils.isBlank(baseNames))", source)

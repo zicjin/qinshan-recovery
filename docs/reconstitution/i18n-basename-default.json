@@ -1,0 +1,60 @@
+{
+  "capture": {
+    "allowlisted_key": "spring.messages.basename",
+    "captured_at": "2026-11-11T02:28:17.173446Z",
+    "path": "private/six-key-i18n-source-20261111/current-production-static-locale-private.json",
+    "sha256": "2dc0f3ac3794945c0309e2600f35fa51c81f095697f5591a93bb729fa03bc362"
+  },
+  "classification": "current-production-configuration-default-restoration",
+  "owned_default": "static/i18n/messages-core,static/emc/projectfunction/i18n/messages-weipu,static/emc/i18n/messages-emc",
+  "previous_owned_default": "static/emc/i18n/messages-emc,static/emc/projectfunction/i18n/messages-weipu",
+  "production_artifact_sha256": "ab90fda1331c08d58a58914db280a59c667ad3a15412e8b2ec1aa0d14be81168",
+  "production_configured_order": "static/i18n/messages-core,static/emc/projectfunction/i18n/messages-weipu,static/emc/i18n/messages-emc",
+  "regression": {
+    "existing_test": "scripts/tests/test-button-i18n-source-defaults.py",
+    "expected_values_source": {
+      "path": "private/remaining-i18n-20261111/prod-live-messages-private.json",
+      "sha256": "7e7b707cf675ea3a1de25723d0176a4548ffc70da70f4dd8b44d16967dc5bd0a"
+    },
+    "production_duplicate_key_cases": 32,
+    "public_interfaces": [
+      "CoreI18nCache.getI18nLocaleMap",
+      "I18nHelper.getMessage"
+    ],
+    "red_observation": "Original owned default returned barcode wording where the production-first projectfunction resource provides QR-code wording.",
+    "runtime_http_replay_performed": false,
+    "scenarios": [
+      "default order yields all 32 production values",
+      "explicit emc-first basename retains all 32 corresponding emc values",
+      "existing custom resource and database override behavior",
+      "existing database reload and 25-button plus 3-prompt defaults behavior"
+    ]
+  },
+  "resources": [
+    {
+      "path": "project/src/main/resources/static/emc/projectfunction/i18n/messages-weipu_zh-cn.properties",
+      "production_member": "BOOT-INF/classes/static/emc/projectfunction/i18n/messages-weipu_zh-cn.properties",
+      "production_member_sha256": "1b82c7f86e3893d49ccedb2e80e68a1e0811016d079e88e9ca70224ac86ea7fd",
+      "source_sha256": "5eeced5c82b556a4c952fce6efea95a84063fa4ad30c3455325980eaee6567d6"
+    },
+    {
+      "path": "project/src/main/resources/static/emc/i18n/messages-emc_zh-cn.properties",
+      "production_member": "BOOT-INF/classes/static/emc/i18n/messages-emc_zh-cn.properties",
+      "production_member_sha256": "0742ed76b4f4ad5922138f4ade104cfc351c7b2765dbcaa25061d0dbbbcc23dc",
+      "source_sha256": "2eadd9e8b3c01ecef618fb369eecdb2d7b48704feb1a0aef3da80f7dbe22d54f"
+    }
+  ],
+  "schema": "current-production-i18n-basename-default-v1",
+  "scope_exclusions": [
+    "No properties resource modification",
+    "No translation value replacement",
+    "No cache loading or merge semantic change",
+    "No database write",
+    "No runtime refresh",
+    "No API or strict promotion"
+  ],
+  "selection_semantics": "Explicit nonblank spring.messages.basename remains authoritative. When absent, use the observed production order. The original loader keeps the first occurrence within and across resources. Project resources retain their existing precedence over database messages; the finite source defaults still fill only absent keys.",
+  "source_boundary": "The original stock/current-production CoreI18nCache reads the configured basename property. This owned fallback supports an omitted property after native/config assembly removal; it is bound to the observed production configuration, not a claim that the original class itself supplied this default.",
+  "source_class": "current-production",
+  "strict_evidence": false
+}

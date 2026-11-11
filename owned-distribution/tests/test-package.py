@@ -165,6 +165,8 @@ def verify_distribution(ROOT, build_environment):
     assert 'installation/deployment/oracle/import-templates/assets/reportSendInfo.xlsx' in manifest['files']
     assert 'installation/deployment/report-engine/assets/commission-summary.cpt' in manifest['files']
     assert 'installation/deployment/report-engine/assets/contract-summary.cpt' in manifest['files']
+    assert 'installation/deployment/report-engine/install-config.sql' in manifest['files']
+    assert 'installation/deployment/report-engine/config-provenance.json' in manifest['files']
     assert 'installation/deployment/report-engine/dependencies/external-contract-packprice-20261111.sql' in manifest['files']
     assert 'installation/scripts/install-report-engine.py' in manifest['files']
     assert not any('fine-core-' in name or name.endswith('FanRuan.lic') for name in manifest['files'])

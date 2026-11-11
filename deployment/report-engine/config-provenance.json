@@ -1,0 +1,89 @@
+{
+  "schema": "owned-two-report-configuration/v1",
+  "source_class": "current-production-at-capture",
+  "business_rows": false,
+  "identities_or_grants": false,
+  "rows": [
+    {
+      "table": "T_CORE_REPORT_CONFIG",
+      "id": "homePageReport",
+      "values": {
+        "ID": "homePageReport",
+        "VERSION": null,
+        "ORDERNO": "1",
+        "NAME": "首页报表",
+        "REMARK": "首页报表\n",
+        "REPORTCONFIGCATEGORY": null
+      },
+      "source_row_sha256": "4d12936702efa943fe1ae4174b6e9248430dab30bc8d7eeff4ea3e23b67f7d40"
+    },
+    {
+      "table": "T_CORE_REPORT_CONFIG_LINE",
+      "id": "1533345555174176",
+      "values": {
+        "ID": "1533345555174176",
+        "REPORTCONFIGID": "homePageReport",
+        "REPORTCONFIGLINENO": "kf_htrwtjb",
+        "VERSION": null,
+        "ACTIVATEDFLAG": "1",
+        "REPORTCATEGORY": "fanruan",
+        "REPORTPATH": null,
+        "MENUID": null,
+        "MENUNAME": null,
+        "ORDERNO": "1533345555182368",
+        "PARAM": "userid=userno",
+        "DEFAULTPARAM": null,
+        "DATACENTERREPORTNAME": null,
+        "DATACENTERREPORTURL": null,
+        "DATACENTERREPORTID": null,
+        "REPORTCONFIGLINECATEGORY": "客服",
+        "REPORTNAME": "委托汇总统计表"
+      },
+      "source_row_sha256": "c4ce14087f88f432ff559a482738849b688c9220e0a6cdd4c08394eb259fc602"
+    },
+    {
+      "table": "T_CORE_REPORT_CONFIG_LINE",
+      "id": "1682633607010880",
+      "values": {
+        "ID": "1682633607010880",
+        "REPORTCONFIGID": "homePageReport",
+        "REPORTCONFIGLINENO": "kf_htxxb",
+        "VERSION": null,
+        "ACTIVATEDFLAG": "1",
+        "REPORTCATEGORY": "fanruan",
+        "REPORTPATH": null,
+        "MENUID": null,
+        "MENUNAME": null,
+        "ORDERNO": "1682633607019072",
+        "PARAM": null,
+        "DEFAULTPARAM": null,
+        "DATACENTERREPORTNAME": null,
+        "DATACENTERREPORTURL": null,
+        "DATACENTERREPORTID": null,
+        "REPORTCONFIGLINECATEGORY": "客服",
+        "REPORTNAME": "合同汇总表"
+      },
+      "source_row_sha256": "a7f65db34aaf0b1f01e3c7c587b3e78109b1326ab810b10c59a6e0f260ce9641"
+    }
+  ],
+  "row_counts": {
+    "T_CORE_REPORT_CONFIG": 1,
+    "T_CORE_REPORT_CONFIG_LINE": 2
+  },
+  "installation_sql": {
+    "path": "install-config.sql",
+    "sha256": "3cc35f97dd2bd2f5ebbd9a67a2b881d8e54ae3810a97cb8fc11cbb99cb9be6ea",
+    "bytes": 6688
+  },
+  "source_artifacts": [
+    {
+      "path": "private/report-bootstrap-audit-20261111/reviewed-two-report-configuration-private.json",
+      "sha256": "e23d4837ffdb35a983ceb85ea624269ebfbc49b7f56c9a7991e6f01acc7430e1"
+    },
+    {
+      "path": "private/report-bootstrap-audit-20261111/source-manifest-private.json",
+      "sha256": "8b2c5b0d7ecbb7898921cff11ab07e45fa4f90a23bdfc6c25144e8547106a497"
+    }
+  ],
+  "projection": "Explicit nonidentity behavior fields; unchanged source values. Source actors and timestamps excluded. No production grant rows copied."
+}

@@ -24,7 +24,7 @@ WEB_XML = b'''<?xml version="1.0" encoding="UTF-8"?>
 '''
 
 
-class StageError(Exception):
+class StageError(ValueError):
     pass
 
 
@@ -173,9 +173,54 @@ def compile_listener(javac, libraries, classes):
         raise StageError("owned report listener compilation produced no listener")
 
 
+def verify_configuration(manifest):
+    """Verify the finite report bootstrap, without opening private captures or a DB."""
+    configuration = manifest.get("configuration")
+    expected_counts = {"T_CORE_REPORT_CONFIG": 1, "T_CORE_REPORT_CONFIG_LINE": 2}
+    if (not isinstance(configuration, dict)
+            or configuration.get("schema") != "owned-two-report-configuration/v1"
+            or configuration.get("row_counts") != expected_counts):
+        raise StageError("report configuration bootstrap is missing or differs")
+    entries = configuration.get("files")
+    expected = {"install-config.sql": "configuration", "config-provenance.json": "provenance"}
+    if (not isinstance(entries, list) or len(entries) != 2
+            or {entry.get("path"): entry.get("role") for entry in entries} != expected):
+        raise StageError("report configuration file scope differs")
+    files = [(entry, checked_file(MATERIALS / entry["path"], entry,
+                                 "report configuration " + entry["path"])) for entry in entries]
+    provenance = json.loads((MATERIALS / "config-provenance.json").read_text(encoding="utf-8"))
+    if (provenance.get("schema") != configuration["schema"]
+            or provenance.get("source_class") != "current-production-at-capture"
+            or provenance.get("business_rows") is not False
+            or provenance.get("identities_or_grants") is not False
+            or provenance.get("row_counts") != expected_counts):
+        raise StageError("report configuration provenance scope differs")
+    sql = MATERIALS / "install-config.sql"
+    if provenance.get("installation_sql") != {"path": sql.name,
+            "sha256": sha256(sql), "bytes": sql.stat().st_size}:
+        raise StageError("report configuration SQL differs from provenance")
+    rows = provenance.get("rows")
+    expected_ids = {("T_CORE_REPORT_CONFIG", "homePageReport"),
+                    ("T_CORE_REPORT_CONFIG_LINE", "1533345555174176"),
+                    ("T_CORE_REPORT_CONFIG_LINE", "1682633607010880")}
+    if (not isinstance(rows, list) or len(rows) != 3
+            or {(row.get("table"), row.get("id")) for row in rows} != expected_ids):
+        raise StageError("report configuration row scope differs")
+    for row in rows:
+        values = row.get("values")
+        if not isinstance(values, dict) or values.get("ID") != row["id"]:
+            raise StageError("report configuration row identity differs")
+        digest = hashlib.sha256(json.dumps(values, sort_keys=True, ensure_ascii=True,
+                                           separators=(",", ":")).encode("ascii")).hexdigest()
+        if digest != row.get("source_row_sha256"):
+            raise StageError("report configuration source row hash differs")
+    return files
+
+
 def stage(args):
     validate_output(args.output)
     manifest = json.loads((MATERIALS / "manifest.json").read_text(encoding="utf-8"))
+    configuration_files = verify_configuration(manifest)
     expected = manifest["third_party_engine"]["libraries"]
     if len(expected) != 13 or len({entry["name"] for entry in expected}) != 13:
         raise StageError("manifest must declare thirteen distinct engine libraries")
@@ -219,7 +264,9 @@ def stage(args):
         metadata_path = asset_entry.get("metadata_source", "install-metadata.sql")
         if metadata_path not in ("install-metadata.sql", "install-contract-metadata.sql"):
             raise StageError("unreviewed metadata source")
-        metadata_source = (MATERIALS / metadata_path).read_bytes()
+        metadata_source = checked_file(MATERIALS / metadata_path,
+            {"bytes": asset_entry["metadata_bytes"], "sha256": asset_entry["metadata_sha256"]},
+            "report attachment metadata").read_bytes()
         metadata_token = asset_entry.get("metadata_size_token", "${OWNED_REPORT_ASSET_BYTES}").encode("ascii")
         if metadata_source.count(metadata_token) != 3:
             raise StageError("metadata SQL must contain exactly three asset-size placeholders")
@@ -253,6 +300,10 @@ def stage(args):
                                      "source_sha256": hashlib.sha256(metadata_source).hexdigest(),
                                      "bytes": len(metadata), "sha256": hashlib.sha256(metadata).hexdigest(),
                                      "asset_size_replacements": 3})
+        configuration_records = []
+        for entry, source in configuration_files:
+            shutil.copyfile(source, webroot / entry["path"])
+            configuration_records.append(dict(entry))
         dependency_records = []
         for dependency in manifest.get("dependencies", []):
             relative = PurePosixPath(dependency["path"])
@@ -275,6 +326,7 @@ def stage(args):
             "metadata_sql": metadata_records[0],
             "metadata_sql_files": metadata_records,
             "dependencies": dependency_records,
+            "configuration_files": configuration_records,
             "libraries": manifest["third_party_engine"]["libraries"] + manifest["public_libraries"],
             "listener_sources": [
                 {"path": str(source.relative_to(MATERIALS)), "sha256": sha256(source)}

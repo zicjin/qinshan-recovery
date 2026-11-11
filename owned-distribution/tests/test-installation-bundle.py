@@ -131,9 +131,10 @@ class InstallationBundleTest(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='workflow-bundle-boundary-') as temporary:
             checkout = Path(temporary) / 'source'
             shutil.copytree(ROOT / 'deployment/oracle', checkout / 'deployment/oracle')
+            shutil.copytree(ROOT / 'deployment/report-engine', checkout / 'deployment/report-engine')
             (checkout / 'scripts').mkdir()
             for name in ('verify-core-schema-package.py', 'verify-combined-oracle-installation.py',
-                         'install-import-template-assets.py'):
+                         'install-import-template-assets.py', 'install-report-engine.py'):
                 shutil.copy2(ROOT / 'scripts' / name, checkout / 'scripts' / name)
             (checkout / 'owned-distribution').mkdir()
             shutil.copy2(ROOT / 'owned-distribution/installation-README.md', checkout / 'owned-distribution/installation-README.md')
@@ -143,6 +144,9 @@ class InstallationBundleTest(unittest.TestCase):
             self.assertFalse(result['workflow']['deployment_ready'])
             self.assertFalse((checkout / 'private').exists())
             self.assertFalse((checkout / 'project').exists())
+            report_sql = output / 'installation/deployment/report-engine/install-config.sql'
+            self.assertTrue(report_sql.is_file())
+            self.assertEqual(report_sql.read_bytes(), (ROOT / 'deployment/report-engine/install-config.sql').read_bytes())
             asset_manifest_path = checkout / 'deployment/oracle/import-templates/manifest.json'
             asset_original = asset_manifest_path.read_bytes()
             changed = json.loads(asset_original)

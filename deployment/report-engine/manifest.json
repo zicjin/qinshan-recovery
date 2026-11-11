@@ -195,7 +195,9 @@
       "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
       "schema_occurrences": 1,
       "metadata_source": "install-metadata.sql",
-      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}"
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "d1ea5b4b1cb6ae3c5db5b47ec1edc825c8507d2fcca1b3fbbb22e57662bed474",
+      "metadata_bytes": 2457
     },
     {
       "path": "assets/contract-summary.cpt",
@@ -207,7 +209,9 @@
       "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
       "schema_occurrences": 0,
       "metadata_source": "install-contract-metadata.sql",
-      "metadata_size_token": "${OWNED_CONTRACT_REPORT_ASSET_BYTES}"
+      "metadata_size_token": "${OWNED_CONTRACT_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "734593203c093f6907ec7de96a0a1dbcac1cbe7d581575e1559fea428b71ccb8",
+      "metadata_bytes": 2476
     }
   ],
   "additional_provenance": [
@@ -272,5 +276,26 @@
       "sha256": "23a132da617659376fc88712ec2d079ab6570a0e11895ccbd5f154c2a273c987",
       "role": "schema"
     }
-  ]
+  ],
+  "configuration": {
+    "schema": "owned-two-report-configuration/v1",
+    "row_counts": {
+      "T_CORE_REPORT_CONFIG": 1,
+      "T_CORE_REPORT_CONFIG_LINE": 2
+    },
+    "files": [
+      {
+        "path": "install-config.sql",
+        "bytes": 6688,
+        "sha256": "3cc35f97dd2bd2f5ebbd9a67a2b881d8e54ae3810a97cb8fc11cbb99cb9be6ea",
+        "role": "configuration"
+      },
+      {
+        "path": "config-provenance.json",
+        "bytes": 2980,
+        "sha256": "ad21ca77ebe8692ac8144e5fc3808df21f5933f48ec72b7c205c7cf38f194e92",
+        "role": "provenance"
+      }
+    ]
+  }
 }

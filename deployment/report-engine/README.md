@@ -23,6 +23,12 @@ sunway.config.fine.independent-deploy-path=/var/lib/lims-owned/report-engine
 application JVM 的隔离 Servlet context，使用同一端口，不启动独立进程或 HTTP bridge。
 数据源使用本应用的隔离 Oracle 配置，通过 Fine 正常公开配置事务注册。
 
+现有核心 bootstrap 已含统计菜单。新设备还必须先以应用隔离 schema 的账号执行
+stager 输出的 `install-config.sql`：它安装生产来源绑定的报表主配置1行、两条行配置，
+保留原参数/启用/排序语义，不复制来源制单人、用户、组织或权限。已有记录必须逐字段一致，
+冲突时在任何新增前失败；重复安装不改已有行。`config-provenance.json` 记录来源与逐行 hash。
+这三行是本包专属配置补充，不解除全系统 installer 的 partial 阻断。
+
 安装脚本为两份模板分别生成 `install-metadata.sql` 与 `install-contract-metadata.sql`，
 已按绑定 CPT 的实际大小解析占位符，用于补齐现有 homePageReport/kf_htrwtjb 和
 homePageReport/kf_htxxb 行的文件关联。脚本只接受原配置行和精确附件标识，遇到冲突失败，
@@ -30,8 +36,7 @@ homePageReport/kf_htxxb 行的文件关联。脚本只接受原配置行和精�
 来源与窄迁移位于 `dependencies/external-contract-packprice-20261111.json` 和同名 SQL；
 先以应用隔离 schema 的账号执行 stager 输出的 `dependencies/external-contract-packprice-20261111.sql`，
 再执行两个 metadata SQL。依赖迁移只创建已核对的空结构并拒绝冲突；Oracle DDL 隐式提交，
-不是业务数据迁移或事务 rollback。结构未准备时不能用空结果代替报表查询。新设备若缺少
-对应报表配置，必须先恢复已审阅配置，不用此脚本创建替代页面。
+不是业务数据迁移或事务 rollback。结构未准备时不能用空结果代替报表查询。新设备使用上面的固定配置补充恢复对应原配置，不创建替代页面。
 
 `/report-engine` 的所有请求先验证真实门户登录和目标菜单。按两个菜单分别授权，仅开放相应模板与所需资源；
 报表会话通过服务器生成的一次性关联参数绑定门户 token 摘要、用户、组织、角色和模板；

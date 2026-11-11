@@ -175,6 +175,17 @@ def package_installation(output):
                        'deployment/oracle/import-templates/' + template_asset['source']))
         # The optional report engine itself stays an operator-supplied third-party
         # input. Package only owned integration source and source-bound assets.
+        report_script = verifier.core.package_file(REPO_ROOT, 'scripts/install-report-engine.py')
+        report_spec = importlib.util.spec_from_file_location('report_installation', report_script)
+        assert report_spec and report_spec.loader
+        report_installer = importlib.util.module_from_spec(report_spec)
+        report_spec.loader.exec_module(report_installer)
+        report_manifest = json.loads((REPO_ROOT / 'deployment/report-engine/manifest.json').read_text(encoding='utf-8'))
+        report_installer.verify_configuration(report_manifest)
+        for asset in report_manifest['assets']:
+            report_installer.checked_file(REPO_ROOT / 'deployment/report-engine' / asset['path'], asset, 'report template')
+            report_installer.checked_file(REPO_ROOT / 'deployment/report-engine' / asset['metadata_source'],
+                {'bytes': asset['metadata_bytes'], 'sha256': asset['metadata_sha256']}, 'report metadata')
         inputs.add('scripts/install-report-engine.py')
         inputs.update(path.relative_to(REPO_ROOT).as_posix()
                       for path in (REPO_ROOT / 'deployment/report-engine').rglob('*')

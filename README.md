@@ -179,10 +179,14 @@ python3 scripts/verify-core-schema-package.py --check-package
 
 This does not grant deployment readiness. The normal package gate and SQL
 installer still reject the incomplete package before applying DDL.
-Its finite `70-bootstrap.sql` supplies 16,265 reviewed technical rows across 31
-tables, including locale, menu, entity and UI configuration, 28 dictionary
-categories, 120 options and their translation dependencies. Captures are bound
+Its finite `70-bootstrap.sql` supplies 17,397 reviewed technical rows across 31
+tables, including locale, menu, entity and UI configuration, 224 dictionary
+categories, 1,056 options and their translation dependencies. Captures are bound
 separately; empty production categories remain empty.
+Dictionary selection also includes the literal categories consumed by the
+original Java, Mapper and page resources. The 25 referenced categories absent
+from the captured production dictionary remain explicitly unfilled; dynamic
+category construction still requires directed validation.
 It additionally carries seven reviewed published LCDP modules for equipment,
 folder/order/project/sample information, report lookup and delivery, with ten
 menus and the equipment dictionary/selector, plus the two original file-service

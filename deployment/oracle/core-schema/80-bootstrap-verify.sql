@@ -48261,7 +48261,7 @@ BEGIN
       || CASE WHEN ORDERNO IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR(ORDERNO,'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR(ORDERNO,'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END AS SIGNATURE FROM T_CORE_CODE_CATEGORY) LOOP
     actual(r.ROW_ID) := r.SIGNATURE;
   END LOOP;
-  IF actual.COUNT <> 28 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual.COUNT <> 224 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_CODE_CATEGORY'); END IF;
   IF NOT actual.EXISTS('activatedFlag') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
   IF actual('activatedFlag') <>
     'V13:activatedFlag;V4:启用停用;V3:sys;V2:25;'
@@ -48374,6 +48374,790 @@ BEGIN
   IF actual('equiptInOut') <>
     'V11:equiptInOut;V5:仪器出入库;V3:sys;N;'
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('QCType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('QCType') <>
+    'V6:QCType;V4:QC类型;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('acqSource') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('acqSource') <>
+    'V9:acqSource;V4:采集来源;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('airdrytype') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('airdrytype') <>
+    'V10:airdrytype;V4:风干方式;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('analysisCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('analysisCategory') <>
+    'V16:analysisCategory;V4:分析类型;V3:biz;V2:56;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('analysisWay') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('analysisWay') <>
+    'V11:analysisWay;V4:解析方式;V3:biz;V2:21;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('analyzeFeeType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('analyzeFeeType') <>
+    'V14:analyzeFeeType;V5:分析费类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('areaLevel') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('areaLevel') <>
+    'V9:areaLevel;V4:区域级别;V3:biz;V2:56;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('assetCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('assetCategory') <>
+    'V13:assetCategory;V4:资产类型;V3:sys;V2:83;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('bizType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('bizType') <>
+    'V7:bizType;V2:类别;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('calfunc') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('calfunc') <>
+    'V7:calfunc;V4:公用函数;V3:biz;V2:21;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('calibrateSolScript') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('calibrateSolScript') <>
+    'V18:calibrateSolScript;V8:标定浓度计算公式;V3:biz;V3:193;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('calibrationBasis') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('calibrationBasis') <>
+    'V16:calibrationBasis;V4:校准依据;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('calibrationCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('calibrationCategory') <>
+    'V19:calibrationCategory;V4:校准种类;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('calibrationPeriod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('calibrationPeriod') <>
+    'V17:calibrationPeriod;V4:校准周期;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('calibrationResult') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('calibrationResult') <>
+    'V17:calibrationResult;V4:校准结果;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('calibrationType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('calibrationType') <>
+    'V15:calibrationType;V4:校准类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('calibsolweightunit') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('calibsolweightunit') <>
+    'V18:calibsolweightunit;V12:标准液称重量(体积)单位;V3:biz;V3:192;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('certificatetype') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('certificatetype') <>
+    'V15:certificatetype;V4:证书类型;V3:sys;V2:80;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('changeType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('changeType') <>
+    'V10:changeType;V4:变更类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('checkConclusion') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('checkConclusion') <>
+    'V15:checkConclusion;V4:核查结果;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('checkWay') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('checkWay') <>
+    'V8:checkWay;V4:核查方式;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('chooseBeforeHander') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('chooseBeforeHander') <>
+    'V18:chooseBeforeHander;V5:选择前处理;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('chooseLimit') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('chooseLimit') <>
+    'V11:chooseLimit;V5:选择检出限;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('classification') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('classification') <>
+    'V14:classification;V4:分类情况;V3:biz;V3:116;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('clientTag') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('clientTag') <>
+    'V9:clientTag;V4:客户标记;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('complaintMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('complaintMethod') <>
+    'V15:complaintMethod;V4:投诉方式;V3:biz;V3:115;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('completeFlag') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('completeFlag') <>
+    'V12:completeFlag;V4:完成状态;V3:sys;V2:83;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('conformClaim') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('conformClaim') <>
+    'V12:conformClaim;V4:符合要求;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('consultCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('consultCategory') <>
+    'V15:consultCategory;V4:咨询类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('contentResult') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('contentResult') <>
+    'V13:contentResult;V11:根据证书、报告内容确认;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('contractCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('contractCategory') <>
+    'V16:contractCategory;V4:合同类型;V3:biz;V3:150;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('controllerLever') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('controllerLever') <>
+    'V15:controllerLever;V4:控制级别;V3:biz;V2:21;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreAssessmentMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreAssessmentMethod') <>
+    'V20:coreAssessmentMethod;V4:考核方式;V3:sys;V3:101;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreElnDisplayCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreElnDisplayCategory') <>
+    'V22:coreElnDisplayCategory;V10:eln数据源显示类型;V3:sys;V1:6;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreElnDsScope') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreElnDsScope') <>
+    'V14:coreElnDsScope;V3:作用域;V3:sys;V1:6;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreJudgementOption') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreJudgementOption') <>
+    'V19:coreJudgementOption;V5:判断题选项;V3:sys;V3:100;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreOfficeDisplayCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreOfficeDisplayCategory') <>
+    'V25:coreOfficeDisplayCategory;V13:office数据源显示类型;V3:sys;V1:6;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreOfficeDocumentType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreOfficeDocumentType') <>
+    'V22:coreOfficeDocumentType;V6:报告模板类型;V3:sys;V1:6;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreQuestionCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreQuestionCategory') <>
+    'V20:coreQuestionCategory;V4:题目类别;V3:biz;V3:100;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreQuestionMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreQuestionMethod') <>
+    'V18:coreQuestionMethod;V4:组卷方式;V3:sys;V3:100;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreQuestionType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreQuestionType') <>
+    'V16:coreQuestionType;V4:题目类型;V3:sys;V3:100;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreTrainCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreTrainCategory') <>
+    'V17:coreTrainCategory;V4:培训类型;V3:biz;V3:100;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreTrainMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreTrainMethod') <>
+    'V15:coreTrainMethod;V4:培训方式;V3:sys;V3:100;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('coreTrainScope') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('coreTrainScope') <>
+    'V14:coreTrainScope;V5:内部/外部;V3:sys;V3:101;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('correctionSource') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('correctionSource') <>
+    'V16:correctionSource;V8:纠正措施计划来源;V3:biz;V3:111;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('countryCode') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('countryCode') <>
+    'V11:countryCode;V2:国号;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('customerCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('customerCategory') <>
+    'V16:customerCategory;V4:客户类别;V3:sys;V2:27;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('customerSubclass') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('customerSubclass') <>
+    'V16:customerSubclass;V4:客户小类;V3:biz;V2:28;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('cycle') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('cycle') <>
+    'V5:cycle;V2:周期;V3:sys;V2:78;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('dayornight') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('dayornight') <>
+    'V10:dayornight;V2:昼夜;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('decisionCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('decisionCategory') <>
+    'V16:decisionCategory;V6:QC判定类别;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('detectCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('detectCategory') <>
+    'V14:detectCategory;V4:检测类别;V3:biz;V3:151;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('detectionNature') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('detectionNature') <>
+    'V15:detectionNature;V4:检测性质;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('displayFieldStatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('displayFieldStatus') <>
+    'V18:displayFieldStatus;V4:是否显示;V3:biz;V2:78;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('displayMonitorBasis') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('displayMonitorBasis') <>
+    'V19:displayMonitorBasis;V6:显示监测依据;V3:biz;V2:56;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('equiptAcqDataFormat') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('equiptAcqDataFormat') <>
+    'V19:equiptAcqDataFormat;V4:数据格式;V3:biz;V2:21;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('equiptAcqOrderNoFormat') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('equiptAcqOrderNoFormat') <>
+    'V22:equiptAcqOrderNoFormat;V6:样品编号格式;V3:biz;V2:21;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('equiptAcqPreAnalyCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('equiptAcqPreAnalyCategory') <>
+    'V25:equiptAcqPreAnalyCategory;V2:操作;V3:biz;V2:21;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('equiptBelong') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('equiptBelong') <>
+    'V12:equiptBelong;V4:仪器归属;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('equiptStatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('equiptStatus') <>
+    'V12:equiptStatus;V4:仪器状态;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('evaluation') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('evaluation') <>
+    'V10:evaluation;V6:不符合项评价;V3:sys;V2:92;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('expressType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('expressType') <>
+    'V11:expressType;V4:物流类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('extractMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('extractMethod') <>
+    'V13:extractMethod;V4:提取方法;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('fieldType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('fieldType') <>
+    'V9:fieldType;V4:字段类型;V3:biz;V2:35;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('fileBizCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('fileBizCategory') <>
+    'V15:fileBizCategory;V4:附件类型;V3:biz;V2:33;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('fileLogOperationCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('fileLogOperationCategory') <>
+    'V24:fileLogOperationCategory;V6:附件操作方式;V3:sys;V3:201;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('fileVersionDistOperationType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('fileVersionDistOperationType') <>
+    'V28:fileVersionDistOperationType;V10:文件分发回收操作类型;V3:biz;V2:31;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('fileVersionOperationType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('fileVersionOperationType') <>
+    'V24:fileVersionOperationType;V8:文件版本操作类型;V3:biz;V2:30;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('grindmode') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('grindmode') <>
+    'V9:grindmode;V4:研磨方式;V3:biz;V1:2;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('handleMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('handleMethod') <>
+    'V12:handleMethod;V4:处置方式;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('handleResult') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('handleResult') <>
+    'V12:handleResult;V2:状态;V3:sys;V2:77;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('highLimitSymbol') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('highLimitSymbol') <>
+    'V15:highLimitSymbol;V4:上限符号;V3:biz;V2:56;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('horizontalCode') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('horizontalCode') <>
+    'V14:horizontalCode;V4:水平代码;V3:biz;V3:119;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('humidity') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('humidity') <>
+    'V8:humidity;V2:湿度;V3:biz;V3:165;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('importance') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('importance') <>
+    'V10:importance;V4:重要程度;V3:sys;V2:24;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('improvementSource') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('improvementSource') <>
+    'V17:improvementSource;V6:改进措施来源;V3:biz;V3:112;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('infoIndexCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('infoIndexCategory') <>
+    'V17:infoIndexCategory;V6:评价指标分类;V3:sys;V3:103;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('infoTmplFieldPrimaryName') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('infoTmplFieldPrimaryName') <>
+    'V24:infoTmplFieldPrimaryName;V14:综合信息上传模板字段主键名称;V3:biz;V3:110;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('infoTmplFieldShow') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('infoTmplFieldShow') <>
+    'V17:infoTmplFieldShow;V10:上传模板字段是否显示;V3:biz;V3:102;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('infocategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('infocategory') <>
+    'V12:infocategory;V4:信息类型;V3:sys;V2:26;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('inspectionStandard') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('inspectionStandard') <>
+    'V18:inspectionStandard;V4:检验依据;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('internalField') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('internalField') <>
+    'V13:internalField;V4:内部字段;V3:biz;V2:36;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('invoiceCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('invoiceCategory') <>
+    'V15:invoiceCategory;V4:发票类型;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('issueSignMode') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('issueSignMode') <>
+    'V13:issueSignMode;V6:签发签名方式;V3:biz;V3:170;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('itemUseType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('itemUseType') <>
+    'V11:itemUseType;V7:分析项使用类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('leaveDays') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('leaveDays') <>
+    'V9:leaveDays;V4:请假天数;V3:biz;V3:132;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('leaveapplyform') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('leaveapplyform') <>
+    'V14:leaveapplyform;V4:请假类型;V3:biz;V3:101;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('limitFlag') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('limitFlag') <>
+    'V9:limitFlag;V5:检出限标志;V3:biz;V2:56;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('locked') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('locked') <>
+    'V6:locked;V4:是否锁定;V3:sys;V1:3;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('loginStatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('loginStatus') <>
+    'V11:loginStatus;V6:用户登录情况;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('lowLimitSymbol') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('lowLimitSymbol') <>
+    'V14:lowLimitSymbol;V4:下限符号;V3:biz;V2:56;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('maintainEvent') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('maintainEvent') <>
+    'V13:maintainEvent;V6:仪器维护事件;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('managementType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('managementType') <>
+    'V14:managementType;V4:管理类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('messagereceiveflag') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('messagereceiveflag') <>
+    'V18:messagereceiveflag;V8:站内消息签收标志;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('messagestatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('messagestatus') <>
+    'V13:messagestatus;V6:站内消息状态;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('monitoringPointCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('monitoringPointCategory') <>
+    'V23:monitoringPointCategory;V5:监测点类别;V3:sys;V2:25;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('monitoringPointLevel') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('monitoringPointLevel') <>
+    'V20:monitoringPointLevel;V5:监测点级别;V3:sys;V2:29;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('month') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('month') <>
+    'V5:month;V2:月份;V3:biz;V2:80;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('nDComputingMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('nDComputingMethod') <>
+    'V17:nDComputingMethod;V6:ND计算方式;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('neworauth') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('neworauth') <>
+    'V9:neworauth;V4:新建授权;V3:sys;V2:30;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('noticecategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('noticecategory') <>
+    'V14:noticecategory;V4:公告类型;V3:sys;V2:27;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('noticestatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('noticestatus') <>
+    'V12:noticestatus;V4:通知状态;V3:sys;V2:27;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('oaFileType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('oaFileType') <>
+    'V10:oaFileType;V8:OA电签附件类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('oaReportType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('oaReportType') <>
+    'V12:oaReportType;V8:OA电签报告类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('operatedata') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('operatedata') <>
+    'V11:operatedata;V4:操作数据;V3:sys;V2:38;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderColor') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderColor') <>
+    'V10:orderColor;V4:样品颜色;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderColorNew') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderColorNew') <>
+    'V13:orderColorNew;V2:颜色;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderDensity') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderDensity') <>
+    'V12:orderDensity;V2:密度;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderFloater') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderFloater') <>
+    'V12:orderFloater;V5:样品漂浮物;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderOilSlick') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderOilSlick') <>
+    'V13:orderOilSlick;V4:样品浮油;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderSmell') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderSmell') <>
+    'V10:orderSmell;V4:样品气味;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderStatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderStatus') <>
+    'V11:orderStatus;V4:样品形态;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderStructure') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderStructure') <>
+    'V14:orderStructure;V2:结构;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderTexture') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderTexture') <>
+    'V12:orderTexture;V2:质地;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orderdesc') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orderdesc') <>
+    'V9:orderdesc;V4:样品描述;V3:sys;V4:1104;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('orgcategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('orgcategory') <>
+    'V11:orgcategory;V4:组织类型;V3:sys;V1:5;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('otherFeeType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('otherFeeType') <>
+    'V12:otherFeeType;V6:其他费用类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('passwordPolicy') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('passwordPolicy') <>
+    'V14:passwordPolicy;V6:密码策略类型;V3:sys;V1:5;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('periodType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('periodType') <>
+    'V10:periodType;V6:服务周期类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('pivotColumnCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('pivotColumnCategory') <>
+    'V19:pivotColumnCategory;V7:行转列字段属性;V3:sys;V2:75;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('pnFunc') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('pnFunc') <>
+    'V6:pnFunc;V6:PN函数类型;V3:biz;V2:56;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('precautionSource') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('precautionSource') <>
+    'V16:precautionSource;V8:预防措施计划来源;V3:biz;V3:110;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('pretreatWay') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('pretreatWay') <>
+    'V11:pretreatWay;V8:地表水前处理方式;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('pretreatmentRemark') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('pretreatmentRemark') <>
+    'V18:pretreatmentRemark;V7:前处理方式备注;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('priceTerm') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('priceTerm') <>
+    'V9:priceTerm;V4:报价方式;V3:biz;V3:133;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('projName') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('projName') <>
+    'V8:projName;V4:项目名称;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('projectType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('projectType') <>
+    'V11:projectType;V4:任务分类;V3:sys;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('purchaseCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('purchaseCategory') <>
+    'V16:purchaseCategory;V5:采购品类别;V3:biz;V3:170;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('purifyMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('purifyMethod') <>
+    'V12:purifyMethod;V4:净化方法;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('qcExamWays') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('qcExamWays') <>
+    'V10:qcExamWays;V8:质控计划考核方式;V3:sys;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('qcGroup') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('qcGroup') <>
+    'V7:qcGroup;V4:QC分组;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('qcScope') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('qcScope') <>
+    'V7:qcScope;V4:质控范围;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('qualityUseType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('qualityUseType') <>
+    'V14:qualityUseType;V6:质控使用类型;V3:biz;V2:33;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('queryGroup') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('queryGroup') <>
+    'V10:queryGroup;V6:通用查询分组;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reagentCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reagentCategory') <>
+    'V15:reagentCategory;V4:试剂类型;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reason') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reason') <>
+    'V6:reason;V2:原因;V3:sys;V2:39;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('receiveReportWay') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('receiveReportWay') <>
+    'V16:receiveReportWay;V6:报告领取方式;V3:biz;V3:152;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('recoveryRate') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('recoveryRate') <>
+    'V12:recoveryRate;V5:加标回收率;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('remoteCallRequestStatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('remoteCallRequestStatus') <>
+    'V23:remoteCallRequestStatus;V8:远程调用请求状态;V3:sys;V2:93;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('remoteCallResponseStatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('remoteCallResponseStatus') <>
+    'V24:remoteCallResponseStatus;V8:远程调用反馈状态;V3:sys;V2:93;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reportAptitude') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reportAptitude') <>
+    'V14:reportAptitude;V4:报告资质;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reportCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reportCategory') <>
+    'V14:reportCategory;V4:报表类型;V3:biz;V2:60;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reportForm') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reportForm') <>
+    'V10:reportForm;V4:报告形式;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reportLimitType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reportLimitType') <>
+    'V15:reportLimitType;V6:报告检出类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reportRemark') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reportRemark') <>
+    'V12:reportRemark;V4:报告备注;V3:biz;V2:56;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reportTitle') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reportTitle') <>
+    'V11:reportTitle;V4:报告抬头;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reportType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reportType') <>
+    'V10:reportType;V4:报告类别;V3:biz;V3:153;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reportUse') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reportUse') <>
+    'V9:reportUse;V4:报告用途;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('reportqueryform') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('reportqueryform') <>
+    'V15:reportqueryform;V8:数据报告查用形式;V3:biz;V3:100;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('requestMode') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('requestMode') <>
+    'V11:requestMode;V4:导出方式;V3:sys;V2:94;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('requestUrlMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('requestUrlMethod') <>
+    'V16:requestUrlMethod;V4:请求方法;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('resultCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('resultCategory') <>
+    'V14:resultCategory;V4:结果类型;V3:biz;V2:56;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('resultRule') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('resultRule') <>
+    'V10:resultRule;V5:小于检出限;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('resultinputstatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('resultinputstatus') <>
+    'V17:resultinputstatus;V6:结果录入状态;V3:sys;V2:40;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('rootContent') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('rootContent') <>
+    'V11:rootContent;V4:根系含量;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('sampleSource') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('sampleSource') <>
+    'V12:sampleSource;V4:样品来源;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('sampleVariety') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('sampleVariety') <>
+    'V13:sampleVariety;V4:样品种类;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('sampleWay') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('sampleWay') <>
+    'V9:sampleWay;V4:采样方式;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('samplecontainer') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('samplecontainer') <>
+    'V15:samplecontainer;V4:样品容器;V3:biz;V1:3;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('samplingCostType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('samplingCostType') <>
+    'V16:samplingCostType;V6:采样费用类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('samplingFeeType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('samplingFeeType') <>
+    'V15:samplingFeeType;V5:采样费类型;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('samplingorcancel') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('samplingorcancel') <>
+    'V16:samplingorcancel;V4:采样状态;V3:sys;V2:41;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('savedition') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('savedition') <>
+    'V10:savedition;V4:保存条件;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('scheduleTaskType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('scheduleTaskType') <>
+    'V16:scheduleTaskType;V6:定时任务类型;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('scriptCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('scriptCategory') <>
+    'V14:scriptCategory;V4:脚本类型;V3:biz;V2:21;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('section') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('section') <>
+    'V7:section;V2:区间;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('sectionConditionDesc') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('sectionConditionDesc') <>
+    'V20:sectionConditionDesc;V8:断面周边环境描述;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('sectionWaterQuality') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('sectionWaterQuality') <>
+    'V19:sectionWaterQuality;V6:断面水质表现;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('serviceCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('serviceCategory') <>
+    'V15:serviceCategory;V9:审计跟踪中业务类型;V3:sys;V1:0;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('sex') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('sex') <>
+    'V3:sex;V2:性别;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('smsStatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('smsStatus') <>
+    'V9:smsStatus;V4:短信状态;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('source') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('source') <>
+    'V6:source;V2:来源;V3:sys;V2:90;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('sourceMethod') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('sourceMethod') <>
+    'V12:sourceMethod;V6:仪器溯源方式;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('standardGasUnit') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('standardGasUnit') <>
+    'V15:standardGasUnit;V8:标准气体生产单位;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('storeCondition') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('storeCondition') <>
+    'V14:storeCondition;V4:保存条件;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('subpackageType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('subpackageType') <>
+    'V14:subpackageType;V4:分包类型;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('templateSourceType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('templateSourceType') <>
+    'V18:templateSourceType;V5:数据源类型;V3:sys;V11:20210105001;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('templateType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('templateType') <>
+    'V12:templateType;V4:模板类型;V3:sys;V12:202105170001;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('templateUse') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('templateUse') <>
+    'V11:templateUse;V4:模板用法;V3:biz;V2:34;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('testClass') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('testClass') <>
+    'V9:testClass;V4:测试类别;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('testMethodAssigner') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('testMethodAssigner') <>
+    'V18:testMethodAssigner;V7:检测方法指定方;V3:biz;V3:160;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('testMethodType') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('testMethodType') <>
+    'V14:testMethodType;V4:测试类型;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('testitemsort') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('testitemsort') <>
+    'V12:testitemsort;V6:检测项目分类;V3:sys;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('toCalibrateSol') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('toCalibrateSol') <>
+    'V14:toCalibrateSol;V5:待标定溶液;V3:biz;V3:113;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('todo') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('todo') <>
+    'V4:todo;V4:待办类型;V3:sys;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('trainCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('trainCategory') <>
+    'V13:trainCategory;V4:培训类型;V3:biz;V2:21;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('trainContentCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('trainContentCategory') <>
+    'V20:trainContentCategory;V6:培训内容类型;V3:biz;V2:21;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('unitCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('unitCategory') <>
+    'V12:unitCategory;V4:单位类型;V3:biz;V1:1;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('userStatus') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('userStatus') <>
+    'V10:userStatus;V4:用户状态;V3:sys;V2:24;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('vendorCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('vendorCategory') <>
+    'V14:vendorCategory;V4:厂商类型;V3:biz;V2:76;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('verifyOrg') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('verifyOrg') <>
+    'V9:verifyOrg;V4:检定机构;V3:sys;V2:82;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('verticalCode') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('verticalCode') <>
+    'V12:verticalCode;V4:垂直代码;V3:biz;V3:120;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('workCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('workCategory') <>
+    'V12:workCategory;V7:不符合工作类型;V3:sys;V2:91;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('workstate') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('workstate') <>
+    'V9:workstate;V4:运行状态;V3:sys;V2:81;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('writeBackCategory') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('writeBackCategory') <>
+    'V17:writeBackCategory;V6:反写控制类型;V3:sys;V1:5;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
+  IF NOT actual.EXISTS('xishouping') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE_CATEGORY'); END IF;
+  IF actual('xishouping') <>
+    'V10:xishouping;V5:吸收瓶类型;V3:sys;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE_CATEGORY'); END IF;
 END;
 /
 DECLARE
@@ -48392,7 +49176,7 @@ BEGIN
       || CASE WHEN I18NCODE IS NULL THEN 'N;' ELSE 'V'||LENGTH(I18NCODE)||':'||I18NCODE||';' END AS SIGNATURE FROM T_CORE_CODE) LOOP
     actual(r.ROW_ID) := r.SIGNATURE;
   END LOOP;
-  IF actual.COUNT <> 120 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_CODE'); END IF;
+  IF actual.COUNT <> 1056 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_CODE'); END IF;
   IF NOT actual.EXISTS('2019022203') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
   IF actual('2019022203') <>
     'V10:2019022203;V1:1;V2:启用;V13:activatedFlag;V1:1;V1:0;N;'
@@ -48872,6 +49656,3750 @@ BEGIN
   IF NOT actual.EXISTS('1596934772230336') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
   IF actual('1596934772230336') <>
     'V16:1596934772230336;V3:out;V2:出库;V11:equiptInOut;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10794') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10794') <>
+    'V5:10794;V6:L-QXCH;V4:曲线校核;V6:QCType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10795') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10795') <>
+    'V5:10795;V6:L-SPKC;V4:样品加标;V6:QCType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10799') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10799') <>
+    'V5:10799;V7:L-SPKCK;V4:空白加标;V6:QCType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14524') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14524') <>
+    'V5:14524;V8:analysis;V5:实验室分析;V9:acqSource;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14525') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14525') <>
+    'V5:14525;V8:sampling;V4:现场监测;V9:acqSource;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10722') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10722') <>
+    'V5:10722;V6:nature;V2:自然;V10:airdrytype;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10723') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10723') <>
+    'V5:10723;V9:equipment;V2:设备;V10:airdrytype;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('320723846537280') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('320723846537280') <>
+    'V15:320723846537280;V9:calculate;V2:计算;V16:analysisCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('565602') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('565602') <>
+    'V6:565602;V8:analysis;V2:分析;V16:analysisCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('565603') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('565603') <>
+    'V6:565603;V8:sampling;V2:采样;V16:analysisCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1408537727520128') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1408537727520128') <>
+    'V16:1408537727520128;V13:Preprocessing;V3:前处理;V16:analysisCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2548') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2548') <>
+    'V4:2548;V8:sequence;V6:优先解析顺序;V11:analysisWay;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2549') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2549') <>
+    'V4:2549;V4:data;V6:优先解析数据;V11:analysisWay;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14506') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14506') <>
+    'V5:14506;V1:1;V4:限价收取;V14:analyzeFeeType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14507') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14507') <>
+    'V5:14507;V1:2;V4:折扣收取;V14:analyzeFeeType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1038') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1038') <>
+    'V4:1038;V7:country;V2:国家;V9:areaLevel;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1039') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1039') <>
+    'V4:1039;V6:region;V2:区域;V9:areaLevel;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1040') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1040') <>
+    'V4:1040;V8:province;V2:省份;V9:areaLevel;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1041') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1041') <>
+    'V4:1041;V4:city;V2:城市;V9:areaLevel;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1042') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1042') <>
+    'V4:1042;V10:prefecture;V2:地区;V9:areaLevel;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2351') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2351') <>
+    'V4:2351;V1:1;V4:电器设备;V13:assetCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2352') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2352') <>
+    'V4:2352;V1:2;V9:电子产品及通信设备;V13:assetCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2353') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2353') <>
+    'V4:2353;V1:3;V2:房屋;V13:assetCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2354') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2354') <>
+    'V4:2354;V1:4;V5:家具用具等;V13:assetCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2355') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2355') <>
+    'V4:2355;V1:5;V6:交通运输设备;V13:assetCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2356') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2356') <>
+    'V4:2356;V1:6;V2:通用;V13:assetCategory;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2357') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2357') <>
+    'V4:2357;V1:7;V10:仪器仪表、计量标准器;V13:assetCategory;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1310152237848480') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1310152237848480') <>
+    'V16:1310152237848480;V12:Commissioned;V4:委托检测;V7:bizType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1310152430303136') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1310152430303136') <>
+    'V16:1310152430303136;V10:Acceptance;V4:验收检测;V7:bizType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1310152474220448') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1310152474220448') <>
+    'V16:1310152474220448;V3:EIA;V4:环评检测;V7:bizType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1310152511977376') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1310152511977376') <>
+    'V16:1310152511977376;V9:Supervise;V11:监督性检测/临时性检测;V7:bizType;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1310152595134368') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1310152595134368') <>
+    'V16:1310152595134368;V12:Send samples;V4:送样检测;V7:bizType;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1310152625674144') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1310152625674144') <>
+    'V16:1310152625674144;V6:Assess;V4:考核检测;V7:bizType;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1310152665331616') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1310152665331616') <>
+    'V16:1310152665331616;V5:Other;V4:其他类别;V7:bizType;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1310152827836320') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1310152827836320') <>
+    'V16:1310152827836320;V4:Home;V4:家装检测;V7:bizType;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1361836068439168') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1361836068439168') <>
+    'V16:1361836068439168;V11:System Test;V4:系统测试;V7:bizType;V2:99;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2060') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2060') <>
+    'V4:2060;V5:getRN;V23:获取一个样品、一个测试、一个分析项下的样品结果;V7:calfunc;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2061') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2061') <>
+    'V4:2061;V5:getRR;V30:获取某一样品下、某一测试下、某一分析项、某一重复数的样品结果;V7:calfunc;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2062') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2062') <>
+    'V4:2062;V6:getSum;V9:获取当前分析项下和;V7:calfunc;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2063') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2063') <>
+    'V4:2063;V6:getMax;V11:获取当前分析项下最大值;V7:calfunc;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2064') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2064') <>
+    'V4:2064;V6:getMin;V11:获取当前分析项下最小值;V7:calfunc;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2065') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2065') <>
+    'V4:2065;V6:getAvg;V11:获取当前分析项下平均值;V7:calfunc;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2066') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2066') <>
+    'V4:2066;V6:getRsd;V12:获取当前分析项下标准偏差;V7:calfunc;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2067') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2067') <>
+    'V4:2067;V5:getSd;V14:获取当前分析项下相对标准偏差;V7:calfunc;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2068') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2068') <>
+    'V4:2068;V15:getMaxByPointer;V23:获取某一个点位、同一周期频次下的分析项的最大值;V7:calfunc;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2069') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2069') <>
+    'V4:2069;V15:getMinByPointer;V23:获取某一个点位、同一周期频次下的分析项的最小值;V7:calfunc;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2070') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2070') <>
+    'V4:2070;V15:getAvgByPointer;V23:获取某一个点位、同一周期频次下的分析项的平均值;V7:calfunc;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2071') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2071') <>
+    'V4:2071;V15:getSumByPointer;V21:获取某一个点位、同一周期频次下的分析项的和;V7:calfunc;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2072') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2072') <>
+    'V4:2072;V14:getSdByPointer;V26:获取某一个点位、同一周期频次下的分析项的相对标准偏差;V7:calfunc;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2073') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2073') <>
+    'V4:2073;V15:getRsdByPointer;V24:获取某一个点位、同一周期频次下的分析项的标准偏差;V7:calfunc;V2:13;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('662001243168832') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('662001243168832') <>
+    'V15:662001243168832;V2:C7;V30:土壤硫酸根离子含量的测定 NY/T 1121.18-2006;V18:calibrateSolScript;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10805') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10805') <>
+    'V5:10805;V3:C15;V10:通用标定浓度计算公式;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666080999669824') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666080999669824') <>
+    'V15:666080999669824;V2:C1;V30:水质五日生化需氧量的测定  稀释与接种法HJ505-2009;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666081503592512') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666081503592512') <>
+    'V15:666081503592512;V2:C2;V37:土壤检测 第6部分：土壤有机质的测定   NY/T 1121.6-2006;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666082284617792') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666082284617792') <>
+    'V15:666082284617792;V2:C3;V39:LY/T 1251-1999森林土壤水溶性盐分分析 4 碳酸根和重碳酸根的测定;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666082835546176') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666082835546176') <>
+    'V15:666082835546176;V2:C4;V34:固定污染源废气  氯化氢的测定 硝酸银容量法 HJ 548-2016;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666083332833344') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666083332833344') <>
+    'V15:666083332833344;V2:C8;V42:《土壤检测第5部分：石灰性土壤阳离子交换量的测定》 NY/T 1121.5-2006;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666083601940544') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666083601940544') <>
+    'V15:666083601940544;V2:C9;V29:《中性土壤阳离子交换量的测定》 NY/T 295-1995;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666084026556480') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666084026556480') <>
+    'V15:666084026556480;V3:C10;V30:水质 钙和镁总量的测定 EDTA滴定法 GB 7477-87;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666084344881216') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666084344881216') <>
+    'V15:666084344881216;V3:C11;V47:《水和废水监测分析方法》（国家保护总局 2002年 第四版 增补版）第三篇，第一章，十二（一）;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666084531855424') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666084531855424') <>
+    'V15:666084531855424;V3:C12;V29:水质 化学需氧量的测定 重铬酸钾法 HJ 828-2017;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666084881104960') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666084881104960') <>
+    'V15:666084881104960;V3:C13;V28:《土壤质量 全氮的测定 凯氏法》 HJ 717-2014;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('666085066063936') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('666085066063936') <>
+    'V15:666085066063936;V3:C14;V35:NY/T 1121.17-2006 土壤氯离子含量的测定 硝酸银滴定法;V18:calibrateSolScript;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9597') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9597') <>
+    'V4:9597;V6:basis1;V22:JJG 680-2007 烟尘采样器检定规程;V16:calibrationBasis;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9598') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9598') <>
+    'V4:9598;V6:basis2;V22:HJ/T 48-1999 烟尘采样器技术条件;V16:calibrationBasis;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9599') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9599') <>
+    'V4:9599;V6:basis3;V22:JJG 956-2013 大气采样器检定规程;V16:calibrationBasis;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9600') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9600') <>
+    'V4:9600;V6:basis4;V22:HJ/T 47-1999 烟气采样器技术条件;V16:calibrationBasis;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9601') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9601') <>
+    'V4:9601;V6:basis5;V27:崂应 8040 型智能高精度综合标准仪仪器设备操作规程;V16:calibrationBasis;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14502') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14502') <>
+    'V5:14502;V5:smoke;V4:烟气校准;V19:calibrationCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14503') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14503') <>
+    'V5:14503;V4:flow;V4:流量校准;V19:calibrationCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8085') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8085') <>
+    'V4:8085;V15:beforeCalibrate;V3:校准前;V17:calibrationPeriod;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8086') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8086') <>
+    'V4:8086;V14:afterCalibrate;V3:校准后;V17:calibrationPeriod;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8087') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8087') <>
+    'V4:8087;V9:qualified;V2:合格;V17:calibrationResult;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8088') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8088') <>
+    'V4:8088;V11:unqualified;V3:不合格;V17:calibrationResult;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14508') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14508') <>
+    'V5:14508;V17:stdGasCalibration;V4:标气校准;V15:calibrationType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14509') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14509') <>
+    'V5:14509;V15:flowCalibration;V4:流量校准;V15:calibrationType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14510') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14510') <>
+    'V5:14510;V20:waterTempCalibration;V4:水温校准;V15:calibrationType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14511') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14511') <>
+    'V5:14511;V13:phCalibration;V6:PH溶液校准;V15:calibrationType;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14512') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14512') <>
+    'V5:14512;V20:turbidityCalibration;V6:浊度溶液校准;V15:calibrationType;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14513') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14513') <>
+    'V5:14513;V23:conductivityCalibration;V7:电导率溶液校准;V15:calibrationType;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14514') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14514') <>
+    'V5:14514;V17:oxygenCalibration;V5:溶解氧校准;V15:calibrationType;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14517') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14517') <>
+    'V5:14517;V16:RedoxCalibration;V8:氧化还原电位校准;V15:calibrationType;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14515') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14515') <>
+    'V5:14515;V16:soundCalibration;V6:声校准仪校准;V15:calibrationType;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14516') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14516') <>
+    'V5:14516;V17:dioxinCalibration;V5:二噁英校准;V15:calibrationType;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('661993976029248') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('661993976029248') <>
+    'V15:661993976029248;V1:g;V4:克（g）;V18:calibsolweightunit;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('661993562644544') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('661993562644544') <>
+    'V15:661993562644544;V2:ml;V6:毫升（ml）;V18:calibsolweightunit;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2314') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2314') <>
+    'V4:2314;V1:1;V4:空白选项;V15:certificatetype;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2315') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2315') <>
+    'V4:2315;V1:2;V4:检测报告;V15:certificatetype;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2316') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2316') <>
+    'V4:2316;V1:3;V7:检定结果通知书;V15:certificatetype;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2317') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2317') <>
+    'V4:2317;V1:4;V4:检定证书;V15:certificatetype;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2318') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2318') <>
+    'V4:2318;V1:5;V4:校准证书;V15:certificatetype;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2319') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2319') <>
+    'V4:2319;V1:6;V4:自校证书;V15:certificatetype;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16056') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16056') <>
+    'V5:16056;V1:1;V2:新增;V10:changeType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16057') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16057') <>
+    'V5:16057;V1:2;V2:删除;V10:changeType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8115') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8115') <>
+    'V4:8115;V2:合格;V2:合格;V15:checkConclusion;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8116') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8116') <>
+    'V4:8116;V3:不合格;V3:不合格;V15:checkConclusion;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8117') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8117') <>
+    'V4:8117;V4:仪器比对;V4:仪器比对;V8:checkWay;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8118') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8118') <>
+    'V4:8118;V4:方法比对;V4:方法比对;V8:checkWay;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8119') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8119') <>
+    'V4:8119;V6:标准物质验证;V6:标准物质验证;V8:checkWay;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8120') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8120') <>
+    'V4:8120;V9:加标回收和单点校准;V9:加标回收和单点校准;V8:checkWay;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8121') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8121') <>
+    'V4:8121;V3:精密度;V3:精密度;V8:checkWay;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8122') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8122') <>
+    'V4:8122;V4:外观检查;V4:外观检查;V8:checkWay;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8123') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8123') <>
+    'V4:8123;V3:稳定性;V3:稳定性;V8:checkWay;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8124') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8124') <>
+    'V4:8124;V2:其他;V2:其他;V8:checkWay;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10801') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10801') <>
+    'V5:10801;V13:beforeHandle1;V4:前处理1;V18:chooseBeforeHander;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10802') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10802') <>
+    'V5:10802;V13:beforeHandle2;V4:前处理2;V18:chooseBeforeHander;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10803') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10803') <>
+    'V5:10803;V12:chooseLimit1;V5:检出低限1;V11:chooseLimit;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10804') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10804') <>
+    'V5:10804;V12:chooseLimit2;V5:检出低限2;V11:chooseLimit;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2493') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2493') <>
+    'V4:2493;V5:light;V2:轻微;V14:classification;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2494') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2494') <>
+    'V4:2494;V4:kind;V2:一般;V14:classification;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2495') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2495') <>
+    'V4:2495;V7:serious;V2:严重;V14:classification;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3465') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3465') <>
+    'V4:3465;V9:entrustor;V4:甲方客户;V9:clientTag;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3466') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3466') <>
+    'V4:3466;V10:contractor;V4:乙方客户;V9:clientTag;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2489') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2489') <>
+    'V4:2489;V5:phone;V2:电话;V15:complaintMethod;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2490') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2490') <>
+    'V4:2490;V4:oral;V2:口头;V15:complaintMethod;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2491') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2491') <>
+    'V4:2491;V5:paper;V2:书面;V15:complaintMethod;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2492') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2492') <>
+    'V4:2492;V7:network;V2:网络;V15:complaintMethod;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2328') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2328') <>
+    'V4:2328;V1:1;V3:未完成;V12:completeFlag;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2329') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2329') <>
+    'V4:2329;V1:2;V3:已完成;V12:completeFlag;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8095') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8095') <>
+    'V4:8095;V3:yes;V2:满足;V12:conformClaim;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8096') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8096') <>
+    'V4:8096;V2:no;V3:不满足;V12:conformClaim;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8090') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8090') <>
+    'V4:8090;V13:buildingCheck;V12:建设项目竣工环境保护验收;V15:consultCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8091') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8091') <>
+    'V4:8091;V13:envAssessment;V2:环评;V15:consultCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8092') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8092') <>
+    'V4:8092;V13:soilPollution;V10:土壤污染状况调查报告;V15:consultCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8093') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8093') <>
+    'V4:8093;V11:emergencies;V10:突发环境事件应急预案;V15:consultCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8094') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8094') <>
+    'V4:8094;V5:other;V2:其他;V15:consultCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16078') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16078') <>
+    'V5:16078;V6:normal;V4:常规合同;V16:contractCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16079') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16079') <>
+    'V5:16079;V4:plan;V4:计划合同;V16:contractCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2504') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2504') <>
+    'V4:2504;V8:province;V2:省控;V15:controllerLever;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2505') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2505') <>
+    'V4:2505;V4:city;V2:市控;V15:controllerLever;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2697') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2697') <>
+    'V4:2697;V10:testOnline;V4:在线考试;V20:coreAssessmentMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2698') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2698') <>
+    'V4:2698;V18:writtenExamination;V2:笔试;V20:coreAssessmentMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2699') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2699') <>
+    'V4:2699;V9:operation;V2:实操;V20:coreAssessmentMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2700') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2700') <>
+    'V4:2700;V5:other;V2:其他;V20:coreAssessmentMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3092') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3092') <>
+    'V4:3092;V10:testOnline;V4:在线考试;V20:coreAssessmentMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3093') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3093') <>
+    'V4:3093;V18:writtenExamination;V2:笔试;V20:coreAssessmentMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3094') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3094') <>
+    'V4:3094;V9:operation;V2:实操;V20:coreAssessmentMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3095') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3095') <>
+    'V4:3095;V5:other;V2:其他;V20:coreAssessmentMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('201909030005') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('201909030005') <>
+    'V12:201909030005;V4:list;V2:表格;V22:coreElnDisplayCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('201909030006') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('201909030006') <>
+    'V12:201909030006;V6:detail;V2:详细;V22:coreElnDisplayCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3476') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3476') <>
+    'V4:3476;V8:dropDown;V3:下拉框;V22:coreElnDisplayCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('201909030003') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('201909030003') <>
+    'V12:201909030003;V6:public;V2:公有;V14:coreElnDsScope;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('201909030004') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('201909030004') <>
+    'V12:201909030004;V7:protect;V2:私有;V14:coreElnDsScope;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2708') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2708') <>
+    'V4:2708;V7:correct;V1:对;V19:coreJudgementOption;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2709') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2709') <>
+    'V4:2709;V9:incorrect;V1:错;V19:coreJudgementOption;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3103') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3103') <>
+    'V4:3103;V7:correct;V1:对;V19:coreJudgementOption;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3104') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3104') <>
+    'V4:3104;V9:incorrect;V1:错;V19:coreJudgementOption;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10618') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10618') <>
+    'V5:10618;V4:list;V2:表格;V25:coreOfficeDisplayCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10619') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10619') <>
+    'V5:10619;V6:detail;V2:详细;V25:coreOfficeDisplayCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10703') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10703') <>
+    'V5:10703;V4:word;V4:WORD;V22:coreOfficeDocumentType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10704') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10704') <>
+    'V5:10704;V5:excel;V5:EXCEL;V22:coreOfficeDocumentType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('925') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('925') <>
+    'V3:925;V3:eln;V3:ELN;V22:coreOfficeDocumentType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2702') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2702') <>
+    'V4:2702;V14:safetyTraining;V4:安全培训;V20:coreQuestionCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2703') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2703') <>
+    'V4:2703;V19:theoreticalTraining;V4:理论培训;V20:coreQuestionCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3097') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3097') <>
+    'V4:3097;V14:safetyTraining;V4:安全培训;V20:coreQuestionCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3098') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3098') <>
+    'V4:3098;V19:theoreticalTraining;V4:理论培训;V20:coreQuestionCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2710') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2710') <>
+    'V4:2710;V6:random;V4:系统随机;V18:coreQuestionMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2711') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2711') <>
+    'V4:2711;V6:manual;V4:人工组卷;V18:coreQuestionMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3105') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3105') <>
+    'V4:3105;V6:random;V4:系统随机;V18:coreQuestionMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3106') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3106') <>
+    'V4:3106;V6:manual;V4:人工组卷;V18:coreQuestionMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2686') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2686') <>
+    'V4:2686;V10:completion;V3:填空题;V16:coreQuestionType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2704') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2704') <>
+    'V4:2704;V12:singleChoice;V3:单选题;V16:coreQuestionType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2705') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2705') <>
+    'V4:2705;V14:multipleChoice;V3:多选题;V16:coreQuestionType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2706') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2706') <>
+    'V4:2706;V9:judgement;V3:判断题;V16:coreQuestionType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2707') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2707') <>
+    'V4:2707;V11:shortAnswer;V3:简答题;V16:coreQuestionType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3099') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3099') <>
+    'V4:3099;V12:singleChoice;V3:单选题;V16:coreQuestionType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3100') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3100') <>
+    'V4:3100;V14:multipleChoice;V3:多选题;V16:coreQuestionType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3101') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3101') <>
+    'V4:3101;V9:judgement;V3:判断题;V16:coreQuestionType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3102') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3102') <>
+    'V4:3102;V11:shortAnswer;V3:简答题;V16:coreQuestionType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2690') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2690') <>
+    'V4:2690;V14:safetyTraining;V4:安全培训;V17:coreTrainCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2691') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2691') <>
+    'V4:2691;V19:theoreticalTraining;V4:理论培训;V17:coreTrainCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3085') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3085') <>
+    'V4:3085;V14:safetyTraining;V4:安全培训;V17:coreTrainCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3086') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3086') <>
+    'V4:3086;V19:theoreticalTraining;V4:理论培训;V17:coreTrainCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2694') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2694') <>
+    'V4:2694;V3:ppt;V5:PPT课件;V15:coreTrainMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2695') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2695') <>
+    'V4:2695;V9:operation;V2:实操;V15:coreTrainMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2696') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2696') <>
+    'V4:2696;V5:other;V2:其他;V15:coreTrainMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3089') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3089') <>
+    'V4:3089;V3:ppt;V5:PPT课件;V15:coreTrainMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3090') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3090') <>
+    'V4:3090;V9:operation;V2:实操;V15:coreTrainMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3091') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3091') <>
+    'V4:3091;V5:other;V2:其他;V15:coreTrainMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2692') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2692') <>
+    'V4:2692;V8:internal;V2:内部;V14:coreTrainScope;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2693') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2693') <>
+    'V4:2693;V8:external;V2:外部;V14:coreTrainScope;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3087') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3087') <>
+    'V4:3087;V8:internal;V2:内部;V14:coreTrainScope;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3088') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3088') <>
+    'V4:3088;V8:external;V2:外部;V14:coreTrainScope;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2475') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2475') <>
+    'V4:2475;V12:inconformity;V4:不符合项;V16:correctionSource;V2:85;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1708') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1708') <>
+    'V4:1708;V2:86;V2:86;V11:countryCode;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('0') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('0') <>
+    'V1:0;V18:environmentQuality;V4:环境质量;V16:customerCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('921145502') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('921145502') <>
+    'V9:921145502;V8:polution;V3:污染源;V16:customerCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('921145503') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('921145503') <>
+    'V9:921145503;V13:petrolStation;V6:委托受检单位;V16:customerCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('921145504') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('921145504') <>
+    'V9:921145504;V11:categoryOne;V3:畜牧业;V16:customerSubclass;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('921145505') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('921145505') <>
+    'V9:921145505;V11:catogeryTwo;V7:农副食品加工业;V16:customerSubclass;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('921145506') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('921145506') <>
+    'V9:921145506;V11:sinopeGroup;V5:食品制造业;V16:customerSubclass;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('921145507') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('921145507') <>
+    'V9:921145507;V20:petroleumCorporation;V7:酒、饮料制造业;V16:customerSubclass;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('921145508') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('921145508') <>
+    'V9:921145508;V4:cnpc;V5:烟草制品业;V16:customerSubclass;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('921145509') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('921145509') <>
+    'V9:921145509;V7:society;V3:纺织业;V16:customerSubclass;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('392364956794944') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('392364956794944') <>
+    'V15:392364956794944;V4:jsfw;V6:专业技术服务;V16:customerSubclass;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2303') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2303') <>
+    'V4:2303;V1:1;V2:每天;V5:cycle;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2304') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2304') <>
+    'V4:2304;V1:2;V2:每周;V5:cycle;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2305') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2305') <>
+    'V4:2305;V1:3;V2:每月;V5:cycle;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2306') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2306') <>
+    'V4:2306;V1:4;V3:每两月;V5:cycle;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2307') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2307') <>
+    'V4:2307;V1:5;V3:每季度;V5:cycle;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2308') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2308') <>
+    'V4:2308;V1:6;V3:每四月;V5:cycle;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2309') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2309') <>
+    'V4:2309;V1:7;V3:每半年;V5:cycle;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2310') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2310') <>
+    'V4:2310;V1:8;V2:每年;V5:cycle;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2311') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2311') <>
+    'V4:2311;V1:9;V3:每两年;V5:cycle;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2312') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2312') <>
+    'V4:2312;V2:10;V3:每三年;V5:cycle;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2313') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2313') <>
+    'V4:2313;V2:11;V3:每五年;V5:cycle;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10808') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10808') <>
+    'V5:10808;V3:day;V1:日;V10:dayornight;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10810') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10810') <>
+    'V5:10810;V3:day;V1:日;V10:dayornight;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10812') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10812') <>
+    'V5:10812;V3:day;V1:日;V10:dayornight;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10809') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10809') <>
+    'V5:10809;V5:night;V1:夜;V10:dayornight;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10811') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10811') <>
+    'V5:10811;V5:night;V1:夜;V10:dayornight;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10813') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10813') <>
+    'V5:10813;V5:night;V1:夜;V10:dayornight;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2093') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2093') <>
+    'V4:2093;V3:RN5;V4:相对误差;V16:decisionCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2094') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2094') <>
+    'V4:2094;V3:RN7;V4:相对偏差;V16:decisionCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('413581656023104') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('413581656023104') <>
+    'V15:413581656023104;V3:RN6;V4:加标回收;V16:decisionCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000833') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000833') <>
+    'V10:1000000833;V3:RN8;V4:绝对相差;V16:decisionCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000913') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000913') <>
+    'V10:1000000913;V4:RN14;V6:相对标准偏差;V16:decisionCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('949319986397248') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('949319986397248') <>
+    'V15:949319986397248;V3:RN9;V4:相对相差;V16:decisionCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('949320743788608') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('949320743788608') <>
+    'V15:949320743788608;V3:RN1;V4:绝对误差;V16:decisionCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1028576901431360') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1028576901431360') <>
+    'V16:1028576901431360;V3:RN2;V4:绝对偏差;V16:decisionCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1831134173193600') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1831134173193600') <>
+    'V16:1831134173193600;V4:RN15;V6:物种分类差异;V16:decisionCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1831134198031744') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1831134198031744') <>
+    'V16:1831134198031744;V4:RN16;V4:计数差异;V16:decisionCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3448') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3448') <>
+    'V4:3448;V10:comparison;V4:比对检测;V14:detectCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3449') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3449') <>
+    'V4:3449;V7:entrust;V4:委托检测;V14:detectCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3451') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3451') <>
+    'V4:3451;V7:recheck;V2:复检;V14:detectCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3452') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3452') <>
+    'V4:3452;V12:qualityCheck;V2:质考;V14:detectCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3453') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3453') <>
+    'V4:3453;V5:other;V2:其他;V14:detectCategory;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('680246506135616') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('680246506135616') <>
+    'V15:680246506135616;V18:Sampledeliverytest;V4:送样检测;V14:detectCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10708') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10708') <>
+    'V5:10708;V8:longterm;V4:长期委托;V15:detectionNature;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10709') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10709') <>
+    'V5:10709;V11:arbitration;V4:仲裁监测;V15:detectionNature;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10710') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10710') <>
+    'V5:10710;V5:other;V4:其他监测;V15:detectionNature;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2057') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2057') <>
+    'V4:2057;V9:nodisplay;V3:不显示;V18:displayFieldStatus;V2:78;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2058') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2058') <>
+    'V4:2058;V11:displayedit;V5:显示可编辑;V18:displayFieldStatus;V2:79;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2059') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2059') <>
+    'V4:2059;V13:displaynoedit;V6:显示不可编辑;V18:displayFieldStatus;V2:80;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5601') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5601') <>
+    'V4:5601;V8:analysis;V2:分析;V19:displayMonitorBasis;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5602') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5602') <>
+    'V4:5602;V8:sampling;V2:采样;V19:displayMonitorBasis;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5603') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5603') <>
+    'V4:5603;V19:analysisandsampling;V5:采样和分析;V19:displayMonitorBasis;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5604') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5604') <>
+    'V4:5604;V9:nodisplay;V3:不显示;V19:displayMonitorBasis;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2108') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2108') <>
+    'V4:2108;V6:single;V2:单段;V19:equiptAcqDataFormat;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2109') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2109') <>
+    'V4:2109;V8:multiple;V2:多段;V19:equiptAcqDataFormat;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2110') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2110') <>
+    'V4:2110;V6:single;V2:单个;V22:equiptAcqOrderNoFormat;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2111') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2111') <>
+    'V4:2111;V8:multiple;V2:列表;V22:equiptAcqOrderNoFormat;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2114') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2114') <>
+    'V4:2114;V6:delete;V2:删除;V25:equiptAcqPreAnalyCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2115') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2115') <>
+    'V4:2115;V10:deleteLine;V3:删除行;V25:equiptAcqPreAnalyCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2116') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2116') <>
+    'V4:2116;V7:replace;V2:替换;V25:equiptAcqPreAnalyCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8078') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8078') <>
+    'V4:8078;V14:replaceToSpace;V5:替换成空格;V25:equiptAcqPreAnalyCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8079') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8079') <>
+    'V4:8079;V14:regularReplace;V4:正则替换;V25:equiptAcqPreAnalyCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8080') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8080') <>
+    'V4:8080;V21:regularReplaceToSpace;V7:正则替换成空格;V25:equiptAcqPreAnalyCategory;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5906') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5906') <>
+    'V4:5906;V2:自有;V2:自有;V12:equiptBelong;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5907') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5907') <>
+    'V4:5907;V2:租用;V2:租用;V12:equiptBelong;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5908') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5908') <>
+    'V4:5908;V2:借用;V2:借用;V12:equiptBelong;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1032') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1032') <>
+    'V4:1032;V5:inUse;V2:在用;V12:equiptStatus;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1033') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1033') <>
+    'V4:1033;V6:notUse;V2:停用;V12:equiptStatus;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1034') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1034') <>
+    'V4:1034;V7:discard;V2:报废;V12:equiptStatus;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1184381108568128') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1184381108568128') <>
+    'V16:1184381108568128;V8:Outbound;V2:出库;V12:equiptStatus;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1184381399457856') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1184381399457856') <>
+    'V16:1184381399457856;V7:Staging;V2:暂存;V12:equiptStatus;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1184383565652032') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1184383565652032') <>
+    'V16:1184383565652032;V7:convert;V2:转用;V12:equiptStatus;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2472') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2472') <>
+    'V4:2472;V1:1;V2:轻微;V10:evaluation;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2473') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2473') <>
+    'V4:2473;V1:2;V2:一般;V10:evaluation;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2474') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2474') <>
+    'V4:2474;V1:3;V2:严重;V10:evaluation;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16072') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16072') <>
+    'V5:16072;V2:京东;V2:京东;V11:expressType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16062') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16062') <>
+    'V5:16062;V2:顺丰;V2:顺丰;V11:expressType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16060') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16060') <>
+    'V5:16060;V3:同城送;V3:同城送;V11:expressType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16059') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16059') <>
+    'V5:16059;V4:无需快递;V4:无需快递;V11:expressType;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16073') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16073') <>
+    'V5:16073;V2:其他;V2:其他;V11:expressType;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16074') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16074') <>
+    'V5:16074;V4:索氏提取;V4:索氏提取;V13:extractMethod;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16075') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16075') <>
+    'V5:16075;V7:快速溶剂萃取仪;V7:快速溶剂萃取仪;V13:extractMethod;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16076') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16076') <>
+    'V5:16076;V4:液液萃取;V4:液液萃取;V13:extractMethod;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('7845672645284') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('7845672645284') <>
+    'V13:7845672645284;V12:fieldContext;V2:文本;V9:fieldType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('224562645284') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('224562645284') <>
+    'V12:224562645284;V11:fieldSelect;V3:下拉框;V9:fieldType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5768782645284') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5768782645284') <>
+    'V13:5768782645284;V9:fieldDate;V2:日期;V9:fieldType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('665765765765') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('665765765765') <>
+    'V12:665765765765;V16:fieldContextArea;V3:文本域;V9:fieldType;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('45666') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('45666') <>
+    'V5:45666;V16:fieldMultiSelect;V5:多选下拉框;V9:fieldType;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10800') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10800') <>
+    'V5:10800;V6:script;V3:上下标;V9:fieldType;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2125') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2125') <>
+    'V4:2125;V12:pointDiagram;V5:点位示意图;V15:fileBizCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1527582741742464') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1527582741742464') <>
+    'V16:1527582741742464;V13:samplePicture;V6:现场采样照片;V15:fileBizCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1553837152969536') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1553837152969536') <>
+    'V16:1553837152969536;V11:equiptTital;V5:仪器打印条;V15:fileBizCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1553838511178560') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1553838511178560') <>
+    'V16:1553838511178560;V12:sampleRecord;V5:现场记录表;V15:fileBizCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2756') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2756') <>
+    'V4:2756;V9:signature;V2:签名;V15:fileBizCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2419') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2419') <>
+    'V4:2419;V10:wordReport;V6:Word报告;V15:fileBizCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000753') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000753') <>
+    'V10:1000000753;V8:qcReport;V4:质控报告;V15:fileBizCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1769701454122496') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1769701454122496') <>
+    'V16:1769701454122496;V9:pdfReport;V5:pdf报告;V15:fileBizCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2757') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2757') <>
+    'V4:2757;V5:photo;V2:图片;V15:fileBizCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2759') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2759') <>
+    'V4:2759;V8:document;V2:文档;V15:fileBizCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9646') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9646') <>
+    'V4:9646;V8:rsReport;V4:RS报告;V15:fileBizCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9647') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9647') <>
+    'V4:9647;V9:dataSheet;V5:线下数据表;V15:fileBizCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000462') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000462') <>
+    'V10:1000000462;V13:stampedReport;V4:盖章报告;V15:fileBizCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1422730519668672') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1422730519668672') <>
+    'V16:1422730519668672;V3:CMA;V5:CMA图片;V15:fileBizCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1422730600736704') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1422730600736704') <>
+    'V16:1422730600736704;V4:CNAS;V6:CNAS图片;V15:fileBizCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9799') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9799') <>
+    'V4:9799;V6:INSERT;V2:上传;V24:fileLogOperationCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9800') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9800') <>
+    'V4:9800;V6:UPDATE;V2:更新;V24:fileLogOperationCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9801') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9801') <>
+    'V4:9801;V8:DOWNLOAD;V2:下载;V24:fileLogOperationCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9802') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9802') <>
+    'V4:9802;V5:PRINT;V2:打印;V24:fileLogOperationCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9803') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9803') <>
+    'V4:9803;V6:DELETE;V2:删除;V24:fileLogOperationCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20191010003') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20191010003') <>
+    'V11:20191010003;V3:use;V2:领用;V28:fileVersionDistOperationType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20191010004') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20191010004') <>
+    'V11:20191010004;V6:borrow;V2:借阅;V28:fileVersionDistOperationType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20191010001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20191010001') <>
+    'V11:20191010001;V6:change;V2:更改;V24:fileVersionOperationType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20191010002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20191010002') <>
+    'V11:20191010002;V7:replace;V2:替换;V24:fileVersionOperationType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10724') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10724') <>
+    'V5:10724;V8:handwork;V2:手工;V9:grindmode;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10725') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10725') <>
+    'V5:10725;V10:instrument;V2:仪器;V9:grindmode;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2038') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2038') <>
+    'V4:2038;V14:neutralization;V2:中和;V12:handleMethod;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2039') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2039') <>
+    'V4:2039;V8:recovery;V2:回收;V12:handleMethod;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2040') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2040') <>
+    'V4:2040;V7:hand in;V2:上交;V12:handleMethod;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2041') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2041') <>
+    'V4:2041;V7:discard;V2:弃置;V12:handleMethod;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('685397324587072') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('685397324587072') <>
+    'V15:685397324587072;V5:第三方处置;V5:第三方处置;V12:handleMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('685397573779520') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('685397573779520') <>
+    'V15:685397573779520;V6:回收综合利用;V6:回收综合利用;V12:handleMethod;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2087') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2087') <>
+    'V4:2087;V1:1;V3:无问题;V12:handleResult;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2090') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2090') <>
+    'V4:2090;V1:1;V3:无问题;V12:handleResult;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2088') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2088') <>
+    'V4:2088;V1:2;V3:处理中;V12:handleResult;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2091') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2091') <>
+    'V4:2091;V1:2;V3:处理中;V12:handleResult;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2089') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2089') <>
+    'V4:2089;V1:3;V4:处理完成;V12:handleResult;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2092') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2092') <>
+    'V4:2092;V1:3;V4:处理完成;V12:handleResult;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5656564') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5656564') <>
+    'V7:5656564;V1:/;V1:/;V15:highLimitSymbol;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5656565') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5656565') <>
+    'V7:5656565;V1:<;V1:<;V15:highLimitSymbol;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5656566') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5656566') <>
+    'V7:5656566;V2:<=;V2:<=;V15:highLimitSymbol;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2501') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2501') <>
+    'V4:2501;V4:left;V1:左;V14:horizontalCode;V3:106;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2502') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2502') <>
+    'V4:2502;V6:center;V1:中;V14:horizontalCode;V3:107;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2503') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2503') <>
+    'V4:2503;V5:right;V1:右;V14:horizontalCode;V3:108;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10770') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10770') <>
+    'V5:10770;V3:dry;V2: 干;V8:humidity;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10771') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10771') <>
+    'V5:10771;V4:tide;V1:潮;V8:humidity;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10772') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10772') <>
+    'V5:10772;V3:wet;V1:湿;V8:humidity;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10773') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10773') <>
+    'V5:10773;V9:heavyTide;V2:重潮;V8:humidity;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10774') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10774') <>
+    'V5:10774;V11:extremeTide;V2:极潮;V8:humidity;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10775') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10775') <>
+    'V5:10775;V10:saturation;V2:饱和;V8:humidity;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2607') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2607') <>
+    'V4:2607;V8:ordinary;V2:普通;V10:importance;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2608') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2608') <>
+    'V4:2608;V9:important;V2:重要;V10:importance;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2487') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2487') <>
+    'V4:2487;V6:inside;V2:内部;V17:improvementSource;V2:94;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2488') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2488') <>
+    'V4:2488;V7:outside;V2:外部;V17:improvementSource;V2:95;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2330') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2330') <>
+    'V4:2330;V2:01;V1:Ⅰ;V17:infoIndexCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2331') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2331') <>
+    'V4:2331;V2:02;V1:Ⅱ;V17:infoIndexCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2332') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2332') <>
+    'V4:2332;V2:03;V1:Ⅲ;V17:infoIndexCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2333') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2333') <>
+    'V4:2333;V2:04;V1:Ⅳ;V17:infoIndexCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2334') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2334') <>
+    'V4:2334;V2:05;V1:Ⅴ;V17:infoIndexCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2335') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2335') <>
+    'V4:2335;V2:11;V3:劣V1;V17:infoIndexCategory;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2336') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2336') <>
+    'V4:2336;V2:12;V3:劣V2;V17:infoIndexCategory;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2337') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2337') <>
+    'V4:2337;V2:13;V3:劣V3;V17:infoIndexCategory;V2:13;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2338') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2338') <>
+    'V4:2338;V2:14;V3:劣V4;V17:infoIndexCategory;V2:14;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2290') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2290') <>
+    'V4:2290;V14:MonitorProject;V4:监测项目;V24:infoTmplFieldPrimaryName;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2291') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2291') <>
+    'V4:2291;V11:MonitorItem;V4:监测点位;V24:infoTmplFieldPrimaryName;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2292') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2292') <>
+    'V4:2292;V12:VerticalCode;V4:垂直代码;V24:infoTmplFieldPrimaryName;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2293') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2293') <>
+    'V4:2293;V11:MonitorDate;V4:监测日期;V24:infoTmplFieldPrimaryName;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2294') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2294') <>
+    'V4:2294;V11:MonitorYear;V4:监测-年;V24:infoTmplFieldPrimaryName;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2295') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2295') <>
+    'V4:2295;V12:MonitorMonth;V4:监测-月;V24:infoTmplFieldPrimaryName;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2296') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2296') <>
+    'V4:2296;V10:MonitorDay;V4:监测-日;V24:infoTmplFieldPrimaryName;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2297') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2297') <>
+    'V4:2297;V11:MonitorTime;V4:监测时间;V24:infoTmplFieldPrimaryName;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2298') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2298') <>
+    'V4:2298;V12:CalculateMax;V5:计算-最大;V24:infoTmplFieldPrimaryName;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2299') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2299') <>
+    'V4:2299;V12:CalculateMin;V5:计算-最小;V24:infoTmplFieldPrimaryName;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2300') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2300') <>
+    'V4:2300;V7:OrgName;V4:单位名称;V24:infoTmplFieldPrimaryName;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2126') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2126') <>
+    'V4:2126;V4:show;V2:显示;V17:infoTmplFieldShow;V2:83;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2127') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2127') <>
+    'V4:2127;V4:hide;V2:隐藏;V17:infoTmplFieldShow;V2:84;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2596') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2596') <>
+    'V4:2596;V6:notice;V4:通知公告;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2597') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2597') <>
+    'V4:2597;V8:workplan;V4:工作计划;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2598') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2598') <>
+    'V4:2598;V4:rule;V4:制度规范;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2599') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2599') <>
+    'V4:2599;V3:law;V4:政策法规;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2600') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2600') <>
+    'V4:2600;V4:news;V4:企业新闻;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2601') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2601') <>
+    'V4:2601;V9:worktrend;V4:工作动态;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2602') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2602') <>
+    'V4:2602;V4:data;V4:常用资料;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2603') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2603') <>
+    'V4:2603;V6:report;V4:工作报告;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2604') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2604') <>
+    'V4:2604;V3:faq;V4:常见问题;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2605') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2605') <>
+    'V4:2605;V14:servicesupport;V4:服务支持;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2606') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2606') <>
+    'V4:2606;V12:modification;V4:变更公示;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9518') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9518') <>
+    'V4:9518;V6:scroll;V4:滚动信息;V12:infocategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9605') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9605') <>
+    'V4:9605;V12:JJG99-2006砝码;V12:JJG99-2006砝码;V18:inspectionStandard;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('538146009096256') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('538146009096256') <>
+    'V15:538146009096256;V14:JJG676-2019测振仪;V14:JJG676-2019测振仪;V18:inspectionStandard;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('538146134130752') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('538146134130752') <>
+    'V15:538146134130752;V15:JJG176-2005声校准器;V15:JJG176-2005声校准器;V18:inspectionStandard;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('538146251620416') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('538146251620416') <>
+    'V15:538146251620416;V18:JJG188-2017声级计检定规程;V18:JJG188-2017声级计检定规程;V18:inspectionStandard;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('538146356953152') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('538146356953152') <>
+    'V15:538146356953152;V17:JJG980-2003个人声暴露计;V17:JJG980-2003个人声暴露计;V18:inspectionStandard;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('538146463334464') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('538146463334464') <>
+    'V15:538146463334464;V18:JJG993-2018电动通风干湿表;V18:JJG993-2018电动通风干湿表;V18:inspectionStandard;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('538151256375360') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('538151256375360') <>
+    'V15:538151256375360;V16:JJG520-2005粉尘采样器;V16:JJG520-2005粉尘采样器;V18:inspectionStandard;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('538151367516224') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('538151367516224') <>
+    'V15:538151367516224;V16:JJG956-2013大气采样器;V16:JJG956-2013大气采样器;V18:inspectionStandard;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050901') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050901') <>
+    'V8:10050901;V4:ext1;V3:字段1;V13:internalField;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050902') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050902') <>
+    'V8:10050902;V4:ext2;V3:字段2;V13:internalField;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050903') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050903') <>
+    'V8:10050903;V4:ext3;V3:字段3;V13:internalField;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050904') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050904') <>
+    'V8:10050904;V4:ext4;V3:字段4;V13:internalField;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050905') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050905') <>
+    'V8:10050905;V4:ext5;V3:字段5;V13:internalField;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050906') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050906') <>
+    'V8:10050906;V4:ext6;V3:字段6;V13:internalField;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050907') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050907') <>
+    'V8:10050907;V4:ext7;V3:字段7;V13:internalField;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050908') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050908') <>
+    'V8:10050908;V4:ext8;V3:字段8;V13:internalField;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050909') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050909') <>
+    'V8:10050909;V4:ext9;V3:字段9;V13:internalField;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050910') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050910') <>
+    'V8:10050910;V5:ext10;V4:字段10;V13:internalField;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050911') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050911') <>
+    'V8:10050911;V5:ext11;V4:字段11;V13:internalField;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050912') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050912') <>
+    'V8:10050912;V5:ext12;V4:字段12;V13:internalField;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050913') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050913') <>
+    'V8:10050913;V5:ext13;V4:字段13;V13:internalField;V2:13;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050914') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050914') <>
+    'V8:10050914;V5:ext14;V4:字段14;V13:internalField;V2:14;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050915') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050915') <>
+    'V8:10050915;V5:ext15;V4:字段15;V13:internalField;V2:15;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050916') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050916') <>
+    'V8:10050916;V5:ext16;V4:字段16;V13:internalField;V2:16;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050917') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050917') <>
+    'V8:10050917;V5:ext17;V4:字段17;V13:internalField;V2:17;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050918') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050918') <>
+    'V8:10050918;V5:ext18;V4:字段18;V13:internalField;V2:18;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050919') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050919') <>
+    'V8:10050919;V5:ext19;V4:字段19;V13:internalField;V2:19;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050920') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050920') <>
+    'V8:10050920;V5:ext20;V4:字段20;V13:internalField;V2:20;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050921') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050921') <>
+    'V8:10050921;V5:ext21;V4:字段21;V13:internalField;V2:21;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050922') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050922') <>
+    'V8:10050922;V5:ext22;V4:字段22;V13:internalField;V2:22;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050923') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050923') <>
+    'V8:10050923;V5:ext23;V4:字段23;V13:internalField;V2:23;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050924') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050924') <>
+    'V8:10050924;V5:ext24;V4:字段24;V13:internalField;V2:24;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050925') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050925') <>
+    'V8:10050925;V5:ext25;V4:字段25;V13:internalField;V2:25;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050926') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050926') <>
+    'V8:10050926;V5:ext26;V4:字段26;V13:internalField;V2:26;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050927') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050927') <>
+    'V8:10050927;V5:ext27;V4:字段27;V13:internalField;V2:27;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050928') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050928') <>
+    'V8:10050928;V5:ext28;V4:字段28;V13:internalField;V2:28;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050929') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050929') <>
+    'V8:10050929;V5:ext29;V4:字段29;V13:internalField;V2:29;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050930') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050930') <>
+    'V8:10050930;V5:ext30;V4:字段30;V13:internalField;V2:30;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050931') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050931') <>
+    'V8:10050931;V5:ext31;V4:字段31;V13:internalField;V2:31;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050932') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050932') <>
+    'V8:10050932;V5:ext32;V4:字段32;V13:internalField;V2:32;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050933') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050933') <>
+    'V8:10050933;V5:ext33;V4:字段33;V13:internalField;V2:33;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050934') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050934') <>
+    'V8:10050934;V5:ext34;V4:字段34;V13:internalField;V2:34;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050935') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050935') <>
+    'V8:10050935;V5:ext35;V4:字段35;V13:internalField;V2:35;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050936') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050936') <>
+    'V8:10050936;V5:ext36;V4:字段36;V13:internalField;V2:36;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050937') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050937') <>
+    'V8:10050937;V5:ext37;V4:字段37;V13:internalField;V2:37;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050938') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050938') <>
+    'V8:10050938;V5:ext38;V4:字段38;V13:internalField;V2:38;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050939') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050939') <>
+    'V8:10050939;V5:ext39;V4:字段39;V13:internalField;V2:39;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050940') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050940') <>
+    'V8:10050940;V5:ext40;V4:字段40;V13:internalField;V2:40;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050941') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050941') <>
+    'V8:10050941;V5:ext41;V4:字段41;V13:internalField;V2:41;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050942') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050942') <>
+    'V8:10050942;V5:ext42;V4:字段42;V13:internalField;V2:42;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050943') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050943') <>
+    'V8:10050943;V5:ext43;V4:字段43;V13:internalField;V2:43;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050944') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050944') <>
+    'V8:10050944;V5:ext44;V4:字段44;V13:internalField;V2:44;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050945') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050945') <>
+    'V8:10050945;V5:ext45;V4:字段45;V13:internalField;V2:45;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050946') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050946') <>
+    'V8:10050946;V5:ext46;V4:字段46;V13:internalField;V2:46;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050947') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050947') <>
+    'V8:10050947;V5:ext47;V4:字段47;V13:internalField;V2:47;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050948') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050948') <>
+    'V8:10050948;V5:ext48;V4:字段48;V13:internalField;V2:48;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050949') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050949') <>
+    'V8:10050949;V5:ext49;V4:字段49;V13:internalField;V2:49;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10050950') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10050950') <>
+    'V8:10050950;V5:ext50;V4:字段50;V13:internalField;V2:50;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1646561266371840') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1646561266371840') <>
+    'V16:1646561266371840;V1:1;V7:增值税普通发票;V15:invoiceCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1646561333939456') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1646561333939456') <>
+    'V16:1646561333939456;V1:2;V7:增值税专用发票;V15:invoiceCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5926') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5926') <>
+    'V4:5926;V3:qys;V3:契约锁;V13:issueSignMode;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5927') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5927') <>
+    'V4:5927;V7:picture;V4:签名图片;V13:issueSignMode;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000313') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000313') <>
+    'V10:1000000313;V8:weighing;V2:称重;V11:itemUseType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000314') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000314') <>
+    'V10:1000000314;V12:pretreatment;V3:前处理;V11:itemUseType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000315') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000315') <>
+    'V10:1000000315;V10:experiment;V2:上机;V11:itemUseType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2617') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2617') <>
+    'V4:2617;V1:1;V1:1;V9:leaveDays;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2618') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2618') <>
+    'V4:2618;V1:2;V1:2;V9:leaveDays;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2808') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2808') <>
+    'V4:2808;V6:annual;V2:年假;V14:leaveapplyform;V2:83;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5551') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5551') <>
+    'V4:5551;V1:1;V5:<=low;V9:limitFlag;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5552') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5552') <>
+    'V4:5552;V1:2;V4:<low;V9:limitFlag;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5553') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5553') <>
+    'V4:5553;V1:3;V5:charA;V9:limitFlag;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5554') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5554') <>
+    'V4:5554;V1:4;V3:low;V9:limitFlag;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5555') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5555') <>
+    'V4:5555;V1:5;V5:low/2;V9:limitFlag;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('4') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('4') <>
+    'V1:4;V1:0;V3:未锁定;V6:locked;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5') <>
+    'V1:5;V1:1;V3:已锁定;V6:locked;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3467') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3467') <>
+    'V4:3467;V1:1;V2:成功;V11:loginStatus;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3468') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3468') <>
+    'V4:3468;V1:0;V2:失败;V11:loginStatus;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5656561') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5656561') <>
+    'V7:5656561;V1:/;V1:/;V14:lowLimitSymbol;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5656562') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5656562') <>
+    'V7:5656562;V1:>;V1:>;V14:lowLimitSymbol;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5656563') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5656563') <>
+    'V7:5656563;V2:>=;V2:>=;V14:lowLimitSymbol;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9602') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9602') <>
+    'V4:9602;V18:equiptVerification;V4:仪器检定;V13:maintainEvent;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9603') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9603') <>
+    'V4:9603;V17:equiptCalibration;V4:仪器校准;V13:maintainEvent;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9604') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9604') <>
+    'V4:9604;V11:duringCheck;V4:期间核查;V13:maintainEvent;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9637') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9637') <>
+    'V4:9637;V12:stdMaterials;V4:标准物质;V14:managementType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9638') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9638') <>
+    'V4:9638;V14:genericReagent;V4:一般试剂;V14:managementType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3073') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3073') <>
+    'V4:3073;V1:0;V3:未签收;V18:messagereceiveflag;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3074') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3074') <>
+    'V4:3074;V1:1;V3:已签收;V18:messagereceiveflag;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3071') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3071') <>
+    'V4:3071;V1:0;V2:新建;V13:messagestatus;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3072') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3072') <>
+    'V4:3072;V1:1;V3:已发送;V13:messagestatus;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019092401') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019092401') <>
+    'V10:2019092401;V12:minitorPoint;V3:监测点;V23:monitoringPointCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019092402') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019092402') <>
+    'V10:2019092402;V18:equivalentEmission;V4:等效排放;V23:monitoringPointCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019092403') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019092403') <>
+    'V10:2019092403;V22:purificationEfficiency;V4:净化效率;V23:monitoringPointCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019092404') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019092404') <>
+    'V10:2019092404;V13:singleSummary;V4:单台汇总;V23:monitoringPointCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019092405') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019092405') <>
+    'V10:2019092405;V15:reducingblanks ;V3:减空白;V23:monitoringPointCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019092406') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019092406') <>
+    'V10:2019092406;V4:ECOD;V3:去除率;V23:monitoringPointCategory;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019092407') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019092407') <>
+    'V10:2019092407;V14:countryControl;V2:国控;V20:monitoringPointLevel;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019092408') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019092408') <>
+    'V10:2019092408;V11:areaControl;V2:区控;V20:monitoringPointLevel;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019092409') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019092409') <>
+    'V10:2019092409;V11:cityControl;V2:城控;V20:monitoringPointLevel;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2339') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2339') <>
+    'V4:2339;V2:01;V2:01;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2340') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2340') <>
+    'V4:2340;V2:02;V2:02;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2341') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2341') <>
+    'V4:2341;V2:03;V2:03;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2342') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2342') <>
+    'V4:2342;V2:04;V2:04;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2343') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2343') <>
+    'V4:2343;V2:05;V2:05;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2344') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2344') <>
+    'V4:2344;V2:06;V2:06;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2345') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2345') <>
+    'V4:2345;V2:07;V2:07;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2346') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2346') <>
+    'V4:2346;V2:08;V2:08;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2347') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2347') <>
+    'V4:2347;V2:09;V2:09;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2348') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2348') <>
+    'V4:2348;V2:10;V2:10;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2349') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2349') <>
+    'V4:2349;V2:11;V2:11;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2350') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2350') <>
+    'V4:2350;V2:12;V2:12;V5:month;V2:86;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1023') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1023') <>
+    'V4:1023;V1:0;V1:0;V17:nDComputingMethod;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1024') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1024') <>
+    'V4:1024;V3:LOW;V3:LOW;V17:nDComputingMethod;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1025') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1025') <>
+    'V4:1025;V5:LOW/2;V5:LOW/2;V17:nDComputingMethod;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1026') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1026') <>
+    'V4:1026;V27:notParticipatingInComputing;V5:不参与计算;V17:nDComputingMethod;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2002') <>
+    'V4:2002;V3:new;V2:新建;V9:neworauth;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2003') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2003') <>
+    'V4:2003;V4:auth;V2:授权;V9:neworauth;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2609') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2609') <>
+    'V4:2609;V5:whole;V4:全局公告;V14:noticecategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2610') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2610') <>
+    'V4:2610;V9:authority;V4:权限公告;V14:noticecategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2611') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2611') <>
+    'V4:2611;V6:normal;V2:正常;V12:noticestatus;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2612') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2612') <>
+    'V4:2612;V6:cancel;V2:撤销;V12:noticestatus;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9762') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9762') <>
+    'V4:9762;V3:ft1;V10:合同扫描件(Pdf);V10:oaFileType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520245071732800') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520245071732800') <>
+    'V15:520245071732800;V3:ft2;V8:单个报告(终稿);V10:oaFileType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520246036447296') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520246036447296') <>
+    'V15:520246036447296;V3:ft3;V6:项目告知文件;V10:oaFileType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520246302646336') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520246302646336') <>
+    'V15:520246302646336;V3:ft4;V6:项目公示文件;V10:oaFileType;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520394685710400') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520394685710400') <>
+    'V15:520394685710400;V3:ft5;V2:其他;V10:oaFileType;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520590480703552') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520590480703552') <>
+    'V15:520590480703552;V3:ft6;V11:其他(可动态添加类别);V10:oaFileType;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('521045431394368') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('521045431394368') <>
+    'V15:521045431394368;V3:rt0;V13:可根据部门报告类型动态添加;V12:oaReportType;V1:0;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9761') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9761') <>
+    'V4:9761;V3:rt1;V8:职业卫生定期检测;V12:oaReportType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520243271827520') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520243271827520') <>
+    'V15:520243271827520;V3:rt2;V8:职业卫生粉尘检测;V12:oaReportType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520243535372352') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520243535372352') <>
+    'V15:520243535372352;V3:rt3;V7:职业卫生预评价;V12:oaReportType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520243781091392') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520243781091392') <>
+    'V15:520243781091392;V3:rt4;V10:职业卫生防护设施设计;V12:oaReportType;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520243993452608') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520243993452608') <>
+    'V15:520243993452608;V3:rt5;V10:职业卫生控制效果评价;V12:oaReportType;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520244268785728') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520244268785728') <>
+    'V15:520244268785728;V3:rt6;V6:安全检验报告;V12:oaReportType;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520480871899200') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520480871899200') <>
+    'V15:520480871899200;V3:rt7;V8:安全检测检验报告;V12:oaReportType;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520481985708096') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520481985708096') <>
+    'V15:520481985708096;V3:rt8;V4:检定证书;V12:oaReportType;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520482166947904') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520482166947904') <>
+    'V15:520482166947904;V3:rt9;V4:校准证书;V12:oaReportType;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('520482807275584') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('520482807275584') <>
+    'V15:520482807275584;V4:rt10;V4:检测报告;V12:oaReportType;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('522495874555968') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('522495874555968') <>
+    'V15:522495874555968;V4:rt11;V4:检验报告;V12:oaReportType;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('522496261095488') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('522496261095488') <>
+    'V15:522496261095488;V4:rt12;V5:研究性报告;V12:oaReportType;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('525903585157184') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('525903585157184') <>
+    'V15:525903585157184;V4:rt13;V18:煤矿在用主通风机系统安全性能检验报告;V12:oaReportType;V2:13;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('525904115425344') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('525904115425344') <>
+    'V15:525904115425344;V4:rt14;V16:煤矿用局部通风机安全检测检验报告;V12:oaReportType;V2:14;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('525904309510208') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('525904309510208') <>
+    'V15:525904309510208;V4:rt15;V8:煤矿通风能力核定;V12:oaReportType;V2:15;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('525904575045696') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('525904575045696') <>
+    'V15:525904575045696;V4:rt16;V10:矿井瓦斯等级鉴定报告;V12:oaReportType;V2:16;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('525904750592064') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('525904750592064') <>
+    'V15:525904750592064;V4:rt17;V10:矿井通风阻力测定报告;V12:oaReportType;V2:17;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('525905467392064') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('525905467392064') <>
+    'V15:525905467392064;V4:rt18;V21:金属非金属矿山在用主通风机系统安全检验报告;V12:oaReportType;V2:18;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('525905701257280') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('525905701257280') <>
+    'V15:525905701257280;V4:rt19;V17:金属非金属地下矿山通风系统检测报告;V12:oaReportType;V2:19;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('525905927348288') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('525905927348288') <>
+    'V15:525905927348288;V4:rt20;V15:金属非金属矿井通风系统鉴定指标;V12:oaReportType;V2:20;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('525906128093248') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('525906128093248') <>
+    'V15:525906128093248;V4:rt21;V9:工业通风机检测报告;V12:oaReportType;V2:21;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('526693169791040') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('526693169791040') <>
+    'V15:526693169791040;V4:rt22;V11:矿井瓦斯涌出量预测报告;V12:oaReportType;V2:22;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('526693337440320') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('526693337440320') <>
+    'V15:526693337440320;V4:rt23;V10:瓦斯基本参数测定报告;V12:oaReportType;V2:23;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2076') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2076') <>
+    'V4:2076;V8:noresult;V4:未录结果;V11:operatedata;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2077') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2077') <>
+    'V4:2077;V4:line;V3:当前行;V11:operatedata;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1393188558606624') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1393188558606624') <>
+    'V16:1393188558606624;V2:无色;V2:无色;V10:orderColor;V2:-1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2764') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2764') <>
+    'V4:2764;V4:无色透明;V4:无色透明;V10:orderColor;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('431886447034432') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('431886447034432') <>
+    'V15:431886447034432;V4:无色澄清;V4:无色澄清;V10:orderColor;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2765') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2765') <>
+    'V4:2765;V3:微浑浊;V3:微浑浊;V10:orderColor;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2766') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2766') <>
+    'V4:2766;V2:浑浊;V2:浑浊;V10:orderColor;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2767') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2767') <>
+    'V4:2767;V3:淡黄色;V3:淡黄色;V10:orderColor;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('431887697436736') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('431887697436736') <>
+    'V15:431887697436736;V2:黄色;V2:黄色;V10:orderColor;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1533353666278176') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1533353666278176') <>
+    'V16:1533353666278176;V2:棕色;V2:棕色;V10:orderColor;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10728') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10728') <>
+    'V5:10728;V3:red;V1:红;V13:orderColorNew;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10729') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10729') <>
+    'V5:10729;V6:yellow;V1:黄;V13:orderColorNew;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10730') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10730') <>
+    'V5:10730;V11:lightYellow;V2:浅黄;V13:orderColorNew;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10731') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10731') <>
+    'V5:10731;V12:darkChestnut;V2:暗栗;V13:orderColorNew;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10732') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10732') <>
+    'V5:10732;V9:darkBrown;V2:暗棕;V13:orderColorNew;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10733') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10733') <>
+    'V5:10733;V8:darkGrey;V2:暗灰;V13:orderColorNew;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10734') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10734') <>
+    'V5:10734;V8:chestnut;V1:栗;V13:orderColorNew;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10735') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10735') <>
+    'V5:10735;V5:brown;V1:棕;V13:orderColorNew;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10736') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10736') <>
+    'V5:10736;V4:grey;V1:灰;V13:orderColorNew;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10737') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10737') <>
+    'V5:10737;V8:redBrown;V2:红棕;V13:orderColorNew;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10738') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10738') <>
+    'V5:10738;V11:yellowBrown;V2:黄棕;V13:orderColorNew;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10739') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10739') <>
+    'V5:10739;V10:lightBrown;V2:浅棕;V13:orderColorNew;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10740') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10740') <>
+    'V5:10740;V5:black;V1:黑;V13:orderColorNew;V2:13;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10741') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10741') <>
+    'V5:10741;V6:orange;V2:橙色;V13:orderColorNew;V2:14;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10742') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10742') <>
+    'V5:10742;V5:taupe;V3:灰褐色;V13:orderColorNew;V2:15;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10743') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10743') <>
+    'V5:10743;V3:tan;V3:棕褐色;V13:orderColorNew;V2:16;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10744') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10744') <>
+    'V5:10744;V5:tawny;V3:黄褐色;V13:orderColorNew;V2:17;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10761') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10761') <>
+    'V5:10761;V5:loose;V2:松散;V12:orderDensity;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10762') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10762') <>
+    'V5:10762;V5:close;V1:密;V12:orderDensity;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10763') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10763') <>
+    'V5:10763;V14:slightlyDenser;V2:稍密;V12:orderDensity;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10764') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10764') <>
+    'V5:10764;V13:mediumDensity;V2:中密;V12:orderDensity;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2774') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2774') <>
+    'V4:2774;V2:透明;V2:透明;V12:orderFloater;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2775') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2775') <>
+    'V4:2775;V2:微浊;V2:微浊;V12:orderFloater;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2776') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2776') <>
+    'V4:2776;V2:浑浊;V2:浑浊;V12:orderFloater;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2771') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2771') <>
+    'V4:2771;V3:无浮油;V3:无浮油;V13:orderOilSlick;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2772') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2772') <>
+    'V4:2772;V4:少量浮油;V4:少量浮油;V13:orderOilSlick;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2773') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2773') <>
+    'V4:2773;V4:中量浮油;V4:中量浮油;V13:orderOilSlick;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('441124490240064') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('441124490240064') <>
+    'V15:441124490240064;V4:大量浮油;V4:大量浮油;V13:orderOilSlick;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2768') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2768') <>
+    'V4:2768;V2:无味;V2:无味;V10:orderSmell;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('441120339828800') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('441120339828800') <>
+    'V15:441120339828800;V4:微弱气味;V4:微弱气味;V10:orderSmell;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2769') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2769') <>
+    'V4:2769;V3:弱气味;V3:弱气味;V10:orderSmell;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2770') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2770') <>
+    'V4:2770;V4:明显气味;V4:明显气味;V10:orderSmell;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('441123549315136') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('441123549315136') <>
+    'V15:441123549315136;V3:强气味;V3:强气味;V10:orderSmell;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('441123761709120') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('441123761709120') <>
+    'V15:441123761709120;V4:很强气味;V4:很强气味;V10:orderSmell;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14518') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14518') <>
+    'V5:14518;V8:solidity;V2:固态;V11:orderStatus;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14519') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14519') <>
+    'V5:14519;V9:liquidity;V2:液态;V11:orderStatus;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14520') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14520') <>
+    'V5:14520;V9:semisolid;V3:半固态;V11:orderStatus;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10758') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10758') <>
+    'V5:10758;V14:grainStructure;V5:团粒结构体;V14:orderStructure;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10759') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10759') <>
+    'V5:10759;V14:blockStructure;V5:块状结构体;V14:orderStructure;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10760') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10760') <>
+    'V5:10760;V17:columnarStructure;V5:柱状结构体;V14:orderStructure;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10745') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10745') <>
+    'V5:10745;V4:sand;V2:砂土;V12:orderTexture;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10746') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10746') <>
+    'V5:10746;V9:sandyLoam;V3:沙壤土;V12:orderTexture;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10747') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10747') <>
+    'V5:10747;V9:lightLoam;V3:轻壤土;V12:orderTexture;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10748') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10748') <>
+    'V5:10748;V10:mediumLoam;V3:中壤土;V12:orderTexture;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10749') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10749') <>
+    'V5:10749;V9:heavyLoam;V3:重壤土;V12:orderTexture;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10750') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10750') <>
+    'V5:10750;V4:clay;V2:粘土;V12:orderTexture;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10751') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10751') <>
+    'V5:10751;V17:miscellaneousFill;V3:杂填土;V12:orderTexture;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10752') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10752') <>
+    'V5:10752;V4:silt;V2:粉土;V12:orderTexture;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10753') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10753') <>
+    'V5:10753;V4:sand;V2:沙土;V12:orderTexture;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10754') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10754') <>
+    'V5:10754;V15:sandBearingClay;V4:含砂粘土;V12:orderTexture;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10755') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10755') <>
+    'V5:10755;V9:siltyClay;V4:粉质粘土;V12:orderTexture;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10756') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10756') <>
+    'V5:10756;V9:plainFill;V3:素填土;V12:orderTexture;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10757') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10757') <>
+    'V5:10757;V9:sandyClay;V4:砂质粘土;V12:orderTexture;V2:13;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2074') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2074') <>
+    'V4:2074;V4:无色透明;V4:无色透明;V9:orderdesc;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2075') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2075') <>
+    'V4:2075;V2:完好;V2:完好;V9:orderdesc;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1030') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1030') <>
+    'V4:1030;V7:company;V2:公司;V11:orgcategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1027') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1027') <>
+    'V4:1027;V10:department;V2:科室;V11:orgcategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1028') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1028') <>
+    'V4:1028;V4:post;V2:岗位;V11:orgcategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16080') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16080') <>
+    'V5:16080;V1:1;V5:采样人工费;V12:otherFeeType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16081') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16081') <>
+    'V5:16081;V2:10;V3:车辆费;V12:otherFeeType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16082') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16082') <>
+    'V5:16082;V2:11;V23:燃油费(根据导航确认公里数，按1.5元/km);V12:otherFeeType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16083') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16083') <>
+    'V5:16083;V2:12;V23:过路费(根据导航确认公里数，按0.5元/km);V12:otherFeeType;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16084') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16084') <>
+    'V5:16084;V1:2;V3:交通费;V12:otherFeeType;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16085') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16085') <>
+    'V5:16085;V1:3;V5:现场勘查费;V12:otherFeeType;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16086') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16086') <>
+    'V5:16086;V1:4;V5:设备租赁费;V12:otherFeeType;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16087') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16087') <>
+    'V5:16087;V1:5;V3:加急费;V12:otherFeeType;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16088') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16088') <>
+    'V5:16088;V1:6;V3:专家费;V12:otherFeeType;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16089') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16089') <>
+    'V5:16089;V1:7;V3:咨询费;V12:otherFeeType;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16090') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16090') <>
+    'V5:16090;V1:9;V5:液氮材料费;V12:otherFeeType;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16091') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16091') <>
+    'V5:16091;V1:8;V9:其他(原始记录等);V12:otherFeeType;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16092') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16092') <>
+    'V5:16092;V2:13;V13:其他交通费(飞机、高铁等);V12:otherFeeType;V2:13;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019071001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019071001') <>
+    'V10:2019071001;V6:GLOBAL;V4:全局策略;V14:passwordPolicy;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019071002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019071002') <>
+    'V10:2019071002;V4:ROLE;V4:角色策略;V14:passwordPolicy;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16100') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16100') <>
+    'V5:16100;V1:1;V4:标准服务;V10:periodType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16101') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16101') <>
+    'V5:16101;V1:2;V4:加急服务;V10:periodType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16102') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16102') <>
+    'V5:16102;V1:3;V4:特急服务;V10:periodType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3043') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3043') <>
+    'V4:3043;V5:group;V4:分组字段;V19:pivotColumnCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3044') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3044') <>
+    'V4:3044;V5:value;V5:显示值字段;V19:pivotColumnCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3045') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3045') <>
+    'V4:3045;V6:column;V5:扩展列字段;V19:pivotColumnCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('56561') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('56561') <>
+    'V5:56561;V10:dayaverage;V3:日均值;V6:pnFunc;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('56562') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('56562') <>
+    'V5:56562;V6:sample;V3:样品值;V6:pnFunc;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('56563') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('56563') <>
+    'V5:56563;V10:peraverage;V3:次均值;V6:pnFunc;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2430') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2430') <>
+    'V4:2430;V6:inside;V2:内部;V16:precautionSource;V2:83;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2431') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2431') <>
+    'V4:2431;V7:outside;V2:外部;V16:precautionSource;V2:84;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5754') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5754') <>
+    'V4:5754;V8:静置30 min;V8:静置30 min;V11:pretreatWay;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5755') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5755') <>
+    'V4:5755;V8:静置60 min;V8:静置60 min;V11:pretreatWay;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5756') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5756') <>
+    'V4:5756;V17:离心2000r/min，1 min;V17:离心2000r/min，1 min;V11:pretreatWay;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5757') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5757') <>
+    'V4:5757;V17:离心2000r/min，2 min;V17:离心2000r/min，2 min;V11:pretreatWay;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5758') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5758') <>
+    'V4:5758;V8:63μm筛网过滤;V8:63μm筛网过滤;V11:pretreatWay;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5759') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5759') <>
+    'V4:5759;V10:0.45μm滤膜过滤;V10:0.45μm滤膜过滤;V11:pretreatWay;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16103') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16103') <>
+    'V5:16103;V1:1;V1:无;V18:pretreatmentRemark;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16104') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16104') <>
+    'V5:16104;V1:2;V32:固体废物 浸出毒性浸出方法 硫酸硝酸法HJ/T 299-2007;V18:pretreatmentRemark;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16105') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16105') <>
+    'V5:16105;V1:3;V30:固体废物 浸出毒性浸出方法 水平震荡法HJ 557-2010;V18:pretreatmentRemark;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16106') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16106') <>
+    'V5:16106;V1:4;V35:固体废物 浸出毒性浸出方法 醋酸缓冲溶液法 HJ/T 300-2007;V18:pretreatmentRemark;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3047') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3047') <>
+    'V4:3047;V4:none;V1:/;V9:priceTerm;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3048') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3048') <>
+    'V4:3048;V8:internal;V3:内部价;V9:priceTerm;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3049') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3049') <>
+    'V4:3049;V6:market;V3:市场价;V9:priceTerm;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('327102660287168') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('327102660287168') <>
+    'V15:327102660287168;V3:pro;V5:例行地表水;V8:projName;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1616115039112832') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1616115039112832') <>
+    'V16:1616115039112832;V4:czwb;V2:场调;V11:projectType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1667060614291872') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1667060614291872') <>
+    'V16:1667060614291872;V2:tr;V2:土壤;V11:projectType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1667060714217888') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1667060714217888') <>
+    'V16:1667060714217888;V2:wf;V2:危废;V11:projectType;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8253') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8253') <>
+    'V4:8253;V6:equipt;V5:仪器/设备;V16:purchaseCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8254') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8254') <>
+    'V4:8254;V10:consumable;V3:消耗品;V16:purchaseCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8255') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8255') <>
+    'V4:8255;V15:chemicalReagent;V4:化学试剂;V16:purchaseCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8256') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8256') <>
+    'V4:8256;V17:referenceMaterial;V4:标准物质;V16:purchaseCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8257') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8257') <>
+    'V4:8257;V7:service;V2:服务;V16:purchaseCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8258') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8258') <>
+    'V4:8258;V5:other;V2:其他;V16:purchaseCategory;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16122') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16122') <>
+    'V5:16122;V1:1;V291:将三段式净化柱拼装完成后用50ml二氯甲烷淋洗三次，吹干后分别加入无水硫酸钠至活性炭柱中段，加入1g活性炭，填充无水硫酸钠至硅胶柱底部，加1g中性硅胶，2%氢氧化钾硅胶4g，中性硅胶1g，44%硫酸硅胶5g，22%硫酸硅胶6g，中性硅胶1g，10%硝酸银硅胶3g工，无水硫酸钠6g，用100ml正己烷淋洗，将旋蒸浓缩后的样品溶液转移至净化柱上，转移完成后用200ml正己烷淋洗，淋洗完成后硅胶柱更换成空柱，用200ml25%二氯甲烷-正己烷淋洗，完成后净化柱底部加入鸡心瓶，用100ml甲苯淋洗至完成，将洗脱液浓缩至近干，用二氯甲烷转移至进样小瓶中氮吹至微湿，加入上机标定容，待测。;V12:purifyMethod;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1674989565728320') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1674989565728320') <>
+    'V16:1674989565728320;V4:仪器比对;V4:仪器比对;V10:qcExamWays;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1674989647099456') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1674989647099456') <>
+    'V16:1674989647099456;V4:标准样品;V4:标准样品;V10:qcExamWays;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1674989792532032') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1674989792532032') <>
+    'V16:1674989792532032;V4:加标回收;V4:加标回收;V10:qcExamWays;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1674989873854016') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1674989873854016') <>
+    'V16:1674989873854016;V4:人员比对;V4:人员比对;V10:qcExamWays;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1674989915338304') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1674989915338304') <>
+    'V16:1674989915338304;V4:留样复测;V4:留样复测;V10:qcExamWays;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1674990089279040') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1674990089279040') <>
+    'V16:1674990089279040;V4:方法比对;V4:方法比对;V10:qcExamWays;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('104248703645280') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('104248703645280') <>
+    'V15:104248703645280;V5:Blank;V2:空白;V7:qcGroup;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('104248703645282') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('104248703645282') <>
+    'V15:104248703645282;V9:Determine;V2:判定;V7:qcGroup;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('104248703645283') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('104248703645283') <>
+    'V15:104248703645283;V8:Contrast;V2:对比;V7:qcGroup;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('104248703645284') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('104248703645284') <>
+    'V15:104248703645284;V6:Ration;V2:定量;V7:qcGroup;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2421') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2421') <>
+    'V4:2421;V6:inside;V2:内部;V7:qcScope;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2422') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2422') <>
+    'V4:2422;V7:outside;V2:外部;V7:qcScope;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2008') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2008') <>
+    'V4:2008;V11:orderAccept;V6:样品接收质控;V14:qualityUseType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2009') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2009') <>
+    'V4:2009;V3:lab;V5:实验室质控;V14:qualityUseType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2010') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2010') <>
+    'V4:2010;V5:scene;V4:现场质控;V14:qualityUseType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10796') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10796') <>
+    'V5:10796;V2:RS;V2:质控;V15:reagentCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10797') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10797') <>
+    'V5:10797;V2:QC;V2:标液;V15:reagentCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10798') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10798') <>
+    'V5:10798;V2:RW;V3:液+固;V15:reagentCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2078') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2078') <>
+    'V4:2078;V8:noresult;V2:无样;V6:reason;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2079') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2079') <>
+    'V4:2079;V7:disturb;V2:干扰;V6:reason;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2080') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2080') <>
+    'V4:2080;V9:screenbad;V2:屏坏;V6:reason;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2081') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2081') <>
+    'V4:2081;V6:notest;V2:不测;V6:reason;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2082') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2082') <>
+    'V4:2082;V6:othoer;V2:其他;V6:reason;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3454') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3454') <>
+    'V4:3454;V12:selfFetching;V2:自取;V16:receiveReportWay;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3455') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3455') <>
+    'V4:3455;V7:express;V4:特快专递;V16:receiveReportWay;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3456') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3456') <>
+    'V4:3456;V5:other;V2:其他;V16:receiveReportWay;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000373') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000373') <>
+    'V10:1000000373;V13:recoveryRate0;V6:通用标准加标;V12:recoveryRate;V1:0;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000374') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000374') <>
+    'V10:1000000374;V13:recoveryRate1;V27:（（浓度*定容体积-父样*定容体积））/加标量*100;V12:recoveryRate;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000375') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000375') <>
+    'V10:1000000375;V13:recoveryRate2;V27:（（浓度-父样）*定容体积/1000）/加标量*100;V12:recoveryRate;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000376') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000376') <>
+    'V10:1000000376;V13:recoveryRate3;V20:((浓度-父样)*10)/加标量*100;V12:recoveryRate;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000377') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000377') <>
+    'V10:1000000377;V13:recoveryRate4;V5:土壤VOC;V12:recoveryRate;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000378') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000378') <>
+    'V10:1000000378;V13:recoveryRate5;V6:理化通用加标;V12:recoveryRate;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000693') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000693') <>
+    'V10:1000000693;V13:recoveryRate6;V7:土壤VOC除二;V12:recoveryRate;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000813') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000813') <>
+    'V10:1000000813;V13:recoveryRate7;V5:金属速效钾;V12:recoveryRate;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000893') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000893') <>
+    'V10:1000000893;V13:recoveryRate8;V12:HJ634-2012氨氮;V12:recoveryRate;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000894') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000894') <>
+    'V10:1000000894;V13:recoveryRate9;V13:HJ745-2015氰化物;V12:recoveryRate;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000895') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000895') <>
+    'V10:1000000895;V14:recoveryRate10;V20:CJ/T 221-2005.10 氰化物;V12:recoveryRate;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000896') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000896') <>
+    'V10:1000000896;V14:recoveryRate11;V14:NY/T 88-1988全磷;V12:recoveryRate;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000897') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000897') <>
+    'V10:1000000897;V14:recoveryRate12;V13:HJ 632-2011总磷;V12:recoveryRate;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000898') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000898') <>
+    'V10:1000000898;V14:recoveryRate13;V16:CJ/T 221-2005.8酚;V12:recoveryRate;V2:13;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000899') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000899') <>
+    'V10:1000000899;V14:recoveryRate14;V17:HJ 833-2017硫化物-土壤;V12:recoveryRate;V2:14;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000900') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000900') <>
+    'V10:1000000900;V14:recoveryRate15;V18:HJ 833-2017硫化物-沉积物;V12:recoveryRate;V2:15;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000901') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000901') <>
+    'V10:1000000901;V14:recoveryRate16;V17:CJ/T221.49-2005总氮;V12:recoveryRate;V2:16;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000902') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000902') <>
+    'V10:1000000902;V14:recoveryRate17;V17:CJ/T221.50-2005总磷;V12:recoveryRate;V2:17;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000933') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000933') <>
+    'V10:1000000933;V14:recoveryRate18;V8:5.3.7.2汞;V12:recoveryRate;V2:18;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000001373') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000001373') <>
+    'V10:1000001373;V14:recoveryRate19;V12:781-2016(浸出);V12:recoveryRate;V2:19;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1201197362700352') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1201197362700352') <>
+    'V16:1201197362700352;V14:recoveryRate20;V4:有机质量;V12:recoveryRate;V2:20;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1670671463412416') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1670671463412416') <>
+    'V16:1670671463412416;V14:recoveryRate21;V3:阴离子;V12:recoveryRate;V2:21;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3075') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3075') <>
+    'V4:3075;V1:1;V2:成功;V23:remoteCallRequestStatus;V1:0;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3076') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3076') <>
+    'V4:3076;V2:-1;V2:失败;V23:remoteCallRequestStatus;V1:0;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3077') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3077') <>
+    'V4:3077;V1:0;V3:待处理;V23:remoteCallRequestStatus;V1:0;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3080') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3080') <>
+    'V4:3080;V1:1;V2:成功;V24:remoteCallResponseStatus;V1:0;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3081') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3081') <>
+    'V4:3081;V1:0;V2:失败;V24:remoteCallResponseStatus;V1:0;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16109') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16109') <>
+    'V5:16109;V1:0;V3:无资质;V14:reportAptitude;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16110') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16110') <>
+    'V5:16110;V1:1;V3:CMA;V14:reportAptitude;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16111') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16111') <>
+    'V5:16111;V1:2;V4:CNAS;V14:reportAptitude;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16112') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16112') <>
+    'V5:16112;V1:3;V8:CMA+CNAS;V14:reportAptitude;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16113') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16113') <>
+    'V5:16113;V1:4;V3:CAL;V14:reportAptitude;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('363172802207808') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('363172802207808') <>
+    'V15:363172802207808;V16:reportingService;V16:reportingService;V14:reportCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('363173059010624') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('363173059010624') <>
+    'V15:363173059010624;V7:fanruan;V4:帆软报表;V14:reportCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('363173207253056') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('363173207253056') <>
+    'V15:363173207253056;V4:word;V6:word报告;V14:reportCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3079') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3079') <>
+    'V4:3079;V6:select;V4:查询报表;V14:reportCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3078') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3078') <>
+    'V4:3078;V6:common;V4:常规报表;V14:reportCategory;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10719') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10719') <>
+    'V5:10719;V3:CMA;V10:加盖CMA章检测报告;V10:reportForm;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10720') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10720') <>
+    'V5:10720;V8:evaluate;V4:数据评价;V10:reportForm;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10721') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10721') <>
+    'V5:10721;V6:report;V4:数据报告;V10:reportForm;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000953') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000953') <>
+    'V10:1000000953;V8:lowLimit;V3:检出限;V15:reportLimitType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000954') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000954') <>
+    'V10:1000000954;V8:lowValue;V3:检出量;V15:reportLimitType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000955') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000955') <>
+    'V10:1000000955;V14:samplingVolume;V4:采样体积;V15:reportLimitType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16119') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16119') <>
+    'V5:16119;V1:0;V9:体现委托方和受检方;V11:reportTitle;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16120') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16120') <>
+    'V5:16120;V1:1;V6:仅体现委托方;V11:reportTitle;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16121') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16121') <>
+    'V5:16121;V1:2;V5:仅体受检方;V11:reportTitle;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16094') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16094') <>
+    'V5:16094;V1:1;V8:普通检测数据报告;V10:reportType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16095') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16095') <>
+    'V5:16095;V1:2;V6:验收监测报告;V10:reportType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16096') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16096') <>
+    'V5:16096;V1:3;V2:其他;V10:reportType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16114') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16114') <>
+    'V5:16114;V1:0;V2:验收;V9:reportUse;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16115') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16115') <>
+    'V5:16115;V1:1;V2:环评;V9:reportUse;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16116') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16116') <>
+    'V5:16116;V1:2;V7:自检/内部使用;V9:reportUse;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16117') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16117') <>
+    'V5:16117;V1:3;V2:场调;V9:reportUse;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16118') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16118') <>
+    'V5:16118;V1:4;V2:其他;V9:reportUse;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('294530119066592') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('294530119066592') <>
+    'V15:294530119066592;V3:dzb;V4:电子文档;V15:reportqueryform;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('294530394948576') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('294530394948576') <>
+    'V15:294530394948576;V3:zzb;V4:纸质文档;V15:reportqueryform;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2508') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2508') <>
+    'V4:2508;V4:sync;V2:同步;V11:requestMode;V1:0;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2509') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2509') <>
+    'V4:2509;V5:async;V2:异步;V11:requestMode;V1:0;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10556') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10556') <>
+    'V5:10556;V4:POST;V4:POST;V16:requestUrlMethod;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10557') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10557') <>
+    'V5:10557;V3:PUT;V3:PUT;V16:requestUrlMethod;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10558') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10558') <>
+    'V5:10558;V6:DELETE;V6:DELETE;V16:requestUrlMethod;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10559') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10559') <>
+    'V5:10559;V3:GET;V3:GET;V16:requestUrlMethod;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('561') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('561') <>
+    'V3:561;V6:select;V4:选择结果;V14:resultCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('562') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('562') <>
+    'V3:562;V6:number;V3:数字型;V14:resultCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('563') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('563') <>
+    'V3:563;V4:char;V3:字符型;V14:resultCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9607') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9607') <>
+    'V4:9607;V5:rule1;V4:<检出限;V10:resultRule;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9608') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9608') <>
+    'V4:9608;V5:rule2;V3:未检出;V10:resultRule;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9609') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9609') <>
+    'V4:9609;V5:rule3;V1:/;V10:resultRule;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2004') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2004') <>
+    'V4:2004;V6:Logged;V6:Logged;V17:resultinputstatus;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2005') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2005') <>
+    'V4:2005;V4:Done;V4:Done;V17:resultinputstatus;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10765') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10765') <>
+    'V5:10765;V4:none;V3:无根系;V11:rootContent;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10766') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10766') <>
+    'V5:10766;V5:small;V2:少量;V11:rootContent;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10767') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10767') <>
+    'V5:10767;V6:medium;V2:中量;V11:rootContent;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10768') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10768') <>
+    'V5:10768;V5:large;V2:多量;V11:rootContent;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10769') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10769') <>
+    'V5:10769;V9:rootDense;V3:根密集;V11:rootContent;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000393') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000393') <>
+    'V10:1000000393;V1:1;V2:采样;V12:sampleSource;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000396') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000396') <>
+    'V10:1000000396;V1:0;V2:送样;V12:sampleSource;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10713') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10713') <>
+    'V5:10713;V7:surface;V3:地表水;V13:sampleVariety;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10714') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10714') <>
+    'V5:10714;V11:underground;V3:地下水;V13:sampleVariety;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10715') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10715') <>
+    'V5:10715;V8:drinking;V5:生活饮用水;V13:sampleVariety;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10716') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10716') <>
+    'V5:10716;V5:waste;V3:污废水;V13:sampleVariety;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10717') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10717') <>
+    'V5:10717;V12:regeneration;V3:再生水;V13:sampleVariety;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10718') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10718') <>
+    'V5:10718;V5:other;V2:其他;V13:sampleVariety;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('645587348488256') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('645587348488256') <>
+    'V15:645587348488256;V4:soil;V2:土壤;V13:sampleVariety;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10711') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10711') <>
+    'V5:10711;V8:sampling;V2:采样;V9:sampleWay;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10712') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10712') <>
+    'V5:10712;V12:presentation;V2:送样;V9:sampleWay;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10726') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10726') <>
+    'V5:10726;V6:bagged;V2:袋装;V15:samplecontainer;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10727') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10727') <>
+    'V5:10727;V7:bottled;V2:瓶装;V15:samplecontainer;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('15474') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('15474') <>
+    'V5:15474;V1:1;V2:采样;V16:samplingCostType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('15476') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('15476') <>
+    'V5:15476;V1:1;V2:采样;V16:samplingCostType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('15475') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('15475') <>
+    'V5:15475;V1:2;V2:送样;V16:samplingCostType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('15477') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('15477') <>
+    'V5:15477;V1:2;V2:送样;V16:samplingCostType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14504') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14504') <>
+    'V5:14504;V1:1;V4:只收一次;V15:samplingFeeType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('14505') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('14505') <>
+    'V5:14505;V1:2;V4:全额收取;V15:samplingFeeType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2006') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2006') <>
+    'V4:2006;V8:sampling;V3:采样中;V16:samplingorcancel;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2007') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2007') <>
+    'V4:2007;V6:cancel;V2:取消;V16:samplingorcancel;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000793') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000793') <>
+    'V10:1000000793;V4:-10℃;V4:-10℃;V10:savedition;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000794') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000794') <>
+    'V10:1000000794;V2:干燥;V2:干燥;V10:savedition;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000795') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000795') <>
+    'V10:1000000795;V2:冷藏;V3:冷藏 ;V10:savedition;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000796') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000796') <>
+    'V10:1000000796;V4:冷藏避光;V4:冷藏避光;V10:savedition;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000797') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000797') <>
+    'V10:1000000797;V4:室温避光;V2:室温;V10:savedition;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000798') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000798') <>
+    'V10:1000000798;V6:dioxin;V4:室温避光;V10:savedition;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000799') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000799') <>
+    'V10:1000000799;V7:室温避光或冷藏;V9:室温避光或冷藏  ;V10:savedition;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000800') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000800') <>
+    'V10:1000000800;V4:室温干燥;V5:室温干燥 ;V10:savedition;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000801') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000801') <>
+    'V10:1000000801;V5:室温或冷藏;V6:室温或冷藏 ;V10:savedition;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000802') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000802') <>
+    'V10:1000000802;V4:阴凉干燥;V5:阴凉干燥 ;V10:savedition;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1706707176050688') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1706707176050688') <>
+    'V16:1706707176050688;V4:-18℃;V4:-18℃;V10:savedition;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1804248324192800') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1804248324192800') <>
+    'V16:1804248324192800;V7:2-8℃，充氮;V7:2-8℃，充氮;V10:savedition;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9040') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9040') <>
+    'V4:9040;V7:service;V3:业务级;V16:scheduleTaskType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('9041') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('9041') <>
+    'V4:9041;V3:sys;V3:系统级;V16:scheduleTaskType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2546') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2546') <>
+    'V4:2546;V10:acq-script;V4:通用配置;V14:scriptCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2547') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2547') <>
+    'V4:2547;V11:file-script;V4:定制配置;V14:scriptCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10776') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10776') <>
+    'V5:10776;V7:morning;V2:上午;V7:section;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10777') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10777') <>
+    'V5:10777;V9:afternoon;V2:下午;V7:section;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5746') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5746') <>
+    'V4:5746;V4:有排污口;V4:有排污口;V20:sectionConditionDesc;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5766') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5766') <>
+    'V4:5766;V5:有无排污口;V5:有无排污口;V20:sectionConditionDesc;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5767') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5767') <>
+    'V4:5767;V9:是否死水区/回水区;V9:是否死水区/回水区;V20:sectionConditionDesc;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520475558328288') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520475558328288') <>
+    'V16:1520475558328288;V4:无排污口;V4:无排污口;V20:sectionConditionDesc;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5747') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5747') <>
+    'V4:5747;V3:死水区;V3:死水区;V20:sectionConditionDesc;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5768') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5768') <>
+    'V4:5768;V13:有无居民区/工业区/农业区;V13:有无居民区/工业区/农业区;V20:sectionConditionDesc;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520475837937632') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520475837937632') <>
+    'V16:1520475837937632;V3:回水区;V3:回水区;V20:sectionConditionDesc;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5748') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5748') <>
+    'V4:5748;V12:有居民区/工业区/农业区;V12:有居民区/工业区/农业区;V20:sectionConditionDesc;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520476047611872') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520476047611872') <>
+    'V16:1520476047611872;V12:无居民区/工业区/农业区;V12:无居民区/工业区/农业区;V20:sectionConditionDesc;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5749') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5749') <>
+    'V4:5749;V2:无色;V2:无色;V19:sectionWaterQuality;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5769') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5769') <>
+    'V4:5769;V4:水体颜色;V4:水体颜色;V19:sectionWaterQuality;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520486270990304') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520486270990304') <>
+    'V16:1520486270990304;V2:微黄;V2:微黄;V19:sectionWaterQuality;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520486415734752') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520486415734752') <>
+    'V16:1520486415734752;V2:浑浊;V2:浑浊;V19:sectionWaterQuality;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5770') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5770') <>
+    'V4:5770;V5:气味(嗅);V5:气味(嗅);V19:sectionWaterQuality;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520486544676832') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520486544676832') <>
+    'V16:1520486544676832;V2:无味;V2:无味;V19:sectionWaterQuality;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520486643333088') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520486643333088') <>
+    'V16:1520486643333088;V2:微臭;V2:微臭;V19:sectionWaterQuality;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5751') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5751') <>
+    'V4:5751;V7:有悬浮物或泥沙;V7:有悬浮物或泥沙;V19:sectionWaterQuality;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5771') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5771') <>
+    'V4:5771;V8:有无悬浮物或泥沙;V8:有无悬浮物或泥沙;V19:sectionWaterQuality;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520479112255456') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520479112255456') <>
+    'V16:1520479112255456;V7:无悬浮物或泥沙;V7:无悬浮物或泥沙;V19:sectionWaterQuality;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5752') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5752') <>
+    'V4:5752;V5:水面有油膜;V5:水面有油膜;V19:sectionWaterQuality;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5772') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5772') <>
+    'V4:5772;V6:水面有无油膜;V6:水面有无油膜;V19:sectionWaterQuality;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520479388800992') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520479388800992') <>
+    'V16:1520479388800992;V5:水面无油膜;V5:水面无油膜;V19:sectionWaterQuality;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5753') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5753') <>
+    'V4:5753;V5:水体有藻类;V5:水体有藻类;V19:sectionWaterQuality;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5773') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5773') <>
+    'V4:5773;V6:水体有无藻类;V6:水体有无藻类;V19:sectionWaterQuality;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1520479594870752') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1520479594870752') <>
+    'V16:1520479594870752;V5:水体无藻类;V5:水体无藻类;V19:sectionWaterQuality;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1947') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1947') <>
+    'V4:1947;V6:system;V4:系统设置;V15:serviceCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1948') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1948') <>
+    'V4:1948;V4:base;V4:基础数据;V15:serviceCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1949') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1949') <>
+    'V4:1949;V7:service;V4:业务数据;V15:serviceCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('3') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('3') <>
+    'V1:3;V4:male;V1:男;V3:sex;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('281') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('281') <>
+    'V3:281;V4:woma;V1:女;V3:sex;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1190') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1190') <>
+    'V4:1190;V1:0;V3:待发送;V9:smsStatus;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1540') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1540') <>
+    'V4:1540;V1:0;V3:待发送;V9:smsStatus;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1191') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1191') <>
+    'V4:1191;V1:1;V3:已发送;V9:smsStatus;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1541') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1541') <>
+    'V4:1541;V1:1;V3:已发送;V9:smsStatus;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1192') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1192') <>
+    'V4:1192;V1:2;V4:发送失败;V9:smsStatus;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1542') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1542') <>
+    'V4:1542;V1:2;V4:发送失败;V9:smsStatus;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1193') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1193') <>
+    'V4:1193;V1:3;V3:已关闭;V9:smsStatus;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1543') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1543') <>
+    'V4:1543;V1:3;V3:已关闭;V9:smsStatus;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2468') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2468') <>
+    'V4:2468;V1:1;V4:管理评审;V6:source;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8265') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8265') <>
+    'V4:8265;V1:1;V4:管理评审;V6:source;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8266') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8266') <>
+    'V4:8266;V1:2;V6:内部质量控制;V6:source;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8267') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8267') <>
+    'V4:8267;V1:3;V2:内审;V6:source;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8269') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8269') <>
+    'V4:8269;V1:4;V6:实验室间对比;V6:source;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8270') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8270') <>
+    'V4:8270;V1:5;V2:投诉;V6:source;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8271') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8271') <>
+    'V4:8271;V1:6;V7:外单位监督检查;V6:source;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8272') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8272') <>
+    'V4:8272;V1:7;V4:质量监督;V6:source;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('8268') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('8268') <>
+    'V4:8268;V1:8;V2:其它;V6:source;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1035') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1035') <>
+    'V4:1035;V12:verification;V2:检定;V12:sourceMethod;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1036') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1036') <>
+    'V4:1036;V11:calibration;V2:校准;V12:sourceMethod;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('448870154608704') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('448870154608704') <>
+    'V15:448870154608704;V6:济南市气体厂;V6:济南市气体厂;V15:standardGasUnit;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('470701554171968') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('470701554171968') <>
+    'V15:470701554171968;V1:1;V4:密封避光;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('470789276262464') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('470789276262464') <>
+    'V15:470789276262464;V1:2;V6:密封冷藏避光;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('470789397209152') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('470789397209152') <>
+    'V15:470789397209152;V1:3;V4:冷藏避光;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('470789506383936') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('470789506383936') <>
+    'V15:470789506383936;V1:4;V4:密封冷藏;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('470789650309184') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('470789650309184') <>
+    'V15:470789650309184;V1:5;V4:清洁干燥;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('470789790277696') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('470789790277696') <>
+    'V15:470789790277696;V1:6;V2:密封;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('470789910700096') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('470789910700096') <>
+    'V15:470789910700096;V1:7;V2:冷藏;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('684461590093888') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('684461590093888') <>
+    'V15:684461590093888;V9:4℃以下冷藏、避光;V9:4℃以下冷藏、避光;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('684461775519808') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('684461775519808') <>
+    'V15:684461775519808;V5:常温、避光;V5:常温、避光;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1484536040409312') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1484536040409312') <>
+    'V16:1484536040409312;V8:0-4℃避光冷藏;V8:0-4℃避光冷藏;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1821346057610944') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1821346057610944') <>
+    'V16:1821346057610944;V4:密封冷冻;V4:密封冷冻;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1849607062449120') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1849607062449120') <>
+    'V16:1849607062449120;V2:12;V11:1~5°C密封冷藏避光;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1973340751652672') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1973340751652672') <>
+    'V16:1973340751652672;V2:13;V6:室温密闭避光;V14:storeCondition;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10814') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10814') <>
+    'V5:10814;V14:beforeSampling;V5:采样前分包;V14:subpackageType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10815') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10815') <>
+    'V5:10815;V15:orderSubpackage;V4:样品分包;V14:subpackageType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20210105001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20210105001') <>
+    'V11:20210105001;V6:detail;V2:表单;V18:templateSourceType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20210105002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20210105002') <>
+    'V11:20210105002;V4:list;V2:列表;V18:templateSourceType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20210105003') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20210105003') <>
+    'V11:20210105003;V4:file;V2:文件;V18:templateSourceType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20210115001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20210115001') <>
+    'V11:20210115001;V8:fileList;V4:文件列表;V18:templateSourceType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20210115002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20210115002') <>
+    'V11:20210115002;V7:subTemp;V3:子模板;V18:templateSourceType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('20210115003') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('20210115003') <>
+    'V11:20210115003;V11:subTempList;V5:子模板列表;V18:templateSourceType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('202105170001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('202105170001') <>
+    'V12:202105170001;V6:report;V4:报告模板;V12:templateType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('202105170003') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('202105170003') <>
+    'V12:202105170003;V9:subReport;V3:子模板;V12:templateType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('925001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('925001') <>
+    'V6:925001;V20:monitorPointCategory;V5:监测点类型;V11:templateUse;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('925002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('925002') <>
+    'V6:925002;V19:monitorAreaCategory;V6:监测区域类型;V11:templateUse;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('925003') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('925003') <>
+    'V6:925003;V18:evaluationStandard;V4:评价标准;V11:templateUse;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2001') <>
+    'V4:2001;V14:sampleProperty;V5:采样单属性;V11:templateUse;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2358') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2358') <>
+    'V4:2358;V11:methodParam;V4:方法参数;V11:templateUse;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5304') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5304') <>
+    'V4:5304;V3:org;V3:有组织;V9:testClass;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('5305') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('5305') <>
+    'V4:5305;V5:inOrg;V3:无组织;V9:testClass;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1339376720398240') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1339376720398240') <>
+    'V16:1339376720398240;V3:air;V4:环境空气;V9:testClass;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1339370616358816') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1339370616358816') <>
+    'V16:1339370616358816;V8:complete;V6:含量(固态);V9:testClass;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1367587007818944') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1367587007818944') <>
+    'V16:1367587007818944;V9:completey;V6:含量(液态);V9:testClass;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1339370756368288') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1339370756368288') <>
+    'V16:1339370756368288;V5:leach;V4:固废浸出;V9:testClass;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1345074474149184') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1345074474149184') <>
+    'V16:1345074474149184;V4:room;V4:室内空气;V9:testClass;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1367587065425088') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1367587065425088') <>
+    'V16:1367587065425088;V4:soil;V2:土壤;V9:testClass;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1367587194694848') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1367587194694848') <>
+    'V16:1367587194694848;V8:sediment;V3:沉积物;V9:testClass;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1784476644892736') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1784476644892736') <>
+    'V16:1784476644892736;V5:water;V2:水质;V9:testClass;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16107') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16107') <>
+    'V5:16107;V1:1;V5:委托方指定;V18:testMethodAssigner;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('16108') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('16108') <>
+    'V5:16108;V1:2;V5:检测方指定;V18:testMethodAssigner;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000293') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000293') <>
+    'V10:1000000293;V8:chemical;V2:理化;V14:testMethodType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1148573371408448') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1148573371408448') <>
+    'V16:1148573371408448;V5:scene;V2:现场;V14:testMethodType;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000294') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000294') <>
+    'V10:1000000294;V7:organic;V2:有机;V14:testMethodType;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1145936766115904') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1145936766115904') <>
+    'V16:1145936766115904;V9:inorganic;V2:无机;V14:testMethodType;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1000000296') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1000000296') <>
+    'V10:1000000296;V6:dioxin;V3:二噁英;V14:testMethodType;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10778') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10778') <>
+    'V5:10778;V3:VOC;V6:挥发性有机物;V12:testitemsort;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10779') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10779') <>
+    'V5:10779;V4:SVOC;V7:半挥发性有机物;V12:testitemsort;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10780') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10780') <>
+    'V5:10780;V4:TVOC;V7:总挥发性有机物;V12:testitemsort;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10781') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10781') <>
+    'V5:10781;V4:PAHs;V4:多环芳烃;V12:testitemsort;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10782') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10782') <>
+    'V5:10782;V4:PCBs;V4:多氯联苯;V12:testitemsort;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10783') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10783') <>
+    'V5:10783;V4:PBBs;V4:多溴联苯;V12:testitemsort;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10784') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10784') <>
+    'V5:10784;V16:Organophosphorus;V5:有机磷农药;V12:testitemsort;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10785') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10785') <>
+    'V5:10785;V4:OCPs;V5:有机氯农药;V12:testitemsort;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('10786') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('10786') <>
+    'V5:10786;V12:nitrobenzene;V4:硝基苯类;V12:testitemsort;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2483') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2483') <>
+    'V4:2483;V11:thiosulfate;V7:硫代硫酸钠溶液;V14:toCalibrateSol;V2:95;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2484') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2484') <>
+    'V4:2484;V21:potassiumPermanganate;V6:高锰酸钾溶液;V14:toCalibrateSol;V2:96;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2485') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2485') <>
+    'V4:2485;V22:ammoniumFerrousSulfate;V7:硫酸亚铁铵溶液;V14:toCalibrateSol;V2:97;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2362') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2362') <>
+    'V4:2362;V8:business;V4:业务待办;V4:todo;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2363') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2363') <>
+    'V4:2363;V7:overdue;V4:超期提醒;V4:todo;V2:21;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2051') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2051') <>
+    'V4:2051;V2:in;V4:站内培训;V13:trainCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2052') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2052') <>
+    'V4:2052;V3:out;V4:站外培训;V13:trainCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2053') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2053') <>
+    'V4:2053;V6:manage;V8:管理体系文件培训;V20:trainContentCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2054') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2054') <>
+    'V4:2054;V3:biz;V6:业务技术培训;V20:trainContentCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('94401') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('94401') <>
+    'V5:94401;V6:weight;V2:重量;V12:unitCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('94402') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('94402') <>
+    'V5:94402;V6:volume;V2:体积;V12:unitCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('94403') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('94403') <>
+    'V5:94403;V11:temperature;V2:温度;V12:unitCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('94404') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('94404') <>
+    'V5:94404;V6:length;V2:长度;V12:unitCategory;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('204040137236224') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('204040137236224') <>
+    'V15:204040137236224;V6:danwei;V2:单位;V12:unitCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1001') <>
+    'V4:1001;V9:activated;V2:激活;V10:userStatus;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1002') <>
+    'V4:1002;V6:locked;V2:锁定;V10:userStatus;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1003') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1003') <>
+    'V4:1003;V10:deprecated;V2:废弃;V10:userStatus;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2055') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2055') <>
+    'V4:2055;V7:produce;V3:生产商;V14:vendorCategory;V2:76;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2056') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2056') <>
+    'V4:2056;V6:supply;V3:供应商;V14:vendorCategory;V2:77;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407814748495456') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407814748495456') <>
+    'V16:1407814748495456;V1:1;V13:常州检验检测标准认证研究院;V9:verifyOrg;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407814938402400') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407814938402400') <>
+    'V16:1407814938402400;V1:2;V14:安徽海量技术检测服务有限公司;V9:verifyOrg;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407815094509152') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407815094509152') <>
+    'V16:1407815094509152;V1:3;V10:安正计量检测有限公司;V9:verifyOrg;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407815227563616') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407815227563616') <>
+    'V16:1407815227563616;V1:4;V12:国测计量（江苏）有限公司;V9:verifyOrg;V1:4;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407815462256224') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407815462256224') <>
+    'V16:1407815462256224;V1:5;V18:国家防爆产品质量监督检验中心（天津）;V9:verifyOrg;V1:5;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407815688855136') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407815688855136') <>
+    'V16:1407815688855136;V1:6;V14:湖南航测检测技术服务有限公司;V9:verifyOrg;V1:6;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407815909072480') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407815909072480') <>
+    'V16:1407815909072480;V1:7;V10:济南市计量检定测试院;V9:verifyOrg;V1:7;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407816167661152') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407816167661152') <>
+    'V16:1407816167661152;V1:8;V13:江苏省环境监测仪器计量中心;V9:verifyOrg;V1:8;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407816352669280') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407816352669280') <>
+    'V16:1407816352669280;V1:9;V10:江苏省计量科学研究院;V9:verifyOrg;V1:9;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407816473411168') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407816473411168') <>
+    'V16:1407816473411168;V2:10;V4:南京水文;V9:verifyOrg;V2:10;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407816537759328') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407816537759328') <>
+    'V16:1407816537759328;V2:11;V14:谱尼测试集团北京计量有限公司;V9:verifyOrg;V2:11;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407816701247072') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407816701247072') <>
+    'V16:1407816701247072;V2:12;V14:山东凯利布森测控技术有限公司;V9:verifyOrg;V2:12;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407816922889824') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407816922889824') <>
+    'V16:1407816922889824;V2:13;V12:上海市计量测试技术研究院;V9:verifyOrg;V2:13;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407817057050208') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407817057050208') <>
+    'V16:1407817057050208;V2:14;V12:深圳市华中航检测有限公司;V9:verifyOrg;V2:14;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407817221643872') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407817221643872') <>
+    'V16:1407817221643872;V2:15;V10:山东省计量科学研究院;V9:verifyOrg;V2:15;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407817353633376') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407817353633376') <>
+    'V16:1407817353633376;V2:16;V12:苏州宏准计量技术有限公司;V9:verifyOrg;V2:16;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407817539223136') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407817539223136') <>
+    'V16:1407817539223136;V2:17;V9:中国计量科学研究院;V9:verifyOrg;V2:17;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1407817644129888') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1407817644129888') <>
+    'V16:1407817644129888;V2:18;V12:苏州莱测检测科技有限公司;V9:verifyOrg;V2:18;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1418621246029984') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1418621246029984') <>
+    'V16:1418621246029984;V2:19;V11:山东省水文计量检定中心;V9:verifyOrg;V2:19;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1418621416136864') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1418621416136864') <>
+    'V16:1418621416136864;V2:20;V12:氡及其子体测量仪器计量站;V9:verifyOrg;V2:20;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1418621771964576') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1418621771964576') <>
+    'V16:1418621771964576;V2:21;V14:河北恒一联华检测科技有限公司;V9:verifyOrg;V2:21;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1432621109744672') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1432621109744672') <>
+    'V16:1432621109744672;V2:22;V12:方圆检测认证集团有限公司;V9:verifyOrg;V2:22;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1551007279009152') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1551007279009152') <>
+    'V16:1551007279009152;V2:23;V10:南京市计量监督检测院;V9:verifyOrg;V2:23;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1601970562058912') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1601970562058912') <>
+    'V16:1601970562058912;V2:24;V14:黑龙江华安精益计量技术研究院;V9:verifyOrg;V2:24;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1656500566635520') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1656500566635520') <>
+    'V16:1656500566635520;V2:25;V9:中国测试技术研究院;V9:verifyOrg;V2:25;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1679634404599392') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1679634404599392') <>
+    'V16:1679634404599392;V2:26;V14:苏州赛宝校准技术服务有限公司;V9:verifyOrg;V2:26;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1691856973789824') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1691856973789824') <>
+    'V16:1691856973789824;V2:27;V10:中溯计量检测有限公司;V9:verifyOrg;V2:27;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1759780162672384') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1759780162672384') <>
+    'V16:1759780162672384;V2:28;V12:北京市计量检测科学研究院;V9:verifyOrg;V2:28;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1800836872108576') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1800836872108576') <>
+    'V16:1800836872108576;V2:29;V12:深圳市计量质量检测研究院;V9:verifyOrg;V2:29;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2029420082992256') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2029420082992256') <>
+    'V16:2029420082992256;V2:30;V12:苏州市计量测试院有限公司;V9:verifyOrg;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2496') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2496') <>
+    'V4:2496;V3:top;V2:顶层;V12:verticalCode;V3:103;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2497') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2497') <>
+    'V4:2497;V6:middle;V2:中间;V12:verticalCode;V3:104;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2498') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2498') <>
+    'V4:2498;V6:bottom;V2:底层;V12:verticalCode;V3:105;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2469') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2469') <>
+    'V4:2469;V1:1;V3:实施性;V12:workCategory;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2470') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2470') <>
+    'V4:2470;V1:2;V3:体系性;V12:workCategory;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2471') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2471') <>
+    'V4:2471;V1:3;V3:效果性;V12:workCategory;V1:3;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2320') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2320') <>
+    'V4:2320;V1:1;V2:正常;V9:workstate;V1:1;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2321') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2321') <>
+    'V4:2321;V1:2;V2:异常;V9:workstate;V1:2;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019009030001') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019009030001') <>
+    'V13:2019009030001;V8:realtime;V4:实时反写;V17:writeBackCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('2019009030002') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('2019009030002') <>
+    'V13:2019009030002;V7:trigger;V4:事件反写;V17:writeBackCategory;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1492076698482688') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1492076698482688') <>
+    'V16:1492076698482688;V5:three;V4:前中后管;V10:xishouping;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1492076819986432') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1492076819986432') <>
+    'V16:1492076819986432;V3:two;V3:前后管;V10:xishouping;N;V1:0;N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
+  IF NOT actual.EXISTS('1609939027722976') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_CODE'); END IF;
+  IF actual('1609939027722976') <>
+    'V16:1609939027722976;V4:four;V5:前中中后管;V10:xishouping;N;V1:0;N;'
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_CODE'); END IF;
 END;
 /

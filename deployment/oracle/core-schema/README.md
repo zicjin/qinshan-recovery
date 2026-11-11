@@ -37,11 +37,11 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 16,265 rows across thirty-one explicitly selected
+The technical bootstrap contains 17,397 rows across thirty-one explicitly selected
 configuration tables: 2 locales, 5,339 internationalization keys, 5,397 messages,
 392 static and 10 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
 relations, one system UI config, one login UI config and 37 source-referenced
-select configs, plus 2 dictionary classes, 28 categories and 120 options.
+select configs, plus 2 dictionary classes, 224 categories and 1,056 options.
 Seven published LCDP modules contribute 37 resource/ancestor nodes, 29 published
 histories, 229 components, 123 page translations and 242 dependent translation keys.
 The two original file-service Java resources and their ancestors add four resource
@@ -89,12 +89,19 @@ source row. Identity/audit-origin columns are not copied. No users, organization
 roles, passwords or permission grants are copied from production.
 
 Dictionary selection follows the explicit `codeCategoryId` references in the
-shipped select configs, not an assumption that every `sys` row is technical.
+shipped select configs and the literal consumers in original Java, Mapper and
+page resources, not an assumption that every `sys` row is technical.
 Actual `sys`/`biz` classification and suspension flags are preserved, with each
 parent class and translation dependency. The source categories `dsCategory`,
 `dsType`, `fieldCategory` and `publishState` have no options and remain empty;
-no synthetic defaults are inserted. Generic selectors and other categories are
-outside this finite dictionary closure.
+no synthetic defaults are inserted. The additional source-consumed projection
+preserves the empty `contentResult`, `queryGroup` and `reportRemark` categories.
+Its 196 categories and 936 options are bound to read-only production receipts
+and the original consumer inventory in `bootstrap-provenance.json` under
+`source_dictionary`; all preceding bootstrap statements and row hashes remain
+unchanged. The 25 literal categories absent from production are recorded there
+without fabricated definitions. Dynamically constructed categories and other
+unreviewed dictionary consumers remain outside this finite closure.
 
 The published equipment-in/out, folder/order/project/sample information,
 report lookup and report delivery Java, Mapper and page sources are preserved

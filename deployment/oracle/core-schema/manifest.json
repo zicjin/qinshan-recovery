@@ -647,22 +647,22 @@
       "sha256": "f450db0da66fb93327af4ca45ad1096241ed5701ffcd7802f04e09f93c27448d"
     },
     {
-      "bytes": 3160821,
+      "bytes": 3356258,
       "path": "70-bootstrap.sql",
       "role": "bootstrap",
-      "sha256": "7670396a7edfcf63a1987748bbf484f1c2d175940f94d272a17037b21e02ebf7"
+      "sha256": "c3a86fb343b0e0f11b7ae065739b6b3b7735e099c72f23bb01a23e332c2356bc"
     },
     {
-      "bytes": 6321030,
+      "bytes": 6698052,
       "path": "80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "05d248e890367b2c922c2c0e65e63a81e2d492206402736275236ccf46a5a524"
+      "sha256": "af563667cc6cf5ecfd42f85b5cefadb526e4b68ece7e7ab50933bd009c545d5e"
     },
     {
-      "bytes": 4323926,
+      "bytes": 4624415,
       "path": "bootstrap-provenance.json",
       "role": "source-metadata",
-      "sha256": "56dfad56bbdb749f58c949344d58ca54382ac5e14ba112e9dc718ece0e4990f3"
+      "sha256": "3f3500ee6332e906d60cf8e3e6a9fcf0246d4960776fe24fda7cc5a8befc497d"
     },
     {
       "bytes": 1891610,
@@ -13559,6 +13559,34 @@
     {
       "path": "private/remaining-i18n-20261111/20261111T023354Z-all-i18n-message-private.json",
       "sha256": "8922cac353bdb70571ed072e40aa6b24310f36cce649be3c858e1057c84779da"
+    },
+    {
+      "path": "private/source-dictionary-installation-20261111/20261111T091126Z-manifest-private.json",
+      "sha256": "f0c619ae482ecfde2ef0f37e4ad083e5fee9eede1fbe35bebc0c46edc1f69da2"
+    },
+    {
+      "path": "private/dictionary-frontier-20261111/source-consumer-difference-private.json",
+      "sha256": "2e31cde8a9cc9342235676e96e51e695e16555f1b35512ac2c14e61aa9a768aa"
+    },
+    {
+      "path": "private/source-dictionary-installation-20261111/20261111T091126Z-code_class-private.json",
+      "sha256": "e70992d3d416b4d88b1e6d9cda5a72c7dbbe1e4cd26ec1959be4e3e1a282f1af"
+    },
+    {
+      "path": "private/source-dictionary-installation-20261111/20261111T091126Z-code_category-private.json",
+      "sha256": "71d99bb5903caeb3ce4428a1f4da064e49771c771d9bb4b5eb5e41aab7fe620f"
+    },
+    {
+      "path": "private/source-dictionary-installation-20261111/20261111T091126Z-code-private.json",
+      "sha256": "5734c5277a901876dc915608092db39a80244b5cc8a036974f4ebb541de5bf87"
+    },
+    {
+      "path": "private/source-dictionary-installation-20261111/20261111T091126Z-code_i18n-private.json",
+      "sha256": "88b8dd336e9f2cf0a2b7fffea0dce363124f29cc7976754bee9bc636b052e948"
+    },
+    {
+      "path": "private/source-dictionary-installation-20261111/20261111T091126Z-code_i18n_message-private.json",
+      "sha256": "cecc8718d068a50dc89597ef4dc78c8eed02611711f96b9c2fe159dc91461d44"
     }
   ],
   "source_class": "current-production-at-capture",
@@ -13577,8 +13605,8 @@
       "T_CORE_AT_CONFIG_LINE": 3038,
       "T_CORE_AUDIT_CONFIG": 6,
       "T_CORE_AUDIT_CONFIG_COLUMN": 106,
-      "T_CORE_CODE": 120,
-      "T_CORE_CODE_CATEGORY": 28,
+      "T_CORE_CODE": 1056,
+      "T_CORE_CODE_CATEGORY": 224,
       "T_CORE_CODE_CLASS": 2,
       "T_CORE_CONSTANT": 2,
       "T_CORE_FILE": 1,

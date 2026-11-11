@@ -278,6 +278,17 @@ class SwitchTest(unittest.TestCase):
                 self.assertEqual(self.fixture.mutations, [])
                 self.assertNotIn('SECRET', result.stdout + result.stderr + self.receipt.read_text())
 
+    def test_default_oom_killer_null_and_false_are_equivalent_but_true_is_not(self):
+        self.fixture.containers[CURRENT]['HostConfig']['OomKillDisable'] = None
+        self.fixture.containers[TARGET]['HostConfig']['OomKillDisable'] = False
+        result = self.run_cli()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.fixture.mutations, [])
+        self.fixture.containers[TARGET]['HostConfig']['OomKillDisable'] = True
+        result = self.run_cli('--execute')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(self.fixture.mutations, [])
+
     def test_hash_escape_symlink_mode_and_unlisted_files_refuse_before_stop(self):
         directory = self.root / 'previous'
         manifest = directory / 'manifest.json'

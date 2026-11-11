@@ -168,6 +168,10 @@ def normalized_container(container):
             binds[index] = '<distribution>:' + ':'.join(parts[1:])
     require(len(matches) == 1, 'distribution-bind-mismatch')
     host['Binds'] = sorted(binds)
+    # Docker inspect may retain null on an older container while create
+    # materializes the default false. Both leave the OOM killer enabled.
+    if host.get('OomKillDisable') in (None, False):
+        host['OomKillDisable'] = False
     return {'Config': container['Config'], 'HostConfig': host, 'Image': container.get('Image'),
             'Mounts': sorted(mounts, key=lambda mount: mount['Destination'])}, source
 

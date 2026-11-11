@@ -71,7 +71,19 @@ def verify_snapshots(root: Path, artifact_sha: str, errors: list[str], project_s
     require(registry.get("all_modules_compile_pass") is True, "framework registry compile gate is not pass", errors)
     require(registry.get("artifact_sha256") == artifact_sha, "framework registry artifact identity differs", errors)
     require(registry.get("module_count") == 7, "framework registry module count", errors)
-    require(registry.get("source_file_count") == 4576, "framework registry source count", errors)
+    module_source_count = 0
+    for module in registry.get("modules", []):
+        name = str(module.get("module", ""))
+        require(bool(re.fullmatch(r"owned-core-[a-z-]+", name)), "invalid framework module name", errors)
+        if not re.fullmatch(r"owned-core-[a-z-]+", name):
+            continue
+        source_root = root / "reconstituted/framework" / name / "src/main/java"
+        actual = len(list(source_root.rglob("*.java")))
+        require(module.get("source_file_count") == actual,
+                "framework module source count differs from checkout: " + name, errors)
+        module_source_count += actual
+    require(registry.get("source_file_count") == module_source_count,
+            "framework registry source count differs from module sources", errors)
     require(registry.get("resource_file_count") == 9427, "framework registry resource count", errors)
     require(registry.get("native_removal", {}).get("status") == "pass", "framework native removal status", errors)
     runtime_model = registry.get("runtime_model", {})

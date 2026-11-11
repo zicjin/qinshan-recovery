@@ -82,7 +82,6 @@ def main() -> int:
     require(registry["schema"] == "reconstituted-framework-module-registry-v1", "registry schema", errors)
     require(registry["module_count"] == 7, "module count is not seven", errors)
     require(registry["candidate_group_count"] == 8, "candidate count changed", errors)
-    require(registry["source_file_count"] == 4577, "source total mismatch", errors)
     require(registry["resource_file_count"] == 9427, "resource total mismatch", errors)
     require(registry["runtime_model"]["boundary_process"] is False, "boundary process flag", errors)
     require(registry["runtime_model"]["internal_http_bridge"] is False, "HTTP bridge flag", errors)
@@ -130,6 +129,12 @@ def main() -> int:
         require(provenance["module"] == module, f"{module}: provenance module", errors)
         require(provenance["status"] == "assembled-source-only", f"{module}: provenance status", errors)
         records = provenance["source_files"]
+        actual_sources = {
+            path.relative_to(module_root).as_posix()
+            for path in (module_root / "src/main/java").rglob("*.java")
+        }
+        require(actual_sources == {str(record["path"]) for record in records},
+                f"{module}: source inventory differs from checkout", errors)
         source_total += len(records)
         require(len(records) == summary["source_file_count"], f"{module}: source count", errors)
         require(tree_digest(records) == provenance["source_tree_sha256"], f"{module}: source tree", errors)

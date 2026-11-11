@@ -47,6 +47,50 @@ def main() -> int:
     assert "LIMS_EXTERNAL_ARTIFACT_ROOT" in framework_build
     assert "--seed \"$PLUGIN_SEED\"" in framework_build
 
+    verifier = load_module()
+    # The registry includes owned additions after the historical generated
+    # source snapshot. Counts must follow those modules, not that old milestone.
+    with tempfile.TemporaryDirectory(prefix="source-only-module-count-") as temporary:
+        fixture = Path(temporary)
+        docs = fixture / "docs/reconstitution"
+        docs.mkdir(parents=True)
+        registry = json.loads((ROOT / "docs/reconstitution/framework-module-registry.json").read_text())
+        for name in ("all-framework-source-closure-current.json", "project-source-closure-current.json", "decompiler-transforms.json"):
+            (docs / name).symlink_to(ROOT / "docs/reconstitution" / name)
+        (fixture / "project").symlink_to(ROOT / "project", target_is_directory=True)
+        (fixture / "scripts").symlink_to(ROOT / "scripts", target_is_directory=True)
+        for item in registry["modules"]:
+            java = fixture / "reconstituted/framework" / item["module"] / "src/main/java"
+            java.mkdir(parents=True)
+            (java / "Existing.java").write_text("class Existing {}\n")
+            item["source_file_count"] = 1
+        registry["source_file_count"] = 7
+        registry_path = docs / "framework-module-registry.json"
+        registry_path.write_text(json.dumps(registry))
+        artifact = registry["artifact_sha256"]
+        errors = []
+        verifier.verify_snapshots(fixture, artifact, errors)
+        assert not errors, errors
+
+        extra = fixture / "reconstituted/framework/owned-core-common/src/main/java/NewOwned.java"
+        extra.write_text("class NewOwned {}\n")
+        errors = []
+        verifier.verify_snapshots(fixture, artifact, errors)
+        assert any("owned-core-common" in error and "source count" in error for error in errors), errors
+
+        registry["modules"][0]["source_file_count"] = 2
+        registry["source_file_count"] = 8
+        registry_path.write_text(json.dumps(registry))
+        errors = []
+        verifier.verify_snapshots(fixture, artifact, errors)
+        assert not errors, errors
+
+        registry["source_file_count"] = 9
+        registry_path.write_text(json.dumps(registry))
+        errors = []
+        verifier.verify_snapshots(fixture, artifact, errors)
+        assert any("registry source count" in error for error in errors), errors
+
     result = subprocess.run(
         [sys.executable, str(SCRIPT)], cwd=ROOT, text=True,
         capture_output=True, check=False,
@@ -56,7 +100,6 @@ def main() -> int:
     assert payload["status"] == "pass"
     assert payload["errors"] == []
 
-    verifier = load_module()
     with tempfile.TemporaryDirectory(prefix="source-only-checkpoint-test-") as temporary:
         distribution = Path(temporary)
         (distribution / "lib").mkdir(parents=True)

@@ -32,6 +32,9 @@ class ExternalSchemaBuildCacheTest(unittest.TestCase):
             "scripts/prepare-reconstituted-maven-repo.py",
             "scripts/record-reconstituted-framework-build.py",
             "scripts/verify-reconstituted-framework-modules.py",
+            "scripts/install-import-template-assets.py",
+            "scripts/install-report-engine.py",
+            "deployment/report-engine/manifest.json",
             "owned-distribution/example/owned-application.properties",
         ):
             self.write(path, "fixture input\n")

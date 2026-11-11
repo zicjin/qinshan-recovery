@@ -657,22 +657,22 @@
       "sha256": "34c43de299eb20a45435b6d343badb43ebc16cefece4df9d9415f865a8093638"
     },
     {
-      "bytes": 1960473,
+      "bytes": 1966696,
       "path": "70-bootstrap.sql",
       "role": "bootstrap",
-      "sha256": "2a6f53eddfe1b792d6b343c0d5f6c850fdceba4341b24a9ad8b51b39a1c42544"
+      "sha256": "e818d017cde8111fa880c7a7bfe4bd8fe9055119f0be99b9912d6eab4e656cb6"
     },
     {
-      "bytes": 3626103,
+      "bytes": 3644230,
       "path": "80-bootstrap-verify.sql",
       "role": "bootstrap-verifier",
-      "sha256": "78c1831417a18e4def9b3a2290751298198fcb2b97f41fee5ab819b7aef74d50"
+      "sha256": "40e8814cf07281c80b425047f0a38e1a5987cc605bf3c4dc4b0078dc1fd4e4cc"
     },
     {
-      "bytes": 2248409,
+      "bytes": 2264097,
       "path": "bootstrap-provenance.json",
       "role": "source-metadata",
-      "sha256": "d696249d68ad05242a7cf45af6a047a0ed08f554796add533d062089af5fa01c"
+      "sha256": "684cbd8a51bfc8ca821b9f1cc01963d7ebfd6907fe68518cc482bbc8b59cc588"
     }
   ],
   "limitations": [
@@ -13543,6 +13543,8 @@
       "T_CORE_MENU_EXT": 41,
       "T_CORE_REQUEST_URL": 188,
       "T_CORE_ROLE_PERMISSION_TYPE": 3,
+      "T_CORE_SEQUENCE": 45,
+      "T_CORE_SEQUENCE_LINE": 2,
       "T_CORE_SYSTEM_CONFIG": 1,
       "T_CORE_TABLE": 467,
       "T_CORE_TABLE_HIERARCHY": 170,

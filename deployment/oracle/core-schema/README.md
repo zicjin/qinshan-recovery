@@ -37,7 +37,7 @@ The actual order is in `install.sql`: sequences precede procedures that referenc
 database backup, or a way to reset existing sequences. No business rows, users,
 passwords, database links or production connection strings are included.
 
-The technical bootstrap contains 8,207 rows across twenty-nine explicitly selected
+The technical bootstrap contains 8,254 rows across thirty-one explicitly selected
 configuration tables: 2 locales, 1,350 internationalization keys, 1,375 messages,
 392 static and 10 reviewed published LCDP menus, 467 entity metadata rows, 170 hierarchy
 relations, one system UI config, one login UI config and 37 source-referenced
@@ -77,6 +77,12 @@ and original stale references. The three SQL configuration fields are all NULL;
 no audit records or actor/organization/time provenance are included. This seed
 changes neither runtime profiles nor operation switches. See
 [audit configuration](../../../docs/deployment/audit-configuration.md).
+
+Forty-five numbering definitions and two segment definitions retain their original
+IDs, NULL names, patterns, codes and ordering. Only fresh empty installation sets
+`JSONPARAM` to NULL; production allocation state is not read or copied. Five source
+rule IDs are not present as core tables and remain intact. See
+[numbering configuration](../../../docs/deployment/numbering-configuration.md).
 
 `bootstrap-provenance.json` pins every emitted statement and selected
 source row. Identity/audit-origin columns are not copied. No users, organizations,

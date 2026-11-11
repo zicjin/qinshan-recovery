@@ -47090,4 +47090,223 @@ BEGIN
      THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_AUDIT_CONFIG_COLUMN'); END IF;
 END;
 /
+DECLARE
+  TYPE row_map IS TABLE OF VARCHAR2(32767) INDEX BY VARCHAR2(128);
+  actual row_map;
+  oversized NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO oversized FROM T_CORE_SEQUENCE WHERE DBMS_LOB.GETLENGTH(JSONPARAM)>1000;
+  IF oversized <> 0 THEN RAISE_APPLICATION_ERROR(-20123, 'Technical bootstrap text exceeds reviewed capacity.'); END IF;
+  FOR r IN (SELECT TO_CHAR(ID) AS ROW_ID, CASE WHEN "ID" IS NULL THEN 'N;' ELSE 'V'||LENGTH("ID")||':'||"ID"||';' END
+      || CASE WHEN "NAME" IS NULL THEN 'N;' ELSE 'V'||LENGTH("NAME")||':'||"NAME"||';' END
+      || CASE WHEN "PATTERN" IS NULL THEN 'N;' ELSE 'V'||LENGTH("PATTERN")||':'||"PATTERN"||';' END
+      || CASE WHEN "JSONPARAM" IS NULL THEN 'N;' ELSE 'V'||DBMS_LOB.GETLENGTH("JSONPARAM")||':'||DBMS_LOB.SUBSTR("JSONPARAM",1000,1)||';' END AS SIGNATURE FROM T_CORE_SEQUENCE) LOOP
+    actual(r.ROW_ID) := r.SIGNATURE;
+  END LOOP;
+  IF actual.COUNT <> 45 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_CORE_CUSTOM_CHART') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_CORE_CUSTOM_CHART') <>
+    'V19:T_CORE_CUSTOM_CHART;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_CORE_MENU') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_CORE_MENU') <>
+    'V11:T_CORE_MENU;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_CORE_SCHEDULE_TASK_CONFIG') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_CORE_SCHEDULE_TASK_CONFIG') <>
+    'V27:T_CORE_SCHEDULE_TASK_CONFIG;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_ADVISORY_REPORT_SF') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_ADVISORY_REPORT_SF') <>
+    'V24:T_EMC_ADVISORY_REPORT_SF;N;V10:[key][nnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_ANALYTICAL_EQUIPT_CRVES') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_ANALYTICAL_EQUIPT_CRVES') <>
+    'V29:T_EMC_ANALYTICAL_EQUIPT_CRVES;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_AREA') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_AREA') <>
+    'V10:T_EMC_AREA;N;V14:[nnnnnnnnnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_CERT') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_CERT') <>
+    'V10:T_EMC_CERT;N;V14:[nnnnnnnnnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_CLIENT') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_CLIENT') <>
+    'V12:T_EMC_CLIENT;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_CLIENT_CONTACT') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_CLIENT_CONTACT') <>
+    'V20:T_EMC_CLIENT_CONTACT;N;V14:[nnnnnnnnnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_CONSUME') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_CONSUME') <>
+    'V13:T_EMC_CONSUME;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_CURVE') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_CURVE') <>
+    'V11:T_EMC_CURVE;N;V22:[key][yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_DELIVERY') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_DELIVERY') <>
+    'V14:T_EMC_DELIVERY;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_EQUIPT_CALIBRATION_LINE') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_EQUIPT_CALIBRATION_LINE') <>
+    'V29:T_EMC_EQUIPT_CALIBRATION_LINE;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_EQUIPT_CURVE') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_EQUIPT_CURVE') <>
+    'V18:T_EMC_EQUIPT_CURVE;N;V22:[key][yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_EQUIPT_FILE_SCRIPT') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_EQUIPT_FILE_SCRIPT') <>
+    'V24:T_EMC_EQUIPT_FILE_SCRIPT;N;V14:[nnnnnnnnnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_FOLDER') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_FOLDER') <>
+    'V12:T_EMC_FOLDER;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_FOLDER_A') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_FOLDER_A') <>
+    'V14:T_EMC_FOLDER_A;N;V18:A[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_INTERNAL_AUDIT') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_INTERNAL_AUDIT') <>
+    'V20:T_EMC_INTERNAL_AUDIT;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_MANAGE_REVIEW') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_MANAGE_REVIEW') <>
+    'V19:T_EMC_MANAGE_REVIEW;N;V22:[key][yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_METHOD') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_METHOD') <>
+    'V12:T_EMC_METHOD;N;V14:[nnnnnnnnnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_MONITOR_POINT_CATEGORY') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_MONITOR_POINT_CATEGORY') <>
+    'V28:T_EMC_MONITOR_POINT_CATEGORY;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_MONITOR_TMPL') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_MONITOR_TMPL') <>
+    'V18:T_EMC_MONITOR_TMPL;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_MONITOR_TMPL_GROUP') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_MONITOR_TMPL_GROUP') <>
+    'V24:T_EMC_MONITOR_TMPL_GROUP;N;V14:[nnnnnnnnnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_MTL') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_MTL') <>
+    'V9:T_EMC_MTL;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_ORDER_INDEX') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_ORDER_INDEX') <>
+    'V17:T_EMC_ORDER_INDEX;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_ORDER_ITEM_GROUP') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_ORDER_ITEM_GROUP') <>
+    'V22:T_EMC_ORDER_ITEM_GROUP;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_ORDER_RETAIN') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_ORDER_RETAIN') <>
+    'V18:T_EMC_ORDER_RETAIN;N;V22:[key][yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_PROJECT2024') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_PROJECT2024') <>
+    'V17:T_EMC_PROJECT2024;N;V5:[nnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_PROJECT_CHANGE') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_PROJECT_CHANGE') <>
+    'V20:T_EMC_PROJECT_CHANGE;N;V19:[yyyy][mm][dd][nnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_PROJECT_PLAN') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_PROJECT_PLAN') <>
+    'V18:T_EMC_PROJECT_PLAN;N;V12:[nnnnnnnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_PROJ_ORDER') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_PROJ_ORDER') <>
+    'V16:T_EMC_PROJ_ORDER;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_PROPERTY_TMPL') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_PROPERTY_TMPL') <>
+    'V19:T_EMC_PROPERTY_TMPL;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_QUALITY_CONTROL') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_QUALITY_CONTROL') <>
+    'V21:T_EMC_QUALITY_CONTROL;N;V22:[key][yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_QUALITY_SUPERVISION') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_QUALITY_SUPERVISION') <>
+    'V25:T_EMC_QUALITY_SUPERVISION;N;V22:[key][yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_REPORT_SEND_INFO') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_REPORT_SEND_INFO') <>
+    'V22:T_EMC_REPORT_SEND_INFO;N;V20:[yyyy][mm][dd][nnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_REPORT_SEND_INFO_HQ') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_REPORT_SEND_INFO_HQ') <>
+    'V25:T_EMC_REPORT_SEND_INFO_HQ;N;V19:[yyyy][mm][dd][nnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_RUN') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_RUN') <>
+    'V9:T_EMC_RUN;N;V22:[key][yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_SAMPLE') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_SAMPLE') <>
+    'V12:T_EMC_SAMPLE;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_SOL') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_SOL') <>
+    'V9:T_EMC_SOL;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_TEST') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_TEST') <>
+    'V10:T_EMC_TEST;N;V14:[nnnnnnnnnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_TRAIN_COURSE') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_TRAIN_COURSE') <>
+    'V18:T_EMC_TRAIN_COURSE;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_EMC_UNIT') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_EMC_UNIT') <>
+    'V10:T_EMC_UNIT;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_LCDP_CHECKIN_RECORD') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_LCDP_CHECKIN_RECORD') <>
+    'V21:T_LCDP_CHECKIN_RECORD;N;V21:[yyyy][mm][dd][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_LCDP_CHECKOUT_RECORD') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_LCDP_CHECKOUT_RECORD') <>
+    'V22:T_LCDP_CHECKOUT_RECORD;N;V21:[yyyy][mm][dd][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+  IF NOT actual.EXISTS('T_LIMS_REPORT_TEMPLATE') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE'); END IF;
+  IF actual('T_LIMS_REPORT_TEMPLATE') <>
+    'V22:T_LIMS_REPORT_TEMPLATE;N;V17:[yyyy][mm][nnnnn];N;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE'); END IF;
+END;
+/
+DECLARE
+  TYPE row_map IS TABLE OF VARCHAR2(32767) INDEX BY VARCHAR2(128);
+  actual row_map;
+  oversized NUMBER;
+BEGIN
+  FOR r IN (SELECT TO_CHAR(ID) AS ROW_ID, CASE WHEN "ID" IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR("ID",'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR("ID",'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END
+      || CASE WHEN "SEQUENCEID" IS NULL THEN 'N;' ELSE 'V'||LENGTH("SEQUENCEID")||':'||"SEQUENCEID"||';' END
+      || CASE WHEN "SEQUENCECODECATEGORY" IS NULL THEN 'N;' ELSE 'V'||LENGTH("SEQUENCECODECATEGORY")||':'||"SEQUENCECODECATEGORY"||';' END
+      || CASE WHEN "SEQUENCECODE" IS NULL THEN 'N;' ELSE 'V'||LENGTH("SEQUENCECODE")||':'||"SEQUENCECODE"||';' END
+      || CASE WHEN "ORDERNO" IS NULL THEN 'N;' ELSE 'V'||LENGTH(TO_CHAR("ORDERNO",'TM9','NLS_NUMERIC_CHARACTERS=''.,'''))||':'||TO_CHAR("ORDERNO",'TM9','NLS_NUMERIC_CHARACTERS=''.,''')||';' END AS SIGNATURE FROM T_CORE_SEQUENCE_LINE) LOOP
+    actual(r.ROW_ID) := r.SIGNATURE;
+  END LOOP;
+  IF actual.COUNT <> 2 THEN RAISE_APPLICATION_ERROR(-20121, 'Technical bootstrap row count differs: T_CORE_SEQUENCE_LINE'); END IF;
+  IF NOT actual.EXISTS('1354238319963296') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE_LINE'); END IF;
+  IF actual('1354238319963296') <>
+    'V16:1354238319963296;V10:T_EMC_CERT;V3:nnn;V12:nnnnnnnnnnnn;V16:1354238320053408;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE_LINE'); END IF;
+  IF NOT actual.EXISTS('1824176694257344') THEN RAISE_APPLICATION_ERROR(-20122, 'Missing technical bootstrap row: T_CORE_SEQUENCE_LINE'); END IF;
+  IF actual('1824176694257344') <>
+    'V16:1824176694257344;V24:T_EMC_EQUIPT_FILE_SCRIPT;V3:nnn;V12:nnnnnnnnnnnn;V16:1824176694748864;'
+     THEN RAISE_APPLICATION_ERROR(-20122, 'Technical bootstrap row differs: T_CORE_SEQUENCE_LINE'); END IF;
+END;
+/
 PROMPT Selected technical bootstrap content verified; full installation remains partial.

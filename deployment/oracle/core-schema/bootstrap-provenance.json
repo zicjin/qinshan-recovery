@@ -2114,6 +2114,7 @@
     "Finite source-bound audit_def definitions only; original enabled/disabled state and NULL EXT retained. No identities, grants, workflow instances or audit history copied; full workflow/application installation remains incomplete.",
     "Finite captured import-template metadata and reviewed file bytes only; grjl has no source file or mapped columns and remains explicitly blocked. File assets require separate placement in the persistent application working directory; definitions do not prove import/export business acceptance.",
     "Finite source-bound four-table audit configuration only; original flags, NULL SQL, duplicate targets and source orphan targets/parents are retained and classified. No audit records, identities, runtime enablement or business columns are installed; full-system installation remains partial.",
+    "Finite source-bound numbering definitions and line rules only; source NAME and PATTERN retained. JSONPARAM is NULL for fresh empty installation, without reading production counter state or resetting existing state. Source rule IDs outside structural tables are preserved and classified; full-system installation remains partial.",
     "Published 7 reviewed LCDP modules, 10 reviewed menus and 2 original file Java resources only; FileScript retains its original active-only parent0/no-history exception. Import/export templates and file storage acceptance remain incomplete; remaining dynamic LCDP/workflow/permission bootstrap remains incomplete."
   ],
   "row_counts": {
@@ -2137,6 +2138,8 @@
     "T_CORE_MENU_EXT": 41,
     "T_CORE_REQUEST_URL": 188,
     "T_CORE_ROLE_PERMISSION_TYPE": 3,
+    "T_CORE_SEQUENCE": 45,
+    "T_CORE_SEQUENCE_LINE": 2,
     "T_CORE_SYSTEM_CONFIG": 1,
     "T_CORE_TABLE": 467,
     "T_CORE_TABLE_HIERARCHY": 170,
@@ -51389,9 +51392,369 @@
       "source_row_sha256": "1c1d41ca99c5958486f87b80e1d779c56947893226a24965c30cbb930e1090e5",
       "statement_sha256": "d8ace80c8d8b91f0eaab8556adef83af0c67b2b0b9eb3d10bfe96fa2ed11c321",
       "table": "T_CORE_AUDIT_CONFIG_COLUMN"
+    },
+    {
+      "id": "T_CORE_CUSTOM_CHART",
+      "source_row_sha256": "3b6284feb3dd4a0060a9ad3349e210e89ee5fc0f88543a4a44a1d94149f30ee6",
+      "statement_sha256": "9f422bbbfc6c8d487be3540bcbaf2341c3631addc66bececfebc10d6412114ba",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_CORE_MENU",
+      "source_row_sha256": "887a4ee2997fdaf4f800861045f6e82d6cb19944ad0adfd6dd57e7252e9a6ad2",
+      "statement_sha256": "688a3e30e706a22f9fbb9744d819bc9888a5062ed85d1996d23bb51ef02ee44c",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_CORE_SCHEDULE_TASK_CONFIG",
+      "source_row_sha256": "c665fc1b317e5d1b0fe6c69585a7a5d737911f5ab2569cbe325ba9dd2704c2b7",
+      "statement_sha256": "54b08bc4a5f83e29c0a247d83f2f0931656169f2217696c80f69da7fa6dec056",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_ADVISORY_REPORT_SF",
+      "source_row_sha256": "0e59c4dde9ea978984f1190028474d7e43de4a10a9692c9a182f71055018dd5c",
+      "statement_sha256": "68dae0ffdec896fb447ff73fee21d05efa52ebdb09fdf863a0804d763eca1f99",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_ANALYTICAL_EQUIPT_CRVES",
+      "source_row_sha256": "02859b1f9bbf0206f67c83b6b767b332fa8d091b2f976e93e1992cce0416688f",
+      "statement_sha256": "f9428d81fc582a09e1937e3e38deb386319409c2d7437c1dd69dd060812378c0",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_AREA",
+      "source_row_sha256": "d5d352d43b4826d1432a43a3af3582087186b93bcf55e4f6cc0c2eaff822b524",
+      "statement_sha256": "60ebaf1289d61283ebc461fbd0052e4cc47aada07520083791d40d32204647ef",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_CERT",
+      "source_row_sha256": "b66a53d90fc4e9840bde4f1b1b646b574192fe4e7b06356cfe09931cf261da0c",
+      "statement_sha256": "39bb72d80f2384da790483fd572ae5f4ebe0a94e531ba55d5d63024bb71afd8a",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_CLIENT",
+      "source_row_sha256": "ec49a878f71d01b148e371bb9790ca3ecfc1cf0cbf086a142ede91b19f39a442",
+      "statement_sha256": "5ce9a1c3cd1065c17c58b665006d3d832fa1669d55b0b318cfccd7b2e8c0bfb7",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_CLIENT_CONTACT",
+      "source_row_sha256": "80a92f84dfcd851933f8e0b32cc459b611f8489e57dec9851991a51d64621c1d",
+      "statement_sha256": "c470e66219c83b3411fd14a40474807445948a0b3f58a950a287d1832643a355",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_CONSUME",
+      "source_row_sha256": "1ad823de5d744594a77d38f9f7fb7e4126b1bbef8323f7dba6700b4c1e561ad0",
+      "statement_sha256": "bda9e749fab67fe4a86dd4c7d17161acbb0bbff0fa44eecb47b5cee0342a39d2",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_CURVE",
+      "source_row_sha256": "c939c56cfd0ef0e9a525276ed86d5aa103bddcf20097feb9faeb08caee655cd5",
+      "statement_sha256": "faf0eef2055c6d2c99fa681dee62a8b79876488dd27491a8891ed39657f24354",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_DELIVERY",
+      "source_row_sha256": "00631d21e68e5a134fec35e1c50073f3fec7df7bb09341025fe228cff915035c",
+      "statement_sha256": "19907fc5cd22364475da024e41a4f3dfa3fbf0aed0c9f02f3f2c6d845d3c86c4",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_EQUIPT_CALIBRATION_LINE",
+      "source_row_sha256": "7a8e0756fe695a295f89ea5e6ce280c501baa3ee870017fc7ba9ca2e5fa546f7",
+      "statement_sha256": "82145e080d04091e4dade87c3acbb0c691fa75094d4be82bffd291f8e047d5db",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_EQUIPT_CURVE",
+      "source_row_sha256": "3f11cab42ccb892343df9e2217e84710907fee4b1ebd920552951956d4e34280",
+      "statement_sha256": "4064bb82108ed51f94ee35d051c3ef95199151086d95dca9972b342a6c195387",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_EQUIPT_FILE_SCRIPT",
+      "source_row_sha256": "61bd63a474df44534224612e641969f1076ae0f876ca5009ad345d195a07f856",
+      "statement_sha256": "f01f7b33b0eb2ef29f411a341e039ad274651b2a67135160fb72b2395ad52e09",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_FOLDER",
+      "source_row_sha256": "2f4e3067a1f64f47c1bcde631a261254883fbf75887c889456c446622526203e",
+      "statement_sha256": "f1dfd3cf9db69d4a06e112991991eca6a8b1e7513ffdd21b307443644e4b4630",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_FOLDER_A",
+      "source_row_sha256": "358a5c281b7bd4cab8fd84847a93353985e85c672be67574d92daa74f6e64bff",
+      "statement_sha256": "0f7b9b7bdbdc94f2baafc29948674882418a7f49d9361878cfce9af34ddd5870",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_INTERNAL_AUDIT",
+      "source_row_sha256": "c2666a73e30579790eb454020b43571bc5a509fad1e32359e2b336ece98b7b8a",
+      "statement_sha256": "e619d846e4a543d027aea9db424cfa5ed90789ec4c285ade4c82349455e1eebe",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_MANAGE_REVIEW",
+      "source_row_sha256": "69293327fc3139faf4f6e579161bbe696c52dc7dff70bc6bd9aee7d90e35cf3e",
+      "statement_sha256": "5fa509c0ac71a01550ae248ecc503df4cf6727fab1ef8bc85afcb49ea17dd57d",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_METHOD",
+      "source_row_sha256": "bb648ae576884f284dcf6a45defd19ab2a797472675f278250ddde571d396f3c",
+      "statement_sha256": "0ba9885190d4a2e5b6f915b45cf0b0a9ed5614a65a1d30dc71b002303f8aa9aa",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_MONITOR_POINT_CATEGORY",
+      "source_row_sha256": "05b211dc065ed1356e313beab196ddb319de87686b9171dd7e53da34d04fd15a",
+      "statement_sha256": "1f5e8caafa458eb3f4363c28b561e8a278b60c10cec010063240dcc56663f627",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_MONITOR_TMPL",
+      "source_row_sha256": "ef3bbac7fb9ef961e2c728088b307b302203fa7544500c8f79ed24982c76dd6c",
+      "statement_sha256": "6d99a742170a722e8cfb00a7665a7615da5c5f8ee42140376c8adb30ccdf85fd",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_MONITOR_TMPL_GROUP",
+      "source_row_sha256": "fd8052161dea95779874284696a6be18f0dfd3e55b868598a0e36f343af86d84",
+      "statement_sha256": "abb8c0e424f5600779b8e70c1865d190f503bc27727c80379b100cc56bd99ff8",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_MTL",
+      "source_row_sha256": "9fef0c86b0b67aa2fd4541546c392acce81b9e6c211e21ea050c737ba245f036",
+      "statement_sha256": "e55e2625cd91be314581ab30c6e4a011765b1374a43432e0a36d00ffb7dc7b42",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_ORDER_INDEX",
+      "source_row_sha256": "877fd0470b4c2fc106971e35ff26dbc2b23e72c49bade130e9273cec2a0041fd",
+      "statement_sha256": "15c1eb1c538dac85551b2d650b8e1456470fd2ee6aa5376485bc6e688cbe6394",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_ORDER_ITEM_GROUP",
+      "source_row_sha256": "697fa21445513ce1f00a242d10bfe0ad3cdcadb8c7a7898c466f84d8ea15dc49",
+      "statement_sha256": "ebab14da4e4f50f9e4d0053215815dbac42f90aed0d64cff9ba5c9f94f739c5d",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_ORDER_RETAIN",
+      "source_row_sha256": "8ff12318a1c9b19792fa9a05696bfc361fb8ef2415df0edde0d383d0eaea20e0",
+      "statement_sha256": "eb8c4397897bb6273a63d5f6bc0e0366442dc18696cdf8aa6b39e08dc18f37ff",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_PROJECT2024",
+      "source_row_sha256": "065a7b554608e1cbc7e66293cac45dd151e8b20dfef828daf6914d1a785389b7",
+      "statement_sha256": "f9b7f0f4edf4d5d645eafe47f4eeaae03dbca03beea2906367ed083c0509375e",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_PROJECT_CHANGE",
+      "source_row_sha256": "1bc854b26ad3baf1a5bb980ea90a6c964a303593db493f0e72392f962f709b35",
+      "statement_sha256": "527b12a847b4706c9e59653bb84ec3c1429337158292588f5ef5d11a2844e2e7",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_PROJECT_PLAN",
+      "source_row_sha256": "c782e23eef4352ffc8003127c0ece89851675f6d893ddf3ef12dbbbb1bce0342",
+      "statement_sha256": "dbc1a675bd6577de8d9f25790b50b41f8a0113348c1689c337659cf749c70706",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_PROJ_ORDER",
+      "source_row_sha256": "795c6151ae0951eff432dd794d2b3ffb7ee73b98078e2c21b559290b259ebe79",
+      "statement_sha256": "813c755a5784c89a9a195e4e360792044f0e52859c71dbe8ccd8d3c36a365cc8",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_PROPERTY_TMPL",
+      "source_row_sha256": "4bc1d5873b498379a60f61ba06ea204bbaf46ed2367a9d649d21b9f8413fbfea",
+      "statement_sha256": "e631bc011051ec058954eb41fbcfa02548e65122a31524856088440dd507f2c2",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_QUALITY_CONTROL",
+      "source_row_sha256": "4a282e582dcec854499d572e424f6eb736f8ac66fe7d702737cbe6830dcf2e6e",
+      "statement_sha256": "fe050bcc0852273095288aab80b645f0306d51fb8e1127fd2dddcdc60995dc54",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_QUALITY_SUPERVISION",
+      "source_row_sha256": "8946e852b27f6fbd91a6e5281ef8358be619701659c97e9016d9cbde288d6ecf",
+      "statement_sha256": "a587638e4a31504388b8585611bc097bbf3e5ef9a25bd7ff1b7878d59ca0294b",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_REPORT_SEND_INFO",
+      "source_row_sha256": "a6bda7d228e25b792c84f20378dd1e12f738f316a72ce9d54647f37c99a47797",
+      "statement_sha256": "6efae9d1a02da0343ba6b5a5975321c7c6feefec7b44f78f006778013934f48d",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_REPORT_SEND_INFO_HQ",
+      "source_row_sha256": "7aef0c4415f09b23d27033d8e7db03109a6e4c7caf101f049fb3482f0cf8470d",
+      "statement_sha256": "a477ba3e1060e073b63d5bad4f1588abac41b54d721c6426346356b993b31fbc",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_RUN",
+      "source_row_sha256": "33f18ed2750f7e22e9ef645b5657823cd7a93cb4174cc3b045a78159ddcda094",
+      "statement_sha256": "7df6e1521bb5826fe1b5699929c34fe91d8faf3eb2a57668c8ee03d01d747609",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_SAMPLE",
+      "source_row_sha256": "41b2800c6136ac9f4355d569652f55e0f63a24de363bac16aee259c5506e5f7f",
+      "statement_sha256": "b410240227aed758ae4576504b45118913f271f78e4e6bfcf137263cbc4bbcc8",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_SOL",
+      "source_row_sha256": "07c42822c24a4a1eca1cf74f22caf6a9bf2354d97d40ca95a144b541ee41fdfb",
+      "statement_sha256": "48b6dd130395fe8ab368f8954ff0e93881c5f55e31a8309c05d9e8b83b98fa10",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_TEST",
+      "source_row_sha256": "a43e3c54dfa4e4401a290775f9413a2ec9f173b30923cf51c14cb28652a08b82",
+      "statement_sha256": "e02bc38e25f7e20efc3339069ba6e7542d74087cffccca84d5715e1e4972c347",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_TRAIN_COURSE",
+      "source_row_sha256": "fbd20cc048bd984b62b38a17a08f31f7639ce334cd379079453312995c962772",
+      "statement_sha256": "70f130a4f6578a6b1a5f83e3b59fdf09384d7314eaad438ce9c2d141e19e2cbb",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_EMC_UNIT",
+      "source_row_sha256": "b3c2f761e5d9c6f3e4ff4c92023834411ee57442ed23ebb48001473d366af869",
+      "statement_sha256": "56e1e11e19915a3de0013dff16ae2897047e427cdf5dd2cbfc078560c4d157aa",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_LCDP_CHECKIN_RECORD",
+      "source_row_sha256": "8863807d91a94adfd29c37841fff0e7f4af10bccb0a8b0eab1cc79a014624547",
+      "statement_sha256": "29b03ed1d38ed4560bf4303f9d4f0c647903f994853094bbb3c2bbbd77831736",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_LCDP_CHECKOUT_RECORD",
+      "source_row_sha256": "eacbaa8c92efa9ca34f9699245adf96d5e7806bf5b9144ecfff43c289612d1e3",
+      "statement_sha256": "7ba836ebadcbd8dc5fc2e82306155f05fd93dac91ee3ad89409c73a18fa1ebc4",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "T_LIMS_REPORT_TEMPLATE",
+      "source_row_sha256": "51ebe231e1345feda284a8e67b1fc0a52bcc7213bf60992f20e824d304574522",
+      "statement_sha256": "871315e54d26603ace2b5f5abaa102dc0fe8e02989483f36f7024ddcb5419ebe",
+      "table": "T_CORE_SEQUENCE"
+    },
+    {
+      "id": "1354238319963296",
+      "source_row_sha256": "a454147c87bbe09cba95967555f8c08230778cdbb190f5b18cbaddb36c164bde",
+      "statement_sha256": "faf64af3fd7f0c0b6bb8875da7f9b0c1b9e5545096ccaefb6124150b0d7c3f37",
+      "table": "T_CORE_SEQUENCE_LINE"
+    },
+    {
+      "id": "1824176694257344",
+      "source_row_sha256": "576908c7a956dce3e71650b5e1eacb88795b64cb9a280ee964acfdc115768ad0",
+      "statement_sha256": "aa7839fead383b5a4b82e426729df02c4086465308856f7d9fb3b77a3a31156e",
+      "table": "T_CORE_SEQUENCE_LINE"
     }
   ],
   "schema": "core-technical-bootstrap-v1",
+  "sequence_configuration": {
+    "business_rows": false,
+    "counter_state": {
+      "production_counter_state_read": false,
+      "resets_existing_state": false,
+      "target": "JSONPARAM",
+      "transformation": "fresh-empty-install-counter-state",
+      "value": null
+    },
+    "identity_or_history_rows_copied": false,
+    "known_target_mappings": [
+      "T_CORE_CUSTOM_CHART",
+      "T_CORE_MENU",
+      "T_CORE_SCHEDULE_TASK_CONFIG",
+      "T_EMC_ANALYTICAL_EQUIPT_CRVES",
+      "T_EMC_AREA",
+      "T_EMC_CERT",
+      "T_EMC_CLIENT",
+      "T_EMC_CLIENT_CONTACT",
+      "T_EMC_CONSUME",
+      "T_EMC_CURVE",
+      "T_EMC_DELIVERY",
+      "T_EMC_EQUIPT_CALIBRATION_LINE",
+      "T_EMC_EQUIPT_CURVE",
+      "T_EMC_EQUIPT_FILE_SCRIPT",
+      "T_EMC_FOLDER",
+      "T_EMC_INTERNAL_AUDIT",
+      "T_EMC_MANAGE_REVIEW",
+      "T_EMC_METHOD",
+      "T_EMC_MONITOR_POINT_CATEGORY",
+      "T_EMC_MONITOR_TMPL",
+      "T_EMC_MONITOR_TMPL_GROUP",
+      "T_EMC_MTL",
+      "T_EMC_ORDER_INDEX",
+      "T_EMC_ORDER_ITEM_GROUP",
+      "T_EMC_ORDER_RETAIN",
+      "T_EMC_PROJECT_CHANGE",
+      "T_EMC_PROJ_ORDER",
+      "T_EMC_PROPERTY_TMPL",
+      "T_EMC_QUALITY_CONTROL",
+      "T_EMC_QUALITY_SUPERVISION",
+      "T_EMC_REPORT_SEND_INFO",
+      "T_EMC_RUN",
+      "T_EMC_SAMPLE",
+      "T_EMC_SOL",
+      "T_EMC_TEST",
+      "T_EMC_TRAIN_COURSE",
+      "T_EMC_UNIT",
+      "T_LCDP_CHECKIN_RECORD",
+      "T_LCDP_CHECKOUT_RECORD",
+      "T_LIMS_REPORT_TEMPLATE"
+    ],
+    "source_class": "current-production",
+    "source_manifest": {
+      "path": "private/next-frontier-20261111/20261111T005254Z-sequence-config-manifest-private.json",
+      "sha256": "87f041a80ab2b0efe230c30f8e4ba169b286759bd64203adcc098177865e5d4d"
+    },
+    "source_only_rule_ids": [
+      "T_EMC_ADVISORY_REPORT_SF",
+      "T_EMC_FOLDER_A",
+      "T_EMC_PROJECT2024",
+      "T_EMC_PROJECT_PLAN",
+      "T_EMC_REPORT_SEND_INFO_HQ"
+    ],
+    "source_receipts": [
+      {
+        "label": "sequence-config",
+        "path": "private/next-frontier-20261111/20261111T005254Z-sequence-config-private.json",
+        "sha256": "b573c4ac86949731d2974984e2c517dc671f28fde0fe0dd7a6278d4c1ba4ce8d"
+      },
+      {
+        "label": "sequence-line-config",
+        "path": "private/next-frontier-20261111/20261111T005254Z-sequence-line-config-private.json",
+        "sha256": "e805c87502b8317ea18ecb30754ddb8bf39c2ed452beba5686df624882c63a4f"
+      }
+    ],
+    "whole_selected_table_closure": true
+  },
   "source_artifacts": [
     {
       "path": "private/config-bootstrap-20261110/20261110T150909Z-locale-private.json",
@@ -51444,6 +51807,10 @@
     {
       "path": "private/goal-continuation-20261111/reviewed-audit-configuration-private.json",
       "sha256": "c6ba066fb296e7ac29277f2ea5d249580f9737846dbd34d1f97c3d543ea18698"
+    },
+    {
+      "path": "private/next-frontier-20261111/reviewed-sequence-configuration-private.json",
+      "sha256": "c658435b5afb70f6eb6c64fb0e81b6e42f21a89abb4429228d1a1a112c1e4e03"
     }
   ],
   "source_class": "current-production-at-capture"

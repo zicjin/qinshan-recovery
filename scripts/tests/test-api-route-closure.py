@@ -143,7 +143,7 @@ class ClosureTest(unittest.TestCase):
         self.assertEqual(result["required_unknown"], 2)
         self.assertFalse(result["failures"])
 
-    def test_strict_behavior_family_promotes_all_alias_routes(self):
+    def test_strict_behavior_family_without_per_route_proof_stays_diagnostic(self):
         ledger = {
             "source_commit": "head", "source_dirty": False,
             "route_execution_model": {"boundary_process": False, "internal_http_bridge": False, "jni_replacement_process": False},
@@ -164,8 +164,102 @@ class ClosureTest(unittest.TestCase):
                             "fixture": {"restore": "not-required"}, "audit": "not-required"}],
             }))
             result = module.build_closure(ledger, [path])
-        self.assertEqual(result["strict_pass_count"], 2)
+        self.assertEqual(result["strict_pass_count"], 0)
+        self.assertEqual(result["executed_strict_count"], 0)
+        self.assertEqual(result["revalidated_by_fingerprint_count"], 0)
+        self.assertEqual(result["required_unknown"], 2)
+        self.assertEqual(result["diagnostic_observation_count"], 2)
+        self.assertEqual(result["affected_replay"]["route_ids"], ["a", "b"])
+        for route in result["routes"]:
+            self.assertFalse(route["evidence"])
+            self.assertEqual(len(route["diagnostic_observations"]), 1)
+        self.assertTrue(all(
+            "per-target request/auth/organization equivalence proof" in item["reason"]
+            for item in result["diagnostics"]
+        ))
+        self.assertFalse(result["failures"])
+
+    def test_alias_reuse_stays_diagnostic_across_path_role_auth_and_organization(self):
+        for mode in ("executed", "revalidated-by-fingerprint"):
+            for difference in ("path", "role", "auth", "organization"):
+                with self.subTest(mode=mode, difference=difference):
+                    report, ledger = self.fingerprint_report(validation_mode=mode)
+                    first = ledger["routes"][0]
+                    first.update(roles=["reader"], organizations=["org-a"])
+                    second = dict(first, id="r2")
+                    request = {"role": "reader", "auth": {"profile": "reader-a"},
+                               "organization": "org-a"}
+                    if difference == "path":
+                        second["path"] = "/ok/raw"
+                    elif difference == "role":
+                        second["roles"] = ["administrator"]
+                    elif difference == "auth":
+                        request["auth"] = {"profile": "reader-b"}
+                    else:
+                        second["organizations"] = ["org-b"]
+                    ledger["routes"].append(second)
+                    case = report["cases"][0]
+                    case["request"] = request
+                    case["route"].pop("route_id")
+                    case["route"]["route_ids"] = ["r1", "r2"]
+                    with tempfile.TemporaryDirectory() as temp:
+                        path = Path(temp) / "unproved-aliases.json"
+                        path.write_text(json.dumps(report), encoding="utf-8")
+                        result = module.build_closure(ledger, [path])
+                    self.assertEqual(result["strict_pass_count"], 0)
+                    self.assertEqual(result["executed_strict_count"], 0)
+                    self.assertEqual(result["revalidated_by_fingerprint_count"], 0)
+                    self.assertEqual(result["required_unknown"], 2)
+                    self.assertEqual(result["diagnostic_observation_count"], 2)
+                    self.assertEqual(result["affected_replay"]["route_ids"], ["r1", "r2"])
+                    self.assertFalse(result["reports"][0]["family_stale"])
+                    self.assertEqual(result["reports"][0]["strict_contract"],
+                                     "strict report contract valid")
+                    self.assertFalse(result["failures"])
+
+    def test_single_alias_id_without_per_route_proof_stays_diagnostic(self):
+        for mode in ("executed", "revalidated-by-fingerprint"):
+            with self.subTest(mode=mode):
+                report, ledger = self.fingerprint_report(validation_mode=mode)
+                report["cases"][0]["route"].pop("route_id")
+                report["cases"][0]["route"]["route_ids"] = ["r1"]
+                with tempfile.TemporaryDirectory() as temp:
+                    path = Path(temp) / "single-alias.json"
+                    path.write_text(json.dumps(report), encoding="utf-8")
+                    result = module.build_closure(ledger, [path])
+                self.assertEqual(result["strict_pass_count"], 0)
+                self.assertEqual(result["executed_strict_count"], 0)
+                self.assertEqual(result["revalidated_by_fingerprint_count"], 0)
+                self.assertEqual(result["diagnostic_observation_count"], 1)
+                self.assertEqual(result["affected_replay"]["route_ids"], ["r1"])
+                self.assertFalse(result["routes"][0]["evidence"])
+
+    def test_strict_report_promotes_unique_method_and_path_without_route_id(self):
+        report, ledger = self.fingerprint_report()
+        report["cases"][0]["route"].pop("route_id")
+        report["cases"][0].pop("family_fingerprint")
+        report["schema"] = 1
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "unique-path.json"
+            path.write_text(json.dumps(report), encoding="utf-8")
+            result = module.build_closure(ledger, [path])
+        self.assertEqual(result["strict_pass_count"], 1)
+        self.assertEqual(result["executed_strict_count"], 1)
         self.assertEqual(result["required_unknown"], 0)
+        self.assertFalse(result["diagnostics"])
+        self.assertFalse(result["failures"])
+
+    def test_legacy_explicit_route_without_family_fingerprint_still_passes(self):
+        report, ledger = self.fingerprint_report()
+        report["schema"] = 1
+        report["cases"][0].pop("family_fingerprint")
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "legacy-route.json"
+            path.write_text(json.dumps(report), encoding="utf-8")
+            result = module.build_closure(ledger, [path])
+        self.assertEqual(result["strict_pass_count"], 1)
+        self.assertFalse(result["reports"][0]["family_stale"])
+        self.assertFalse(result["diagnostics"])
         self.assertFalse(result["failures"])
 
     def test_family_fingerprint_revalidation_counts_without_new_execution(self):
@@ -197,6 +291,84 @@ class ClosureTest(unittest.TestCase):
             item.get("stale_reason") == "family fingerprint is stale or incomplete"
             for item in result["diagnostics"]
         ))
+
+    def test_family_fingerprint_must_match_every_alias_target(self):
+        report, ledger = self.fingerprint_report()
+        ledger["routes"].append(dict(
+            ledger["routes"][0], id="r2", family_fingerprint="fam-other",
+        ))
+        report["cases"][0]["route"].pop("route_id")
+        report["cases"][0]["route"]["route_ids"] = ["r1", "r2"]
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "mixed-family.json"
+            path.write_text(json.dumps(report), encoding="utf-8")
+            result = module.build_closure(ledger, [path])
+        self.assertEqual(result["strict_pass_count"], 0)
+        self.assertEqual(result["affected_replay"]["route_ids"], ["r1", "r2"])
+        self.assertEqual(result["reports"][0]["strict_contract"],
+                         "family fingerprint is stale or incomplete")
+        self.assertEqual(result["reports"][0]["family_stale"], [{
+            "case_index": 0,
+            "route_ids": ["r1", "r2"],
+            "reason": "family-fingerprint-mismatch",
+            "declared_family_fingerprint": "fam-current",
+            "expected_family_fingerprints": ["fam-current", "fam-other"],
+        }])
+
+    def test_missing_declared_family_fingerprint_is_stale_when_ledger_requires_it(self):
+        for schema in (2, "invalid", None):
+            with self.subTest(schema=schema):
+                report, ledger = self.fingerprint_report()
+                report["schema"] = schema
+                report["cases"][0].pop("family_fingerprint")
+                with tempfile.TemporaryDirectory() as temp:
+                    path = Path(temp) / "missing-family.json"
+                    path.write_text(json.dumps(report), encoding="utf-8")
+                    result = module.build_closure(ledger, [path])
+                self.assertEqual(result["strict_pass_count"], 0)
+                self.assertEqual(result["required_unknown"], 1)
+                self.assertEqual(result["affected_replay"]["route_ids"], ["r1"])
+                self.assertTrue(result["reports"][0]["family_stale"])
+
+    def test_declared_family_fingerprint_rejects_missing_target_fingerprints(self):
+        for missing_value in ("absent", "", None):
+            with self.subTest(missing_value=missing_value):
+                report, ledger = self.fingerprint_report()
+                target = dict(ledger["routes"][0], id="r2")
+                if missing_value == "absent":
+                    target.pop("family_fingerprint")
+                else:
+                    target["family_fingerprint"] = missing_value
+                ledger["routes"].append(target)
+                report["cases"][0]["route"].pop("route_id")
+                report["cases"][0]["route"]["route_ids"] = ["r1", "r2"]
+                with tempfile.TemporaryDirectory() as temp:
+                    path = Path(temp) / "incomplete-family.json"
+                    path.write_text(json.dumps(report), encoding="utf-8")
+                    result = module.build_closure(ledger, [path])
+                self.assertEqual(result["strict_pass_count"], 0)
+                self.assertEqual(result["diagnostic_observation_count"], 2)
+                self.assertEqual(result["affected_replay"]["route_ids"], ["r1", "r2"])
+                self.assertEqual(result["reports"][0]["strict_contract"],
+                                 "family fingerprint is stale or incomplete")
+                self.assertTrue(result["reports"][0]["family_stale"])
+
+    def test_unknown_alias_target_is_visible_in_diagnostics_and_affected_replay(self):
+        report, ledger = self.fingerprint_report()
+        report["cases"][0]["route"].pop("route_id")
+        report["cases"][0]["route"]["route_ids"] = ["r1", "unknown-target"]
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "unknown-alias.json"
+            path.write_text(json.dumps(report), encoding="utf-8")
+            result = module.build_closure(ledger, [path])
+        self.assertEqual(result["strict_pass_count"], 0)
+        self.assertEqual(result["reports"][0]["strict_contract"],
+                         "family fingerprint is stale or incomplete")
+        self.assertTrue(result["reports"][0]["family_stale"])
+        self.assertEqual(result["diagnostic_observation_count"], 2)
+        self.assertEqual(result["affected_replay"]["route_ids"], ["r1", "unknown-target"])
+        unknown = next(item for item in result["diagnostics"] if item["route_id"] == "unknown-target")
+        self.assertIn("route id or method does not match ledger alias", unknown["reason"])
 
     def test_revalidation_requires_golden_harness_proof(self):
         report, ledger = self.fingerprint_report(

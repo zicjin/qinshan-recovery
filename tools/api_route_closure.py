@@ -65,7 +65,7 @@ def _family_binding_index(ledger: Mapping[str, Any]) -> Dict[str, Dict[str, str]
             continue
         result[route_id] = {
             "behavior_family_id": str(route.get("behavior_family_id", "")),
-            "family_fingerprint": str(route.get("family_fingerprint", "")),
+            "family_fingerprint": str(route.get("family_fingerprint") or ""),
         }
     return result
 
@@ -92,8 +92,22 @@ def _report_family_status(report: Mapping[str, Any],
             for route_id in route_ids
             if route_id in expected and expected[route_id]["family_fingerprint"]
         }
-        declared = str(case.get("family_fingerprint", ""))
-        if fingerprints and declared and declared not in fingerprints:
+        declared = str(case.get("family_fingerprint") or "")
+        try:
+            fingerprinted_schema = int(report.get("schema", 1)) >= 2
+        except (TypeError, ValueError):
+            fingerprinted_schema = True
+        if fingerprints and not declared and fingerprinted_schema:
+            stale.append({
+                "case_index": index,
+                "route_ids": route_ids,
+                "reason": "family-fingerprint-missing",
+                "expected_family_fingerprints": sorted(fingerprints),
+            })
+        if fingerprints and declared and any(
+            expected.get(route_id, {}).get("family_fingerprint") != declared
+            for route_id in route_ids
+        ):
             stale.append({
                 "case_index": index,
                 "route_ids": route_ids,
@@ -263,9 +277,12 @@ def build_closure(ledger: Mapping[str, Any], report_paths: Iterable[Path]) -> Di
             route_id = route.get("route_id")
             route_ids = route.get("route_ids") if isinstance(route.get("route_ids"), list) else None
             if route_ids and not route_id:
-                # Fast behavior-family reports may probe once and cover many
-                # ledger aliases. Keep every alias visible in diagnostic
-                # closure without promoting the screening result.
+                # A representative request does not prove each target's
+                # path/auth/organization semantics, even in a strict report.
+                # Keep route_ids reuse diagnostic until each route is replayed.
+                alias_reason = "route_ids reuse lacks per-target request/auth/organization equivalence proof; replay each route with route_id"
+                if not strict_ok:
+                    alias_reason += "; " + (family_reason if not family_ok else strict_reason)
                 expected_source_class = str(case.get("class") or "")
                 expected_profile = case.get("request", {}).get("profile") if isinstance(case.get("request"), dict) else None
                 for alias_id in route_ids:
@@ -291,36 +308,22 @@ def build_closure(ledger: Mapping[str, Any], report_paths: Iterable[Path]) -> Di
                                              "source_class": expected_source_class or None,
                                              "request_profile": expected_profile,
                                              "request_path": case.get("request_path")}
-                        if strict_ok:
-                            mode = str(case.get("validation_mode", "executed"))
-                            alias_target["behavior_status"] = (
-                                "revalidated-by-fingerprint"
-                                if mode == "revalidated-by-fingerprint"
-                                else "executed-pass"
+                        alias_target["diagnostic_observations"].append(alias_observation)
+                        alias_target["stale_reasons"].append(alias_reason)
+                        diagnostics.append({"route_id": alias_target["id"], **alias_observation,
+                                            "reason": alias_reason, "stale_reason": alias_reason})
+                        affected_routes.add(alias_target["id"])
+                        if family_stale:
+                            affected_families.update(
+                                str(item.get("behavior_family_id") or item.get("declared_family_fingerprint") or "unknown")
+                                for item in family_stale
                             )
-                            if mode == "revalidated-by-fingerprint":
-                                revalidated_pass += 1
-                            alias_target["disposition"] = str(route.get("disposition", "owned-pass"))
-                            alias_target["unknown_reason"] = None
-                            alias_target["validation_modes"].append(mode)
-                            alias_target["evidence"].append(alias_observation)
-                        else:
-                            alias_target["diagnostic_observations"].append(alias_observation)
-                            alias_target["stale_reasons"].append(family_reason if not family_ok else strict_reason)
-                            diagnostics.append({"route_id": alias_target["id"], **alias_observation,
-                                                "reason": family_reason if not family_ok else strict_reason,
-                                                "stale_reason": family_reason if not family_ok else strict_reason})
-                            affected_routes.add(alias_target["id"])
-                            if family_stale:
-                                affected_families.update(
-                                    str(item.get("behavior_family_id") or item.get("declared_family_fingerprint") or "unknown")
-                                    for item in family_stale
-                                )
-                    elif expected_source_class:
+                    else:
                         diagnostics.append({"route_id": str(alias_id), "report": str(report_path),
                                             "case_id": case.get("id"), "classification": case.get("classification"),
-                                            "reason": "behavior-family source class does not match ledger alias",
+                                            "reason": "behavior-family route id or method does not match ledger alias; " + alias_reason,
                                             "source_class": expected_source_class})
+                        affected_routes.add(str(alias_id))
                 continue
             if route_id:
                 # HTTP observations may contain a concrete path (for example

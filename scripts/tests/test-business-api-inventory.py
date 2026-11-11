@@ -221,6 +221,35 @@ public class DemoController {
             [(row["method"], row["path"]) for row in routes],
         )
 
+    def test_terminal_mapping_array_keeps_path_variables(self):
+        source = '''
+@RequestMapping("/reports")
+public class Reports {
+ @PostMapping(value={"/{id}/action/generator"})
+ void generate() {}
+ @GetMapping(path={"/sources/{id}", "/sources/{id}/columns"})
+ void source() {}
+}
+'''
+        self.assertEqual([
+            ("POST", "/reports/{id}/action/generator"),
+            ("GET", "/reports/sources/{id}"),
+            ("GET", "/reports/sources/{id}/columns"),
+        ], [(r["method"], r["path"]) for r in extract_routes(source, "Reports.java")])
+
+    def test_explicit_slash_child_differs_from_empty_child(self):
+        source = '''
+@RequestMapping("/documents")
+public class Documents {
+ @GetMapping(value={"/"}) void slash() {}
+ @GetMapping(value={""}) void root() {}
+}
+'''
+        self.assertEqual([
+            ("GET", "/documents/"),
+            ("GET", "/documents"),
+        ], [(r["method"], r["path"]) for r in extract_routes(source, "Documents.java")])
+
     def test_inventory_marks_packaged_class_and_unknown_route(self):
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)

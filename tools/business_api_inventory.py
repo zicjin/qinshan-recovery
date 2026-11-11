@@ -171,7 +171,7 @@ def _quoted_values(text: str, key: str = "", constants: Optional[Mapping[str, st
     if key:
         # Stop at the array's closing brace, allowing a quoted route itself
         # to contain a path-variable brace such as ``/{id}``.
-        match = re.search(r"\b" + re.escape(key) + r"\s*=\s*\{(.*?)\}\s*(?:,|\))", text, flags=re.S)
+        match = re.search(r"\b" + re.escape(key) + r"\s*=\s*\{(.*?)\}\s*(?:,|\)|$)", text, flags=re.S)
         if not match:
             match = re.search(r"\b" + re.escape(key) + r"\s*=\s*(\"[^\"]*\")", text)
             if not match:
@@ -218,6 +218,8 @@ def _annotation(line: str, constants: Optional[Mapping[str, str]] = None) -> Opt
 
 def _join(base: str, child: str) -> str:
     value = "/" + "/".join(part.strip("/") for part in (base, child) if part and part.strip("/"))
+    if child == "/" and value != "/":
+        value += "/"
     return value if value != "//" else "/"
 
 

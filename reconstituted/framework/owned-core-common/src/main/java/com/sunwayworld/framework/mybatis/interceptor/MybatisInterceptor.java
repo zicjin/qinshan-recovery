@@ -122,7 +122,11 @@ implements Interceptor {
             }
         }
         Object paramObj = boundSql.getParameterObject();
-        if (paramObj instanceof Map) {
+        // DaoMapper implements the current-user lookup itself. Its statement
+        // parameters must retain the same context exclusion as the executor
+        // and BoundSql paths; resolving loginUser here re-enters that query
+        // while MyBatis still holds its ExecutionPlaceholder in local cache.
+        if (!StringUtils.startsWith(mappedStatement.getId(), DaoMapper.class.getName()) && paramObj instanceof Map) {
             @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) paramObj;
             this.enhanceParameter(map);

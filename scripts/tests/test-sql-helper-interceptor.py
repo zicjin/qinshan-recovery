@@ -379,7 +379,7 @@ class TestMybatisInterceptorSource(unittest.TestCase):
             "enhanceParameter must inject loginUserId into map",
         )
         self.assertIn(
-            'if (paramObj instanceof Map)',
+            '&& paramObj instanceof Map)',
             text,
             "enhanceParameter on statement handler must enhance parameter map",
         )

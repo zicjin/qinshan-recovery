@@ -30,6 +30,15 @@ shell tracing; do not pass passwords in process arguments or print private files
 The commands do not discover targets or create private SQL/credential inputs;
 the authorized operator must prepare and review those exact inputs first.
 
+Docker access does not grant host filesystem access. Use an approved host Bash
+identity able to read every source byte, access the private input directory and
+stage/rename the target files. Root-owned `0600` attachments require that owner
+or approved root access; when needed, enter `sudo -- bash` **before** loading
+the variables below and keep these commands in that shell. Do not change the
+original files' owner/modes or loosen the private directory to make backup work.
+The full-read probe below must succeed before SCN/export; `stat` alone cannot
+establish readability.
+
 Prepare a mode-0700 private directory, with mode-0600 inputs supplied through
 the approved secret channel. It must contain:
 
@@ -38,7 +47,9 @@ the approved secret channel. It must contain:
   `LIMS_RESTORE_APP_CONTAINER`), source/target owner names (`LIMS_SOURCE_SCHEMA`,
   `LIMS_TARGET_SCHEMA`), reviewed database/PDB/owner identity equality
   (`LIMS_SAME_INSTALLATION=yes` or `no`), source/target stable working directories
-  (`LIMS_SOURCE_WORKDIR`, `LIMS_TARGET_WORKDIR`), the Oracle DIRECTORY object's
+  (`LIMS_SOURCE_WORKDIR`, `LIMS_TARGET_WORKDIR`), target service's host-mapped
+  numeric identity (`LIMS_TARGET_HOST_UID`, `LIMS_TARGET_HOST_GID`), the Oracle
+  DIRECTORY object's
   resolved container path (`LIMS_DP_DIRECTORY_PATH`), Oracle service OS identity
   (`LIMS_ORACLE_OS_USER`), unique export/import dump names (`LIMS_DUMP_NAME`,
   `LIMS_IMPORT_DUMP_NAME`) and recovery-set identifier (`LIMS_RECOVERY_SET`).
@@ -93,6 +104,8 @@ case "$LIMS_TARGET_SCHEMA" in
 esac
 [[ "$LIMS_SOURCE_SCHEMA" =~ ^[A-Z][A-Z0-9_]*$ ]]
 [[ "$LIMS_TARGET_SCHEMA" =~ ^[A-Z][A-Z0-9_]*$ ]]
+[[ "$LIMS_TARGET_HOST_UID" =~ ^[0-9]+$ ]]
+[[ "$LIMS_TARGET_HOST_GID" =~ ^[0-9]+$ ]]
 [[ "$LIMS_RECOVERY_SET" =~ ^[A-Za-z0-9_-]+$ ]]
 [[ "$LIMS_DUMP_NAME" =~ ^[A-Za-z0-9_-]+\.dmp$ ]]
 [[ "$LIMS_IMPORT_DUMP_NAME" =~ ^[A-Za-z0-9_-]+\.dmp$ ]]
@@ -119,7 +132,8 @@ continuing. Schema-name checks are an additional refusal, not authorization.
 Set `LIMS_SAME_INSTALLATION=yes` only for the same explicitly authorized dedicated
 schema/PDB and app restored in place; source/restore IDs and workdirs then match.
 A different database/PDB/owner identity requires separate files, even when owner
-names match. Long-lived runtime restoration still needs its separate approval.
+names match: compare both SQL preflight identities before accepting the flag.
+Long-lived runtime restoration still needs its separate approval.
 If source and target owners differ, prepare an explicit `REMAP_SCHEMA` in the
 preview/import inputs and review schema-qualified dependencies. The target
 private runtime file must connect to that target PDB/owner, use its intended
@@ -142,6 +156,15 @@ to its schema and files for the whole capture; Oracle and Redis remain running.
 docker stop "$LIMS_SOURCE_APP_CONTAINER" \
   > "$LIMS_RECOVERY_PRIVATE/source-stop.log"
 test "$(docker inspect --format '{{.State.Running}}' "$LIMS_SOURCE_APP_CONTAINER")" = false
+test -d "$LIMS_SOURCE_WORKDIR/files"
+test ! -L "$LIMS_SOURCE_WORKDIR/files"
+( cd "$LIMS_SOURCE_WORKDIR/files"
+  find . ! -type d ! -type f -print0 \
+    > "$LIMS_RECOVERY_PRIVATE/source-nonregular.nul"
+  test ! -s "$LIMS_RECOVERY_PRIVATE/source-nonregular.nul"
+  find . -type f -print0 | LC_ALL=C sort -z | xargs -0 -r sha256sum \
+    > "$LIMS_RECOVERY_PRIVATE/source-read-probe.sha256"
+)
 for phase in source-scn source-highwater; do
   docker exec -i "$LIMS_ORACLE_CONTAINER" sh -c \
     'exec "$ORACLE_HOME/bin/sqlplus" -s /nolog' \
@@ -200,10 +223,13 @@ the local bytes. The trusted directory/parent requirements in
 ```bash
 test -d "$LIMS_SOURCE_WORKDIR/files"
 test ! -L "$LIMS_SOURCE_WORKDIR/files"
-test -z "$(find "$LIMS_SOURCE_WORKDIR/files" ! -type d ! -type f -printf x -quit)"
 ( cd "$LIMS_SOURCE_WORKDIR/files"
+  find . ! -type d ! -type f -print0 \
+    > "$LIMS_RECOVERY_PRIVATE/source-nonregular.nul"
+  test ! -s "$LIMS_RECOVERY_PRIVATE/source-nonregular.nul"
   find . -type f -print0 | LC_ALL=C sort -z | xargs -0 -r sha256sum \
     > "$LIMS_RECOVERY_PRIVATE/files.sha256"
+  cmp -s "$LIMS_RECOVERY_PRIVATE/source-read-probe.sha256" "$LIMS_RECOVERY_PRIVATE/files.sha256"
   find . -printf '%m %U %G %y %P\0' | LC_ALL=C sort -z \
     > "$LIMS_RECOVERY_PRIVATE/files-stat.nul"
   tar --create --gzip --file "$LIMS_RECOVERY_PRIVATE/files.tar.gz" .
@@ -294,7 +320,8 @@ hash-check the entire archive **before target DDL**; do not extract over live
 bytes. The target parent and existing files directory must be trusted regular
 directories, not symlinks or mount roots that cannot be renamed. A new target
 must have its own empty, owned `files/` directory prepared first. This example
-runs as the service OS identity, which must own the staged tree.
+continues in the approved host filesystem shell; it does not require the service
+account to read the operator's `0700` private input directory.
 
 ```bash
 test "$(docker inspect --format '{{.State.Running}}' "$LIMS_SOURCE_APP_CONTAINER")" = false
@@ -335,11 +362,34 @@ test ! -L "$LIMS_FILES_RETAINED"
 
 Privately compare staged owner/group/modes with `files-stat.nul` and the target
 service identity. Extraction deliberately does not restore source numeric
-ownership and applies the trusted umask. Apply only reviewed per-path ownership
-or mode corrections needed for this target, then capture the staged stat manifest
+ownership and applies the trusted umask: host root extraction creates root-owned
+files, which a nonroot service may be unable to read. Use the container's actual
+host-mapped UID/GID (including user-namespace mapping), not just its username.
+Apply only reviewed per-path ownership or mode corrections needed for this
+target, then capture the staged stat manifest
 again and approve it before DDL. Do not apply blanket recursive `chmod`/`chown`.
 Verify the service can traverse directories and read the original files, and can
 write its required local-storage directories before starting it.
+
+For an approved root host shell, util-linux `setpriv` can check the staged tree
+under the target's numeric identity without giving it access to the private
+directory; the outer shell opens the private output. This example clears
+supplementary groups. If the service requires them, use its reviewed mapped
+group list with `--groups` instead. Run this after the per-path corrections.
+This checks host-path permissions; a container bind mount may bypass host
+ancestors that the mapped UID cannot traverse. For that layout, verify access
+in the approved equivalent mount/identity context; do not loosen host parents
+or treat a host-path failure as proof that the container cannot read its mount.
+
+```bash
+setpriv --reuid "$LIMS_TARGET_HOST_UID" --regid "$LIMS_TARGET_HOST_GID" \
+  --clear-groups bash -euo pipefail -c '
+    cd "$1"
+    test -w .
+    find . -type f -print0 | LC_ALL=C sort -z | xargs -0 -r sha256sum
+  ' -- "$LIMS_FILES_STAGE" > "$LIMS_RECOVERY_PRIVATE/staged-service-files.sha256"
+cmp -s "$LIMS_RECOVERY_PRIVATE/files.sha256" "$LIMS_RECOVERY_PRIVATE/staged-service-files.sha256"
+```
 
 ## Restore only the approved schema
 

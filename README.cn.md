@@ -299,16 +299,28 @@ launcher 默认监听 `127.0.0.1`。如需从其他主机直接访问，
 随后登录，并在同一 session 中读取 `/core/module/sys/logins/account`。
 初始身份和登录 contract 见[首位管理员指南](docs/deployment/first-administrator.md)。
 
-`refresh-owned-sss2-app.sh` 是面向现有环境的操作，只刷新 `sss2` 上的自有应用；
-它不会配置新服务器。它保留供应商 `18081`、debug `18088`，以及长期运行的 Oracle 和 Redis。
-回滚通过同一条仅刷新应用的路径，重新部署保留的上一版本发行包：
+已准备好的 Docker 安装应同时保留停止的上一版应用容器及其不可变发行目录。
+在 Docker 宿主机运行应用切换入口。它先验证两版发行物，要求 image、配置、工作目录及
+持久挂载完全匹配，只允许只读发行目录 bind 不同；保留隔离网络 IP，并核对同网络的
+其他运行容器身份不变。先收尾活动验证，再执行：
 
 ```bash
-bash scripts/refresh-owned-sss2-app.sh
-bash scripts/rollback-owned-sss2-app.sh /path/to/previous/distribution
+python3 scripts/switch-owned-application.py \
+  --current "$CURRENT_APP_ID" --target "$RETAINED_APP_ID" \
+  --network "$APP_NETWORK" \
+  --readiness-url http://127.0.0.1:18087/open/security/public-key \
+  --receipt /private/path/switch-plan.json
 ```
 
-runtime 边界和报告语义见 `docs/owned-sss2-deployment.md`。
+使用完整容器 ID。默认 dry-run；增加 `--execute` 并换用新的 receipt 路径才实际切换。
+原容器停止后保留，反向操作可切回。就绪检查要求可解析 RSA 公钥，之后还须实际登录与
+业务 readback。切换失败会尝试恢复原容器，即使恢复成功也明确报告切换失败。
+该入口不创建候选容器、不迁移 schema，也不恢复数据库或文件。
+
+旧 `refresh-owned-sss2-app.sh` / `rollback-owned-sss2-app.sh` 对应历史远端布局，
+不能保留当前报表与工作目录挂载，不作为候选部署步骤。
+容器准备条件、反向切换命令及当前本机/远端边界见
+[应用切换与回滚](docs/owned-sss2-deployment.md)。
 
 ## API 与证据
 

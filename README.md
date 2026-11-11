@@ -370,19 +370,34 @@ read `/core/module/sys/logins/account` in the same session. See
 [the first-administrator guide](docs/deployment/first-administrator.md) for the
 initial identity and login contract.
 
-`refresh-owned-sss2-app.sh` is an existing-environment operation that refreshes
-only the owned application on `sss2`; it does not provision a new server.
-It preserves supplier `18081`, debug `18088`, the long-lived Oracle and Redis.
-Rollback redeploys a retained previous distribution through the same app-only
-path:
+For a prepared Docker installation, retain the stopped previous application
+container as well as its immutable distribution. The local switch entry checks
+both distributions and requires the same image, configuration, working directory
+and persistent mounts; only the read-only distribution bind may differ. It
+preserves the isolated network IP and checks that other running containers on
+that network stay unchanged. Run on the Docker host after active verification
+has finished:
 
 ```bash
-bash scripts/refresh-owned-sss2-app.sh
-bash scripts/rollback-owned-sss2-app.sh /path/to/previous/distribution
+python3 scripts/switch-owned-application.py \
+  --current "$CURRENT_APP_ID" --target "$RETAINED_APP_ID" \
+  --network "$APP_NETWORK" \
+  --readiness-url http://127.0.0.1:18087/open/security/public-key \
+  --receipt /private/path/switch-plan.json
 ```
 
-See `docs/owned-sss2-deployment.md` for the runtime boundary and report
-semantics.
+Use full container IDs. The default is a dry run; repeat with `--execute` and a
+new receipt path to switch. The stopped current container is retained for the
+reverse operation. Readiness requires a parseable RSA key, followed by operator
+login and business readback. A failed switch attempts to restore the original
+container and reports failure even when restoration succeeds. This entry does
+not stage a new container, migrate a schema or recover database/files.
+
+The older `refresh-owned-sss2-app.sh` / `rollback-owned-sss2-app.sh` scripts
+target a historical remote layout and do not preserve the current report/work
+mounts. They are not the candidate deployment procedure. See
+[application switch and rollback](docs/owned-sss2-deployment.md) for staging
+requirements, reverse-switch commands and current local/remote targets.
 
 ## API and evidence
 

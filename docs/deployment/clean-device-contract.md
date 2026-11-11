@@ -346,7 +346,10 @@ only validates this explicit blocked state offline; it is not a deployment gate.
    Rollback replaces only the application distribution; it does not recreate
    Oracle or Redis. Reuse the same working directory and persistent file volume.
    Data recovery requires matching database and file backups, separately from
-   app rollback. For prepared Docker containers, use the reviewed
+   app rollback. The [matched schema/file recovery runbook](database-file-recovery.md)
+   covers that maintenance operation for an already prepared, authorized target;
+   it does not bypass the partial installation guard or prove new-device recovery.
+   For prepared Docker containers, use the reviewed
    [application switch and reverse-switch procedure](../owned-sss2-deployment.md);
    retain the previous stopped container and verify real login/entity readback
    after each switch.

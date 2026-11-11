@@ -348,6 +348,11 @@ for permissions, original download security, upload constants and retention.
 Without this setting the original FTP manager remains selected and requires its
 configured backend.
 
+For a prepared installation, use the [matched Oracle schema and local-file
+recovery runbook](docs/deployment/database-file-recovery.md) for a consistent
+backup, dedicated-target restore and actual HTTP readback. It does not replace
+the guarded new-device installation contract or establish a verified recovery.
+
 The launcher defaults to listening on `127.0.0.1`. For direct access from another
 host, explicitly choose the intended interface, for example
 `LIMS_BIND_ADDRESS=0.0.0.0 "$LIMS_DEPLOY_DIST/start.sh" /private/path/runtime.properties`,

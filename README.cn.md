@@ -280,6 +280,10 @@ cd "$LIMS_APP_WORKDIR"
 权限、原始下载安全机制、上传常量和保留策略见[文件存储](docs/deployment/file-storage.md)。
 若不设置该属性，仍会选择原始 FTP manager，并要求提供相应配置的后端。
 
+已准备好的安装环境请按 [Oracle schema 与本地文件配套恢复步骤](docs/deployment/database-file-recovery.md)
+执行一致性备份、专用目标恢复及真实 HTTP readback。该步骤不替代仍受 guard 保护的
+全新设备安装 contract，也不代表恢复已经验证通过。
+
 launcher 默认监听 `127.0.0.1`。如需从其他主机直接访问，
 请显式选择预期的监听接口，例如
 `LIMS_BIND_ADDRESS=0.0.0.0 "$LIMS_DEPLOY_DIST/start.sh" /private/path/runtime.properties`，

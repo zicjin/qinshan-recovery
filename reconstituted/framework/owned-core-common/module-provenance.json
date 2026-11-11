@@ -30479,12 +30479,14 @@
       "decompiler": "Vineflower",
       "decompiler_version": "1.11.1",
       "path": "src/main/java/com/sunwayworld/module/sys/role/service/impl/CoreRoleUserServiceImpl.java",
-      "sha256": "52565dadae3b5b4cf2cf7bd4e443d9a4720dc7b30707c9ce1e2b1064efd87eec",
+      "sha256": "16c82367f4f72de8006ca3eb6e62322e5b72f29496973aace59e3ac1dd223d93",
       "source_class_path": "com/sunwayworld/module/sys/role/service/impl/CoreRoleUserServiceImpl.class",
       "source_jar": "BOOT-INF/lib/gikam-core-common-14.1.5.jar",
+      "source_sha256_before_overlay": "52565dadae3b5b4cf2cf7bd4e443d9a4720dc7b30707c9ce1e2b1064efd87eec",
       "source_sha256_before_transform": "52565dadae3b5b4cf2cf7bd4e443d9a4720dc7b30707c9ce1e2b1064efd87eec",
       "transformations": [
-        "cfr-to-vineflower-fallback"
+        "cfr-to-vineflower-fallback",
+        "overlay:src/main/java/com/sunwayworld/module/sys/role/service/impl/CoreRoleUserServiceImpl.java"
       ]
     },
     {
@@ -31652,7 +31654,7 @@
       ]
     }
   ],
-  "source_tree_sha256": "496a9b2486a0fa1718ec06449a39f39f07094b9e3287da67e51f3a111176fec9",
+  "source_tree_sha256": "b340edfaae997930cb94cb01424a3cdfbfb796085c46ee026e74c2dd934da9b5",
   "status": "assembled-source-only",
   "transformation_manifest": "docs/reconstitution/decompiler-transforms.json",
   "transformation_manifest_sha256": "cc82d85926049feee8ed8b40c13c7e81a9ece832168e26f1dbf7aa7bd722703a",

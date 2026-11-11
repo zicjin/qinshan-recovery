@@ -19,7 +19,8 @@ APPROVED_EMAIL = 'approved-missing-runtime-and-email-tables-v2'
 APPROVED_FILE = 'approved-runtime-core-file-v3'
 APPROVED_LES = 'approved-runtime-les-data-source-v4'
 APPROVED_PRODUCTION = 'approved-runtime-production-alignment-v5'
-POLICIES = (EQUAL, APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION)
+APPROVED_EXTERNAL = 'approved-runtime-external-schema-v6'
+POLICIES = (EQUAL, APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION, APPROVED_EXTERNAL)
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_SHA256 = 'd1227563b5a27ef249376a0652ddd10f9edb6526f64a0df7b2e466ac9b5adfcb'
 DEFINITIONS = {
@@ -49,6 +50,17 @@ LES_DEFINITIONS = {
 PRODUCTION_BASE = 'api-fixtures/schema/approved-production-alignment-v5.json'
 PRODUCTION_MANIFEST_SHA256 = 'e464f124d77911f5e3f7d190d5089d71e061bb929e16da4fc0dd634ecc8217cf'
 ACQUISITION_TABLE = 'T_EMC_EQUIPT_ACQ_FILE'
+EXTERNAL_BASE = 'deployment/oracle/external-schema/'
+PACKPRICE_BASE = 'deployment/report-engine/dependencies/external-contract-packprice-20261111'
+EXTERNAL_TABLES = frozenset({'T_CRM_CONTRACT', 'T_CRM_INVOICE_PROJ', 'T_CRM_INVOICE',
+    'T_CRM_PAY_PROJECT', 'T_CRM_PAYMENT', 'T_LIMS_CLEARANCEFORM', 'T_LIMS_FOLDERS',
+    'T_XFP_ORDER_TASK', 'T_XFP_PROJECT', 'T_XFP_REPORT', 'T_CRM_CONTRACT_PACKPRICE'})
+EXTERNAL_PINS = {
+    EXTERNAL_BASE + 'manifest.json': '722c98160ba0683254dcbda8be05a697cb9a7498645f15a7667be55953744e22',
+    EXTERNAL_BASE + 'structure.json': '7b8541e25c3055a0f440e137a5f08b5fd10c77adcdbcc5dd58adc519a77fd878',
+    PACKPRICE_BASE + '.json': '4fdc594b7e345134df5cfd00cce6ef756f5fbbfb97a672c3b40ab534cf0d19b0',
+    'deployment/report-engine/manifest.json': 'f802b0dbebd4df8efcb7f78cad0a5d7bcff866c5a7754b5fef9f66502d7bde6f',
+}
 
 
 class PolicyError(ValueError):
@@ -115,6 +127,8 @@ def email_fixture(root):
 
 def policy_tables(policy):
     require(policy in POLICIES, 'unknown local schema policy')
+    if policy == APPROVED_EXTERNAL:
+        return policy_tables(APPROVED_PRODUCTION) | EXTERNAL_TABLES
     if policy == APPROVED_PRODUCTION:
         return policy_tables(APPROVED_LES) | frozenset({ACQUISITION_TABLE})
     tables = TABLES | frozenset(EMAIL_DEFINITIONS) if policy in (APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES) else TABLES
@@ -508,8 +522,195 @@ def production_definition(root):
     return descriptor, predicates
 
 
+def external_inputs(root):
+    """Only the hash-pinned delivered inputs; private provenance is never opened."""
+    root = Path(root)
+    try:
+        contents = {}
+        for path, sha256 in EXTERNAL_PINS.items():
+            raw = (root / path).read_bytes()
+            require(hashlib.sha256(raw).hexdigest() == sha256, 'external schema source pin drift')
+            contents[path] = json.loads(raw)
+        manifest = contents[EXTERNAL_BASE + 'manifest.json']
+        report = contents['deployment/report-engine/manifest.json']
+        for base, files in ((EXTERNAL_BASE, manifest['files']),
+                            ('deployment/report-engine/', report['dependencies'])):
+            for item in files:
+                require(hashlib.sha256((root / (base + item['path'])).read_bytes()).hexdigest()
+                        == item['sha256'], 'external schema delivered file drift')
+        structure = contents[EXTERNAL_BASE + 'structure.json']
+        pack = contents[PACKPRICE_BASE + '.json']
+        require({t['name'] for t in structure['tables']} | {pack['object']} == EXTERNAL_TABLES
+                and len(structure['tables']) == 10, 'external schema finite table coverage drift')
+        return structure, pack
+    except (OSError, KeyError, TypeError, ValueError) as error:
+        raise PolicyError('external schema source or finite definition rejected') from error
+
+
+def external_match(fields):
+    """Finite metadata values are SQL literals, never executable source text."""
+    return ' AND '.join(key + (' IS NULL' if value is None else '=' + literal(str(value)))
+                        for key, value in fields.items())
+
+
+def external_columns(structure, pack):
+    tables = copy.deepcopy(structure['tables'])
+    metadata = pack['metadata']
+    def rows(name):
+        item = metadata[name]
+        return [dict(zip(item['columns'], row)) for row in item['rows']]
+    columns = [{'name': c['COLUMN_NAME'], 'position': int(c['COLUMN_ID']),
+                'type': c['DATA_TYPE'], 'length': c['DATA_LENGTH'],
+                'precision': c['DATA_PRECISION'], 'scale': c['DATA_SCALE'],
+                'nullable': c['NULLABLE'], 'char_used': c['CHAR_USED'],
+                'char_length': c['CHAR_LENGTH'], 'default': None} for c in rows('columns')]
+    require(not rows('column_defaults') and not rows('index_expressions') and not rows('triggers')
+            and all(c['DEFAULT_LENGTH'] is None for c in rows('columns')),
+            'unsupported PACKPRICE default, expression or trigger')
+    links = {c['CONSTRAINT_NAME']: c for c in rows('constraint_index_links')}
+    constraints = []
+    for c in rows('constraints'):
+        generated = c['GENERATED'] == 'GENERATED NAME'
+        require(not generated or (c['CONSTRAINT_TYPE'] == 'C'
+                and c['SEARCH_CONDITION_VC'] == '"ID" IS NOT NULL'),
+                'unsupported generated PACKPRICE constraint')
+        constraints.append({'name': c['CONSTRAINT_NAME'], 'kind': c['CONSTRAINT_TYPE'],
+            'status': c['STATUS'], 'validated': c['VALIDATED'], 'deferrable': c['DEFERRABLE'],
+            'deferred': c['DEFERRED'], 'condition': c['SEARCH_CONDITION_VC'],
+            'index_name': links.get(c['CONSTRAINT_NAME'], {}).get('INDEX_NAME'),
+            'generated': c['GENERATED'], 'generated_target_name': generated,
+            'columns': [[r['POSITION'], r['COLUMN_NAME']] for r in rows('constraint_columns')
+                        if r['CONSTRAINT_NAME'] == c['CONSTRAINT_NAME']]})
+    indexes = [{'name': i['INDEX_NAME'], 'uniqueness': i['UNIQUENESS'],
+                'columns': [[c['COLUMN_POSITION'], c['COLUMN_NAME'], c['DESCEND']]
+                            for c in rows('index_columns') if c['INDEX_NAME'] == i['INDEX_NAME']]}
+               for i in rows('indexes')]
+    attributes = {k: v for k, v in rows('table_semantics')[0].items() if k not in ('OWNER', 'TABLE_NAME')}
+    # READ_ONLY is a formal target check, not a captured source field. Likewise
+    # the pinned CREATE TABLE declares only ordinary nonvirtual, visible columns.
+    attributes['READ_ONLY'] = 'NO'
+    tables.append({'name': pack['object'], 'columns': columns, 'constraints': constraints,
+                   'indexes': indexes, 'attributes': attributes})
+    require(sum(len(t['columns']) for t in tables) == 1312
+            and sum(len(t['constraints']) for t in tables) == 28
+            and sum(len(t['indexes']) for t in tables) == 46,
+            'external schema finite metadata coverage drift')
+    return tables
+
+
+def external_predicates(structure, pack):
+    """Mirror the delivered verifier's selected-table contract, without its
+    empty-installer restrictions. Unsupported future metadata stays rejected by
+    input pins; no table learning, DDL execution or business-row predicates.
+    """
+    predicates = []
+    semantics = {t['name']: t for t in structure['semantic_contract']['tables']}
+    def add(table, view, fields, count=1, suffix=''):
+        predicates.append({'table': table, 'view': view,
+            'predicate': external_match(fields) + suffix, 'expected_count': count})
+    domains = list(structure['semantic_contract']['domains'].values())
+    for domain in domains:
+        require(domain['database_nls'] == domains[0]['database_nls']
+                and domain['link_session_nls'] == domains[0]['link_session_nls'],
+                'unsupported divergent external NLS contract')
+    for view, key in (('NLS_DATABASE_PARAMETERS', 'database_nls'),
+                      ('NLS_SESSION_PARAMETERS', 'link_session_nls')):
+        for parameter, value in sorted(domains[0][key].items()):
+            add('EXTERNAL_NLS', view, {'PARAMETER': parameter, 'VALUE': value})
+    for table in external_columns(structure, pack):
+        name = table['name']
+        key = {'OWNER': OWNER, 'TABLE_NAME': name}
+        sem = semantics.get(name)
+        attrs = sem['attributes'] if sem else table['attributes']
+        add(name, 'ALL_TABLES', {**key, **attrs})
+        add(name, 'ALL_TAB_COLS', key, len(table['columns']))
+        col_sem = {c['name']: c for c in sem['columns']} if sem else {}
+        for c in table['columns']:
+            require(c['type'] in ('VARCHAR2', 'CHAR', 'NUMBER', 'DATE', 'CLOB', 'TIMESTAMP(6)'),
+                    'unsupported external column type')
+            fields = {**key, 'COLUMN_NAME': c['name'], 'COLUMN_ID': c['position'],
+                'DATA_TYPE': c['type'], 'DATA_LENGTH': c['length'],
+                'DATA_PRECISION': c['precision'], 'DATA_SCALE': c['scale'],
+                'NULLABLE': c['nullable'], 'CHAR_USED': c['char_used'],
+                'CHAR_LENGTH': c['char_length'], 'DATA_TYPE_OWNER': None,
+                'HIDDEN_COLUMN': 'NO', 'VIRTUAL_COLUMN': 'NO'}
+            if sem:
+                cs = col_sem[c['name']]
+                fields.update(COLLATION=cs['collation'], IDENTITY_COLUMN=cs['identity_column'],
+                    DEFAULT_ON_NULL=cs['default_on_null'], USER_GENERATED=cs['user_generated'],
+                    VIRTUAL_COLUMN=cs['virtual_column'])
+            default = c['default']
+            add(name, 'ALL_TAB_COLS', fields, suffix=' AND DEFAULT_LENGTH IS '
+                + ('NULL' if default is None else 'NOT NULL'))
+            if default is not None:
+                # DBMS_XMLGEN is the read-only LONG-to-XML bridge. Oracle TRIM
+                # matches 90-verify.sql; hex preserves quotes, Unicode and inner
+                # whitespace and rejects equal-length replacement expressions.
+                select = 'SELECT DATA_DEFAULT FROM ALL_TAB_COLUMNS WHERE ' + external_match(
+                    {**key, 'COLUMN_NAME': c['name']})
+                view = '(SELECT EXTRACTVALUE(DBMS_XMLGEN.GETXMLTYPE(' + literal(select) \
+                       + "),'/ROWSET/ROW/DATA_DEFAULT') DEFAULT_TEXT FROM DUAL)"
+                add(name, view, {'RAWTOHEX(UTL_RAW.CAST_TO_RAW(TRIM(DEFAULT_TEXT)))':
+                                default.strip(' ').encode('utf-8').hex().upper()})
+        add(name, 'ALL_CONSTRAINTS', key, len(table['constraints']))
+        constraint_sem = {c['name']: c for c in sem['constraints']} if sem else {}
+        for c in table['constraints']:
+            require(c['kind'] in ('P', 'U', 'C'), 'unsupported external constraint kind')
+            fields = {**key, 'CONSTRAINT_TYPE': c['kind'], 'STATUS': c['status'],
+                'VALIDATED': c['validated'], 'DEFERRABLE': c['deferrable'], 'DEFERRED': c['deferred'],
+                'SEARCH_CONDITION_VC': c['condition'], 'INDEX_NAME': c['index_name'],
+                'INDEX_OWNER': OWNER if c['index_name'] is not None else None}
+            if sem:
+                cs = constraint_sem[c['name']]
+                fields.update(GENERATED=cs['target_generated'], RELY=cs['rely'],
+                              BAD=cs['bad'], INVALID=cs['invalid'], VIEW_RELATED=cs['view_related'])
+            else:
+                fields['GENERATED'] = c['generated']
+            if c.get('generated_target_name'):
+                # Only PACKPRICE's one explicitly remapped NOT NULL constraint
+                # may use its actual generated name; count and full shape remain exact.
+                name_filter = 'CONSTRAINT_NAME=(SELECT CONSTRAINT_NAME FROM ALL_CONSTRAINTS WHERE ' \
+                    + external_match({**key, 'CONSTRAINT_TYPE': 'C', 'GENERATED': 'GENERATED NAME',
+                                      'SEARCH_CONDITION_VC': c['condition']}) + ')'
+            else:
+                name_filter = 'CONSTRAINT_NAME=' + literal(c['name'])
+            add(name, 'ALL_CONSTRAINTS', fields, suffix=' AND ' + name_filter)
+            add(name, 'ALL_CONS_COLUMNS', key, len(c['columns']), suffix=' AND ' + name_filter)
+            for position, column in c['columns']:
+                add(name, 'ALL_CONS_COLUMNS', {**key, 'COLUMN_NAME': column, 'POSITION': position},
+                    suffix=' AND ' + name_filter)
+        add(name, 'ALL_INDEXES', {'TABLE_OWNER': OWNER, 'TABLE_NAME': name}, len(table['indexes']),
+            suffix=" AND INDEX_TYPE<>'LOB'")
+        for index in table['indexes']:
+            add(name, 'ALL_INDEXES', {'OWNER': OWNER, 'TABLE_OWNER': OWNER, 'TABLE_NAME': name,
+                'INDEX_NAME': index['name'], 'INDEX_TYPE': 'NORMAL', 'STATUS': 'VALID',
+                'UNIQUENESS': index['uniqueness']})
+            ikey = {'INDEX_OWNER': OWNER, 'INDEX_NAME': index['name'], 'TABLE_OWNER': OWNER, 'TABLE_NAME': name}
+            add(name, 'ALL_IND_COLUMNS', ikey, len(index['columns']))
+            for position, column, direction in index['columns']:
+                add(name, 'ALL_IND_COLUMNS', {**ikey, 'COLUMN_POSITION': position,
+                                              'COLUMN_NAME': column, 'DESCEND': direction})
+        add(name, 'ALL_IND_EXPRESSIONS', {'TABLE_OWNER': OWNER, 'TABLE_NAME': name}, 0)
+        add(name, 'ALL_TRIGGERS', {'TABLE_OWNER': OWNER, 'TABLE_NAME': name}, 0)
+    return predicates
+
+
+def external_definition(root):
+    predecessor, predicates = definition(APPROVED_PRODUCTION, root)
+    structure, pack = external_inputs(root)
+    predicates = [*predicates, *external_predicates(structure, pack)]
+    descriptor = {**predecessor, 'id': APPROVED_EXTERNAL, 'table_count': 23,
+        'column_count': 1473, 'external_schema': {'tables': sorted(EXTERNAL_TABLES),
+            'pins': EXTERNAL_PINS, 'predecessor_descriptor_sha256': digest(predecessor),
+            'definition_sha256': digest({'structure': structure, 'packprice': pack})},
+        'predicates_sha256': digest(predicates)}
+    return descriptor, predicates
+
+
 def definition(policy=EQUAL, root=ROOT):
     require(policy in POLICIES, 'unknown local schema policy')
+    if policy == APPROVED_EXTERNAL:
+        return external_definition(root)
     if policy == APPROVED_PRODUCTION:
         return production_definition(root)
     if policy == EQUAL:
@@ -566,9 +767,9 @@ def check_inventories(baseline, runtime, policy=EQUAL):
         require(baseline == runtime, 'baseline/runtime table inventories mismatch or empty')
     else:
         tables = policy_tables(policy)
-        require(policy in (APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION) and not baseline.intersection(tables)
+        require(policy in (APPROVED, APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION, APPROVED_EXTERNAL) and not baseline.intersection(tables)
                 and runtime == baseline.union(tables), 'approved schema table delta mismatch')
-        if policy in (APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION):
+        if policy in (APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION, APPROVED_EXTERNAL):
             require(FILE_TABLE in baseline, 'CoreFile historical baseline table missing')
 
 
@@ -617,12 +818,12 @@ def validate(snapshot, policy=EQUAL):
                     'schema policy column hash runtime binding mismatch')
         columns = snapshot['schemas'][OWNER]['column_metadata']['rows']
         loaded = load_fixture(ROOT)
-        if policy in (APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION):
+        if policy in (APPROVED_EMAIL, APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION, APPROVED_EXTERNAL):
             loaded.update(email_fixture(ROOT)[0])
-        if policy in (APPROVED_LES, APPROVED_PRODUCTION):
+        if policy in (APPROVED_LES, APPROVED_PRODUCTION, APPROVED_EXTERNAL):
             loaded.update(les_fixture(ROOT)[0])
         production = None
-        if policy == APPROVED_PRODUCTION:
+        if policy in (APPROVED_PRODUCTION, APPROVED_EXTERNAL):
             production, _ = production_fixture(ROOT)
             loaded[ACQUISITION_TABLE] = production['added_table']
         for table, d in loaded.items():
@@ -636,9 +837,18 @@ def validate(snapshot, policy=EQUAL):
                 if col['type'] == 'VARCHAR2':
                     require(row[4] == row[8] == str(col['length']) and row[9] == 'B',
                             'approved fixture character metadata mismatch')
+        if policy == APPROVED_EXTERNAL:
+            structure, pack = external_inputs(ROOT)
+            for table in external_columns(structure, pack):
+                exact = sorted([[table['name'], c['name'], str(c['position']), c['type'],
+                    str(c['length']), str(c['precision']) if c['precision'] is not None else '-',
+                    str(c['scale']) if c['scale'] is not None else '-', c['nullable'],
+                    str(c['char_length']), c['char_used'] or '-', '-'] for c in table['columns']])
+                require(sorted(r for r in columns if r[0] == table['name']) == exact,
+                        'external exact column metadata mismatch')
         shared = [r for r in columns if r[0] not in policy_tables(policy)]
         baseline = snapshot['schemas']['LIMS_BASELINE_LOCAL']['column_metadata']['rows']
-        if policy in (APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION):
+        if policy in (APPROVED_FILE, APPROVED_LES, APPROVED_PRODUCTION, APPROVED_EXTERNAL):
             historical, target, _ = core_file_fixture(ROOT)
             require(sorted(r for r in baseline if r[0] == FILE_TABLE) == core_file_column_rows(historical['columns']),
                     'CoreFile baseline column metadata mismatch')

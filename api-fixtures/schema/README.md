@@ -101,29 +101,6 @@ binding inputs. Observed schema hashes remain runtime-contract inputs. This work
 does not change application source, provide API equivalence, promote strict
 evidence or close `API-ALIGNMENT-GATE`.
 
-`external-index-alignment-20261112.sql` replaces exactly four legacy UNIQUE
-constraint-name backing indexes with the formal NONUNIQUE index names in
-`deployment/oracle/external-schema/{structure.json,30-indexes.sql,35-constraints.sql}`.
-Validate the complete source/SQL contract offline first:
-
-```sh
-python3 scripts/verify-external-index-alignment.py
-```
-
-With the application and every other schema writer stopped, retain an approved
-backup and run the SQL in a clean `LIMS_RUNTIME_LOCAL` SQL*Plus session on
-`FREEPDB1` using `@api-fixtures/schema/external-index-alignment-20261112.sql`.
-The principal must already have SELECT access to `DBA_CONSTRAINTS` so the script
-can reject incoming foreign keys across all owners before migration DDL. The
-script grants no permissions. It stages index visibility, keeps the old index
-while the constraint is disabled, enables and validates the constraint using the
-formal target index, and drops the old index only after verifying no constraint
-references. DDL commits implicitly; preserve logs and inspect a failure before
-rerunning. Only the explicitly guarded intermediate states resume. Existing rows
-and the separate `UKT_LIMS_FOLDERS_FOLDERNO` NOVALIDATE constraint are preserved;
-record full content hashes and metadata before/after and repeat the script to
-verify the final no-op state. This migration does not refresh the application.
-
 `external-schema-clone-manifest.json` is a separate production dependency
 inventory for Oracle domains reached through `@LIMS_CZJKY_HT`,
 `@LIMS_CZJKY_SP` and `@LIMS_CZJKY_XFP`. It records the production link
@@ -246,6 +223,35 @@ new-device installer, an automatic repair of arbitrary schema drift, a baseline
 change or API/strict evidence. It restarts no application, Oracle or Redis and
 changes no cache or privilege.
 
+## Existing local external clone alignment
+
+The following stages align the existing local fixture with the tracked formal
+[external structure package](../../deployment/oracle/external-schema/README.md).
+Use the order below, retaining one approved backup and execution logs for the
+maintenance window. These are fixed-target migrations, not new-device
+installation steps or permission to modify baseline, production or another
+runtime. The coordinator must verify the actual local Oracle instance, stop the
+application and every other schema writer, and retain before/after metadata and
+content hashes. Oracle/Redis reuse and application recovery remain coordinator
+responsibilities; none of these SQL files controls services or caches.
+
+| Stage | Guarded change | Source-pinned manifest |
+| --- | --- | --- |
+| 0 | Two clearance columns become `NUMBER(*,0)` only while their table is empty | [Integer alignment](external-clearance-integer-alignment-20261112.json) |
+| 1 | Restore 33 formal default expressions | [Default alignment](external-production-structure-alignment-20261112.json) |
+| 2a | Preserve thirteen actual inline NOT NULL constraints and remove their redundant ordinary CHECKs | [NOT NULL alignment](external-not-null-alignment-20261112.json) |
+| 2b | Align four PK/UNIQUE backing-index definitions and links | [Index alignment](external-index-alignment-20261112.json) |
+
+Each stage has its own preflight, accepted recovery states and terminal checks.
+Offline verification checks the pinned source and SQL; it does not execute a
+migration or establish runtime/HTTP acceptance. Oracle DDL commits implicitly,
+so SQLPlus `ROLLBACK` cannot undo completed DDL. On failure retain the original
+log, inspect the exact state, and resume only from states accepted by that
+stage's unchanged preflight; otherwise use the approved backup recovery path.
+No automatic inverse migration is supplied. A final equivalent rerun checks
+idempotence, not transactional rollback, complete external dependency closure
+or strict evidence.
+
 `external-production-structure-alignment-20261112.sql` is **stage 1 only** of
 aligning the existing local external clone to the formal production-derived
 package. It restores all 33 formal default expressions without changing rows,
@@ -283,14 +289,13 @@ Any other state stops the migration. Restore from the retained approved backup
 when recovery is required; no automatic inverse migration is supplied. SQLPlus
 `ROLLBACK` cannot undo successful ALTER statements.
 
-The **13 redundant generated NOT NULL checks and four differing PK/UNIQUE
-backing-index definitions/links remain unresolved**. This stage deliberately
-performs no drop, index rebuild, constraint disable/recreate or nullability
-change. A separate reviewed sequence must preserve constraint semantics before
-those differences can be removed. Successful default restoration does not make
-the local schema identical to the formal package, grant strict evidence or
-relax a runtime policy. No application, Oracle or Redis restart is part of this
-fixture.
+Stage 1 deliberately performs no drop, index rebuild, constraint
+disable/recreate or nullability change. The thirteen redundant NOT NULL checks
+and four backing-index differences are handled by the separate stage 2a and 2b
+scripts below, after the stage 0 prerequisite and stage 1. Successful default
+restoration alone does not make the local schema identical to the formal
+package, grant strict evidence or relax a runtime policy. No application,
+Oracle or Redis restart is part of this fixture.
 
 `external-clearance-integer-alignment-20261112.sql` is a separate **stage 0**
 prerequisite discovered when stage 1 correctly rejected the two clearance
@@ -321,3 +326,67 @@ states permit rerun, which skips completed columns. Other states require explici
 backup recovery, never a claimed SQL rollback. Then rerun unchanged stage 1 to
 check all 1,303 source columns and restore defaults. Neither stage changes the
 formal installer or relaxes NOT NULL/index or strict acceptance requirements.
+
+`external-not-null-alignment-20261112.sql` is **stage 2a**. Its adjacent manifest
+pins the formal selected-ten-table structure and all thirteen source NOT NULL
+constraints. Verify the existing offline entry from the standalone root:
+
+```bash
+python3 scripts/verify-external-logical-clone-fixture.py \
+  --notnull-alignment-manifest api-fixtures/schema/external-not-null-alignment-20261112.json
+```
+
+With writers stopped and the approved backup retained, use a dedicated clean
+SQLPlus session with
+`SESSION_USER=CURRENT_SCHEMA=LIMS_RUNTIME_LOCAL`, `CON_NAME=FREEPDB1`, then run
+`@api-fixtures/schema/external-not-null-alignment-20261112.sql`. Preflight checks
+the states of all thirteen constraints, name collisions, target columns and
+unrelated key closure before the first constraint DDL. Exact
+`DBMS_METADATA.GET_DDL` distinguishes
+the actual inline NOT NULL from an ordinary CHECK; `NULLABLE=N` or a primary
+key alone does not establish that distinction.
+
+The four accepted states are: the canonical ordinary CHECK plus the actual
+inline NOT NULL; the ordinary CHECK renamed to its finite `SW_NN_DUP_*` name;
+the actual inline constraint renamed to the canonical name while that temporary
+CHECK remains; and the final canonical inline constraint alone. The script
+preserves the actual inline constraint, verifies final `NULLABLE=N` and
+`GENERATED=USER NAME`, and only then drops the confirmed redundant CHECK.
+Unknown constraints or any other state reject. DDL implicitly commits: preserve
+partial-failure logs and resume only after the full preflight accepts the
+observed state, or recover from the retained backup. Repeat in the same stopped
+maintenance window to verify all thirteen final constraints with no further
+DDL. This stage performs no index DDL, business DML, sequence operation, grant,
+cache change or service refresh; stage 2b handles the four backing indexes.
+
+`external-index-alignment-20261112.sql` is **stage 2b**. It replaces exactly four
+earlier UNIQUE constraint-name backing indexes with the formal NONUNIQUE index
+names in
+`deployment/oracle/external-schema/{structure.json,30-indexes.sql,35-constraints.sql}`.
+Validate the complete source/SQL contract offline first:
+
+```bash
+python3 scripts/verify-external-index-alignment.py
+```
+
+With the application and every other schema writer stopped, retain the approved
+backup and use a dedicated clean SQLPlus session with
+`SESSION_USER=CURRENT_SCHEMA=LIMS_RUNTIME_LOCAL`, `CON_NAME=FREEPDB1`, then run
+`@api-fixtures/schema/external-index-alignment-20261112.sql`. The principal must
+already have SELECT access to `DBA_CONSTRAINTS` so the script can reject incoming
+foreign keys across all owners before migration DDL. The script grants no
+permissions. It stages index visibility, keeps the old index while the
+constraint is disabled, enables and validates the constraint using the formal
+target index, and drops the old index only after verifying no constraint
+references. The final four constraints remain ENABLED, VALIDATED, NOT
+DEFERRABLE and IMMEDIATE.
+
+DDL commits implicitly; preserve logs and inspect a failure before rerunning.
+Only the migration's explicitly guarded intermediate states resume, including
+its disabled NOVALIDATE state; other states reject and require inspection or
+approved backup recovery. Existing rows and the separate
+`UKT_LIMS_FOLDERS_FOLDERNO` ENABLE NOVALIDATE constraint are preserved. Record
+full content hashes and metadata before/after and repeat the script to verify
+the final no-op state. This stage performs no business DML, sequence operation,
+cache change or application refresh. Neither stage 2a nor 2b changes the formal
+empty-schema installer or grants lifecycle, API or full deployment acceptance.

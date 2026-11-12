@@ -14,11 +14,32 @@ if [[ -n "${EXTERNAL_SCHEMA_PROFILE:-}" ]]; then
     exit 2
   }
 fi
+# Resolve the complete module list before touching build/cache output. A reader
+# failure inside process substitution does not propagate through mapfile.
+if ! FRAMEWORK_JAR_PATHS="$(jq -er '
+  .modules as $modules |
+  if ($modules | type) != "array" or ($modules | length) == 0 then
+    error("framework module registry is empty")
+  elif any($modules[]; (.output_jar | type) != "string") then
+    error("framework module registry output_jar must be a string")
+  elif any($modules[]; (.output_jar | test("^[A-Za-z0-9_-]+/target/[A-Za-z0-9_.-]+[.]jar$")) | not) then
+    error("framework module registry output_jar is invalid")
+  elif ($modules | map(.output_jar) | unique | length) != ($modules | length) then
+    error("framework module registry output_jar is duplicated")
+  else $modules[].output_jar end
+' "$ROOT/docs/reconstitution/framework-module-registry.json")" || [[ -z "$FRAMEWORK_JAR_PATHS" ]]; then
+  echo "cannot resolve framework module registry; distribution build refused" >&2
+  exit 2
+fi
+FRAMEWORK="$ROOT/reconstituted/framework"
+FRAMEWORK_JARS=()
+while IFS= read -r module_jar; do
+  FRAMEWORK_JARS+=("$FRAMEWORK/$module_jar")
+done <<< "$FRAMEWORK_JAR_PATHS"
 LIMS_PROJECT_ROOT="${LIMS_PROJECT_ROOT:-$ROOT/project}"
 JAVA_HOME="${JAVA_HOME:-$ROOT/build/jdk1.8.0_391}"
 export LIMS_PROJECT_ROOT JAVA_HOME
 
-FRAMEWORK="$ROOT/reconstituted/framework"
 PUBLIC_DEPS_INPUT="${LIMS_PUBLIC_DEPENDENCY_DIR:-$ROOT/build/reconstituted-public-deps}"
 PUBLIC_DEPS="$ROOT/build/reconstituted-public-deps"
 export LIMS_PUBLIC_DEPENDENCY_DIR="$PUBLIC_DEPS_INPUT"
@@ -129,11 +150,6 @@ cp "$ROOT/owned-distribution/example/owned-application.properties" "$PACKAGE_OUT
 cp "$APPLICATION_DIR/compile-report.json" "$PACKAGE_OUTPUT/provenance/source-only-application.json"
 cp "$ROOT/docs/reconstitution/framework-module-registry.json" "$PACKAGE_OUTPUT/provenance/framework-module-registry.json"
 cp "$ROOT/reconstituted/framework/public-dependency-allowlist.json" "$PACKAGE_OUTPUT/provenance/public-dependency-allowlist.json"
-
-mapfile -t FRAMEWORK_JARS < <(
-  jq -r '.modules[].output_jar' "$ROOT/docs/reconstitution/framework-module-registry.json" |
-    sed "s#^#$FRAMEWORK/#"
-)
 
 OWNED_PUBLIC_DEPENDENCY_DIR="$PUBLIC_DEPS" \
 OWNED_ADDITIONAL_DEPENDENCY_DIRS="$APPLICATION_DIR/third-party-deps" \

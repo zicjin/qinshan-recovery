@@ -58,7 +58,8 @@ def main():
         source = Path(temporary) / "source"
         snapshot = Path(temporary) / "snapshot"
         for name in ("project", "reconstituted", "scripts", "docs", "build-support",
-                     "api-fixtures/schema", "deployment/oracle", "owned-distribution"):
+                     "api-fixtures/schema", "deployment/oracle", "deployment/report-engine",
+                     "owned-distribution"):
             directory = source / name
             directory.mkdir(parents=True)
             (directory / "input.txt").write_text("fixture input\n")

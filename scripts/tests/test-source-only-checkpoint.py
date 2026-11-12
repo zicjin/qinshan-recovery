@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,6 +23,103 @@ def load_module():
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+def distribution_fixture(directory: Path) -> dict:
+    """Eight real archives and independent expected merged bytes; no build."""
+    registry_raw = (ROOT / 'docs/reconstitution/framework-module-registry.json').read_bytes()
+    registry = json.loads(registry_raw)
+    provenance = directory / 'provenance'
+    provenance.mkdir()
+    (provenance / 'framework-module-registry.json').write_bytes(registry_raw)
+    (directory / 'modules').mkdir()
+    (directory / 'app').mkdir()
+    (directory / 'lib').mkdir()
+    (directory / 'lib/classpath.txt').write_text('public-lib.jar\n')
+    names = ['lims-owned-application.jar'] + [Path(m['output_jar']).name for m in registry['modules']]
+    merged = {}
+    factory = b'example.Factory=\\\nexample.Implementation\n'
+    for index, name in enumerate(names):
+        entries = {f'example/Module{index}.class': bytes([index]),
+                   f'templates/module{index}.html': f'module {index}'.encode()}
+        merged.update(entries)
+        if index == 0:
+            entries['META-INF/spring.factories'] = factory
+            merged['META-INF/spring.factories'] = factory
+        with zipfile.ZipFile(directory / 'modules' / name, 'w') as jar:
+            for path, data in entries.items():
+                jar.writestr(path, data)
+    with zipfile.ZipFile(directory / 'app/lims-owned-application.jar', 'w') as jar:
+        for path, data in merged.items():
+            jar.writestr(path, data)
+    digest = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
+    manifest = {'distribution_mode': 'source-only-reconstituted',
+        'app_jar': 'app/lims-owned-application.jar',
+        'module_jars': ['modules/' + name for name in names],
+        'source_jar_sha256': {name: digest(directory / 'modules' / name) for name in names},
+        'source_jar_hash_convention': 'normalized module archives; fixed ZIP timestamps, no generated manifest',
+        'resource_overrides': [], 'merged_resources': {'META-INF/spring.factories': {
+            'sources': [names[0]], 'sha256': hashlib.sha256(factory).hexdigest()}},
+        'dependency_classpath': ['public-lib.jar'],
+        'files': {str(p.relative_to(directory)): digest(p) for p in directory.rglob('*') if p.is_file()}}
+    (directory / 'manifest.json').write_text(json.dumps(manifest))
+    return manifest
+
+
+def test_distribution_framework_coverage(verifier):
+    with tempfile.TemporaryDirectory(prefix='checkpoint-framework-coverage-') as temporary:
+        distribution = Path(temporary)
+        manifest = distribution_fixture(distribution)
+        errors = []
+        verifier.verify_distribution(distribution, errors)
+        assert not errors, errors
+        # Real jq failure packaged only the application: all ordinary mode and
+        # forbidden-content checks pass, but the framework was omitted.
+        missing = manifest['module_jars'].pop()
+        del manifest['files'][missing]
+        del manifest['source_jar_sha256'][Path(missing).name]
+        (distribution / missing).unlink()
+        (distribution / 'manifest.json').write_text(json.dumps(manifest))
+        errors = []
+        verifier.verify_distribution(distribution, errors)
+        assert any('framework module coverage' in error for error in errors), errors
+
+    for mutation in ('registry', 'module-hash', 'merged-class', 'merged-resource', 'merged-factories'):
+        with tempfile.TemporaryDirectory(prefix='checkpoint-framework-tamper-') as temporary:
+            distribution = Path(temporary)
+            manifest = distribution_fixture(distribution)
+            if mutation == 'registry':
+                path = distribution / 'provenance/framework-module-registry.json'
+                data = json.loads(path.read_text())
+                data['modules'].pop()
+                path.write_text(json.dumps(data))
+                expected = 'framework registry mismatch'
+            elif mutation == 'module-hash':
+                path = distribution / manifest['module_jars'][-1]
+                with zipfile.ZipFile(path, 'a') as jar:
+                    jar.writestr('example/Unexpected.class', b'unexpected')
+                expected = 'framework module hash mismatch'
+            else:
+                path = distribution / manifest['app_jar']
+                omitted = {'merged-class': 'example/Module7.class',
+                           'merged-resource': 'templates/module7.html',
+                           'merged-factories': 'META-INF/spring.factories'}[mutation]
+                with zipfile.ZipFile(path) as jar:
+                    entries = {name: jar.read(name) for name in jar.namelist() if name != omitted}
+                with zipfile.ZipFile(path, 'w') as jar:
+                    for name, raw in entries.items():
+                        jar.writestr(name, raw)
+                # Even a self-consistent rehashed outer manifest cannot conceal
+                # missing compiled framework classes or original resources.
+                manifest['files'][manifest['app_jar']] = hashlib.sha256(path.read_bytes()).hexdigest()
+                if mutation == 'merged-factories':
+                    manifest['merged_resources'] = {}
+                (distribution / 'manifest.json').write_text(json.dumps(manifest))
+                expected = ('merged resource coverage mismatch' if mutation == 'merged-factories'
+                            else 'merged framework entry missing or changed: ' + omitted)
+            errors = []
+            verifier.verify_distribution(distribution, errors)
+            assert any(expected in error for error in errors), (mutation, errors)
 
 
 def main() -> int:
@@ -48,6 +147,7 @@ def main() -> int:
     assert "--seed \"$PLUGIN_SEED\"" in framework_build
 
     verifier = load_module()
+    test_distribution_framework_coverage(verifier)
     # The registry includes owned additions after the historical generated
     # source snapshot. Counts must follow those modules, not that old milestone.
     with tempfile.TemporaryDirectory(prefix="source-only-module-count-") as temporary:
@@ -102,12 +202,7 @@ def main() -> int:
 
     with tempfile.TemporaryDirectory(prefix="source-only-checkpoint-test-") as temporary:
         distribution = Path(temporary)
-        (distribution / "lib").mkdir(parents=True)
-        (distribution / "manifest.json").write_text(json.dumps({
-            "distribution_mode": "source-only-reconstituted",
-            "dependency_classpath": ["public-lib.jar"],
-        }) + "\n", encoding="utf-8")
-        (distribution / "lib/classpath.txt").write_text("public-lib.jar\n", encoding="utf-8")
+        distribution_fixture(distribution)
         errors: list[str] = []
         verifier.verify_distribution(distribution, errors)
         assert errors == []

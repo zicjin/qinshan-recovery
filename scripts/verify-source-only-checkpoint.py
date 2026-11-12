@@ -17,6 +17,7 @@ import re
 import subprocess
 import sys
 from typing import Any, Mapping
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -158,6 +159,7 @@ def verify_distribution(distribution: Path, errors: list[str]) -> None:
         return
     manifest = load(manifest_path)
     require(manifest.get("distribution_mode") == "source-only-reconstituted", "distribution mode", errors)
+    verify_distribution_framework(distribution, manifest, errors)
     for value in manifest.get("dependency_classpath", []):
         name = Path(str(value)).name
         require(not PRIVATE_MARKER.search(name), f"private supplier dependency in distribution: {name}", errors)
@@ -168,6 +170,95 @@ def verify_distribution(distribution: Path, errors: list[str]) -> None:
         if not path.is_file():
             continue
         require(not FORBIDDEN_NAME.search(path.name), f"forbidden native/license file in distribution: {path.relative_to(distribution)}", errors)
+
+
+def verify_distribution_framework(distribution: Path, manifest: dict[str, Any], errors: list[str]) -> None:
+    """Bind shipped archives to the tracked registry and their actual merged bytes."""
+    registry_path = ROOT / "docs/reconstitution/framework-module-registry.json"
+    shipped = distribution / "provenance/framework-module-registry.json"
+    if not shipped.is_file():
+        errors.append("distribution framework registry is missing")
+        return
+    require(shipped.read_bytes() == registry_path.read_bytes(), "distribution framework registry mismatch", errors)
+    registry = load(registry_path)
+    framework_names = [Path(item["output_jar"]).name for item in registry["modules"]]
+    expected = ["modules/lims-owned-application.jar"] + ["modules/" + name for name in framework_names]
+    require(len(framework_names) == 7 and len(set(framework_names)) == 7,
+            "distribution framework registry module coverage", errors)
+    actual = manifest.get("module_jars")
+    if actual != expected:
+        errors.append("distribution framework module coverage or order differs from registry")
+        return
+    source_hashes = manifest.get("source_jar_sha256", {})
+    files = manifest.get("files", {})
+    require(isinstance(source_hashes, dict) and set(source_hashes) == {Path(p).name for p in expected},
+            "distribution framework source archive coverage", errors)
+    if not isinstance(source_hashes, dict) or not isinstance(files, dict):
+        errors.append("distribution framework file hashes are missing")
+        return
+    app_name = manifest.get("app_jar")
+    require(app_name == "app/lims-owned-application.jar", "distribution merged application path", errors)
+    selected: dict[str, tuple[str, bytes]] = {}
+    factory_sources: list[str] = []
+    overrides = manifest.get("resource_overrides", [])
+    try:
+        for relative in expected:
+            path = distribution / relative
+            if not path.is_file():
+                errors.append("distribution framework module is missing: " + relative)
+                return
+            digest = sha256(path)
+            require(files.get(relative) == digest and source_hashes.get(path.name) == digest,
+                    "distribution framework module hash mismatch: " + relative, errors)
+            with zipfile.ZipFile(path) as archive:
+                names = archive.namelist()
+                require(len(names) == len(set(names)), "distribution module duplicate ZIP entries: " + relative, errors)
+                for name in names:
+                    if name == "META-INF/spring.factories":
+                        factory_sources.append(path.name)
+                        continue
+                    if name.endswith("/") or name in ("META-INF/MANIFEST.MF", "META-INF/spring.factories"):
+                        continue
+                    data = archive.read(name)
+                    if name not in selected:
+                        selected[name] = (path.name, data)
+                    elif selected[name][1] != data:
+                        prior_name, prior_data = selected[name]
+                        record = {"entry": name, "selected_source": prior_name, "shadowed_source": path.name,
+                                  "selected_sha256": hashlib.sha256(prior_data).hexdigest(),
+                                  "shadowed_sha256": hashlib.sha256(data).hexdigest(),
+                                  "policy": "first-source-wins for application resource overrides"}
+                        require(not name.endswith(".class") and isinstance(overrides, list) and record in overrides,
+                                "distribution framework resource override mismatch: " + name, errors)
+        merged_path = distribution / "app/lims-owned-application.jar"
+        if not merged_path.is_file():
+            errors.append("distribution merged application is missing")
+            return
+        require(files.get("app/lims-owned-application.jar") == sha256(merged_path),
+                "distribution merged application hash mismatch", errors)
+        with zipfile.ZipFile(merged_path) as merged:
+            names = merged.namelist()
+            require(len(names) == len(set(names)), "distribution merged duplicate ZIP entries", errors)
+            available = set(names)
+            for name, (_, data) in selected.items():
+                require(name in available and merged.read(name) == data,
+                        "distribution merged framework entry missing or changed: " + name, errors)
+            merged_resources = manifest.get("merged_resources", {})
+            require(isinstance(merged_resources, dict)
+                    and set(merged_resources) == ({"META-INF/spring.factories"} if factory_sources else set()),
+                    "distribution merged resource coverage mismatch", errors)
+            if not isinstance(merged_resources, dict):
+                return
+            if factory_sources:
+                record = merged_resources.get("META-INF/spring.factories", {})
+                require(isinstance(record, dict) and record.get("sources") == factory_sources,
+                        "distribution merged spring.factories source coverage mismatch", errors)
+            for name, record in merged_resources.items():
+                require(name in available and isinstance(record, dict)
+                        and hashlib.sha256(merged.read(name)).hexdigest() == record.get("sha256"),
+                        "distribution merged resource hash mismatch: " + name, errors)
+    except (OSError, zipfile.BadZipFile, KeyError, TypeError) as error:
+        errors.append("distribution framework archive validation failed: " + str(error))
 
 
 def main(argv: list[str] | None = None) -> int:

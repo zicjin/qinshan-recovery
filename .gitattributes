@@ -6,11 +6,12 @@ api-fixtures/schema/missing-runtime-tables.sql whitespace=-blank-at-eol
 # Keep reviewed production JavaScript bytes, including their original CRLF.
 project/src/main/resources/static/emc/module/bp/sample/samples/emc-sample-annex.js whitespace=cr-at-eol
 project/src/main/resources/static/emc/module/bp/sample/samples/emc-sample-query-search-list.js whitespace=cr-at-eol
-
 # Preserve source-bound FineReport template bytes, including original SQL spacing.
 deployment/report-engine/assets/commission-summary.cpt whitespace=-blank-at-eol
 deployment/report-engine/assets/contract-summary.cpt whitespace=-blank-at-eol
 # Keep all source-bound home report SQL/layout spacing unchanged.
 deployment/report-engine/assets/*.cpt -whitespace
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
 project/sql/核心发版/1.1.0/SWLIMS[[:space:]]V12版本_1.1.0/Spire-HTML2PDF-plugin.zip filter=lfs diff=lfs merge=lfs -text
 sql/核心发版/1.1.0/SWLIMS[[:space:]]V12版本_1.1.0/Spire-HTML2PDF-plugin.zip filter=lfs diff=lfs merge=lfs -text

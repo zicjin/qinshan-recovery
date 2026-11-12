@@ -1,5 +1,5 @@
 {
-  "schema": "owned-home-report-configuration/v2",
+  "schema": "owned-home-and-project-report-configuration/v3",
   "source_class": "current-production-at-capture",
   "business_rows": false,
   "identities_or_grants": false,
@@ -16,6 +16,19 @@
         "REPORTCONFIGCATEGORY": null
       },
       "source_row_sha256": "4d12936702efa943fe1ae4174b6e9248430dab30bc8d7eeff4ea3e23b67f7d40"
+    },
+    {
+      "table": "T_CORE_REPORT_CONFIG",
+      "id": "rasproject",
+      "values": {
+        "ID": "rasproject",
+        "VERSION": null,
+        "ORDERNO": "1",
+        "NAME": "任务流转单",
+        "REMARK": "任务登记,样品接收；任务流转单",
+        "REPORTCONFIGCATEGORY": "任务"
+      },
+      "source_row_sha256": "feed8e814808283f245eb14ddf1fd68361b7575e63110ef3d608e963b2bd0139"
     },
     {
       "table": "T_CORE_REPORT_CONFIG_LINE",
@@ -664,16 +677,64 @@
         "REPORTNAME": "报告退回意见统计"
       },
       "source_row_sha256": "71d54205c02c379ac9679c8c75fff40998409459847af0a4e7bb4dc90cb69fcc"
+    },
+    {
+      "table": "T_CORE_REPORT_CONFIG_LINE",
+      "id": "1344186996217184",
+      "values": {
+        "ID": "1344186996217184",
+        "REPORTCONFIGID": "rasproject",
+        "REPORTCONFIGLINENO": "proj",
+        "VERSION": null,
+        "ACTIVATEDFLAG": "1",
+        "REPORTCATEGORY": "fanruan",
+        "REPORTPATH": null,
+        "MENUID": null,
+        "MENUNAME": null,
+        "ORDERNO": "1",
+        "PARAM": "PROJNO=PROJNO",
+        "DEFAULTPARAM": null,
+        "DATACENTERREPORTNAME": null,
+        "DATACENTERREPORTURL": null,
+        "DATACENTERREPORTID": null,
+        "REPORTCONFIGLINECATEGORY": null,
+        "REPORTNAME": "采样任务流转单"
+      },
+      "source_row_sha256": "597bf003e8cfcc538f478b310d64be9c17d5eb6ce6fdcfb699034b1721e7ac08"
+    },
+    {
+      "table": "T_CORE_REPORT_CONFIG_LINE",
+      "id": "1453125616129984",
+      "values": {
+        "ID": "1453125616129984",
+        "REPORTCONFIGID": "rasproject",
+        "REPORTCONFIGLINENO": "test",
+        "VERSION": null,
+        "ACTIVATEDFLAG": "1",
+        "REPORTCATEGORY": "fanruan",
+        "REPORTPATH": null,
+        "MENUID": null,
+        "MENUNAME": null,
+        "ORDERNO": "2",
+        "PARAM": "PROJNO=PROJNO",
+        "DEFAULTPARAM": null,
+        "DATACENTERREPORTNAME": null,
+        "DATACENTERREPORTURL": null,
+        "DATACENTERREPORTID": null,
+        "REPORTCONFIGLINECATEGORY": null,
+        "REPORTNAME": "送样任务流转单"
+      },
+      "source_row_sha256": "ea0204290aea443e5855f3471112039752e63ef93f1a79749f990065b2e4d33f"
     }
   ],
   "row_counts": {
-    "T_CORE_REPORT_CONFIG": 1,
-    "T_CORE_REPORT_CONFIG_LINE": 27
+    "T_CORE_REPORT_CONFIG": 2,
+    "T_CORE_REPORT_CONFIG_LINE": 29
   },
   "installation_sql": {
     "path": "install-config.sql",
-    "sha256": "5b4e235eec29fe228e1a197c65f7232163b477c0668d2a84eacfe0bbeb0e9e2d",
-    "bytes": 65448
+    "sha256": "3b9fb8e72c3dee8f3dcf78a963d1d1a402bf1cecb2982cea8eb4ce394882c894",
+    "bytes": 71389
   },
   "source_artifacts": [
     {
@@ -683,6 +744,14 @@
     {
       "path": "private/all-report-templates-20261111/20261111T090752Z-capture-manifest-private.json",
       "sha256": "aa4e49effaebac92260e7d701bd40f51c687d1a60bb1c7d420cf9714dabd771c"
+    },
+    {
+      "path": "private/analysis-entry-report-20261112/reviewed-configuration-private.json",
+      "sha256": "5ca79178c2f5d06c9f1d33c763248db0497069cd904993dbd8beafa70e9d3314"
+    },
+    {
+      "path": "private/analysis-entry-report-20261112/20261112T013533Z-capture-manifest-private.json",
+      "sha256": "81a967c0472271974ab9aa358f90e8dbeec66e73858020b085f3a86cebd8458e"
     }
   ],
   "projection": "Explicit nonidentity behavior fields; unchanged source values. Source actors and timestamps excluded. No production grant rows copied."

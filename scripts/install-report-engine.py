@@ -176,9 +176,9 @@ def compile_listener(javac, libraries, classes):
 def verify_configuration(manifest):
     """Verify the finite report bootstrap, without opening private captures or a DB."""
     configuration = manifest.get("configuration")
-    expected_counts = {"T_CORE_REPORT_CONFIG": 1, "T_CORE_REPORT_CONFIG_LINE": 27}
+    expected_counts = {"T_CORE_REPORT_CONFIG": 2, "T_CORE_REPORT_CONFIG_LINE": 29}
     if (not isinstance(configuration, dict)
-            or configuration.get("schema") != "owned-home-report-configuration/v2"
+            or configuration.get("schema") != "owned-home-and-project-report-configuration/v3"
             or configuration.get("row_counts") != expected_counts):
         raise StageError("report configuration bootstrap is missing or differs")
     entries = configuration.get("files")
@@ -202,9 +202,9 @@ def verify_configuration(manifest):
     rows = provenance.get("rows")
     if not isinstance(rows, list):
         raise StageError("report configuration rows are absent")
-    expected_ids = {("T_CORE_REPORT_CONFIG", "homePageReport")} | {
-        ("T_CORE_REPORT_CONFIG_LINE", line_id) for line_id in ('1389452644773344', '1389464558218720', '1389464703528416', '1389464916356579', '1389624399859168', '1389665817128416', '1391751419556224', '1469555387403840', '1511240290732896', '1516502645514560', '1517068322189920', '1518396586296736', '1533345555174176', '1546806278272480', '1558284399977536', '1579155852848576', '1595473245765344', '1609691922740064', '1682633607010880', '1683439152962112', '1692400913685120', '1694089578136256', '1699853647404768', '1706506964086784', '1706557505163264', '1735579720293280', '1865261756650944')}
-    if (not isinstance(rows, list) or len(rows) != 28
+    expected_ids = {("T_CORE_REPORT_CONFIG", "homePageReport"), ("T_CORE_REPORT_CONFIG", "rasproject")} | {
+        ("T_CORE_REPORT_CONFIG_LINE", line_id) for line_id in ('1389452644773344', '1389464558218720', '1389464703528416', '1389464916356579', '1389624399859168', '1389665817128416', '1391751419556224', '1469555387403840', '1511240290732896', '1516502645514560', '1517068322189920', '1518396586296736', '1533345555174176', '1546806278272480', '1558284399977536', '1579155852848576', '1595473245765344', '1609691922740064', '1682633607010880', '1683439152962112', '1692400913685120', '1694089578136256', '1699853647404768', '1706506964086784', '1706557505163264', '1735579720293280', '1865261756650944', '1344186996217184', '1453125616129984')}
+    if (not isinstance(rows, list) or len(rows) != 31
             or {(row.get("table"), row.get("id")) for row in rows} != expected_ids):
         raise StageError("report configuration row scope differs")
     declared_lines = {asset.get("report_line_id") for asset in manifest.get("assets", [])}
@@ -331,8 +331,8 @@ def stage(args):
     public = public_inputs(args.public_lib, manifest["public_libraries"])
     schema = local_schema(args.application_config)
     asset_entries = manifest.get("assets", [manifest["asset"]])
-    if not isinstance(asset_entries, list) or not 1 <= len(asset_entries) <= 27:
-        raise StageError("manifest must declare one to 27 reviewed report templates")
+    if not isinstance(asset_entries, list) or not 1 <= len(asset_entries) <= 29:
+        raise StageError("manifest must declare one to 29 reviewed report templates")
     if any(asset_entries[0].get(key) != value for key, value in manifest["asset"].items()):
         raise StageError("primary report asset differs from compatibility entry")
     staged_assets = []

@@ -1,11 +1,11 @@
-# 首页全部 27 份报表的本机依赖
+# 首页报表与任务流转单的本机依赖
 
 该页面使用当前生产版本的原 CPT 和 FineReport 11。引擎是独立第三方产品，
 不属于 Sunway native/license 替换范围。部署不包含生产连接、FineDB、授权文件或业务行。
 
 使用安装包中的 `scripts/install-report-engine.py --help`，从运维已授权的
 Fine11 library 与公共依赖目录准备一个新的绝对路径。脚本离线校验原引擎 hash，
-编译自有 session listener，复制 manifest 中全部 27 份 CPT，将命名连接绑定到私密配置中的隔离 schema。
+编译自有 session listener，复制 manifest 中全部 29 份 CPT，将命名连接绑定到私密配置中的隔离 schema。
 它不连接数据库、不改变第三方许可、不读取生产配置。
 
 在私密 application properties 设置：
@@ -24,10 +24,10 @@ application JVM 的隔离 Servlet context，使用同一端口，不启动独立
 数据源使用本应用的隔离 Oracle 配置，通过 Fine 正常公开配置事务注册。
 
 现有核心 bootstrap 已含统计菜单。新设备还必须先以应用隔离 schema 的账号执行
-stager 输出的 `install-config.sql`：它安装生产来源绑定的报表主配置1行、27条行配置，
+stager 输出的 `install-config.sql`：它安装生产来源绑定的报表主配置2行、29条行配置（27份首页报表和2份 `rasproject` 任务流转单），
 保留原参数/启用/排序语义，不复制来源制单人、用户、组织或权限。已有记录必须逐字段一致，
 冲突时在任何新增前失败；重复安装不改已有行。`config-provenance.json` 记录来源与逐行 hash。
-这28行是本包专属配置补充，不解除全系统 installer 的 partial 阻断。
+这31行是本包专属配置补充，不解除全系统 installer 的 partial 阻断。
 
 安装脚本为两份模板分别生成 `install-metadata.sql` 与 `install-contract-metadata.sql`，
 已按绑定 CPT 的实际大小解析占位符，用于补齐现有 homePageReport/kf_htrwtjb 和
@@ -58,7 +58,7 @@ python3 installation/scripts/install-report-engine.py \
 ```
 
 该模式用同一私密 application properties 读取目标 schema，重新核对原模板的有限变换，
-不复制或记录配置、不连接数据库，只接受当前发行 manifest 声明的全部 27 份附件。它先校验整套模板/附件 hash 和全部已有目标，再复制缺失文件；内容相同
+不复制或记录配置、不连接数据库，只接受当前发行 manifest 声明的全部 29 份附件。它先校验整套模板/附件 hash 和全部已有目标，再复制缺失文件；内容相同
 时可重复执行，任一已有文件不同或路径含符号链接即失败，不覆盖旧文件。冲突须先核对版本、
 备份并明确迁移，不用覆盖参数跳过。安装后通过原文件 API 查询并下载对应 CPT，不能用
 metadata 存在或引擎模板可读代替附件恢复验收。
@@ -86,3 +86,10 @@ metadata 存在或引擎模板可读代替附件恢复验收。
 转换为已准备的 local-view。保留原查询、公式、布局和跳转目标；不复制来源用户默认值、
 生产连接、FineDB 或第三方授权文件。源 hash 与变换记录在 manifest 的逐模板 provenance 中。
 新设备仍需另行准备真实身份/组织/角色及其报表授权；本安装不复制生产授权或自动授予全部模板。
+
+`分析录入` 的待处理测试任务编号使用 `rasproject` 配置，分别指向
+`proj/任务登记-采样任务流转单_2603.cpt` 和
+`test/任务登记-送样任务流转单_2604.cpt`。两份模板保留原 `PROJNO` 查询参数，
+清除来源工程编号默认值；对应 `metadata/proj.sql`、`metadata/test.sql` 同样必须执行，
+否则原 URL helper 无法从附件关联取得 `ext$.filename`。访问仍要求当前门户身份、
+报表配置授权、启用状态和会话归属，不接受 `proj/undefined`。

@@ -124,17 +124,21 @@ class ReportInstallationTest(unittest.TestCase):
                 self.assertEqual(13, len(list((self.output / 'WEB-INF/lib').glob('fine-*.jar'))))
                 self.assertFalse(list(self.output.rglob('*.lic')))
 
-    def test_all_home_templates_stage_with_metadata(self):
-        self.assertEqual(27, len(self.assets()))
-        self.assertEqual(27, self.stage()['templates'])
+    def test_home_and_project_templates_stage_with_metadata(self):
+        self.assertEqual(29, len(self.assets()))
+        self.assertEqual(29, self.stage()['templates'])
         receipt = json.loads((self.output / 'staging-manifest.json').read_text())
-        self.assertEqual(27, len(receipt['metadata_sql_files']))
+        self.assertEqual(29, len(receipt['metadata_sql_files']))
         self.assertTrue(any('fxryjxtj/' in entry['path'] for entry in receipt['assets']))
+        for code in ('proj', 'test'):
+            entry = next(asset for asset in self.assets() if asset['report_code'] == code)
+            self.assertIn("REPORTCONFIGID='rasproject'", (self.materials / entry['metadata_source']).read_text())
+            self.assertTrue((self.output / entry['install_path']).is_file())
 
     def test_original_attachment_download_paths_are_staged_and_installable(self):
         self.stage()
         receipt = json.loads((self.output / 'staging-manifest.json').read_text())
-        self.assertEqual(27, len(receipt['attachment_files']))
+        self.assertEqual(29, len(receipt['attachment_files']))
         for entry in self.assets():
             metadata = (self.materials / entry['metadata_source']).read_text()
             self.assertIn("'" + entry['report_code'] + "'", metadata)
@@ -142,7 +146,7 @@ class ReportInstallationTest(unittest.TestCase):
         files = self.root / 'application-work' / 'files'
         files.mkdir(parents=True)
         result = self.install(files)
-        self.assertEqual(27, result['installed'])
+        self.assertEqual(29, result['installed'])
         for source, attachment in zip(receipt['assets'], receipt['attachment_files']):
             expected = Path('finereport').joinpath(*Path(source['path']).parts[2:])
             self.assertEqual(str(expected), attachment['relative_path'])
@@ -155,7 +159,7 @@ class ReportInstallationTest(unittest.TestCase):
         self.assertTrue((files / 'finereport/kf_htxxb/LIMS-客服-合同汇总表.cpt').is_file())
         result = self.install(files)
         self.assertEqual(0, result['installed'])
-        self.assertEqual(27, result['already_present'])
+        self.assertEqual(29, result['already_present'])
 
     def test_attachment_conflict_is_rejected_before_any_files_are_installed(self):
         self.stage()
@@ -297,7 +301,7 @@ class ReportInstallationTest(unittest.TestCase):
             self.assertEqual((self.materials / path).read_bytes(), (self.output / path).read_bytes())
         receipt = json.loads((self.output / 'staging-manifest.json').read_text())
         self.assertEqual(2, len(receipt['configuration_files']))
-        self.assertEqual({'T_CORE_REPORT_CONFIG': 1, 'T_CORE_REPORT_CONFIG_LINE': 27},
+        self.assertEqual({'T_CORE_REPORT_CONFIG': 2, 'T_CORE_REPORT_CONFIG_LINE': 29},
                          self.manifest['configuration']['row_counts'])
 
     def test_configuration_sql_tamper_is_rejected(self):

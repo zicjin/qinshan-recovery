@@ -561,6 +561,7 @@ public final class ReportEngineAccessCheck {
     }
 
     public static void main(String[] args) throws Exception {
+        circulationEligibility();
         ClassLoader before = Thread.currentThread().getContextClassLoader();
         ClassLoader engineLoader = new ClassLoader(before) { };
         Thread.currentThread().setContextClassLoader(engineLoader);
@@ -569,7 +570,9 @@ public final class ReportEngineAccessCheck {
             PortalIdentity portal = new PortalIdentity();
             ReportEngineAccessFilter filter = new ReportEngineAccessFilter(portal);
             filter.configureEngine(engineLoader);
-            require(ReportEngineAccessFilter.installedTemplates().size() == 27, "all home templates must be registered");
+            require(ReportEngineAccessFilter.installedTemplates().size() == 29, "home and project circulation templates must be registered");
+            require(ReportEngineAccessFilter.installedTemplates().contains("proj/任务登记-采样任务流转单_2603.cpt"), "sampling project report must be registered");
+            require(ReportEngineAccessFilter.installedTemplates().contains("test/任务登记-送样任务流转单_2604.cpt"), "submitted-sample project report must be registered");
             for (String template : ReportEngineAccessFilter.installedTemplates()) {
                 Result restored = invoke(filter, new Request("GET", "/decision/view/report").parameter("viewlet", template), null);
                 require(restored.entered == 1 && restored.response.status == 200, "restored template must reach engine: " + template);
@@ -578,6 +581,7 @@ public final class ReportEngineAccessCheck {
                 portal.identity = new ReportEngineAccessFilter.Identity("fixture-user", "fixture-token-role-org-A");
             }
             denied(filter, new Request("GET", "/decision/view/report").parameter("viewlet", "fxryjxtj/undefined"), 403);
+            denied(filter, new Request("GET", "/decision/view/report").parameter("viewlet", "proj/undefined").parameter("PROJNO", "fixture-project"), 403);
             denied(filter, initial().parameter("userid", "another-user"), 403);
 
             authenticationAndRouting(portal, filter);
@@ -593,6 +597,29 @@ public final class ReportEngineAccessCheck {
         } finally {
             Thread.currentThread().setContextClassLoader(before);
             SessionPoolManager.clear();
+        }
+    }
+
+    private static void circulationEligibility() throws Exception {
+        Class.forName("org.sqlite.JDBC");
+        try (java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:sqlite::memory:")) {
+            org.springframework.jdbc.core.JdbcTemplate jdbc = new org.springframework.jdbc.core.JdbcTemplate(
+                new org.springframework.jdbc.datasource.SingleConnectionDataSource(connection, true));
+            jdbc.execute("CREATE TABLE T_CORE_REPORT_CONFIG_LINE (ID INTEGER, REPORTCONFIGID TEXT, REPORTCATEGORY TEXT, ACTIVATEDFLAG TEXT)");
+            jdbc.execute("CREATE TABLE T_CORE_USER_PERMISSION (TARGETID TEXT, USERID TEXT, PERMISSIONTYPEID TEXT)");
+            jdbc.execute("CREATE TABLE T_CORE_ROLE_PERMISSION (TARGETID TEXT, ROLEID TEXT, PERMISSIONTYPEID TEXT)");
+            jdbc.execute("INSERT INTO T_CORE_REPORT_CONFIG_LINE VALUES (1344186996217184,'rasproject','fanruan','1'),(1453125616129984,'rasproject','fanruan','1'),(999,'rasproject','fanruan','1'),(1533345555174176,'homePageReport','fanruan','1')");
+            require(ReportEngineAccessFilter.circulationLines(jdbc, "viewer", null).size() == 2,
+                "unassigned circulation reports must follow original selectable eligibility, excluding other templates");
+            jdbc.execute("INSERT INTO T_CORE_USER_PERMISSION VALUES ('1344186996217184','another-user','T_CORE_REPORT_CONFIG_LINE')");
+            require(!ReportEngineAccessFilter.circulationLines(jdbc, "viewer", null).contains("1344186996217184"), "another user's assignment must restrict the circulation report");
+            jdbc.execute("INSERT INTO T_CORE_ROLE_PERMISSION VALUES ('1344186996217184','selected-role','T_CORE_REPORT_CONFIG_LINE')");
+            require(ReportEngineAccessFilter.circulationLines(jdbc, "viewer", "selected-role").size() == 2, "selected role grant must restore circulation access");
+            require(ReportEngineAccessFilter.circulationLines(jdbc, "viewer", "other-role").size() == 1, "unselected role must not restore access");
+            jdbc.execute("INSERT INTO T_CORE_USER_PERMISSION VALUES ('1344186996217184','viewer','T_CORE_REPORT_CONFIG_LINE')");
+            require(ReportEngineAccessFilter.circulationLines(jdbc, "viewer", null).size() == 2, "direct user assignment must restore circulation access");
+            jdbc.execute("UPDATE T_CORE_REPORT_CONFIG_LINE SET ACTIVATEDFLAG='0' WHERE ID=1344186996217184");
+            require(ReportEngineAccessFilter.circulationLines(jdbc, "viewer", "selected-role").size() == 1, "disabled circulation report must remain denied despite grants");
         }
     }
 }

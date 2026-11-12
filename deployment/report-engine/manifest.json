@@ -186,7 +186,7 @@
     "connection credentials",
     "production endpoints"
   ],
-  "scope": "all 27 current-production homePageReport templates and their internal template links",
+  "scope": "27 current-production homePageReport templates and two rasproject circulation templates",
   "source_class": "current-production-at-capture",
   "assets": [
     {
@@ -647,6 +647,40 @@
       "report_line_id": "1865261756650944",
       "report_code": "bgthyjtj",
       "report_name": "报告退回意见统计"
+    },
+    {
+      "path": "assets/proj.cpt",
+      "bytes": 139530,
+      "sha256": "080d8389abef331d14bbc88215772dc6951bfb2e8cadb839a0fbe648c15088d1",
+      "install_path": "WEB-INF/reportlets/proj/任务登记-采样任务流转单_2603.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 4,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/proj.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "7a8d2efbaa13e03cbe34813f22f7f8124ccc04e075482914613e57d81e5b39bf",
+      "metadata_bytes": 2336,
+      "report_line_id": "1344186996217184",
+      "report_code": "proj",
+      "report_name": "采样任务流转单"
+    },
+    {
+      "path": "assets/test.cpt",
+      "bytes": 39805,
+      "sha256": "51b0b4e6c982b1b30603e46aa61ddf37bbf0d32ddc63f7b484ffaa23490e0704",
+      "install_path": "WEB-INF/reportlets/test/任务登记-送样任务流转单_2604.cpt",
+      "datasource_placeholder": "${OWNED_REPORT_DATASOURCE_NAME}",
+      "datasource_occurrences": 3,
+      "schema_placeholder": "${OWNED_REPORT_SCHEMA}",
+      "schema_occurrences": 0,
+      "metadata_source": "metadata/test.sql",
+      "metadata_size_token": "${OWNED_REPORT_ASSET_BYTES}",
+      "metadata_sha256": "ed535ddcc605ff3a581065170b73cb85b119d5bf43a62ba61cfb0a556a96e70c",
+      "metadata_bytes": 2335,
+      "report_line_id": "1453125616129984",
+      "report_code": "test",
+      "report_name": "送样任务流转单"
     }
   ],
   "additional_provenance": [
@@ -1411,6 +1445,81 @@
         }
       ],
       "query_text_sha256": "db15de6a611a1cf1115b06201216fcba7a125324a1ffec20bcf58917242d510d"
+    },
+    {
+      "asset_path": "assets/proj.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "9ece52e0cc51916f13c212715149d0ac4b066668686fee951d7fbd694f2b4beb",
+      "original_bytes": 140116,
+      "deployment_sha256": "080d8389abef331d14bbc88215772dc6951bfb2e8cadb839a0fbe648c15088d1",
+      "transformations": [
+        {
+          "operation": "clear_source_project_parameter_default",
+          "parameter": "PROJNO",
+          "source_sha256": "455b1467789b728b60336c4fe38458fac86b3889f0c8ade6aa9157b8bacbe58c"
+        },
+        {
+          "operation": "clear_source_project_parameter_default",
+          "parameter": "PROJNO",
+          "source_sha256": "455b1467789b728b60336c4fe38458fac86b3889f0c8ade6aa9157b8bacbe58c"
+        },
+        {
+          "operation": "clear_source_project_parameter_default",
+          "parameter": "PROJNO",
+          "source_sha256": "455b1467789b728b60336c4fe38458fac86b3889f0c8ade6aa9157b8bacbe58c"
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "915f2d9c0753efc3159e5ba7509a7a54a5d0ba824f37df36bc8107fc3493e01b"
+    },
+    {
+      "asset_path": "assets/test.cpt",
+      "source_class": "current-production-at-capture",
+      "original_sha256": "ced561aadcf80391a487693f8e191fc1dead2c05658e049b450e2c66354e0521",
+      "original_bytes": 40377,
+      "deployment_sha256": "51b0b4e6c982b1b30603e46aa61ddf37bbf0d32ddc63f7b484ffaa23490e0704",
+      "transformations": [
+        {
+          "operation": "clear_source_project_parameter_default",
+          "parameter": "PROJNO",
+          "source_sha256": "b9b42f35563f2f69820ead6b6de80c5518dbfa0e31d8d1abefc25b2ee7c2a457"
+        },
+        {
+          "operation": "clear_source_project_parameter_default",
+          "parameter": "PROJNO",
+          "source_sha256": "b9b42f35563f2f69820ead6b6de80c5518dbfa0e31d8d1abefc25b2ee7c2a457"
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateIdAttMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "ForkIdAttrMark",
+          "count": 1
+        },
+        {
+          "operation": "remove_origin_metadata",
+          "xml_tag": "TemplateCloudInfoAttrMark",
+          "count": 1
+        }
+      ],
+      "query_text_sha256": "4cce39b655d90743226fea4028ca7633a1b1da14dadd29ed724a90f92bea0c2c"
     }
   ],
   "dependencies": [
@@ -1428,22 +1537,22 @@
     }
   ],
   "configuration": {
-    "schema": "owned-home-report-configuration/v2",
+    "schema": "owned-home-and-project-report-configuration/v3",
     "row_counts": {
-      "T_CORE_REPORT_CONFIG": 1,
-      "T_CORE_REPORT_CONFIG_LINE": 27
+      "T_CORE_REPORT_CONFIG": 2,
+      "T_CORE_REPORT_CONFIG_LINE": 29
     },
     "files": [
       {
         "path": "install-config.sql",
-        "bytes": 65448,
-        "sha256": "5b4e235eec29fe228e1a197c65f7232163b477c0668d2a84eacfe0bbeb0e9e2d",
+        "bytes": 71389,
+        "sha256": "3b9fb8e72c3dee8f3dcf78a963d1d1a402bf1cecb2982cea8eb4ce394882c894",
         "role": "configuration"
       },
       {
         "path": "config-provenance.json",
-        "bytes": 23120,
-        "sha256": "7155891825731cb8734e58593c78c125a026ab53b17a985b88c16122459c764e",
+        "bytes": 25494,
+        "sha256": "a370b59c27e2c10391090db334ea8b6e41619c469b6f5234aa39f143c6b5aa9a",
         "role": "provenance"
       }
     ]

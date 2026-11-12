@@ -55,11 +55,28 @@ public final class ReportEngineAccessFilter implements Filter {
                         || line == null || !line.matches("[0-9]+") || lines.put(template, line) != null)
                     throw new IllegalStateException("Invalid report template registry");
             }
-            if (lines.size() != 27) throw new IllegalStateException("Incomplete report template registry");
+            if (lines.size() != 29) throw new IllegalStateException("Incomplete report template registry");
         } catch (java.io.IOException failure) { throw new ExceptionInInitializerError(failure); }
         REPORT_LINES = Collections.unmodifiableMap(lines);
     }
     static Set<String> installedTemplates() { return REPORT_LINES.keySet(); }
+    // Same eligibility predicate as EmcReportConfigLineMapper.selectByCondition
+    // with filter_userId. Only the two bundled rasproject lines use this rule;
+    // home reports retain their explicit-grant policy.
+    static java.util.List<String> circulationLines(org.springframework.jdbc.core.JdbcTemplate jdbc,
+            String username, String selectedRole) {
+        return jdbc.queryForList(
+            "SELECT CAST(L.ID AS VARCHAR(64)) FROM T_CORE_REPORT_CONFIG_LINE L"
+            + " WHERE L.REPORTCONFIGID='rasproject' AND L.ID IN (1344186996217184,1453125616129984)"
+            + " AND L.REPORTCATEGORY='fanruan' AND L.ACTIVATEDFLAG='1'"
+            + " AND (EXISTS (SELECT 1 FROM T_CORE_USER_PERMISSION P"
+            + " WHERE P.TARGETID=CAST(L.ID AS VARCHAR(64)) AND P.USERID=?)"
+            + " OR NOT EXISTS (SELECT 1 FROM T_CORE_USER_PERMISSION P WHERE P.TARGETID=CAST(L.ID AS VARCHAR(64)))"
+            + " OR EXISTS (SELECT 1 FROM T_CORE_ROLE_PERMISSION P"
+            + " WHERE P.PERMISSIONTYPEID='T_CORE_REPORT_CONFIG_LINE' AND P.ROLEID=?"
+            + " AND P.TARGETID=CAST(L.ID AS VARCHAR(64))))",
+            new Object[] {username, selectedRole}, String.class);
+    }
     private static final String OWNER = "owned.portal.report.owner.v1";
     private static final Set<String> OPERATIONS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
         "widget", "fr_dialog", "fr_paramstpl", "page_content", "get_pages", "page", "close")));
@@ -311,10 +328,16 @@ public final class ReportEngineAccessFilter implements Filter {
                 + " UNION SELECT TARGETID FROM T_CORE_USER_PERMISSION WHERE USERID=? AND PERMISSIONTYPEID='T_CORE_REPORT_CONFIG_LINE'",
                 parameters.toArray(), String.class);
             boolean administrator = "sysAdmin".equals(LocalContextHelper.getLoginUser().getUserType()) || grants.contains("0");
-            REPORT_LINES.forEach((template, line) -> { if (administrator || grants.contains(line)) templates.add(template); });
+            REPORT_LINES.forEach((template, line) -> {
+                if (!"1344186996217184".equals(line) && !"1453125616129984".equals(line)
+                        && (administrator || grants.contains(line))) templates.add(template);
+            });
+            java.util.List<String> circulation = circulationLines(jdbc, user.getUsername(),
+                LocalContextHelper.getLoginUser().getExt$Item("loginroleid"));
+            REPORT_LINES.forEach((template, line) -> { if (circulation.contains(line)) templates.add(template); });
             // Disabled configurations must not regain access through an old grant or menu.
             java.util.List<String> active = jdbc.queryForList(
-                "SELECT TO_CHAR(ID) FROM T_CORE_REPORT_CONFIG_LINE WHERE REPORTCONFIGID='homePageReport' AND REPORTCATEGORY='fanruan' AND ACTIVATEDFLAG='1'", String.class);
+                "SELECT TO_CHAR(ID) FROM T_CORE_REPORT_CONFIG_LINE WHERE REPORTCONFIGID IN ('homePageReport','rasproject') AND REPORTCATEGORY='fanruan' AND ACTIVATEDFLAG='1'", String.class);
             templates.removeIf(template -> !active.contains(REPORT_LINES.get(template)));
             if(templates.isEmpty()) throw new SecurityException();
             String owner=hash(token+"\n"+user.getUsername()+"\n"+user.getOrgId()+"\n"+user.getRoleId());
